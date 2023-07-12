@@ -1,0 +1,55 @@
+@use './../../../../styles/tools' as tools;
+
+.p-login {
+	padding-top: var(--spacer-sm);
+	padding-bottom: var(--spacer-sm);
+	min-height: calc(100vh - (var(--spacer-sm) * 2));
+
+	&__form {
+		grid-column: 1/7;
+		text-align: center;
+
+		&__description {
+			margin: 0;
+		}
+
+		&__heading {
+			margin-top: var(--spacer-xl);
+			margin-bottom: var(--spacer-sm);
+		}
+
+		&__options {
+			max-width: tools.rem(320px);
+			margin: var(--spacer-md) auto 0 auto;
+			display: flex;
+			flex-direction: column;
+			gap: var(--spacer-xs);
+
+			&__social-button--google {
+				border: var(--border-light);
+				border-color: var(--color-concrete);
+				background-color: unset;
+			}
+
+			&__social-button--facebook {
+				background-color: var(--color-facebook-blue);
+				color: var(--color-white);
+			}
+
+			&__social-button--slack {
+				border: var(--border-light);
+				border-color: var(--color-concrete);
+				background-color: unset;
+			}
+		}
+	}
+
+	&__visual {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		grid-column: 7/13;
+		background-color: var(--primary-purple);
+		border-radius: var(--border-radius-sm);
+	}
+}

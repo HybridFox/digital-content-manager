@@ -1,0 +1,13 @@
+@use 'sass:map';
+@use '../base/breakpoints' as breakpoints;
+
+$_viewports: breakpoints.$viewports;
+
+@mixin to($key) {
+	$value: map.get($_viewports, $key);
+	$max-width: $value - 1px;
+
+	@media screen and (max-width: $max-width) {
+		@content;
+	}
+}

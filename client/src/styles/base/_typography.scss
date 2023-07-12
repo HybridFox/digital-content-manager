@@ -1,0 +1,24 @@
+@use '../tools' as tools;
+
+:root {
+	--font-s-h1: #{tools.rem(70px)};
+	--font-s-p: #{tools.rem(16px)};
+	--font-w-button: #{tools.rem(700)};
+}
+
+h1,
+.heading-1 {
+	font-size: var(--font-s-h1);
+}
+
+p,
+.paragraph {
+	font-size: var(--font-s-p);
+}
+
+button,
+.button {
+	font-size: var(--font-s-p);
+	font-weight: var(--font-w-button);
+	text-transform: uppercase;
+}

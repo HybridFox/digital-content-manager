@@ -1,0 +1,23 @@
+.c-input {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacer-xxs);
+
+	&__label {
+		align-self: flex-start;
+	}
+
+	&__field {
+		border-radius: var(--border-radius-sm);
+		padding: var(--spacer-xxs);
+		border: var(--border-light);
+		border-color: var(--color-concrete);
+		color: var(--color-dark-grey);
+
+		&:active,
+		&:focus {
+			outline: var(--border);
+			outline-color: var(--primary-purple);
+		}
+	}
+}

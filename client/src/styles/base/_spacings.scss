@@ -1,0 +1,30 @@
+@use '../tools' as tools;
+
+// =============================================================================
+// Public spacers
+// =============================================================================
+:root {
+	--spacer-xxs: #{tools.rem(8px)};
+	--spacer-xs: #{tools.rem(16px)};
+	--spacer-sm: #{tools.rem(32px)};
+	--spacer-default: #{tools.rem(40px)};
+	--spacer-md: #{tools.rem(64px)};
+	--spacer-lg: #{tools.rem(88px)};
+	--spacer-xl: #{tools.rem(144px)};
+	--spacer-xxl: #{tools.rem(200px)};
+	--spacer-xxxl: #{tools.rem(280px)};
+	--grid-gap: #{tools.rem(32px)};
+	--max-width: #{tools.rem(1920px)};
+
+	@include tools.to('lg') {
+		--spacer-xxl: #{tools.rem(180px)};
+	}
+
+	@include tools.to('md') {
+		--spacer-default: #{tools.rem(32px)};
+		--spacer-md: #{tools.rem(24px)};
+		--spacer-lg: #{tools.rem(48px)};
+		--spacer-xl: #{tools.rem(80px)};
+		--spacer-xxl: #{tools.rem(96px)};
+	}
+}

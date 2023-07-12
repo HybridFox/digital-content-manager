@@ -1,0 +1,52 @@
+name: chat-wall
+services:
+    client:
+        build:
+            context: client
+            dockerfile: Dockerfile.dev
+        networks:
+            - chat-wall
+        volumes:
+            - ./client:/app:delegated
+            - /app/node_modules
+        env_file:
+            - ./client/.env
+        ports:
+            - 3000:3000
+
+    # api:
+    #     build:
+    #         context: api
+    #         dockerfile: Dockerfile.dev
+    #     command: sh -c "cargo watch -x run"
+    #     env_file:
+    #         - ./api/.env
+    #     networks:
+    #         - chat-wall
+    #     volumes:
+    #         - ./api:/app
+    #         - api-cache:/app/target
+    #     ports:
+    #         - 8000:8000
+    #     depends_on:
+    #         - postgres
+
+    postgres:
+        image: postgres:15-alpine
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: chat-wall
+            POSTGRES_USER: chat-wall
+            POSTGRES_DB: chat-wall
+        networks:
+            - chat-wall
+        ports:
+            - 5432:5432
+        volumes:
+            - ./data:/var/lib/postgresql/data
+
+networks:
+    chat-wall: {}
+
+volumes:
+    api-cache: {}

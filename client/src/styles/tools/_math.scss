@@ -1,0 +1,17 @@
+@use 'sass:math';
+
+$_unit: px;
+
+@function _px-rem($value) {
+	@return math.div($value, 16px) * 1rem;
+}
+
+@function rem($value) {
+	$unit: math.unit($value);
+
+	@if ($unit ==px) {
+		@return _px-rem($value);
+	} @else {
+		@return $value;
+	}
+}

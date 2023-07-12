@@ -1,0 +1,16 @@
+.u-layout {
+	&__grid {
+		display: grid;
+		grid-template-columns: repeat(12, 1fr);
+		gap: var(--grid-gap);
+		max-width: var(--max-width);
+		padding: 0 var(--spacer-sm);
+		margin: 0 auto;
+	}
+
+	&__constrain {
+		max-width: var(--max-width);
+		padding: 0 var(--spacer-sm);
+		margin: 0 auto;
+	}
+}
