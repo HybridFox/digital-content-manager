@@ -1,8 +1,9 @@
 @use '../tools' as tools;
 
 :root {
-	--font-s-h1: #{tools.rem(70px)};
-	--font-s-p: #{tools.rem(16px)};
+	--font-size-h1: #{tools.rem(70px)};
+	--font-size-p: #{tools.rem(16px)};
+	--font-size-small: #{tools.rem(14px)};
 	--font-w-button: #{tools.rem(700)};
 }
 
@@ -21,4 +22,8 @@ button,
 	font-size: var(--font-s-p);
 	font-weight: var(--font-w-button);
 	text-transform: uppercase;
+}
+
+body, html {
+	font-family: 'Cera Pro';
 }

@@ -17,7 +17,7 @@ pub struct Role {
 	pub name: String,
 	pub slug: String,
 	pub description: Option<String>,
-	pub team_id: Uuid,
+	pub site_id: Uuid,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 }
@@ -25,7 +25,7 @@ pub struct Role {
 impl Role {
 	pub fn create(
 		conn: &mut PgConnection,
-		team_id: Uuid,
+		site_id: Uuid,
 		name: String,
 		policy_ids: Vec<Uuid>,
 	) -> Result<(Self, Vec<IAMPolicy>), AppError> {
@@ -33,7 +33,7 @@ impl Role {
 
 		let record = CreateRole {
 			name: &name,
-			team_id,
+			site_id,
 			slug: &slugify(&name),
 		};
 
@@ -47,8 +47,8 @@ impl Role {
 		Ok((role, policies))
 	}
 
-	pub fn find_one(conn: &mut PgConnection, team_id: Uuid, id: Uuid) -> Result<Self, AppError> {
-		let t = roles::table.filter(roles::team_id.eq(team_id)).find(id);
+	pub fn find_one(conn: &mut PgConnection, site_id: Uuid, id: Uuid) -> Result<Self, AppError> {
+		let t = roles::table.filter(roles::site_id.eq(site_id)).find(id);
 		let role = t.first::<Role>(conn)?;
 		Ok(role)
 	}
@@ -63,13 +63,13 @@ impl Role {
 
 	pub fn find(
 		conn: &mut PgConnection,
-		team_id: Uuid,
+		site_id: Uuid,
 		page: i64,
 		pagesize: i64,
 	) -> Result<(Vec<Self>, i64), AppError> {
 		let roles = roles::table
 			.select(Role::as_select())
-			.filter(roles::team_id.eq(team_id))
+			.filter(roles::site_id.eq(site_id))
 			.offset((page - 1) * pagesize)
 			.limit(pagesize)
 			.load::<Role>(conn)?;
@@ -106,7 +106,7 @@ impl Role {
 pub struct CreateRole<'a> {
 	pub name: &'a str,
 	pub slug: &'a str,
-	pub team_id: Uuid,
+	pub site_id: Uuid,
 }
 
 #[derive(AsChangeset, Debug, Deserialize)]

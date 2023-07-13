@@ -15,7 +15,7 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
-			"@ibs/input-fields": ["libs/input-fields/src/index.ts"]
+			"@ibs/components": ["libs/components/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

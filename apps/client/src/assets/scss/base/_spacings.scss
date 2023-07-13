@@ -1,18 +1,20 @@
 @use '../tools' as tools;
+@use "sass:math";
 
 // =============================================================================
 // Public spacers
 // =============================================================================
 :root {
-	--spacer-xxs: #{tools.rem(8px)};
-	--spacer-xs: #{tools.rem(16px)};
-	--spacer-sm: #{tools.rem(32px)};
-	--spacer-default: #{tools.rem(40px)};
-	--spacer-md: #{tools.rem(64px)};
-	--spacer-lg: #{tools.rem(88px)};
-	--spacer-xl: #{tools.rem(144px)};
-	--spacer-xxl: #{tools.rem(200px)};
-	--spacer-xxxl: #{tools.rem(280px)};
+	--spacer: 1rem;
+	--spacer-xxxs: #{calc(math.div(var(--spacer), 4))};
+	--spacer-xxs: #{calc(math.div(var(--spacer), 3))};
+	--spacer-xs: #{calc(math.div(var(--spacer), 2))};
+	--spacer-sm: #{calc(math.div(var(--spacer), 1.5))};
+	--spacer-lg: #{calc(var(--spacer) * 1.5)};
+	--spacer-xl: #{calc(var(--spacer) * 2)};
+	--spacer-xxl: #{calc(var(--spacer) * 3)};
+	--spacer-xxxl: #{calc(var(--spacer) * 4)};
+
 	--grid-gap: #{tools.rem(32px)};
 	--max-width: #{tools.rem(1920px)};
 
@@ -21,7 +23,7 @@
 	}
 
 	@include tools.to('md') {
-		--spacer-default: #{tools.rem(32px)};
+		--spacer: #{tools.rem(32px)};
 		--spacer-md: #{tools.rem(24px)};
 		--spacer-lg: #{tools.rem(48px)};
 		--spacer-xl: #{tools.rem(80px)};

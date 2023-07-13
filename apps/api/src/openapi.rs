@@ -36,11 +36,11 @@ impl Modify for SecurityAddon {
 		super::modules::auth::controllers::slack::login,
 		super::modules::auth::controllers::slack::callback,
 
-		super::modules::teams::controllers::teams::create,
-		super::modules::teams::controllers::teams::find_all,
-		super::modules::teams::controllers::teams::find_one,
-		super::modules::teams::controllers::teams::update,
-		super::modules::teams::controllers::teams::remove,
+		super::modules::sites::controllers::sites::create,
+		super::modules::sites::controllers::sites::find_all,
+		super::modules::sites::controllers::sites::find_one,
+		super::modules::sites::controllers::sites::update,
+		super::modules::sites::controllers::sites::remove,
 
 		super::modules::roles::controllers::roles::create,
 		super::modules::roles::controllers::roles::find_all,
@@ -74,12 +74,12 @@ impl Modify for SecurityAddon {
 			super::modules::auth::dto::request::RegisterUserDTO,
 			super::modules::auth::dto::request::UpdateUserDTO,
 
-			// Teams
-			super::modules::teams::dto::response::TeamDTO,
-			super::modules::teams::dto::response::TeamsDTO,
-			super::modules::teams::dto::response::TeamsEmbeddedDTO,
-			super::modules::teams::dto::request::CreateTeamDTO,
-			super::modules::teams::dto::request::UpdateTeamDTO,
+			// Sites
+			super::modules::sites::dto::response::SiteDTO,
+			super::modules::sites::dto::response::SitesDTO,
+			super::modules::sites::dto::response::SitesEmbeddedDTO,
+			super::modules::sites::dto::request::CreateSiteDTO,
+			super::modules::sites::dto::request::UpdateSiteDTO,
 
 			// Roles
 			super::modules::roles::dto::response::RoleDTO,

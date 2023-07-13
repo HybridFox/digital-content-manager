@@ -88,14 +88,14 @@ impl
 	)> for IAMPoliciesDTO
 {
 	fn from(
-		(policies, page, team_id): (
+		(policies, page, site_id): (
 			Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>,
 			HALPage,
 			Uuid,
 		),
 	) -> Self {
 		Self {
-			_links: HALLinkList::from((format!("/api/v1/teams/{}/policies", team_id), &page)),
+			_links: HALLinkList::from((format!("/api/v1/sites/{}/policies", site_id), &page)),
 			_embedded: IAMPoliciesEmbeddedDTO {
 				policies: policies
 					.into_iter()

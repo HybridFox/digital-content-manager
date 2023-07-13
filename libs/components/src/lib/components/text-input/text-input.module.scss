@@ -1,0 +1,58 @@
+.a-input {
+	display: flex;
+	flex-direction: column;
+
+	&--has-error {
+		.a-input__field {
+			border-color: var(--color-state-danger-light);
+
+			&:hover {
+				border-color: var(--color-state-danger);
+			}
+	
+			&:focus {
+				border-color: var(--color-state-danger);
+				box-shadow: 0px 0px 0px var(--spacer-xxxs) var(--color-state-danger-light);
+			}
+		}
+	}
+
+	&__label {
+		color: var(--color-gray-dark);
+		font-size: var(--font-size-small);
+		margin-bottom: var(--spacer-xs);
+	}
+
+	&__field-wrapper {
+		position: relative;
+	}
+
+	&__field {
+		border: 2px solid var(--color-gray-lightest);
+		border-radius: var(--border-radius-sm);
+		padding: var(--spacer-xs) var(--spacer-sm);
+		font-size: var(--font-size-p);
+		box-shadow: 0px 0px 0px 0px var(--color-primary-light);
+		background: transparent;
+		width: 100%;
+		transition: all .2s ease;
+
+		&:hover {
+			border: 2px solid var(--color-primary);
+		}
+
+		&:focus {
+			outline: none;
+			border: 2px solid var(--color-primary);
+			box-shadow: 0px 0px 0px var(--spacer-xxxs) var(--color-primary-light);
+		}
+	}
+
+	&__error {
+		position: absolute;
+		right: var(--spacer-sm);
+		top: var(--spacer-sm);
+		color: var(--color-state-danger);
+		font-size: 1.2rem;
+	}
+}

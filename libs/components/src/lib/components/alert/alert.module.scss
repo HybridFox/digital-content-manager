@@ -1,0 +1,29 @@
+.a-alert {
+	border-radius: var(--border-radius-sm);
+	background-color: var(--color-gray-lighter);
+	padding: var(--spacer-sm) var(--spacer);
+	display: flex;
+	justify-content: space-between;
+	font-weight: 500;
+
+	&__close {
+		padding: 0;
+		margin: 0;
+		border: none;
+		cursor: pointer;
+		background: none;
+
+		&:hover {
+			background: none;
+		}
+	}
+
+	&--danger {
+		background-color: var(--color-state-danger-light);
+		color: var(--color-state-danger);
+
+		.a-alert__close {
+			color: var(--color-state-danger);
+		}
+	}
+}

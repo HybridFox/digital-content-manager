@@ -11,12 +11,12 @@ use uuid::Uuid;
 
 #[derive(Deserialize, IntoParams)]
 pub struct FindPathParams {
-	team_id: Uuid,
+	site_id: Uuid,
 }
 
 #[derive(Deserialize, IntoParams)]
 pub struct FindOnePathParams {
-	team_id: Uuid,
+	site_id: Uuid,
 	iam_policy_id: Uuid,
 }
 
@@ -27,7 +27,7 @@ pub struct FindAllQueryParams {
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/teams/{team_id}/iam-policies",
+	context_path = "/api/v1/sites/{site_id}/iam-policies",
     request_body = CreateIAMPolicyDTO,
 	responses(
 		(status = 200, body = IAMPolicyDTO),
@@ -45,13 +45,13 @@ pub async fn create(
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let policy = IAMPolicy::create(conn, params.team_id, &form.name)?;
+	let policy = IAMPolicy::create(conn, params.site_id, &form.name)?;
 	let res = response::IAMPolicyDTO::from(policy);
 	Ok(HttpResponse::Ok().json(res))
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/teams/{team_id}/iam-policies",
+	context_path = "/api/v1/sites/{site_id}/iam-policies",
 	responses(
 		(status = 200, body = IAMPoliciesDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
@@ -71,7 +71,7 @@ pub async fn find_all(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
 
-	let (policies, total_elements) = IAMPolicy::find(conn, params.team_id, page, pagesize)?;
+	let (policies, total_elements) = IAMPolicy::find(conn, params.site_id, page, pagesize)?;
 
 	let res = response::IAMPoliciesDTO::from((
 		policies,
@@ -81,14 +81,14 @@ pub async fn find_all(
 			total_elements,
 			total_pages: (total_elements / pagesize + (total_elements % pagesize).signum()).max(1),
 		},
-		params.team_id,
+		params.site_id,
 	));
 
 	Ok(HttpResponse::Ok().json(res))
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/teams/{team_id}/iam-policies",
+	context_path = "/api/v1/sites/{site_id}/iam-policies",
 	responses(
 		(status = 200, body = IAMPolicyWithPermissionsDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
@@ -104,14 +104,14 @@ pub async fn find_one(
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let (policy, permissions) = IAMPolicy::find_one(conn, params.team_id, params.iam_policy_id)?;
+	let (policy, permissions) = IAMPolicy::find_one(conn, params.site_id, params.iam_policy_id)?;
 
 	let res = response::IAMPolicyWithPermissionsDTO::from((policy, permissions));
 	Ok(HttpResponse::Ok().json(res))
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/teams/{team_id}/iam-policies",
+	context_path = "/api/v1/sites/{site_id}/iam-policies",
     request_body = UpdateIAMPolicyDTO,
 	responses(
 		(status = 200, body = IAMPolicyDTO),
@@ -141,7 +141,7 @@ pub async fn update(
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/teams/{team_id}/iam-policies",
+	context_path = "/api/v1/sites/{site_id}/iam-policies",
 	responses(
 		(status = 204),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")

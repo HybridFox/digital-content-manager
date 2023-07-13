@@ -1,0 +1,36 @@
+@use '/src/assets/scss/tools' as tools;
+
+.p-login {
+	display: grid;
+	grid-template-columns: tools.rem(500px) auto;
+	height: calc(100vh - var(--spacer) * 2);
+	gap: var(--spacer);
+
+	&__content {
+		display: flex;
+		align-items: center;
+		padding: 0 var(--spacer-xl)
+	}
+
+	&__form {
+		width: 100%;
+	}
+
+	&__logo {
+		font-weight: 700;
+		font-size: 2rem;
+		padding-bottom: var(--spacer-lg);
+		border-bottom: 1px solid var(--color-gray-lightest);
+
+		i {
+			color: var(--color-primary);
+		}
+	}
+
+	&__aside {
+		width: 100%;
+		background-size: cover;
+		background-position: center center;
+		border-radius: var(--border-radius-md);
+	}
+}

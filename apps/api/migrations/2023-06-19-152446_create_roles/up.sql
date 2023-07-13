@@ -5,9 +5,9 @@ CREATE TABLE roles (
 	name TEXT NOT NULL,
 	slug TEXT NOT NULL,
 	description TEXT,
-	team_id UUID NOT NULL REFERENCES teams (id) ON DELETE CASCADE,
+	site_id UUID NOT NULL REFERENCES sites (id) ON DELETE CASCADE,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-CREATE INDEX roles_team_id_idx ON roles (team_id);
+CREATE INDEX roles_site_id_idx ON roles (site_id);

@@ -16,17 +16,17 @@ use super::permission::Permission;
 pub struct IAMPolicy {
 	pub id: Uuid,
 	pub name: String,
-	pub team_id: Uuid,
+	pub site_id: Uuid,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 }
 
 impl IAMPolicy {
 	#[instrument(skip(conn))]
-	pub fn create(conn: &mut PgConnection, team_id: Uuid, name: &str) -> Result<Self, AppError> {
+	pub fn create(conn: &mut PgConnection, site_id: Uuid, name: &str) -> Result<Self, AppError> {
 		use diesel::prelude::*;
 
-		let record = CreateIAMPolicy { name, team_id };
+		let record = CreateIAMPolicy { name, site_id };
 
 		let role = diesel::insert_into(iam_policies::table)
 			.values(&record)
@@ -38,11 +38,11 @@ impl IAMPolicy {
 
 	pub fn find_one(
 		conn: &mut PgConnection,
-		team_id: Uuid,
+		site_id: Uuid,
 		id: Uuid,
 	) -> Result<(Self, Vec<(Permission, Vec<String>)>), AppError> {
 		let iam_policy = iam_policies::table
-			.filter(iam_policies::team_id.eq(team_id))
+			.filter(iam_policies::site_id.eq(site_id))
 			.find(id)
 			.select(IAMPolicy::as_select())
 			.get_result(conn)?;
@@ -78,13 +78,13 @@ impl IAMPolicy {
 
 	pub fn find(
 		conn: &mut PgConnection,
-		team_id: Uuid,
+		site_id: Uuid,
 		page: i64,
 		pagesize: i64,
 	) -> Result<(Vec<(Self, Vec<(Permission, Vec<String>)>)>, i64), AppError> {
 		let iam_policies = iam_policies::table
 			.select(IAMPolicy::as_select())
-			.filter(iam_policies::team_id.eq(team_id))
+			.filter(iam_policies::site_id.eq(site_id))
 			.offset((page - 1) * pagesize)
 			.limit(pagesize)
 			.load::<IAMPolicy>(conn)?;
@@ -151,7 +151,7 @@ impl IAMPolicy {
 #[diesel(table_name = iam_policies)]
 pub struct CreateIAMPolicy<'a> {
 	pub name: &'a str,
-	pub team_id: Uuid,
+	pub site_id: Uuid,
 }
 
 #[derive(AsChangeset, Debug, Deserialize)]

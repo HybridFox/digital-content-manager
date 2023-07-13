@@ -26,14 +26,14 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 					),
 			)
 			.service(
-				web::scope("/teams")
-					.service(modules::teams::controllers::teams::create)
-					.service(modules::teams::controllers::teams::find_all)
-					.service(modules::teams::controllers::teams::find_one)
-					.service(modules::teams::controllers::teams::update)
-					.service(modules::teams::controllers::teams::remove)
+				web::scope("/sites")
+					.service(modules::sites::controllers::sites::create)
+					.service(modules::sites::controllers::sites::find_all)
+					.service(modules::sites::controllers::sites::find_one)
+					.service(modules::sites::controllers::sites::update)
+					.service(modules::sites::controllers::sites::remove)
 					.service(
-						web::scope("/{team_id}/roles")
+						web::scope("/{site_id}/roles")
 							.service(modules::roles::controllers::roles::create)
 							.service(modules::roles::controllers::roles::find_all)
 							.service(modules::roles::controllers::roles::find_one)
@@ -41,7 +41,7 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 							.service(modules::roles::controllers::roles::remove),
 					)
 					.service(
-						web::scope("/{team_id}/iam-policies")
+						web::scope("/{site_id}/iam-policies")
 							.service(modules::iam_policies::controllers::iam_policies::create)
 							.service(modules::iam_policies::controllers::iam_policies::find_all)
 							.service(modules::iam_policies::controllers::iam_policies::find_one)

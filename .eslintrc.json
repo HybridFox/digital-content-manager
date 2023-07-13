@@ -49,7 +49,7 @@
 				"newlines-between": "always",
 				"pathGroups": [
 					{
-						"pattern": "~**",
+						"pattern": "@ibs/components",
 						"group": "internal"
 					},
 					{

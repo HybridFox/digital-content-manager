@@ -66,9 +66,9 @@ pub struct RolesDTO {
 }
 
 impl From<(Vec<Role>, HALPage, Uuid)> for RolesDTO {
-	fn from((roles, page, team_id): (Vec<Role>, HALPage, Uuid)) -> Self {
+	fn from((roles, page, site_id): (Vec<Role>, HALPage, Uuid)) -> Self {
 		Self {
-			_links: HALLinkList::from((format!("/api/v1/teams/{}/roles", team_id), &page)),
+			_links: HALLinkList::from((format!("/api/v1/sites/{}/roles", site_id), &page)),
 			_embedded: RolesEmbeddedDTO {
 				roles: roles
 					.iter()

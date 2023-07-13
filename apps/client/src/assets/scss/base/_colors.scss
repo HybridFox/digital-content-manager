@@ -1,17 +1,20 @@
 /**
-*	Primary Colors Interally
-**/
-$primary-purple: #B895F3;
-
-/**
 *	Primary Colors Public
 **/
 
 :root {
-	--primary-purple: #B895F3;
-	--color-concrete: #d0d0d0;
-	--color-dark-grey: #1f1f1f;
-	--color-facebook-blue: #1877f2;
-	--color-slack-orange: #e9a820;
+	--color-primary: rgb(208, 138, 255);
+	--color-primary-light: rgba(208, 138, 255, 0.3);
 	--color-white: #ffff;
+
+	--color-gray-lightest: rgb(240, 240, 240);
+	--color-gray-lighter: rgb(230, 230, 230);
+	--color-gray-light: rgb(220, 220, 220);
+	--color-gray: rgb(159, 159, 159);
+	--color-gray-dark: rgb(121, 121, 121);
+	--color-gray-darker: rgb(47, 47, 47);
+	--color-gray-darkest: rgb(30, 30, 30);
+
+	--color-state-danger: rgb(255, 103, 103);
+	--color-state-danger-light: rgba(255, 103, 103, 0.3);
 }

@@ -70,14 +70,18 @@
 		"targets": {}
 	},
 	"dependencies": {
+		"@hookform/resolvers": "3.1.1",
 		"@swc/helpers": "~0.5.0",
 		"@tanstack/router": "0.0.1-beta.107",
 		"classnames": "2.3.2",
+		"ky": "0.33.3",
 		"normalize.css": "8.0.1",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-hook-form": "7.45.1",
 		"react-router-dom": "6.11.2",
-		"tslib": "^2.3.0"
+		"tslib": "^2.3.0",
+		"yup": "1.2.0",
+		"zustand": "4.3.9"
 	}
 }
