@@ -1,18 +1,24 @@
-name: chat-wall
+version: '3'
+
+x-default-options: &default-options
+    networks:
+        - ibs
+    build:
+        context: .
+        dockerfile: Dockerfile.dev
+    volumes:
+        - ./:/app
+        - ./static:/static:delegated
+        - node-modules-data:/app/node_modules
+
+name: ibs
 services:
     client:
-        build:
-            context: client
-            dockerfile: Dockerfile.dev
-        networks:
-            - chat-wall
-        volumes:
-            - ./client:/app:delegated
-            - /app/node_modules
-        env_file:
-            - ./client/.env
+        container_name: ibs-client
+        command: npm run nx run client:serve -- --verbose
         ports:
             - 3000:3000
+        <<: *default-options
 
     # api:
     #     build:
@@ -35,18 +41,19 @@ services:
         image: postgres:15-alpine
         restart: always
         environment:
-            POSTGRES_PASSWORD: chat-wall
-            POSTGRES_USER: chat-wall
-            POSTGRES_DB: chat-wall
+            POSTGRES_PASSWORD: ibs
+            POSTGRES_USER: ibs
+            POSTGRES_DB: ibs
         networks:
-            - chat-wall
+            - ibs
         ports:
             - 5432:5432
         volumes:
             - ./data:/var/lib/postgresql/data
 
 networks:
-    chat-wall: {}
+    ibs: {}
 
 volumes:
-    api-cache: {}
+    node-modules-data:
+

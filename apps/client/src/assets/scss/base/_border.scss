@@ -1,0 +1,7 @@
+@use './../tools' as tools;
+
+:root {
+	--border-radius-sm: #{tools.rem(8px)};
+	--border-light: 1px solid currentcolor;
+	--border: 2px solid currentcolor;
+}
