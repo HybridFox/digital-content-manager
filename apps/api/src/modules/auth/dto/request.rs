@@ -19,6 +19,6 @@ pub struct UpdateUserDTO {
 	pub email: Option<String>,
 	pub name: Option<String>,
 	pub password: Option<String>,
-	pub image: Option<String>,
+	pub avatar: Option<String>,
 	pub bio: Option<String>,
 }

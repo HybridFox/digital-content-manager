@@ -1,6 +1,47 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
+    content_components (id) {
+        id -> Uuid,
+        name -> Text,
+        slug -> Text,
+        component_name -> Text,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    content_types (id) {
+        id -> Uuid,
+        name -> Text,
+        slug -> Text,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    field_config (id) {
+        id -> Uuid,
+        name -> Text,
+        slug -> Text,
+        field_id -> Uuid,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    fields (id) {
+        id -> Uuid,
+        name -> Text,
+        slug -> Text,
+        content_component_id -> Uuid,
+    }
+}
+
+diesel::table! {
     iam_actions (key) {
         key -> Text,
         description -> Nullable<Text>,
@@ -99,10 +140,18 @@ diesel::table! {
 }
 
 diesel::table! {
+    sites_content_types (site_id, content_type_id) {
+        site_id -> Uuid,
+        content_type_id -> Uuid,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     sites_users (site_id, user_id) {
         user_id -> Uuid,
         site_id -> Uuid,
-        role_id -> Uuid,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -119,6 +168,16 @@ diesel::table! {
 }
 
 diesel::table! {
+    sites_users_roles (site_id, user_id) {
+        user_id -> Uuid,
+        site_id -> Uuid,
+        role_id -> Uuid,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     users (id) {
         id -> Uuid,
         email -> Text,
@@ -126,7 +185,7 @@ diesel::table! {
         source -> Text,
         password -> Text,
         bio -> Nullable<Text>,
-        image -> Nullable<Text>,
+        avatar -> Nullable<Text>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -141,14 +200,22 @@ diesel::joinable!(permissions_iam_conditions -> permissions (permission_id));
 diesel::joinable!(roles -> sites (site_id));
 diesel::joinable!(roles_iam_policies -> iam_policies (iam_policy_id));
 diesel::joinable!(roles_iam_policies -> roles (role_id));
-diesel::joinable!(sites_users -> roles (role_id));
+diesel::joinable!(sites_content_types -> content_types (content_type_id));
+diesel::joinable!(sites_content_types -> sites (site_id));
 diesel::joinable!(sites_users -> sites (site_id));
 diesel::joinable!(sites_users -> users (user_id));
 diesel::joinable!(sites_users_iam_policies -> iam_policies (iam_policy_id));
 diesel::joinable!(sites_users_iam_policies -> sites (site_id));
 diesel::joinable!(sites_users_iam_policies -> users (user_id));
+diesel::joinable!(sites_users_roles -> roles (role_id));
+diesel::joinable!(sites_users_roles -> sites (site_id));
+diesel::joinable!(sites_users_roles -> users (user_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
+    content_components,
+    content_types,
+    field_config,
+    fields,
     iam_actions,
     iam_conditions,
     iam_policies,
@@ -158,7 +225,9 @@ diesel::allow_tables_to_appear_in_same_query!(
     roles,
     roles_iam_policies,
     sites,
+    sites_content_types,
     sites_users,
     sites_users_iam_policies,
+    sites_users_roles,
     users,
 );

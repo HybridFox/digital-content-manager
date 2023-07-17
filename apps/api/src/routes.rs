@@ -19,11 +19,6 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 							.service(modules::auth::controllers::google::login)
 							.service(modules::auth::controllers::google::callback),
 					)
-					.service(
-						web::scope("/slack")
-							.service(modules::auth::controllers::slack::login)
-							.service(modules::auth::controllers::slack::callback),
-					),
 			)
 			.service(
 				web::scope("/sites")
@@ -46,6 +41,14 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 							.service(modules::iam_policies::controllers::iam_policies::find_all)
 							.service(modules::iam_policies::controllers::iam_policies::find_one)
 							.service(modules::iam_policies::controllers::iam_policies::update)
+							.service(modules::iam_policies::controllers::iam_policies::remove),
+					)
+					.service(
+						web::scope("/{site_id}/content-types")
+							.service(modules::content_types::controllers::content_types::create)
+							.service(modules::iam_policies::controllers::iam_policies::find_all)
+							.service(modules::iam_policies::controllers::iam_policies::find_one)
+							// .service(modules::iam_policies::controllers::iam_policies::update)
 							.service(modules::iam_policies::controllers::iam_policies::remove),
 					),
 			)

@@ -1,13 +1,13 @@
 use crate::modules::{
 	roles::models::role::Role,
 	core::models::hal::{HALLinkList, HALPage},
-	iam_policies::{models::iam_policy::IAMPolicy, dto::response::IAMPolicyDTO},
+	iam_policies::{models::{iam_policy::IAMPolicy, permission::Permission}, dto::response::{IAMPolicyDTO, IAMPolicyWithPermissionsDTO}},
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
-use utoipa::{ToSchema};
+use utoipa::ToSchema;
 use uuid::Uuid;
-use std::{convert::From};
+use std::convert::From;
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct RoleDTO {
@@ -49,6 +49,29 @@ impl From<(Role, Vec<IAMPolicy>)> for RoleWithPoliciesDTO {
 			created_at: role.created_at,
 			updated_at: role.updated_at,
 			policies: policies.into_iter().map(IAMPolicyDTO::from).collect(),
+		}
+	}
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+pub struct RoleWithPoliciesWithPermissionsDTO {
+	pub id: Uuid,
+	pub name: String,
+	pub slug: String,
+	pub policies: Vec<IAMPolicyWithPermissionsDTO>,
+	pub created_at: NaiveDateTime,
+	pub updated_at: NaiveDateTime,
+}
+
+impl From<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)> for RoleWithPoliciesWithPermissionsDTO {
+	fn from((role, policies): (Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)) -> Self {
+		Self {
+			id: role.id,
+			name: role.name,
+			slug: role.slug,
+			created_at: role.created_at,
+			updated_at: role.updated_at,
+			policies: policies.into_iter().map(|policy| IAMPolicyWithPermissionsDTO::from(policy)).collect(),
 		}
 	}
 }

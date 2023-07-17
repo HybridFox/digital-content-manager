@@ -3,5 +3,5 @@ import * as yup from "yup"
 export const loginSchema = yup
 	.object({
 		email: yup.string().required().email(),
-		password: yup.string().min(5)
+		password: yup.string().required().min(5)
 	})

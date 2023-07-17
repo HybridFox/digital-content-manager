@@ -8,7 +8,7 @@ use actix_web::{get, web, HttpRequest, HttpResponse, put};
 #[utoipa::path(
 	context_path = "/api/v1/auth",
 	responses(
-		(status = 200, body = UserDTO),
+		(status = 200, body = AuthDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
 	),
     security(
@@ -16,10 +16,15 @@ use actix_web::{get, web, HttpRequest, HttpResponse, put};
     )
 )]
 #[get("/me")]
-pub async fn me(req: HttpRequest) -> ApiResponse {
+pub async fn me(
+	state: web::Data<AppState>,
+	req: HttpRequest
+) -> ApiResponse {
+	let conn = &mut state.get_conn()?;
 	let user = auth::get_current_user(&req)?;
 	let token = user.generate_token()?;
-	let res = response::UserDTO::from((user, token));
+	let sites = user.get_sites(conn)?;
+	let res = response::AuthDTO::from((user, sites, token));
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -27,7 +32,7 @@ pub async fn me(req: HttpRequest) -> ApiResponse {
 	context_path = "/api/v1/auth",
     request_body = UpdateUserDTO,
 	responses(
-		(status = 200, body = UserDTO),
+		(status = 200, body = AuthDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
 	),
     security(
@@ -49,11 +54,12 @@ pub async fn update(
 			email: form.email.clone(),
 			name: form.name.clone(),
 			password: form.password.clone(),
-			image: form.image.clone(),
+			avatar: form.avatar.clone(),
 			bio: form.bio.clone(),
 		},
 	)?;
+	let sites = user.get_sites(conn)?;
 	let token = &user.generate_token()?;
-	let res = response::UserDTO::from((user, token.to_string()));
+	let res = response::AuthDTO::from((user, sites, token.to_string()));
 	Ok(HttpResponse::Ok().json(res))
 }

@@ -58,7 +58,7 @@ fn init_telemetry() {
 			env::var(constants::env_key::OTEL_ENDPOINT).expect("Otel endpoint is not set"),
 		))
 		.with_trace_config(trace::config().with_resource(Resource::new(vec![
-			KeyValue::new("service.name", "socialcanvas-api"),
+			KeyValue::new("service.name", "ibs-api"),
 			KeyValue::new("service.language.name", "rust"),
 		])))
 		.install_batch(TokioCurrentThread)
@@ -70,7 +70,7 @@ fn init_telemetry() {
 	// Create a `tracing` layer using the Jaeger tracer
 	let telemetry = tracing_opentelemetry::layer().with_tracer(tracer);
 	// Create a `tracing` layer to emit spans as structured logs to stdout
-	let formatting_layer = BunyanFormattingLayer::new("socialcanvas-api".into(), std::io::stdout);
+	let formatting_layer = BunyanFormattingLayer::new("ibs-api".into(), std::io::stdout);
 	// Combined them all together in a `tracing` subscriber
 	let subscriber = Registry::default()
 		.with(env_filter)

@@ -1,0 +1,116 @@
+.o-menu {
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+
+	&__logo {
+		font-weight: 700;
+		font-size: 1.5rem;
+		margin: var(--spacer-lg) var(--spacer-lg) var(--spacer) var(--spacer-lg);
+		padding-bottom: var(--spacer-lg);
+		border-bottom: 1px solid var(--color-gray-lightest);
+
+		i {
+			color: var(--color-primary);
+		}
+	}
+
+	&__links {
+		&__name {
+			margin: 0;
+			color: var(--color-gray-dark);
+			margin: var(--spacer) var(--spacer-lg) 0 var(--spacer-lg);
+			text-transform: uppercase;
+			font-size: 0.6rem;
+			font-weight: bold;
+			padding-bottom: var(--spacer-xs);
+			border-bottom: 1px solid var(--color-gray-lightest);
+		}
+
+		ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		
+			li {
+			}
+		}
+	}
+
+	&__link {
+		position: relative;
+		display: flex;
+		align-items: center;
+		text-decoration: none;
+		color: var(--color-gray-darkest);
+		padding: var(--spacer-sm) var(--spacer-lg);
+		
+		&::after {
+			position: absolute;
+			content: "";
+			left: -4px;
+			top: var(--spacer-xs);
+			height: 28px;
+			width: 8px;
+			background-color: transparent;	
+			border-radius: var(--border-radius-xs);
+		}
+
+		i {
+			font-size: 1.5rem;
+			margin-right: var(--spacer-xs);
+		}
+
+		&--active {
+			&::after {
+				background-color: var(--color-primary);	
+			}
+		}
+
+		&:hover {
+			&::after {
+				background-color: var(--color-gray-light);	
+			}
+		}
+	}
+
+	&__profile {
+		border-top: 1px solid var(--color-gray-lightest);
+		padding-top: var(--spacer);
+		margin: auto var(--spacer-lg) var(--spacer-lg) var(--spacer-lg);
+		// background-color: var(--color-gray-lightest);
+		// border-radius: var(--border-radius);
+		// padding: var(--spacer-xs);
+		display: flex;
+		align-items: center;
+
+		&__avatar {
+			height: 50px;
+			width: 50px;
+			border-radius: 50%;
+		}
+
+		&__info {
+			margin-left: var(--spacer)
+		}
+
+		&__name {
+			margin: 0;
+			font-weight: bold;
+			color: var(--color-gray-darkest);
+		}
+
+		&__email {
+			margin: 0;
+			margin-top: var(--spacer-xxs);
+			color: var(--color-gray-dark);
+			font-size: 0.8rem;
+		}
+
+		&__settings {
+			margin-left: auto;
+			display: block;
+			padding: var(--spacer);
+		}
+	}
+}

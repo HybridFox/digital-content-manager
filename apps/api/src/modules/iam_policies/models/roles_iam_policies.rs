@@ -9,7 +9,7 @@ use crate::modules::roles::models::role::Role;
 use crate::errors::AppError;
 use crate::schema::{roles_iam_policies};
 
-#[derive(Identifiable, Selectable, Queryable, Associations, Debug)]
+#[derive(Identifiable, Selectable, Queryable, Associations, Debug, Clone)]
 // #[diesel(belongs_to("IAMPolicy"))]
 #[diesel(belongs_to(Role))]
 #[diesel(table_name = roles_iam_policies)]

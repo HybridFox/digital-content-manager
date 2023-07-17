@@ -7,8 +7,8 @@ use uuid::Uuid;
 use crate::constants;
 
 static ONE_DAY: i64 = 60 * 60 * 24; // in seconds
-static ISSUER: &str = "auth.socialcanvas.be";
-static AUDIENCE: &str = "socialcanvas";
+static ISSUER: &str = "auth.ibs.sh";
+static AUDIENCE: &str = "ibs";
 
 pub fn decode(token: &str) -> jsonwebtoken::errors::Result<TokenData<Claims>> {
 	let secret = env::var(constants::env_key::JWT_SECRET).expect("JWT Secret should be defined");

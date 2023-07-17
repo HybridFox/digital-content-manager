@@ -6,7 +6,7 @@ CREATE TABLE users (
 	source TEXT NOT NULL DEFAULT 'local',
 	password Text NOT NULL,
 	bio TEXT,
-	image TEXT,
+	avatar TEXT,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );

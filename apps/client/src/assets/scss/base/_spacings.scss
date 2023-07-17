@@ -18,15 +18,11 @@
 	--grid-gap: #{tools.rem(32px)};
 	--max-width: #{tools.rem(1920px)};
 
-	@include tools.to('lg') {
-		--spacer-xxl: #{tools.rem(180px)};
-	}
+	// @include tools.to('lg') {
+	// 	--spacer-xxl: #{tools.rem(180px)};
+	// }
 
 	@include tools.to('md') {
-		--spacer: #{tools.rem(32px)};
-		--spacer-md: #{tools.rem(24px)};
-		--spacer-lg: #{tools.rem(48px)};
-		--spacer-xl: #{tools.rem(80px)};
-		--spacer-xxl: #{tools.rem(96px)};
+		--spacer: 0.75rem;
 	}
 }

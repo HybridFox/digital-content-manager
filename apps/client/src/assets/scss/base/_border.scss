@@ -1,9 +1,10 @@
 @use './../tools' as tools;
 
 :root {
+	--border-radius-xs: #{tools.rem(4px)};
 	--border-radius-sm: #{tools.rem(8px)};
 	--border-radius-md: #{tools.rem(16px)};
-	--border-radius-button: #{tools.rem(32px)};
+	--border-radius: #{tools.rem(32px)};
 	--border-light: 1px solid currentcolor;
 	--border: 2px solid currentcolor;
 }

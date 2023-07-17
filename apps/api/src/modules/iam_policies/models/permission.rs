@@ -24,7 +24,7 @@ use super::{
 	permission_iam_action::PermissionIAMAction, permission_iam_condition::PermissionIAMCondition,
 };
 
-#[derive(FromSqlRow, AsExpression, serde::Serialize, serde::Deserialize, Debug, Default)]
+#[derive(FromSqlRow, AsExpression, serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 #[diesel(sql_type = Jsonb)]
 pub struct PermissionResourcesValue(Vec<String>);
 
@@ -45,7 +45,7 @@ impl ToSql<Jsonb, Pg> for PermissionResourcesValue {
 	}
 }
 
-#[derive(Selectable, Queryable, Debug, Identifiable, Associations)]
+#[derive(Selectable, Queryable, Debug, Identifiable, Associations, Clone)]
 #[diesel(belongs_to(IAMPolicy, foreign_key = iam_policy_id))]
 #[diesel(table_name = permissions)]
 #[diesel(primary_key(id))]

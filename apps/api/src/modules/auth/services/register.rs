@@ -1,6 +1,6 @@
 use crate::{
 	errors::AppError,
-	modules::{core::middleware::state::AppConn},
+	modules::{core::middleware::state::AppConn, sites::models::site_user_role::SiteUserRole},
 };
 use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
 use crate::modules::iam_policies::models::permission::Permission;
@@ -38,7 +38,8 @@ pub async fn register_user(
 	let (role, _) = Role::create(conn, site.id, "Default site".to_string(), vec![policy.id])?;
 
 	// Assign user to site
-	let _site_user = SiteUser::create(conn, user.id, site.id, role.id)?;
+	let _site_user = SiteUser::create(conn, user.id, site.id)?;
+	let _site_user_role = SiteUserRole::create(conn, user.id, site.id, role.id)?;
 
 	Ok((user, token))
 }

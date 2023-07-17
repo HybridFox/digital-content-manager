@@ -2,7 +2,7 @@ use std::borrow::Borrow;
 use std::env;
 
 use crate::constants::{env_key, self};
-use crate::errors::{AppError};
+use crate::errors::AppError;
 use crate::modules::auth::dto::response;
 use crate::modules::auth::models::user::User;
 use crate::modules::auth::services::register::register_user;
@@ -72,14 +72,14 @@ pub async fn login(_state: web::Data<AppState>) -> Result<Redirect, AppError> {
 
 	// let conn = &mut state.get_conn()?;
 	// let (user, token) = User::signin(conn, &form.email, &form.password)?;
-	// let res = response::UserDTO::from((user, token));
+	// let res = response::AuthDTO::from((user, token));
 	Ok(Redirect::to(auth_url.to_string()))
 }
 
 #[utoipa::path(
 	context_path = "/api/v1/auth/google",
 	responses(
-		(status = 200, body = UserDTO),
+		(status = 200, body = AuthDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
 	)
 )]
@@ -110,7 +110,8 @@ pub async fn callback(
 
 	match existing_user {
 		Ok((user, token)) => {
-			let res = response::UserDTO::from((user, token));
+			let sites = user.get_sites(conn)?;
+			let res = response::AuthDTO::from((user, sites, token));
 			Ok(HttpResponse::Ok().json(res))
 		}
 		Err(_) => {
@@ -124,7 +125,8 @@ pub async fn callback(
 			)
 			.await?;
 
-			let res = response::UserDTO::from((user, token));
+			let sites = user.get_sites(conn)?;
+			let res = response::AuthDTO::from((user, sites, token));
 			Ok(HttpResponse::Ok().json(res))
 		}
 	}

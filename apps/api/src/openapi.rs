@@ -1,7 +1,5 @@
 use utoipa::{
-	openapi::{
-		security::{SecurityScheme, HttpBuilder, HttpAuthScheme},
-	},
+	openapi::security::{SecurityScheme, HttpBuilder, HttpAuthScheme},
 	OpenApi, Modify,
 };
 
@@ -33,8 +31,6 @@ impl Modify for SecurityAddon {
 		super::modules::auth::controllers::local::register,
 		super::modules::auth::controllers::google::login,
 		super::modules::auth::controllers::google::callback,
-		super::modules::auth::controllers::slack::login,
-		super::modules::auth::controllers::slack::callback,
 
 		super::modules::sites::controllers::sites::create,
 		super::modules::sites::controllers::sites::find_all,
@@ -59,6 +55,12 @@ impl Modify for SecurityAddon {
 
 		super::modules::iam_conditions::controllers::iam_conditions::find_all,
 		super::modules::iam_conditions::controllers::iam_conditions::find_one,
+
+		super::modules::content_types::controllers::content_types::create,
+		super::modules::content_types::controllers::content_types::find_all,
+		super::modules::content_types::controllers::content_types::find_one,
+		// super::modules::content_types::controllers::content_types::update,
+		super::modules::content_types::controllers::content_types::remove,
 	),
 	components(
 		schemas(
@@ -70,6 +72,7 @@ impl Modify for SecurityAddon {
 
 			// Auth
 			super::modules::auth::dto::response::UserDTO,
+			super::modules::auth::dto::response::AuthDTO,
 			super::modules::auth::dto::request::LoginUserDTO,
 			super::modules::auth::dto::request::RegisterUserDTO,
 			super::modules::auth::dto::request::UpdateUserDTO,
@@ -110,6 +113,13 @@ impl Modify for SecurityAddon {
 			super::modules::iam_conditions::dto::response::IAMConditionDTO,
 			super::modules::iam_conditions::dto::response::IAMConditionsDTO,
 			super::modules::iam_conditions::dto::response::IAMConditionsEmbeddedDTO,
+
+			// Content Types
+			super::modules::content_types::dto::response::ContentTypeDTO,
+			super::modules::content_types::dto::response::ContentTypesDTO,
+			super::modules::content_types::dto::response::ContentTypesEmbeddedDTO,
+			super::modules::content_types::dto::request::CreateContentTypeDTO,
+			super::modules::content_types::dto::request::CreateFieldDTO,
 		)
 	),
 	modifiers(&SecurityAddon)

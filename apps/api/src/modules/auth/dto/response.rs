@@ -1,4 +1,4 @@
-use crate::modules::auth::models::user::User;
+use crate::modules::{auth::models::user::User, sites::{dto::response::SiteWithRolesDTO, models::site::Site}, roles::models::role::Role, iam_policies::models::{iam_policy::IAMPolicy, permission::Permission}};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 use std::convert::From;
@@ -6,20 +6,35 @@ use std::convert::From;
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct UserDTO {
 	pub email: String,
-	pub token: String,
 	pub name: String,
 	pub bio: Option<String>,
-	pub image: Option<String>,
+	pub avatar: Option<String>,
 }
 
-impl From<(User, String)> for UserDTO {
-	fn from((user, token): (User, String)) -> Self {
+impl From<User> for UserDTO {
+	fn from(user: User) -> Self {
 		Self {
 			email: user.email,
-			token,
 			name: user.name,
 			bio: user.bio,
-			image: user.image,
+			avatar: user.avatar,
+		}
+	}
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+pub struct AuthDTO {
+	pub sites: Vec<SiteWithRolesDTO>,
+	pub user: UserDTO,
+	pub token: String
+}
+
+impl From<(User, Vec<(Site, Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>)>, String)> for AuthDTO {
+	fn from((user, sites, token): (User, Vec<(Site, Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>)>, String)) -> Self {
+		Self {
+			token,
+			user: UserDTO::from(user),
+			sites: sites.into_iter().map(|site| SiteWithRolesDTO::from(site)).collect(),
 		}
 	}
 }

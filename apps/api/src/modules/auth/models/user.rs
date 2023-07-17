@@ -2,7 +2,18 @@
 // use crate::app::follow::model::{CreateFollow, DeleteFollow, Follow};
 // use crate::app::profile::model::Profile;
 use crate::errors::{AppError, AppErrorValue};
-use crate::schema::users;
+use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
+use crate::modules::iam_policies::models::permission::Permission;
+use crate::modules::iam_policies::models::permission_iam_action::PermissionIAMAction;
+use crate::modules::iam_policies::models::roles_iam_policies::RoleIAMPolicy;
+use crate::modules::roles::models::role::Role;
+use crate::modules::sites::models::site::Site;
+use crate::modules::sites::models::site_user::SiteUser;
+use crate::modules::sites::models::site_user_role::SiteUserRole;
+use crate::schema::{
+	users, sites, sites_users, roles, sites_users_roles, roles_iam_policies, iam_policies,
+	iam_actions, permissions_iam_actions,
+};
 use crate::utils::{hasher, token};
 use actix_web::http::StatusCode;
 use chrono::prelude::*;
@@ -25,7 +36,7 @@ pub struct User {
 	pub password: String,
 	pub source: String,
 	pub bio: Option<String>,
-	pub image: Option<String>,
+	pub avatar: Option<String>,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 }
@@ -77,7 +88,7 @@ impl User {
 		email: &'a str,
 		name: &'a str,
 		naive_password: &'a str,
-		image: Option<&'a str>,
+		avatar: Option<&'a str>,
 		source: Option<&'a str>,
 	) -> Result<(User, Token), AppError> {
 		use diesel::prelude::*;
@@ -87,7 +98,7 @@ impl User {
 			email,
 			name,
 			password: &hashed_password,
-			image,
+			avatar,
 			source,
 		};
 
@@ -188,13 +199,118 @@ impl User {
 	}
 }
 
+impl User {
+	pub fn get_sites(
+		&self,
+		conn: &mut PgConnection,
+	) -> Result<Vec<(Site, Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>)>, AppError> {
+		// TODO: Clean this up?
+		let sites = SiteUser::belonging_to(self)
+			.inner_join(sites::table.on(sites::id.eq(sites_users::site_id)))
+			.select(Site::as_select())
+			.load::<Site>(conn)?;
+
+		let roles = SiteUserRole::belonging_to(self)
+			.inner_join(roles::table.on(roles::id.eq(sites_users_roles::role_id)))
+			.select(Role::as_select())
+			.load::<Role>(conn)?;
+
+		let iam_policies = RoleIAMPolicy::belonging_to(&roles)
+			.inner_join(
+				iam_policies::table.on(iam_policies::id.eq(roles_iam_policies::iam_policy_id)),
+			)
+			.select((RoleIAMPolicy::as_select(), IAMPolicy::as_select()))
+			.load::<(RoleIAMPolicy, IAMPolicy)>(conn)?;
+
+		let permissions = Permission::belonging_to(
+			&iam_policies
+				.iter()
+				.map(|(_, policy)| policy.to_owned())
+				.collect::<Vec<IAMPolicy>>(),
+		)
+		.select(Permission::as_select())
+		.load(conn)?;
+
+		let actions = PermissionIAMAction::belonging_to(&permissions)
+			.inner_join(
+				iam_actions::table.on(iam_actions::key.eq(permissions_iam_actions::iam_action_key)),
+			)
+			.select(PermissionIAMAction::as_select())
+			.load::<PermissionIAMAction>(conn)?;
+
+		let permissions_with_actions: Vec<(Permission, Vec<String>)> = actions
+			.grouped_by(&permissions)
+			.into_iter()
+			.zip(permissions)
+			.map(|(actions, permission)| {
+				(
+					permission,
+					actions
+						.into_iter()
+						.map(|action| action.iam_action_key)
+						.collect::<Vec<String>>(),
+				)
+			})
+			.collect();
+
+		let policies_with_permissions: Vec<(RoleIAMPolicy, IAMPolicy, Vec<(Permission, Vec<String>)>)> =
+			iam_policies
+				.into_iter()
+				.map(|(role_iam_policy, iam_policy)| {
+					let permissions = &permissions_with_actions
+						.iter()
+						.filter(|(permission, _)| permission.iam_policy_id == iam_policy.id)
+						.map(|vec| vec.to_owned())
+						.collect::<Vec<(Permission, Vec<String>)>>();
+					(
+						role_iam_policy,
+						iam_policy.to_owned(),
+						permissions.to_owned()
+					)
+				})
+				.collect();
+
+		let roles_with_iam_policies: Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)> = roles
+			.into_iter()
+			.map(|role| {
+				let policies = &policies_with_permissions
+					.iter()
+					.filter(|(role_iam_policy, _, _)| role_iam_policy.role_id == role.id)
+					.map(|(_, iam_policy, permissions)| (iam_policy.to_owned(), permissions.to_owned()))
+					.collect::<Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>>();
+				(
+					role.to_owned(),
+					policies.to_owned(),
+				)
+			})
+			.collect();
+
+		let sites_with_roles: Vec<(Site, Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>)> = sites
+			.into_iter()
+			.map(|site| {
+				let roles = &roles_with_iam_policies
+					.iter()
+					.filter(|(role, _)| role.site_id == site.id)
+					.map(|vec| vec.to_owned())
+					.collect::<Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>>();
+				(
+					site.to_owned(),
+					roles.to_owned(),
+				)
+			})
+			.collect();
+
+		Ok(sites_with_roles)
+	}
+}
+
 #[derive(Insertable, Debug, Deserialize)]
 #[diesel(table_name = users)]
 pub struct SignupUser<'a> {
 	pub email: &'a str,
 	pub name: &'a str,
 	pub password: &'a str,
-	pub image: Option<&'a str>,
+	pub avatar: Option<&'a str>,
 	pub source: Option<&'a str>,
 }
 
@@ -204,6 +320,6 @@ pub struct UpdateUser {
 	pub email: Option<String>,
 	pub name: Option<String>,
 	pub password: Option<String>,
-	pub image: Option<String>,
+	pub avatar: Option<String>,
 	pub bio: Option<String>,
 }
