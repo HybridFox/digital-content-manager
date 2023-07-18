@@ -61,6 +61,12 @@ impl Modify for SecurityAddon {
 		super::modules::content_types::controllers::content_types::find_one,
 		// super::modules::content_types::controllers::content_types::update,
 		super::modules::content_types::controllers::content_types::remove,
+
+		super::modules::content_components::controllers::content_components::create,
+		super::modules::content_components::controllers::content_components::find_all,
+		super::modules::content_components::controllers::content_components::find_one,
+		// super::modules::content_components::controllers::content_components::update,
+		super::modules::content_components::controllers::content_components::remove,
 	),
 	components(
 		schemas(
@@ -120,6 +126,14 @@ impl Modify for SecurityAddon {
 			super::modules::content_types::dto::response::ContentTypesEmbeddedDTO,
 			super::modules::content_types::dto::request::CreateContentTypeDTO,
 			super::modules::content_types::dto::request::CreateFieldDTO,
+
+			// Content Components
+			super::modules::content_components::dto::response::ContentComponentDTO,
+			super::modules::content_components::dto::response::ContentComponentsDTO,
+			super::modules::content_components::dto::response::ContentComponentWithFieldsDTO,
+			super::modules::content_components::dto::response::FieldDTO,
+			super::modules::content_components::dto::response::ContentComponentsEmbeddedDTO,
+			super::modules::content_components::dto::request::CreateContentComponentDTO,
 		)
 	),
 	modifiers(&SecurityAddon)

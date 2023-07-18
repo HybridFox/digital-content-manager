@@ -2,11 +2,13 @@ use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct HALLink {
 	pub href: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct HALLinkList {
 	pub first: HALLink,
 	pub last: HALLink,
@@ -44,6 +46,7 @@ impl From<(String, &HALPage)> for HALLinkList {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct HALPage {
 	pub size: i64,
 	pub total_elements: i64,

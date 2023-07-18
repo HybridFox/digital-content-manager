@@ -46,10 +46,18 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 					.service(
 						web::scope("/{site_id}/content-types")
 							.service(modules::content_types::controllers::content_types::create)
-							.service(modules::iam_policies::controllers::iam_policies::find_all)
-							.service(modules::iam_policies::controllers::iam_policies::find_one)
-							// .service(modules::iam_policies::controllers::iam_policies::update)
-							.service(modules::iam_policies::controllers::iam_policies::remove),
+							.service(modules::content_types::controllers::content_types::find_all)
+							.service(modules::content_types::controllers::content_types::find_one)
+							// .service(modules::content_types::controllers::content_types::update)
+							.service(modules::content_types::controllers::content_types::remove),
+					)
+					.service(
+						web::scope("/{site_id}/content-components")
+							.service(modules::content_components::controllers::content_components::create)
+							.service(modules::content_components::controllers::content_components::find_all)
+							.service(modules::content_components::controllers::content_components::find_one)
+							// .service(modules::content_components::controllers::content_components::update)
+							.service(modules::content_components::controllers::content_components::remove),
 					),
 			)
 			.service(

@@ -24,9 +24,10 @@ diesel::table! {
 diesel::table! {
     field_config (id) {
         id -> Uuid,
-        name -> Text,
-        slug -> Text,
         field_id -> Uuid,
+        config_key -> Text,
+        config_type -> Text,
+        content -> Text,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -37,6 +38,7 @@ diesel::table! {
         id -> Uuid,
         name -> Text,
         slug -> Text,
+        parent_id -> Uuid,
         content_component_id -> Uuid,
     }
 }
