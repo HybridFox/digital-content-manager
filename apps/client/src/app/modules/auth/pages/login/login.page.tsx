@@ -3,9 +3,8 @@ import cx from 'classnames/bind';
 import classNames from "classnames";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup"
-
-import { useAuthStore } from "../../../core/stores/auth.store";
-import { IErrorResponse } from "../../../core/types/error.types";
+import { useNavigate } from "react-router-dom";
+import { IAPIError, useAuthStore } from "@ibs/shared";
 
 import styles from './login.module.scss';
 import { loginSchema } from "./login.const";
@@ -18,12 +17,14 @@ interface ILoginFormInput {
 
 export const LoginPage = () => {
 	const authStore = useAuthStore();
+	const navigate = useNavigate();
 	const formMethods = useForm<ILoginFormInput>({ resolver: yupResolver(loginSchema) });
 	const { handleSubmit, setError, formState: { errors } } = formMethods;
 
 	const onSubmit = ({ email, password }: ILoginFormInput) => {
 		authStore.login(email, password)
-			.catch((error: IErrorResponse) => {
+			.then(() => navigate('/app/dashboard'))
+			.catch((error: IAPIError) => {
 				setError('root', {
 					message: error.code
 				})

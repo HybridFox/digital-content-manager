@@ -6,8 +6,11 @@
 	text-transform: uppercase;
 	border: 2px solid var(--color-primary);
 	cursor: pointer;
-	font-weight: bold;
+	font-weight: 500;
 	transition: all .2s ease;
+	text-decoration: none;
+	color: var(--color-gray-darkest);
+	display: inline-block;
 
 	&:hover {
 		border: 2px solid var(--color-primary);

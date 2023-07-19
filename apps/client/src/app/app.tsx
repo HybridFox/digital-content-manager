@@ -1,12 +1,11 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { useEffect } from 'react';
 
 import { Root } from './modules/core/components/root/root.component';
 import { AUTH_ROUTES } from './modules/auth';
-import { useAuthStore } from './modules/core/stores/auth.store';
 import { AnonymousView } from './modules/core/views/anonymous/anonymous.view';
 import { AuthenticatedView } from './modules/core/views/authenticated/authenticated.view';
 import { DASHBOARD_ROUTES } from './modules/dashboard';
+import { CONTENT_TYPES_ROUTES } from './modules/content-types';
 
 
 const router = createBrowserRouter([
@@ -23,7 +22,8 @@ const router = createBrowserRouter([
 				path: 'app',
 				element: <AuthenticatedView />,
 				children: [
-					...DASHBOARD_ROUTES
+					...DASHBOARD_ROUTES,
+					...CONTENT_TYPES_ROUTES,
 				]
 			}
 		]
@@ -31,12 +31,6 @@ const router = createBrowserRouter([
 ])
 
 export const App = () => {
-	const authStore = useAuthStore();
-
-	useEffect(() => {
-		authStore.fetchUser();
-	}, [])
-
 	return (
 		<RouterProvider router={router} />
 	);

@@ -6,5 +6,6 @@ export interface IButtonProps {
 	children: ReactNode
 	htmlType?: `${HTMLButtonTypes}`
 	type?: `${ButtonTypes}`;
-	className?: string
+	className?: string;
+	onClick?: () => void
 }

@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom"
 import cx from 'classnames/bind'
-
-import { useAuthStore } from "../../stores/auth.store";
+import { useAuthStore } from "@ibs/shared";
 
 import styles from './menu.module.scss';
 const cxBind = cx.bind(styles);

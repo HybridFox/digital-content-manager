@@ -28,7 +28,7 @@ const contentType = { // ContentType
 				name: 'Checkbox',
 				slug: 'checkbox',
 				componentName: 'checkbox',
-				configFields: [
+				fields: [ // Field[]
 					{
 						name: 'options',
 						label: 'Options',

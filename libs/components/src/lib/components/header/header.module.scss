@@ -1,0 +1,17 @@
+.m-header {
+	border-bottom: 1px solid var(--color-gray-lightest);
+	padding: 0 0 var(--spacer) 0;
+
+	&__title {
+		margin: 0;
+		font-size: 1.8rem;
+		color: var(--color-gray-darkest);
+	}
+
+	&__sub-title {
+		margin: 0;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		color: var(--color-gray);
+	}
+}
