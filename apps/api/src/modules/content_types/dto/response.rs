@@ -30,6 +30,7 @@ impl From<ContentType> for ContentTypeDTO {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct ContentTypesEmbeddedDTO {
 	pub content_types: Vec<ContentTypeDTO>,
 }

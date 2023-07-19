@@ -1,11 +1,10 @@
 use chrono::NaiveDateTime;
 use diesel::prelude::*;
-use reqwest::StatusCode;
 use serde::Deserialize;
 use uuid::Uuid;
 use slug::slugify;
 
-use crate::errors::{AppError, AppErrorValue};
+use crate::errors::AppError;
 use crate::modules::content_types::models::field::FieldModel;
 use crate::modules::content_types::models::field_config::FieldConfig;
 use crate::schema::content_components;
@@ -95,7 +94,7 @@ impl ContentComponent {
 		page: i64,
 		pagesize: i64,
 	) -> Result<(Vec<(ContentComponent, Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>)>, i64), AppError> {
-		// if pagesize == -1 {
+		if pagesize == -1 {
 			let content_components = content_components::table
 				.select(ContentComponent::as_select())
 				.load::<ContentComponent>(conn)?;
@@ -117,24 +116,50 @@ impl ContentComponent {
 					(field, content_component.unwrap(), field_configs)
 				})
 				.grouped_by(&content_components);
+
 			let result: Vec<(ContentComponent, Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>)> = content_components
 				.into_iter()
 				.zip(fields_with_config)
 				.collect();
 
-			Ok((result.clone(), result.len().try_into().unwrap()))
-		// }
+			return Ok((result.clone(), result.len().try_into().unwrap()))
+		}
 
-		// let content_components = content_components::table
-		// 	.offset((page - 1) * pagesize)
-		// 	.limit(pagesize)
-		// 	.select(ContentComponent::as_select())
-		// 	.load::<ContentComponent>(conn)?;
+		let content_components = content_components::table
+			.offset((page - 1) * pagesize)
+			.limit(pagesize)
+			.select(ContentComponent::as_select())
+			.load::<ContentComponent>(conn)?;
+		let all_content_components = content_components::table
+			.select(ContentComponent::as_select())
+			.load::<ContentComponent>(conn)?;
 
+		let fields = FieldModel::belonging_to(&content_components)
+			.select(FieldModel::as_select())
+			.load::<FieldModel>(conn)?;
 
-		// let total_elements = content_components::table.count().get_result::<i64>(conn)?;
+		let field_config = FieldConfig::belonging_to(&fields)
+			.select(FieldConfig::as_select())
+			.load::<FieldConfig>(conn)?;
 
-		// Ok((content_components, total_elements))
+		let grouped_config: Vec<Vec<FieldConfig>> = field_config.grouped_by(&fields);
+		let fields_with_config: Vec<Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>> = fields
+			.into_iter()
+			.zip(grouped_config)
+			.map(|(field, field_configs)| {
+				let content_component = all_content_components.iter().find(|cp| cp.id == field.content_component_id).map(|cp| cp.to_owned());
+				(field, content_component.unwrap(), field_configs)
+			})
+			.grouped_by(&content_components);
+
+		let result: Vec<(ContentComponent, Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>)> = content_components
+			.into_iter()
+			.zip(fields_with_config)
+			.collect();
+
+		let total_elements = content_components::table.count().get_result::<i64>(conn)?;
+
+		Ok((result, total_elements))
 	}
 
 	// pub fn update(

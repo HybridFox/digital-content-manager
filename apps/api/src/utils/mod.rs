@@ -4,3 +4,4 @@ pub mod hasher;
 pub mod string;
 pub mod token;
 pub mod uuid;
+pub mod s3;

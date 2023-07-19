@@ -90,8 +90,9 @@ async fn main() -> std::io::Result<()> {
 	println!("start server...");
 	let state: modules::core::middleware::state::AppState = {
 		let pool = utils::db::establish_connection();
+		let s3 = utils::s3::get_client();
 
-		modules::core::middleware::state::AppState { pool }
+		modules::core::middleware::state::AppState { pool, s3 }
 	};
 	println!("Database connected");
 
@@ -113,6 +114,15 @@ async fn main() -> std::io::Result<()> {
 				})
 				.into()
 			}))
+			// .app_data(web::JsonConfig::default().error_handler(|err, _| {
+			// 	AppError::BadRequest(AppErrorValue {
+			// 		message: err.to_string(),
+			// 		status: StatusCode::BAD_REQUEST.as_u16(),
+			// 		code: "JSON_PARSE_FAILED".to_owned(),
+			// 		..Default::default()
+			// 	})
+			// 	.into()
+			// }))
 			.app_data(web::QueryConfig::default().error_handler(|err, _| {
 				AppError::BadRequest(AppErrorValue {
 					message: err.to_string(),

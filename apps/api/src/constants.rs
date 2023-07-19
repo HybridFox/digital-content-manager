@@ -21,4 +21,11 @@ pub mod env_key {
 	pub const SLACK_OAUTH2_TOKEN_URL: &str = "SLACK_OAUTH2_TOKEN_URL";
 	pub const SLACK_OAUTH2_REDIRECT_URL: &str = "SLACK_OAUTH2_REDIRECT_URL";
 	pub const SLACK_OAUTH2_USERINFO_URL: &str = "SLACK_OAUTH2_USERINFO_URL";
+
+	pub const S3_ENDPOINT: &str = "S3_ENDPOINT";
+	pub const S3_ACCESS_KEY: &str = "S3_ACCESS_KEY";
+	pub const S3_SECRET_KEY: &str = "S3_SECRET_KEY";
+	pub const S3_BUCKET_NAME: &str = "S3_BUCKET_NAME";
+	pub const S3_PUBLIC_URL: &str = "S3_PUBLIC_URL";
+
 }

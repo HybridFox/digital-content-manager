@@ -7,3 +7,4 @@ pub mod roles;
 pub mod sites;
 pub mod content_types;
 pub mod content_components;
+pub mod assets;

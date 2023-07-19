@@ -67,6 +67,12 @@ impl Modify for SecurityAddon {
 		super::modules::content_components::controllers::content_components::find_one,
 		// super::modules::content_components::controllers::content_components::update,
 		super::modules::content_components::controllers::content_components::remove,
+
+		super::modules::assets::controllers::assets::upload,
+		super::modules::assets::controllers::assets::find_all,
+		super::modules::assets::controllers::assets::find_one,
+		// super::modules::assets::controllers::assets::update,
+		// super::modules::assets::controllers::assets::remove,
 	),
 	components(
 		schemas(
@@ -134,6 +140,12 @@ impl Modify for SecurityAddon {
 			super::modules::content_components::dto::response::FieldDTO,
 			super::modules::content_components::dto::response::ContentComponentsEmbeddedDTO,
 			super::modules::content_components::dto::request::CreateContentComponentDTO,
+
+			// Assets
+			super::modules::assets::dto::response::AssetDTO,
+			super::modules::assets::dto::response::AssetsDTO,
+			super::modules::assets::dto::response::AssetsEmbeddedDTO,
+			super::modules::assets::dto::request::CreateAssetDTO,
 		)
 	),
 	modifiers(&SecurityAddon)

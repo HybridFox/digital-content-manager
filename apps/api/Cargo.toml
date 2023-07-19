@@ -36,6 +36,12 @@ tracing-actix-web = { version = "0.7.5", features = ["opentelemetry_0_19"]}
 tracing-bunyan-formatter = "0.3.7"
 opentelemetry-jaeger = { version = "0.18.0", features = ["rt-tokio-current-thread"] }
 opentelemetry-otlp = { version = "0.12.0" }
+aws-sdk-s3 = "0.28.0"
+actix-multipart = "0.6.0"
+aws-config = { version = "0.55.3" }
+aws-credential-types = { version = "0.55.3", features = ["hardcoded-credentials"] }
+tokio = { version = "1.29.1", features = ["io-util", "fs"] }
+mime_guess = "2.0.4"
 
 # [dev-dependencies]
 # rusty-hook = "0.11.2"

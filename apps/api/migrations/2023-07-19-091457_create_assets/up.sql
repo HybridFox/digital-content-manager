@@ -1,0 +1,14 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE assets (
+	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+	site_id UUID NOT NULL,
+	name TEXT NOT NULL,
+	description TEXT,
+	file_reference TEXT NOT NULL,
+	file_extension TEXT NOT NULL,
+	file_mime TEXT NOT NULL,
+	file_size BIGINT NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);

@@ -58,6 +58,12 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 							.service(modules::content_components::controllers::content_components::find_one)
 							// .service(modules::content_components::controllers::content_components::update)
 							.service(modules::content_components::controllers::content_components::remove),
+					)
+					.service(
+						web::scope("/{site_id}/assets")
+							.service(modules::assets::controllers::assets::upload)
+							.service(modules::assets::controllers::assets::find_all)
+							.service(modules::assets::controllers::assets::find_one)
 					),
 			)
 			.service(

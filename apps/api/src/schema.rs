@@ -1,6 +1,32 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
+    asset_metadata (id) {
+        id -> Uuid,
+        asset_id -> Uuid,
+        label -> Text,
+        value -> Text,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    assets (id) {
+        id -> Uuid,
+        site_id -> Uuid,
+        name -> Text,
+        description -> Nullable<Text>,
+        file_reference -> Text,
+        file_extension -> Text,
+        file_mime -> Text,
+        file_size -> Int8,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     content_components (id) {
         id -> Uuid,
         name -> Text,
@@ -214,6 +240,8 @@ diesel::joinable!(sites_users_roles -> sites (site_id));
 diesel::joinable!(sites_users_roles -> users (user_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
+    asset_metadata,
+    assets,
     content_components,
     content_types,
     field_config,
