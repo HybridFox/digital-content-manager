@@ -63,6 +63,36 @@ impl From<(FieldModel, ContentComponent, Vec<FieldConfig>)> for FieldDTO {
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
+pub struct FieldWithContentComponentDTO {
+	pub id: Uuid,
+	pub name: String,
+	pub slug: String,
+	pub content_component: ContentComponentWithFieldsDTO,
+	pub config: HashMap<String, String>
+}
+
+impl From<(FieldModel, (ContentComponent, Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>), Vec<FieldConfig>)> for FieldWithContentComponentDTO {
+	fn from((field, content_component, config): (FieldModel, (ContentComponent, Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>), Vec<FieldConfig>)) -> Self {
+		println!("{:#?}", &config);
+		let config_map = config
+			.into_iter()
+			.map(|config_item| (config_item.config_key, config_item.content))
+			.collect::<HashMap<_, _>>();
+
+			println!("{:#?}", config_map);
+
+		Self {
+			id: field.id,
+			name: field.name,
+			slug: field.slug,
+			content_component: ContentComponentWithFieldsDTO::from(content_component),
+			config: config_map
+		}
+	}
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct ContentComponentWithFieldsDTO {
 	pub id: Uuid,
 	pub name: String,

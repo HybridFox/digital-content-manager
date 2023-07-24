@@ -48,8 +48,16 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 							.service(modules::content_types::controllers::content_types::create)
 							.service(modules::content_types::controllers::content_types::find_all)
 							.service(modules::content_types::controllers::content_types::find_one)
-							// .service(modules::content_types::controllers::content_types::update)
-							.service(modules::content_types::controllers::content_types::remove),
+							.service(modules::content_types::controllers::content_types::update)
+							.service(modules::content_types::controllers::content_types::remove)
+							.service(
+								web::scope("/{content_type_id}/fields")
+									.service(modules::content_types::controllers::fields::create)
+									.service(modules::content_types::controllers::fields::find_all)
+									.service(modules::content_types::controllers::fields::find_one)
+									.service(modules::content_types::controllers::fields::update)
+									.service(modules::content_types::controllers::fields::remove),
+							)
 					)
 					.service(
 						web::scope("/{site_id}/content-components")

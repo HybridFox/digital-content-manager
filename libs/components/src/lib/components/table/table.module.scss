@@ -1,0 +1,44 @@
+.a-table {
+	border-radius: var(--border-radius-sm);
+	border: 1px solid var(--color-gray-lightest);
+
+	&__data {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	}
+
+	&__header {
+		display: contents;
+		font-weight: bold;
+
+		&__column {
+			background-color: var(--color-gray-lightest);
+			padding: var(--spacer);
+		}
+	}
+
+	&__content {
+		display: contents;
+	}
+
+	&__row {
+		display: contents;
+
+		&__cell {
+			padding: var(--spacer);
+			display: flex;
+			align-items: center;
+
+			&:first-child {
+				grid-column-start: 1;
+			}
+		}
+	}
+
+	&__no-data {
+		color: var(--color-gray);
+		padding: var(--spacer-xl) 0;
+		font-size: 0.8rem;
+		text-align: center;
+	}
+}

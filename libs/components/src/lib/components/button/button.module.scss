@@ -11,6 +11,7 @@
 	text-decoration: none;
 	color: var(--color-gray-darkest);
 	display: inline-block;
+	height: 44px;
 
 	&:hover {
 		border: 2px solid var(--color-primary);
@@ -21,6 +22,24 @@
 		outline: none;
 		border: 2px solid var(--color-primary);
 		box-shadow: 0px 0px 0px var(--spacer-xxxs) var(--color-primary-light);
+	}
+
+	&--block {
+		width: 100%;
+		display: block;
+	}
+
+	&--small {
+		padding: var(--spacer-xxs) var(--spacer-sm);
+		font-size: 0.9rem;
+		height: 32px;
+	}
+
+	&--secondary {
+		text-transform: none;
+		font-weight: 500;
+		background-color: var(--color-gray-lighter);
+		border: 2px solid transparent;
 	}
 
 	&--transparent {

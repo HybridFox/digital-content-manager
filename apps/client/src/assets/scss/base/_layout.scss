@@ -1,3 +1,7 @@
+.u-display-flex {
+	display: flex;
+	width: 100%;
+}
 
 .u-margin-top-lg {
     margin-top: var(--spacer-lg);
@@ -33,6 +37,10 @@
 
 .u-margin-bottom-xs {
     margin-bottom: var(--spacer-xs);
+}
+
+.u-margin-left-auto {
+    margin-left: auto;
 }
 
 .u-margin-left-lg {

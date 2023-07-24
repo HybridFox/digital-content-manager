@@ -41,6 +41,7 @@ diesel::table! {
     content_types (id) {
         id -> Uuid,
         name -> Text,
+        description -> Nullable<Text>,
         slug -> Text,
         created_at -> Timestamp,
         updated_at -> Timestamp,

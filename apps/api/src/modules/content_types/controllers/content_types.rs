@@ -1,10 +1,10 @@
 use super::super::dto::{request, response};
-use crate::errors::AppError;
+use crate::{errors::AppError, modules::content_types::models::content_type::UpdateContentType};
 use crate::modules::content_types::models::content_type::ContentType;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, HttpResponse, delete};
+use actix_web::{get, post, web, HttpResponse, delete, put};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;
@@ -42,11 +42,11 @@ pub struct FindAllQueryParams {
 pub async fn create(
 	state: web::Data<AppState>,
 	form: web::Json<request::CreateContentTypeDTO>,
-	params: web::Path<FindOnePathParams>,
+	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let content_type = ContentType::create(conn, params.site_id, &form.name)?;
-	let res = response::ContentTypeDTO::from(content_type);
+	let content_type = ContentType::create(conn, params.site_id, &form.name, &form.description)?;
+	let res = response::ContentTypeDTO::from((content_type, Vec::new()));
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -110,35 +110,37 @@ pub async fn find_one(
 	Ok(HttpResponse::Ok().json(res))
 }
 
-// #[utoipa::path(
-// 	context_path = "/api/v1/sites",
-//     request_body = UpdateSiteDTO,
-// 	responses(
-// 		(status = 200, body = SiteDTO),
-// 		(status = 401, body = AppErrorValue, description = "Unauthorized")
-// 	),
-//     security(
-//         ("jwt_token" = [])
-//     ),
-// 	params(FindPathParams)
-// )]
-// #[put("/{site_id}")]
-// pub async fn update(
-// 	state: web::Data<AppState>,
-// 	params: web::Path<FindPathParams>,
-// 	form: web::Json<request::UpdateSiteDTO>,
-// ) -> ApiResponse {
-// 	let conn = &mut state.get_conn()?;
-// 	let site = Site::update(
-// 		conn,
-// 		params.site_id,
-// 		UpdateSite {
-// 			name: form.name.clone(),
-// 		},
-// 	)?;
-// 	let res = response::SiteDTO::from(site);
-// 	Ok(HttpResponse::Ok().json(res))
-// }
+#[utoipa::path(
+	context_path = "/api/v1/sites/{site_id}/content-types",
+    request_body = UpdateContentTypeDTO,
+	responses(
+		(status = 200, body = SiteDTO),
+		(status = 401, body = AppErrorValue, description = "Unauthorized")
+	),
+    security(
+        ("jwt_token" = [])
+    ),
+	params(FindPathParams)
+)]
+#[put("/{content_type_id}")]
+pub async fn update(
+	state: web::Data<AppState>,
+	params: web::Path<FindOnePathParams>,
+	form: web::Json<request::UpdateContentTypeDTO>,
+) -> ApiResponse {
+	let conn = &mut state.get_conn()?;
+	let content_type = ContentType::update(
+		conn,
+		params.site_id,
+		params.content_type_id,
+		UpdateContentType {
+			name: form.name.clone(),
+			description: form.description.clone(),
+		},
+	)?;
+	let res = response::ContentTypeDTO::from(content_type);
+	Ok(HttpResponse::Ok().json(res))
+}
 
 #[utoipa::path(
 	context_path = "/api/v1/sites/{site_id}/content-types",

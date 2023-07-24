@@ -132,6 +132,15 @@ async fn main() -> std::io::Result<()> {
 				})
 				.into()
 			}))
+			.app_data(web::PathConfig::default().error_handler(|err, _| {
+				AppError::BadRequest(AppErrorValue {
+					message: err.to_string(),
+					status: StatusCode::BAD_REQUEST.as_u16(),
+					code: "PATH_PARSE_FAILED".to_owned(),
+					..Default::default()
+				})
+				.into()
+			}))
 			// .wrap(modules::core::middleware::cors::cors())
 			.wrap(modules::core::middleware::auth::Authentication)
 			.service(SwaggerUi::new("/docs/{_:.*}").url("/docs/openapi.json", ApiDoc::openapi()))

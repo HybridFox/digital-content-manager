@@ -1,0 +1,11 @@
+.a-card {
+	border-radius: var(--border-radius-sm);
+	border: 1px solid var(--color-gray-lightest);
+	padding: var(--spacer);
+	justify-content: space-between;
+	font-weight: 500;
+	
+	&__title {
+		margin: 0 0 var(--spacer) 0;
+	}
+}

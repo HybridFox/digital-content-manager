@@ -10,7 +10,7 @@ import styles from './login.module.scss';
 import { loginSchema } from "./login.const";
 const cxBind = cx.bind(styles);
 
-interface ILoginFormInput {
+interface ILoginForm {
 	email: string;
 	password: string;
 }
@@ -18,10 +18,10 @@ interface ILoginFormInput {
 export const LoginPage = () => {
 	const authStore = useAuthStore();
 	const navigate = useNavigate();
-	const formMethods = useForm<ILoginFormInput>({ resolver: yupResolver(loginSchema) });
+	const formMethods = useForm<ILoginForm>({ resolver: yupResolver(loginSchema) });
 	const { handleSubmit, setError, formState: { errors } } = formMethods;
 
-	const onSubmit = ({ email, password }: ILoginFormInput) => {
+	const onSubmit = ({ email, password }: ILoginForm) => {
 		authStore.login(email, password)
 			.then(() => navigate('/app/dashboard'))
 			.catch((error: IAPIError) => {
@@ -42,10 +42,10 @@ export const LoginPage = () => {
 					<FormProvider {...formMethods}>
 						<form onSubmit={handleSubmit(onSubmit)}>
 							<div className="u-margin-bottom">
-								<TextInput name="email" label="Email" type={TextInputTypes.EMAIL} options={{ required: true }} />
+								<TextInput name="email" label="Email" type={TextInputTypes.EMAIL} fieldOptions={{ required: true }} />
 							</div>
 							<div className="u-margin-bottom">
-								<TextInput name="password" label="Password" type={TextInputTypes.PASSWORD} options={{ required: true }} />
+								<TextInput name="password" label="Password" type={TextInputTypes.PASSWORD} fieldOptions={{ required: true }} />
 							</div>
 							<div>
 								<Button className="u-margin-right-sm" htmlType={HTMLButtonTypes.SUBMIT}>Login</Button>

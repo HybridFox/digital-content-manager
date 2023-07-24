@@ -104,7 +104,7 @@ pub async fn find_one(
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let content_component = ContentComponent::find_one(conn, params.site_id, params.content_component_id)?;
+	let content_component = ContentComponent::find_one_with_fields(conn, Some(params.site_id), params.content_component_id)?;
 
 	let res = response::ContentComponentWithFieldsDTO::from(content_component);
 	Ok(HttpResponse::Ok().json(res))

@@ -3,7 +3,8 @@ import * as ReactDOM from 'react-dom/client';
 
 import App from './app/app';
 
-import './assets/scss/main.scss'
+import './assets/scss/main.scss';
+import 'react-tooltip/dist/react-tooltip.css';
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement

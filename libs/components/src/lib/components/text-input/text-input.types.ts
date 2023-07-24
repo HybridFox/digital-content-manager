@@ -7,5 +7,5 @@ export interface ITextInputProps {
 	placeholder?: string;
 	label?: string;
 	type?: `${TextInputTypes}`;
-	options?: RegisterOptions<FieldValues, string>;
+	fieldOptions?: RegisterOptions<FieldValues, string>;
 }

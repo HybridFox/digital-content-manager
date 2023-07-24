@@ -61,7 +61,7 @@ impl ContentComponent {
 		Ok((content_component, fields_with_config))
 	}
 	
-	pub fn find_one(conn: &mut PgConnection, _site_id: Uuid, id: Uuid) -> Result<(ContentComponent, Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>), AppError> {
+	pub fn find_one_with_fields(conn: &mut PgConnection, _site_id: Option<Uuid>, id: Uuid) -> Result<(ContentComponent, Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>), AppError> {
 		let content_component = content_components::table.find(id).first::<Self>(conn)?;
 		let content_components = content_components::table
 			.select(ContentComponent::as_select())
@@ -86,6 +86,12 @@ impl ContentComponent {
 			.collect();
 
 		Ok((content_component, fields_with_config))
+	}
+	
+	pub fn find_one(conn: &mut PgConnection, _site_id: Option<Uuid>, id: Uuid) -> Result<ContentComponent, AppError> {
+		let content_component = content_components::table.find(id).first::<Self>(conn)?;
+
+		Ok(content_component)
 	}
 
 	pub fn find(

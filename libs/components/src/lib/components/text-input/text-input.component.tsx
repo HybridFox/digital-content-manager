@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
+import { Tooltip } from 'react-tooltip'
 
 import { ITextInputProps } from './text-input.types';
 import styles from './text-input.module.scss';
@@ -13,7 +14,7 @@ export const TextInput: FC<ITextInputProps> = ({
 	type = TextInputTypes.TEXT,
 	label,
 	placeholder,
-	options,
+	fieldOptions,
 }: ITextInputProps) => {
 	const { register, formState: { errors } } = useFormContext();
 	const error = errors?.[name]
@@ -33,13 +34,19 @@ export const TextInput: FC<ITextInputProps> = ({
 					className={cxBind('a-input__field')}
 					placeholder={placeholder}
 					{...register(name, {
-						...options,
+						...fieldOptions,
 					})}
 				/>
 				{error && (
-					<div className={cxBind('a-input__error')}>
-						<i className="las la-exclamation-triangle"></i>
-					</div>
+					<>
+						<Tooltip anchorSelect={`#${name}-err-tooltip`}>
+							{error.message?.toString()}
+						</Tooltip>
+						<div className={cxBind('a-input__error')} id={`${name}-err-tooltip`}>
+							<i className="las la-exclamation-triangle"></i>
+						</div>
+					</>
+					
 				)}
 			</div>
 		</div>
