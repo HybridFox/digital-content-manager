@@ -42,6 +42,7 @@ aws-config = { version = "0.55.3" }
 aws-credential-types = { version = "0.55.3", features = ["hardcoded-credentials"] }
 tokio = { version = "1.29.1", features = ["io-util", "fs"] }
 mime_guess = "2.0.4"
+itertools = "0.11.0"
 
 # [dev-dependencies]
 # rusty-hook = "0.11.2"

@@ -1,5 +1,11 @@
 // @generated automatically by Diesel CLI.
 
+pub mod sql_types {
+    #[derive(diesel::query_builder::QueryId, diesel::sql_types::SqlType)]
+    #[diesel(postgres_type(name = "field_types"))]
+    pub struct FieldTypes;
+}
+
 diesel::table! {
     asset_metadata (id) {
         id -> Uuid,
@@ -61,10 +67,19 @@ diesel::table! {
 }
 
 diesel::table! {
+    use diesel::sql_types::*;
+    use super::sql_types::FieldTypes;
+
     fields (id) {
         id -> Uuid,
         name -> Text,
         slug -> Text,
+        description -> Nullable<Text>,
+        min -> Int4,
+        max -> Int4,
+        hidden -> Bool,
+        multi_language -> Bool,
+        field_type -> FieldTypes,
         parent_id -> Uuid,
         content_component_id -> Uuid,
     }

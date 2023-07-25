@@ -19,13 +19,15 @@ INSERT INTO fields (
 	name,
 	slug,
 	parent_id,
-	content_component_id
+	content_component_id,
+	field_type
 ) VALUES (
 	'fcf02655-52d3-46c3-9d6b-c524bed922c4',
 	'Label',
 	'label',
 	'a93be33b-5ef1-44c6-b48f-587d033821c2',
-	'a93be33b-5ef1-44c6-b48f-587d033821c2'
+	'a93be33b-5ef1-44c6-b48f-587d033821c2',
+	'CONTENT-COMPONENT_CONFIG-FIELD'
 );
 
 INSERT INTO field_config (
@@ -62,13 +64,15 @@ INSERT INTO fields (
 	name,
 	slug,
 	parent_id,
-	content_component_id
+	content_component_id,
+	field_type
 ) VALUES (
 	'd24252b2-5b6c-4776-81be-247a38b905ba',
 	'Placeholder',
 	'placeholder',
 	'a93be33b-5ef1-44c6-b48f-587d033821c2',
-	'a93be33b-5ef1-44c6-b48f-587d033821c2'
+	'a93be33b-5ef1-44c6-b48f-587d033821c2',
+	'CONTENT-COMPONENT_CONFIG-FIELD'
 );
 
 INSERT INTO field_config (
@@ -105,13 +109,15 @@ INSERT INTO fields (
 	name,
 	slug,
 	parent_id,
-	content_component_id
+	content_component_id,
+	field_type
 ) VALUES (
 	'a3239408-6869-4995-b942-2910127b0207',
 	'Default value',
 	'defaultValue',
 	'a93be33b-5ef1-44c6-b48f-587d033821c2',
-	'a93be33b-5ef1-44c6-b48f-587d033821c2'
+	'a93be33b-5ef1-44c6-b48f-587d033821c2',
+	'CONTENT-COMPONENT_CONFIG-FIELD'
 );
 
 INSERT INTO field_config (

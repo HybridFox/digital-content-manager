@@ -1,6 +1,6 @@
 use super::super::dto::{request, response};
-use crate::modules::content_components::dto::response::{FieldWithContentComponentDTO};
-use crate::modules::content_types::models::field::UpdateField;
+use crate::modules::content_components::dto::response::FieldWithContentComponentDTO;
+use crate::modules::content_types::models::field::{UpdateField, FieldTypeEnum};
 use crate::{errors::AppError, modules::content_types::models::field::FieldModel};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
@@ -48,7 +48,15 @@ pub async fn create(
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let field = FieldModel::create(conn, params.site_id, params.content_type_id, form.content_component_id, &form.name)?;
+	let field = FieldModel::create(
+		conn,
+		params.site_id,
+		params.content_type_id,
+		form.content_component_id,
+		FieldTypeEnum::ContentTypeField,
+		&form.name,
+	)?;
+	
 	let res = FieldWithContentComponentDTO::from(field);
 	Ok(HttpResponse::Ok().json(res))
 }
@@ -74,7 +82,8 @@ pub async fn find_all(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
 
-	let (fields, total_elements) = FieldModel::find(conn, params.site_id, params.content_type_id, page, pagesize)?;
+	let (fields, total_elements) =
+		FieldModel::find(conn, params.site_id, params.content_type_id, page, pagesize)?;
 
 	let res = response::FieldsDTO::from((
 		fields,
@@ -85,7 +94,7 @@ pub async fn find_all(
 			total_pages: (total_elements / pagesize + (total_elements % pagesize).signum()).max(1),
 		},
 		params.site_id,
-		params.content_type_id
+		params.content_type_id,
 	));
 
 	Ok(HttpResponse::Ok().json(res))
@@ -138,7 +147,8 @@ pub async fn update(
 		params.site_id,
 		params.content_type_id,
 		UpdateField {
-			name: form.name.clone()
+			name: form.name.clone(),
+			description: form.description.clone(),
 		},
 	)?;
 	let res = FieldWithContentComponentDTO::from(field);
@@ -157,7 +167,10 @@ pub async fn update(
 	params(FindPathParams)
 )]
 #[delete("/{field_id}")]
-pub async fn remove(state: web::Data<AppState>, params: web::Path<FindOnePathParams>) -> ApiResponse {
+pub async fn remove(
+	state: web::Data<AppState>,
+	params: web::Path<FindOnePathParams>,
+) -> ApiResponse {
 	let conn = &mut state.get_conn()?;
 	FieldModel::remove(conn, params.content_type_id)?;
 	Ok(HttpResponse::NoContent().body(()))
