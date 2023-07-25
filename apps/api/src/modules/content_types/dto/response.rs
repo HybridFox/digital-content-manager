@@ -1,5 +1,9 @@
 use crate::modules::{
-	content_types::models::{content_type::ContentType, field::FieldModel, field_config::FieldConfig}, core::models::hal::{HALLinkList, HALPage}, content_components::{models::content_component::ContentComponent, dto::response::FieldDTO}
+	content_types::models::{
+		content_type::ContentType, field::FieldModel, field_config::FieldConfig,
+	},
+	core::models::hal::{HALLinkList, HALPage},
+	content_components::{models::content_component::ContentComponent, dto::response::FieldDTO},
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
@@ -18,8 +22,18 @@ pub struct ContentTypeDTO {
 	pub fields: Vec<FieldDTO>,
 }
 
-impl From<(ContentType, Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>)> for ContentTypeDTO {
-	fn from((content_type, fields): (ContentType, Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>)) -> Self {
+impl
+	From<(
+		ContentType,
+		Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+	)> for ContentTypeDTO
+{
+	fn from(
+		(content_type, fields): (
+			ContentType,
+			Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+		),
+	) -> Self {
 		Self {
 			id: content_type.id,
 			name: content_type.name,
@@ -44,8 +58,26 @@ pub struct ContentTypesDTO {
 	pub _embedded: ContentTypesEmbeddedDTO,
 }
 
-impl From<(Vec<(ContentType, Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>)>, HALPage, Uuid)> for ContentTypesDTO {
-	fn from((content_types, page, site_id): (Vec<(ContentType, Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>)>, HALPage, Uuid)) -> Self {
+impl
+	From<(
+		Vec<(
+			ContentType,
+			Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+		)>,
+		HALPage,
+		Uuid,
+	)> for ContentTypesDTO
+{
+	fn from(
+		(content_types, page, site_id): (
+			Vec<(
+				ContentType,
+				Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+			)>,
+			HALPage,
+			Uuid,
+		),
+	) -> Self {
 		Self {
 			_links: HALLinkList::from((format!("/api/v1/sites/{}/content-types", site_id), &page)),
 			_embedded: ContentTypesEmbeddedDTO {
@@ -58,7 +90,6 @@ impl From<(Vec<(ContentType, Vec<(FieldModel, ContentComponent, Vec<FieldConfig>
 		}
 	}
 }
-
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
@@ -73,15 +104,32 @@ pub struct FieldsDTO {
 	pub _embedded: FieldsEmbeddedDTO,
 }
 
-impl From<(Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>, HALPage, Uuid, Uuid)> for FieldsDTO {
-	fn from((fields, page, site_id, content_type_id): (Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>, HALPage, Uuid, Uuid)) -> Self {
+impl
+	From<(
+		Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+		HALPage,
+		Uuid,
+		Uuid,
+	)> for FieldsDTO
+{
+	fn from(
+		(fields, page, site_id, content_type_id): (
+			Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+			HALPage,
+			Uuid,
+			Uuid,
+		),
+	) -> Self {
 		Self {
-			_links: HALLinkList::from((format!("/api/v1/sites/{}/content-types/{}/fields", site_id, content_type_id), &page)),
+			_links: HALLinkList::from((
+				format!(
+					"/api/v1/sites/{}/content-types/{}/fields",
+					site_id, content_type_id
+				),
+				&page,
+			)),
 			_embedded: FieldsEmbeddedDTO {
-				fields: fields
-					.into_iter()
-					.map(FieldDTO::from)
-					.collect(),
+				fields: fields.into_iter().map(FieldDTO::from).collect(),
 			},
 			_page: page,
 		}

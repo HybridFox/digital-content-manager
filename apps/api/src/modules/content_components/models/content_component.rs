@@ -44,7 +44,7 @@ impl ContentComponent {
 			})
 			.returning(ContentComponent::as_returning())
 			.get_result(conn)?;
-		
+
 		let content_components = Self::populate_fields(conn, vec![created_content_component])?;
 
 		Ok(content_components.first().unwrap().clone())
@@ -82,7 +82,10 @@ impl ContentComponent {
 				.load::<ContentComponent>(conn)?;
 			let populated_content_components = Self::populate_fields(conn, content_components)?;
 
-			return Ok((populated_content_components.clone(), populated_content_components.len().try_into().unwrap()));
+			return Ok((
+				populated_content_components.clone(),
+				populated_content_components.len().try_into().unwrap(),
+			));
 		}
 
 		let content_components = content_components::table
@@ -152,21 +155,26 @@ impl ContentComponent {
 			.select(FieldConfig::as_select())
 			.load::<FieldConfig>(conn)?;
 
-		let configuration_fields_config_grouped: Vec<Vec<FieldConfig>> = configuration_fields_config.grouped_by(&configuration_fields);
-		let configuration_fields_with_config: Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)> =
-			configuration_fields
-				.into_iter()
-				.zip(configuration_fields_config_grouped)
-				.map(|(field, field_configs)| {
-					let content_component = all_content_components
-						.iter()
-						.find(|cp| cp.id == field.content_component_id)
-						.map(|cp| cp.to_owned());
-					(field, content_component.unwrap(), field_configs)
-				})
-				.collect();
+		let configuration_fields_config_grouped: Vec<Vec<FieldConfig>> =
+			configuration_fields_config.grouped_by(&configuration_fields);
+		let configuration_fields_with_config: Vec<(
+			FieldModel,
+			ContentComponent,
+			Vec<FieldConfig>,
+		)> = configuration_fields
+			.into_iter()
+			.zip(configuration_fields_config_grouped)
+			.map(|(field, field_configs)| {
+				let content_component = all_content_components
+					.iter()
+					.find(|cp| cp.id == field.content_component_id)
+					.map(|cp| cp.to_owned());
+				(field, content_component.unwrap(), field_configs)
+			})
+			.collect();
 
-		let sub_fields_config_grouped: Vec<Vec<FieldConfig>> = sub_fields_config.grouped_by(&sub_fields);
+		let sub_fields_config_grouped: Vec<Vec<FieldConfig>> =
+			sub_fields_config.grouped_by(&sub_fields);
 		let sub_fields_with_config: Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)> =
 			sub_fields
 				.into_iter()
@@ -180,9 +188,15 @@ impl ContentComponent {
 				})
 				.collect();
 
-		let grouped_configuration_fields = configuration_fields_with_config.grouped_by(&content_components);
+		let grouped_configuration_fields =
+			configuration_fields_with_config.grouped_by(&content_components);
 		let grouped_sub_fields = sub_fields_with_config.grouped_by(&content_components);
-		let populared_content_components = izip!(content_components, grouped_configuration_fields, grouped_sub_fields).collect_vec();
+		let populared_content_components = izip!(
+			content_components,
+			grouped_configuration_fields,
+			grouped_sub_fields
+		)
+		.collect_vec();
 
 		Ok(populared_content_components)
 	}

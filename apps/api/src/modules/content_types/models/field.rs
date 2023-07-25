@@ -130,7 +130,11 @@ impl FieldModel {
 		let populated_content_components =
 			ContentComponent::populate_fields(conn, vec![content_component])?;
 
-		Ok((field, populated_content_components.first().unwrap().clone(), field_config))
+		Ok((
+			field,
+			populated_content_components.first().unwrap().clone(),
+			field_config,
+		))
 	}
 
 	pub fn find(

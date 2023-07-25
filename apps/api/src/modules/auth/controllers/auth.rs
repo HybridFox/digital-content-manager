@@ -16,10 +16,7 @@ use actix_web::{get, web, HttpRequest, HttpResponse, put};
     )
 )]
 #[get("/me")]
-pub async fn me(
-	state: web::Data<AppState>,
-	req: HttpRequest
-) -> ApiResponse {
+pub async fn me(state: web::Data<AppState>, req: HttpRequest) -> ApiResponse {
 	let conn = &mut state.get_conn()?;
 	let user = auth::get_current_user(&req)?;
 	let token = user.generate_token()?;

@@ -154,7 +154,10 @@ pub async fn update(
 	params(FindPathParams)
 )]
 #[delete("/{content_type_id}")]
-pub async fn remove(state: web::Data<AppState>, params: web::Path<FindOnePathParams>) -> ApiResponse {
+pub async fn remove(
+	state: web::Data<AppState>,
+	params: web::Path<FindOnePathParams>,
+) -> ApiResponse {
 	let conn = &mut state.get_conn()?;
 	ContentType::remove(conn, params.content_type_id)?;
 	Ok(HttpResponse::NoContent().body(()))

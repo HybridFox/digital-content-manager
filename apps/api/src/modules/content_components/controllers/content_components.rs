@@ -45,7 +45,12 @@ pub async fn create(
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let content_component = ContentComponent::create(conn, params.site_id, form.name.clone(), "fieldGroup".to_owned())?;
+	let content_component = ContentComponent::create(
+		conn,
+		params.site_id,
+		form.name.clone(),
+		"fieldGroup".to_owned(),
+	)?;
 	let res = response::ContentComponentWithFieldsDTO::from(content_component);
 	Ok(HttpResponse::Ok().json(res))
 }
@@ -71,7 +76,8 @@ pub async fn find_all(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
 
-	let (content_components, total_elements) = ContentComponent::find(conn, params.site_id, page, pagesize)?;
+	let (content_components, total_elements) =
+		ContentComponent::find(conn, params.site_id, page, pagesize)?;
 
 	let res = response::ContentComponentsDTO::from((
 		content_components,
@@ -104,10 +110,14 @@ pub async fn find_one(
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let content_component = ContentComponent::find_one(conn, Some(params.site_id), params.content_component_id)?;
-	let populated_content_components = ContentComponent::populate_fields(conn, vec![content_component])?;
+	let content_component =
+		ContentComponent::find_one(conn, Some(params.site_id), params.content_component_id)?;
+	let populated_content_components =
+		ContentComponent::populate_fields(conn, vec![content_component])?;
 
-	let res = response::ContentComponentWithFieldsDTO::from(populated_content_components.first().unwrap().clone());
+	let res = response::ContentComponentWithFieldsDTO::from(
+		populated_content_components.first().unwrap().clone(),
+	);
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -153,7 +163,10 @@ pub async fn find_one(
 	params(FindPathParams)
 )]
 #[delete("/{content_component_id}")]
-pub async fn remove(state: web::Data<AppState>, params: web::Path<FindOnePathParams>) -> ApiResponse {
+pub async fn remove(
+	state: web::Data<AppState>,
+	params: web::Path<FindOnePathParams>,
+) -> ApiResponse {
 	let conn = &mut state.get_conn()?;
 	ContentComponent::remove(conn, params.content_component_id)?;
 	Ok(HttpResponse::NoContent().body(()))

@@ -1,6 +1,8 @@
 use crate::modules::{
 	sites::models::site::Site,
-	core::models::hal::{HALLinkList, HALPage}, roles::{dto::response::RoleWithPoliciesWithPermissionsDTO, models::role::Role}, iam_policies::models::{iam_policy::IAMPolicy, permission::Permission},
+	core::models::hal::{HALLinkList, HALPage},
+	roles::{dto::response::RoleWithPoliciesWithPermissionsDTO, models::role::Role},
+	iam_policies::models::{iam_policy::IAMPolicy, permission::Permission},
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
@@ -36,17 +38,30 @@ pub struct SiteWithRolesDTO {
 	pub slug: String,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
-	pub roles: Vec<RoleWithPoliciesWithPermissionsDTO>
+	pub roles: Vec<RoleWithPoliciesWithPermissionsDTO>,
 }
-impl From<(Site, Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>)> for SiteWithRolesDTO {
-	fn from((site, roles): (Site, Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>)) -> Self {
+impl
+	From<(
+		Site,
+		Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
+	)> for SiteWithRolesDTO
+{
+	fn from(
+		(site, roles): (
+			Site,
+			Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
+		),
+	) -> Self {
 		Self {
 			id: site.id,
 			name: site.name,
 			slug: site.slug,
 			created_at: site.created_at,
 			updated_at: site.updated_at,
-			roles: roles.into_iter().map(|role| RoleWithPoliciesWithPermissionsDTO::from(role)).collect(),
+			roles: roles
+				.into_iter()
+				.map(|role| RoleWithPoliciesWithPermissionsDTO::from(role))
+				.collect(),
 		}
 	}
 }

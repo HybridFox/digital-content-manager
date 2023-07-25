@@ -45,18 +45,21 @@ pub async fn upload(
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-    let s3_key_prefix = format!("/sites/{}", params.site_id);
+	let s3_key_prefix = format!("/sites/{}", params.site_id);
 	let uploaded_file = state.s3.upload(&form.file, &s3_key_prefix).await?;
 
-	let asset = Asset::create(conn, CreateAsset {
-		name: &form.name,
-		description: &form.description,
-		file_extension: &uploaded_file.extension,
-		file_reference: &uploaded_file.filename,
-		file_size: uploaded_file.size as i64,
-		file_mime: &uploaded_file.mime,
-		site_id: params.site_id,
-	})?;
+	let asset = Asset::create(
+		conn,
+		CreateAsset {
+			name: &form.name,
+			description: &form.description,
+			file_extension: &uploaded_file.extension,
+			file_reference: &uploaded_file.filename,
+			file_size: uploaded_file.size as i64,
+			file_mime: &uploaded_file.mime,
+			site_id: params.site_id,
+		},
+	)?;
 
 	let res = response::AssetDTO::from(asset);
 	Ok(HttpResponse::Ok().json(res))
@@ -72,7 +75,6 @@ pub async fn upload(
     ),
 	params(FindAllQueryParams)
 )]
-
 #[get("")]
 pub async fn find_all(
 	state: web::Data<AppState>,

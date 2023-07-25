@@ -203,7 +203,13 @@ impl User {
 	pub fn get_sites(
 		&self,
 		conn: &mut PgConnection,
-	) -> Result<Vec<(Site, Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>)>, AppError> {
+	) -> Result<
+		Vec<(
+			Site,
+			Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
+		)>,
+		AppError,
+	> {
 		// TODO: Clean this up?
 		let sites = SiteUser::belonging_to(self)
 			.inner_join(sites::table.on(sites::id.eq(sites_users::site_id)))
@@ -253,39 +259,45 @@ impl User {
 			})
 			.collect();
 
-		let policies_with_permissions: Vec<(RoleIAMPolicy, IAMPolicy, Vec<(Permission, Vec<String>)>)> =
-			iam_policies
-				.into_iter()
-				.map(|(role_iam_policy, iam_policy)| {
-					let permissions = &permissions_with_actions
-						.iter()
-						.filter(|(permission, _)| permission.iam_policy_id == iam_policy.id)
-						.map(|vec| vec.to_owned())
-						.collect::<Vec<(Permission, Vec<String>)>>();
-					(
-						role_iam_policy,
-						iam_policy.to_owned(),
-						permissions.to_owned()
-					)
-				})
-				.collect();
-
-		let roles_with_iam_policies: Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)> = roles
+		let policies_with_permissions: Vec<(
+			RoleIAMPolicy,
+			IAMPolicy,
+			Vec<(Permission, Vec<String>)>,
+		)> = iam_policies
 			.into_iter()
-			.map(|role| {
-				let policies = &policies_with_permissions
+			.map(|(role_iam_policy, iam_policy)| {
+				let permissions = &permissions_with_actions
 					.iter()
-					.filter(|(role_iam_policy, _, _)| role_iam_policy.role_id == role.id)
-					.map(|(_, iam_policy, permissions)| (iam_policy.to_owned(), permissions.to_owned()))
-					.collect::<Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>>();
+					.filter(|(permission, _)| permission.iam_policy_id == iam_policy.id)
+					.map(|vec| vec.to_owned())
+					.collect::<Vec<(Permission, Vec<String>)>>();
 				(
-					role.to_owned(),
-					policies.to_owned(),
+					role_iam_policy,
+					iam_policy.to_owned(),
+					permissions.to_owned(),
 				)
 			})
 			.collect();
 
-		let sites_with_roles: Vec<(Site, Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>)> = sites
+		let roles_with_iam_policies: Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)> =
+			roles
+				.into_iter()
+				.map(|role| {
+					let policies = &policies_with_permissions
+						.iter()
+						.filter(|(role_iam_policy, _, _)| role_iam_policy.role_id == role.id)
+						.map(|(_, iam_policy, permissions)| {
+							(iam_policy.to_owned(), permissions.to_owned())
+						})
+						.collect::<Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>>();
+					(role.to_owned(), policies.to_owned())
+				})
+				.collect();
+
+		let sites_with_roles: Vec<(
+			Site,
+			Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
+		)> = sites
 			.into_iter()
 			.map(|site| {
 				let roles = &roles_with_iam_policies
@@ -293,10 +305,7 @@ impl User {
 					.filter(|(role, _)| role.site_id == site.id)
 					.map(|vec| vec.to_owned())
 					.collect::<Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>>();
-				(
-					site.to_owned(),
-					roles.to_owned(),
-				)
+				(site.to_owned(), roles.to_owned())
 			})
 			.collect();
 

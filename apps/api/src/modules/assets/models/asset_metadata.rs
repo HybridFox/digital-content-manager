@@ -19,7 +19,10 @@ pub struct AssetMetadata {
 }
 
 impl AssetMetadata {
-	pub fn create(conn: &mut PgConnection, record: CreateAssetMetadata) -> Result<AssetMetadata, AppError> {
+	pub fn create(
+		conn: &mut PgConnection,
+		record: CreateAssetMetadata,
+	) -> Result<AssetMetadata, AppError> {
 		use diesel::prelude::*;
 
 		let asset_metadata = diesel::insert_into(asset_metadata::table)
@@ -30,9 +33,12 @@ impl AssetMetadata {
 		Ok(asset_metadata)
 	}
 
-	pub fn remove_by_asset_id(conn: &mut PgConnection, original_asset_id: Uuid) -> Result<(), AppError> {
+	pub fn remove_by_asset_id(
+		conn: &mut PgConnection,
+		original_asset_id: Uuid,
+	) -> Result<(), AppError> {
 		use crate::schema::asset_metadata::dsl::*;
-		
+
 		diesel::delete(asset_metadata.filter(asset_id.eq(original_asset_id))).execute(conn)?;
 		Ok(())
 	}

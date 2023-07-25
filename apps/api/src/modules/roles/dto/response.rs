@@ -1,7 +1,10 @@
 use crate::modules::{
 	roles::models::role::Role,
 	core::models::hal::{HALLinkList, HALPage},
-	iam_policies::{models::{iam_policy::IAMPolicy, permission::Permission}, dto::response::{IAMPolicyDTO, IAMPolicyWithPermissionsDTO}},
+	iam_policies::{
+		models::{iam_policy::IAMPolicy, permission::Permission},
+		dto::response::{IAMPolicyDTO, IAMPolicyWithPermissionsDTO},
+	},
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
@@ -63,7 +66,9 @@ pub struct RoleWithPoliciesWithPermissionsDTO {
 	pub updated_at: NaiveDateTime,
 }
 
-impl From<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)> for RoleWithPoliciesWithPermissionsDTO {
+impl From<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>
+	for RoleWithPoliciesWithPermissionsDTO
+{
 	fn from((role, policies): (Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)) -> Self {
 		Self {
 			id: role.id,
@@ -71,7 +76,10 @@ impl From<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)> for RoleWith
 			slug: role.slug,
 			created_at: role.created_at,
 			updated_at: role.updated_at,
-			policies: policies.into_iter().map(|policy| IAMPolicyWithPermissionsDTO::from(policy)).collect(),
+			policies: policies
+				.into_iter()
+				.map(|policy| IAMPolicyWithPermissionsDTO::from(policy))
+				.collect(),
 		}
 	}
 }

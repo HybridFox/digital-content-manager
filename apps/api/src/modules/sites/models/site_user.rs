@@ -28,10 +28,7 @@ impl SiteUser {
 		site_id: Uuid,
 	) -> Result<Vec<Self>, AppError> {
 		let permissions_iam_actions = diesel::insert_into(sites_users::table)
-			.values(CreateSiteUser {
-				user_id,
-				site_id,
-			})
+			.values(CreateSiteUser { user_id, site_id })
 			.returning(SiteUser::as_returning())
 			.get_results(conn)?;
 

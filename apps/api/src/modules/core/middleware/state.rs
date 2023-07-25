@@ -9,7 +9,7 @@ pub type AppConn = PooledConnection<ConnectionManager<PgConnection>>;
 #[derive(Clone, Debug)]
 pub struct AppState {
 	pub pool: utils::db::DbPool,
-	pub s3: Client
+	pub s3: Client,
 }
 
 impl AppState {
@@ -18,4 +18,3 @@ impl AppState {
 		Ok(conn)
 	}
 }
- 

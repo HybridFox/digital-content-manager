@@ -5,13 +5,13 @@ use uuid::Uuid;
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct CreateContentTypeDTO {
 	pub name: String,
-	pub description: String
+	pub description: String,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct UpdateContentTypeDTO {
 	pub name: Option<String>,
-	pub description: Option<String>
+	pub description: Option<String>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
@@ -24,5 +24,5 @@ pub struct CreateFieldDTO {
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct UpdateFieldDTO {
 	pub name: Option<String>,
-	pub description: Option<String>
+	pub description: Option<String>,
 }

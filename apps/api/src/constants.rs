@@ -27,5 +27,4 @@ pub mod env_key {
 	pub const S3_SECRET_KEY: &str = "S3_SECRET_KEY";
 	pub const S3_BUCKET_NAME: &str = "S3_BUCKET_NAME";
 	pub const S3_PUBLIC_URL: &str = "S3_PUBLIC_URL";
-
 }

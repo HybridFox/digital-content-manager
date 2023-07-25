@@ -10,18 +10,14 @@ pub fn get_client() -> Client {
 	let s3_access_key = env::var(env_key::S3_ACCESS_KEY).expect("S3_ACCESS_KEY must be set");
 	let s3_secret_key = env::var(env_key::S3_SECRET_KEY).expect("S3_SECRET_KEY must be set");
 
-	let credentials = Credentials::from_keys(
-		s3_access_key,
-		s3_secret_key,
-		None
-	);
+	let credentials = Credentials::from_keys(s3_access_key, s3_secret_key, None);
 
-    let region = Region::new("eu-west-3");
+	let region = Region::new("eu-west-3");
 	let s3_config = Config::builder()
-        .region(region)
-        .endpoint_url(s3_endpoint)
-        .credentials_provider(credentials)
-        .build();
+		.region(region)
+		.endpoint_url(s3_endpoint)
+		.credentials_provider(credentials)
+		.build();
 
 	Client::new(s3_config)
 }

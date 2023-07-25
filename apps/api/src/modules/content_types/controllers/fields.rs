@@ -56,7 +56,7 @@ pub async fn create(
 		FieldTypeEnum::ContentTypeField,
 		&form.name,
 	)?;
-	
+
 	let res = FieldWithContentComponentDTO::from(field);
 	Ok(HttpResponse::Ok().json(res))
 }
