@@ -1,30 +1,47 @@
-import { Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
+import { IHeaderTab } from '@ibs/components';
+import { IContentType, IContentTypeField } from '@ibs/shared';
 import * as yup from 'yup';
+import { generatePath } from 'react-router-dom';
 
-export const addContentComponentSchema = yup.object({
-	contentComponentId: yup.string().required(),
+import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
+
+export const editFieldSchema = yup.object({
 	name: yup.string().required(),
+	config: yup.object(),
 });
 
-export const CONTENT_TYPE_DETAIL_COLUMNS: ITableColumn[] = [
+export const FIELD_DETAIL_TABS = (
+	contentType?: IContentType,
+	field?: IContentTypeField
+): IHeaderTab[] => [
 	{
-		id: 'name',
-		label: 'Name',
+		to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_SETTINGS, {
+			contentTypeId: contentType?.id || '',
+			fieldId: field?.id || '',
+		}),
+		label: 'Settings',
 	},
 	{
-		id: 'slug',
-		label: 'Slug',
+		to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_CONFIGURATION, {
+			contentTypeId: contentType?.id || '',
+			fieldId: field?.id || '',
+		}),
+		label: 'Configuration',
 	},
 	{
-		id: 'contentComponent.name',
-		label: 'Content Component',
+		to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_VALIDATION, {
+			contentTypeId: contentType?.id || '',
+			fieldId: field?.id || '',
+		}),
+		label: 'Validation',
+		disabled: true,
 	},
 	{
-		id: 'actions',
-		label: '',
-		format: (value, key, item) => <div className='u-display-flex'>
-			<ButtonLink to={`fields/${item.id}`} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className='u-margin-left-auto'><i className='las la-pen'></i> Edit</ButtonLink>
-			<Button size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className='u-margin-left-sm'><i className='las la-trash'></i> Delete</Button>
-		</div>,
+		to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_DEFAULT_VALUE, {
+			contentTypeId: contentType?.id || '',
+			fieldId: field?.id || '',
+		}),
+		label: 'Default Value',
+		disabled: true,
 	},
 ];

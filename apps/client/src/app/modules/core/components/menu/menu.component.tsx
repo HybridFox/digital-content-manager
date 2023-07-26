@@ -34,8 +34,22 @@ export const Menu = () => {
 			<p className={cxBind('o-menu__links__name')}>Content</p>
 			<ul>
 				<li>
-					<NavLink {...navLinkBinding} to="/app/page-types"><i className="las la-file-invoice"></i> Page Types</NavLink>
+					<NavLink {...navLinkBinding} to="/app/page-types"><i className="las la-th-list"></i> Content</NavLink>
 				</li>
+				<li>
+					<NavLink {...navLinkBinding} to="/app/page-types"><i className="las la-file"></i> Pages</NavLink>
+				</li>
+				<li>
+					<NavLink {...navLinkBinding} to="/app/page-types"><i className="las la-cubes"></i> Blocks</NavLink>
+				</li>
+			</ul>
+		</div>
+		<div className={cxBind('o-menu__links')}>
+			<p className={cxBind('o-menu__links__name')}>Management</p>
+			<ul>
+				{/* <li>
+					<NavLink {...navLinkBinding} to="/app/page-types"><i className="las la-file-invoice"></i> Page Types</NavLink>
+				</li> */}
 				<li>
 					<NavLink {...navLinkBinding} to="/app/content-types"><i className="las la-book"></i> Content Types</NavLink>
 				</li>

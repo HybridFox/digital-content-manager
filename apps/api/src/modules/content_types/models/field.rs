@@ -1,21 +1,24 @@
+use std::collections::HashMap;
 use std::io::Write;
 
+use tracing::instrument;
 use diesel::{prelude::*, FromSqlRow, AsExpression};
 use slug::slugify;
 use diesel::deserialize::{self, FromSql};
 use diesel::pg::{Pg, PgValue};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use crate::modules::content_components::models::content_component::ContentComponent;
 use crate::modules::content_types::models::content_type::ContentType;
+use crate::schema::field_config;
 use uuid::Uuid;
 use diesel::serialize::{self, IsNull, Output, ToSql};
 
 use crate::errors::AppError;
 use crate::schema::{fields, content_components, sql_types::FieldTypes};
 
-use super::field_config::FieldConfig;
+use super::field_config::{FieldConfig, FieldConfigContent};
 
-#[derive(Debug, PartialEq, FromSqlRow, AsExpression, Eq, Clone, Deserialize)]
+#[derive(Debug, PartialEq, FromSqlRow, AsExpression, Eq, Clone, Deserialize, Serialize)]
 #[diesel(sql_type = FieldTypes)]
 pub enum FieldTypeEnum {
 	ContentTypeField,
@@ -49,7 +52,7 @@ impl FromSql<FieldTypes, Pg> for FieldTypeEnum {
 	}
 }
 
-#[derive(Selectable, Queryable, Debug, Identifiable, Associations, Clone)]
+#[derive(Selectable, Queryable, Debug, Identifiable, Associations, Clone, Deserialize, Serialize)]
 #[diesel(belongs_to(ContentComponent, foreign_key = content_component_id))]
 #[diesel(belongs_to(ContentType, foreign_key = parent_id))]
 #[diesel(table_name = fields)]
@@ -69,6 +72,7 @@ pub struct FieldModel {
 }
 
 impl FieldModel {
+	#[instrument(skip(conn))]
 	pub fn create(
 		conn: &mut PgConnection,
 		site_id: Uuid,
@@ -81,10 +85,10 @@ impl FieldModel {
 			Self,
 			(
 				ContentComponent,
-				Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
-				Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+				Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
+				Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
 			),
-			Vec<FieldConfig>,
+			HashMap<String, FieldConfigContent>,
 		),
 		AppError,
 	> {
@@ -104,6 +108,7 @@ impl FieldModel {
 		Ok(result)
 	}
 
+	#[instrument(skip(conn))]
 	pub fn find_one(
 		conn: &mut PgConnection,
 		_site_id: Uuid,
@@ -113,10 +118,10 @@ impl FieldModel {
 			Self,
 			(
 				ContentComponent,
-				Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
-				Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+				Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
+				Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
 			),
-			Vec<FieldConfig>,
+			HashMap<String, FieldConfigContent>,
 		),
 		AppError,
 	> {
@@ -129,21 +134,23 @@ impl FieldModel {
 		let content_component = ContentComponent::find_one(conn, None, field.content_component_id)?;
 		let populated_content_components =
 			ContentComponent::populate_fields(conn, vec![content_component])?;
+		let populated_field_config = ContentComponent::populate_config(conn, field_config)?;
 
 		Ok((
 			field,
 			populated_content_components.first().unwrap().clone(),
-			field_config,
+			populated_field_config,
 		))
 	}
 
+	#[instrument(skip(conn))]
 	pub fn find(
 		conn: &mut PgConnection,
 		_site_id: Uuid,
 		parent_id: Uuid,
 		page: i64,
 		pagesize: i64,
-	) -> Result<(Vec<(Self, ContentComponent, Vec<FieldConfig>)>, i64), AppError> {
+	) -> Result<(Vec<(Self, ContentComponent, HashMap<String, FieldConfigContent>)>, i64), AppError> {
 		let fields = fields::table
 			.filter(fields::parent_id.eq(parent_id))
 			.offset((page - 1) * pagesize)
@@ -151,6 +158,20 @@ impl FieldModel {
 			.select(FieldModel::as_select())
 			.load::<FieldModel>(conn)?;
 
+		let fields_with_config = Self::populate_fields(conn, fields)?;
+		let total_elements = fields::table
+			.filter(fields::parent_id.eq(parent_id))
+			.count()
+			.get_result::<i64>(conn)?;
+
+		Ok((fields_with_config, total_elements))
+	}
+
+	#[instrument(skip(conn))]
+	pub fn populate_fields(
+		conn: &mut PgConnection,
+		fields: Vec<Self>
+	) -> Result<Vec<(Self, ContentComponent, HashMap<String, FieldConfigContent>)>, AppError> {
 		let all_content_components = content_components::table
 			.select(ContentComponent::as_select())
 			.load::<ContentComponent>(conn)?;
@@ -160,26 +181,24 @@ impl FieldModel {
 			.load::<FieldConfig>(conn)?;
 
 		let grouped_config: Vec<Vec<FieldConfig>> = field_config.grouped_by(&fields);
-		let fields_with_config: Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)> = fields
+		let fields_with_config = fields
 			.into_iter()
 			.zip(grouped_config)
 			.map(|(field, field_configs)| {
+				let populated_field_configs = ContentComponent::populate_config(conn, field_configs)?;
 				let content_component = all_content_components
 					.iter()
 					.find(|cp| cp.id == field.content_component_id)
 					.map(|cp| cp.to_owned());
-				(field, content_component.unwrap(), field_configs)
+
+				Ok((field, content_component.unwrap(), populated_field_configs))
 			})
-			.collect();
+			.collect::<Result<Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>, AppError>>()?;
 
-		let total_elements = fields::table
-			.filter(fields::parent_id.eq(parent_id))
-			.count()
-			.get_result::<i64>(conn)?;
-
-		Ok((fields_with_config, total_elements))
+		Ok(fields_with_config)
 	}
 
+	#[instrument(skip(conn))]
 	pub fn update(
 		conn: &mut PgConnection,
 		site_id: Uuid,
@@ -190,10 +209,10 @@ impl FieldModel {
 			Self,
 			(
 				ContentComponent,
-				Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
-				Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+				Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
+				Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
 			),
-			Vec<FieldConfig>,
+			HashMap<String, FieldConfigContent>,
 		),
 		AppError,
 	> {
@@ -207,10 +226,14 @@ impl FieldModel {
 		Ok(field)
 	}
 
+	#[instrument(skip(conn))]
 	pub fn remove(conn: &mut PgConnection, field_id: Uuid) -> Result<(), AppError> {
-		// TODO: delete config aswell
 		let target = fields::table.filter(fields::id.eq(field_id));
-		diesel::delete(target).get_result::<FieldModel>(conn)?;
+		diesel::delete(target).execute(conn)?;
+
+		let target = field_config::table.filter(field_config::field_id.eq(field_id));
+		diesel::delete(target).execute(conn)?;
+
 		Ok(())
 	}
 }
@@ -227,7 +250,12 @@ pub struct CreateField {
 
 #[derive(AsChangeset, Insertable, Debug, Deserialize)]
 #[diesel(table_name = fields)]
+#[serde(rename_all = "camelCase")]
 pub struct UpdateField {
 	pub name: Option<String>,
 	pub description: Option<String>,
+	pub min: Option<i32>,
+	pub max: Option<i32>,
+	pub hidden: Option<bool>,
+	pub multi_language: Option<bool>,
 }

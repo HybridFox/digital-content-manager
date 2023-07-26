@@ -22,9 +22,19 @@ export interface IContentTypeFieldStoreState {
 
 	createField: (contentTypeId: string, field: IContentTypeFieldCreateDTO) => Promise<IContentTypeField>;
 	createFieldLoading: boolean;
+
+	updateField: (contentTypeId: string, fieldId: string, field: IContentTypeFieldUpdateDTO) => Promise<IContentTypeField>;
+	updateFieldLoading: boolean;
+
+	deleteField: (contentTypeId: string, fieldId: string) => Promise<void>;
+	deleteFieldLoading: boolean;
 }
 
 export interface IContentTypeFieldCreateDTO {
 	name: string;
 	contentComponentId: string;
+}
+
+export interface IContentTypeFieldUpdateDTO {
+	name: string;
 }

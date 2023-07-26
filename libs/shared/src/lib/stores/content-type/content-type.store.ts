@@ -55,5 +55,22 @@ export const useContentTypeStore = create<IContentTypeStoreState>()(devtools(
 			return result;
 		},
 		createContentTypeLoading: false,
+
+		updateContentType: async (contentTypeId, data) => {
+			set(() => ({ updateContentTypeLoading: true }));
+			const { selectedSiteId } = useAuthStore.getState();
+			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${selectedSiteId}/content-types/${contentTypeId}`, {
+				json: data,
+			}).json<IContentType>());
+
+			if (error) {
+				set(() => ({ updateContentTypeLoading: false }));
+				throw error;
+			}
+			
+			set(() => ({ contentType: result, updateContentTypeLoading: false }));
+			return result;
+		},
+		updateContentTypeLoading: false,
 	}), { name: 'contentTypeStore' }
 ))

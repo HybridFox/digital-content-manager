@@ -2,6 +2,7 @@ use chrono::NaiveDateTime;
 use diesel::prelude::*;
 use serde::Deserialize;
 use uuid::Uuid;
+use tracing::instrument;
 
 use crate::modules::content_types::models::content_type::ContentType;
 use crate::modules::sites::models::site::Site;
@@ -22,6 +23,7 @@ pub struct SiteContentType {
 }
 
 impl SiteContentType {
+	#[instrument(skip(conn))]
 	pub fn create(
 		conn: &mut PgConnection,
 		site_id: Uuid,

@@ -1,6 +1,7 @@
 use super::super::dto::{request, response};
 use crate::modules::content_components::dto::response::FieldWithContentComponentDTO;
 use crate::modules::content_types::models::field::{UpdateField, FieldTypeEnum};
+use crate::modules::content_types::models::field_config::FieldConfig;
 use crate::{errors::AppError, modules::content_types::models::field::FieldModel};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
@@ -124,10 +125,10 @@ pub async fn find_one(
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/sites/{site_id}/content-types/{content_type_id}/fields}",
+	context_path = "/api/v1/sites/{site_id}/content-types/{content_type_id}/fields",
     request_body = UpdateFieldDTO,
 	responses(
-		(status = 200, body = SiteDTO),
+		(status = 200, body = FieldWithContentComponentDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
 	),
     security(
@@ -142,15 +143,22 @@ pub async fn update(
 	form: web::Json<request::UpdateFieldDTO>,
 ) -> ApiResponse {
 	let conn = &mut state.get_conn()?;
+
+	FieldConfig::upsert(conn, params.field_id, form.config.clone())?;
 	let field = FieldModel::update(
 		conn,
 		params.site_id,
-		params.content_type_id,
+		params.field_id,
 		UpdateField {
 			name: form.name.clone(),
 			description: form.description.clone(),
+			min: form.min.clone(),
+			max: form.max.clone(),
+			hidden: form.hidden.clone(),
+			multi_language: form.multi_language.clone(),
 		},
 	)?;
+
 	let res = FieldWithContentComponentDTO::from(field);
 	Ok(HttpResponse::Ok().json(res))
 }
@@ -172,6 +180,6 @@ pub async fn remove(
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
 	let conn = &mut state.get_conn()?;
-	FieldModel::remove(conn, params.content_type_id)?;
+	FieldModel::remove(conn, params.field_id)?;
 	Ok(HttpResponse::NoContent().body(()))
 }

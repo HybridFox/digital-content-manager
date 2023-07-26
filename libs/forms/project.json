@@ -1,0 +1,16 @@
+{
+	"name": "forms",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/forms/src",
+	"projectType": "library",
+	"tags": [],
+	"targets": {
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/forms/**/*.{ts,tsx,js,jsx}"]
+			}
+		}
+	}
+}

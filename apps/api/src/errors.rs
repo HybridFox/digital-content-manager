@@ -179,7 +179,7 @@ impl From<DieselError> for AppError {
 			DieselError::NotFound => AppError::NotFound(AppErrorValue {
 				message: "Resource could not be found".to_owned(),
 				status: StatusCode::NOT_FOUND.as_u16(),
-				code: "NOT_FOUND".to_owned(),
+				code: "ENTITY_NOT_FOUND".to_owned(),
 				..Default::default()
 			}),
 			_ => AppError::InternalServerError(AppErrorValue {
@@ -251,7 +251,6 @@ impl<RE: std::error::Error, TR: oauth2::ErrorResponse> From<RequestTokenError<RE
 	for AppError
 {
 	fn from(_err: RequestTokenError<RE, TR>) -> Self {
-		println!("{:#?}", _err);
 		AppError::InternalServerError(AppErrorValue {
 			message: _err.to_string(),
 			status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),

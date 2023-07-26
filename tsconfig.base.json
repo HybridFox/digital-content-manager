@@ -16,6 +16,7 @@
 		"baseUrl": ".",
 		"paths": {
 			"@ibs/components": ["libs/components/src/index.ts"],
+			"@ibs/forms": ["libs/forms/src/index.ts"],
 			"@ibs/shared": ["libs/shared/src/index.ts"]
 		}
 	},

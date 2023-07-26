@@ -19,8 +19,8 @@ export const CONTENT_TYPE_LIST_COLUMNS: ITableColumn[] = [
 		id: 'actions',
 		label: '',
 		format: (value, key, item) => <div className='u-display-flex'>
-			<ButtonLink to={`${item.id}`} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY}><i className='las la-pen'></i> Edit</ButtonLink>
-			<Button size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className='u-margin-left-sm'><i className='las la-trash'></i> Delete</Button>
+			<ButtonLink to={`${item.id}`} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className='u-margin-left-auto'><i className='las la-pen'></i> Edit</ButtonLink>
+			<Button size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className='u-margin-left-sm'><i className='las la-trash'></i></Button>
 		</div>,
 	},
 ];

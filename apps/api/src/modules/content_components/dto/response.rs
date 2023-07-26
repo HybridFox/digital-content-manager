@@ -1,10 +1,11 @@
 use crate::modules::{
 	content_components::models::content_component::ContentComponent,
 	core::models::hal::{HALLinkList, HALPage},
-	content_types::models::{field::FieldModel, field_config::FieldConfig},
+	content_types::models::{field::FieldModel, field_config::FieldConfigContent},
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use utoipa::ToSchema;
 use uuid::Uuid;
 use std::{convert::From, collections::HashMap};
@@ -45,18 +46,23 @@ pub struct FieldDTO {
 	pub min: i32,
 	pub max: i32,
 	pub content_component: ContentComponentDTO,
-	pub config: HashMap<String, String>,
+	pub config: HashMap<String, Value>,
 }
 
-impl From<(FieldModel, ContentComponent, Vec<FieldConfig>)> for FieldDTO {
+impl
+	From<(
+		FieldModel,
+		ContentComponent,
+		HashMap<String, FieldConfigContent>,
+	)> for FieldDTO
+{
 	fn from(
-		(field, content_component, config): (FieldModel, ContentComponent, Vec<FieldConfig>),
+		(field, content_component, config): (
+			FieldModel,
+			ContentComponent,
+			HashMap<String, FieldConfigContent>,
+		),
 	) -> Self {
-		let config_map = config
-			.into_iter()
-			.map(|config_item| (config_item.config_key, config_item.content))
-			.collect::<HashMap<_, _>>();
-
 		Self {
 			id: field.id,
 			name: field.name,
@@ -67,7 +73,22 @@ impl From<(FieldModel, ContentComponent, Vec<FieldConfig>)> for FieldDTO {
 			min: field.min,
 			max: field.max,
 			content_component: ContentComponentDTO::from(content_component),
-			config: config_map,
+			config: config
+				.into_iter()
+				.map(|(key, config_item)| {
+					match config_item {
+						FieldConfigContent::Text(text) => (key, Value::String(text)),
+						FieldConfigContent::Json(json) => (key, json),
+						FieldConfigContent::Fields(fields) => {
+							// TODO: clean this up somehow 🤮
+							let mapped_fields = fields.into_iter().map(FieldDTO::from).collect::<Vec<FieldDTO>>();
+							let json = serde_json::to_string(&mapped_fields).unwrap();
+
+							(key, serde_json::from_str(&json).unwrap())
+						}
+					}
+				})
+				.collect::<HashMap<_, _>>(),
 		}
 	}
 }
@@ -84,7 +105,7 @@ pub struct FieldWithContentComponentDTO {
 	pub min: i32,
 	pub max: i32,
 	pub content_component: ContentComponentWithFieldsDTO,
-	pub config: HashMap<String, String>,
+	pub config: HashMap<String, Value>,
 }
 
 impl
@@ -92,10 +113,18 @@ impl
 		FieldModel,
 		(
 			ContentComponent,
-			Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
-			Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+			Vec<(
+				FieldModel,
+				ContentComponent,
+				HashMap<String, FieldConfigContent>,
+			)>,
+			Vec<(
+				FieldModel,
+				ContentComponent,
+				HashMap<String, FieldConfigContent>,
+			)>,
 		),
-		Vec<FieldConfig>,
+		HashMap<String, FieldConfigContent>,
 	)> for FieldWithContentComponentDTO
 {
 	fn from(
@@ -103,17 +132,20 @@ impl
 			FieldModel,
 			(
 				ContentComponent,
-				Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
-				Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+				Vec<(
+					FieldModel,
+					ContentComponent,
+					HashMap<String, FieldConfigContent>,
+				)>,
+				Vec<(
+					FieldModel,
+					ContentComponent,
+					HashMap<String, FieldConfigContent>,
+				)>,
 			),
-			Vec<FieldConfig>,
+			HashMap<String, FieldConfigContent>,
 		),
 	) -> Self {
-		let config_map = config
-			.into_iter()
-			.map(|config_item| (config_item.config_key, config_item.content))
-			.collect::<HashMap<_, _>>();
-
 		Self {
 			id: field.id,
 			name: field.name,
@@ -124,7 +156,22 @@ impl
 			min: field.min,
 			max: field.max,
 			content_component: ContentComponentWithFieldsDTO::from(content_component),
-			config: config_map,
+			config: config
+				.into_iter()
+				.map(|(key, config_item)| {
+					match config_item {
+						FieldConfigContent::Text(text) => (key, Value::String(text)),
+						FieldConfigContent::Json(json) => (key, json),
+						FieldConfigContent::Fields(fields) => {
+							// TODO: clean this up somehow 🤮
+							let mapped_fields = fields.into_iter().map(FieldDTO::from).collect::<Vec<FieldDTO>>();
+							let json = serde_json::to_string(&mapped_fields).unwrap();
+
+							(key, serde_json::from_str(&json).unwrap())
+						}
+					}
+				})
+				.collect::<HashMap<_, _>>(),
 		}
 	}
 }
@@ -145,15 +192,31 @@ pub struct ContentComponentWithFieldsDTO {
 impl
 	From<(
 		ContentComponent,
-		Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
-		Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+		Vec<(
+			FieldModel,
+			ContentComponent,
+			HashMap<String, FieldConfigContent>,
+		)>,
+		Vec<(
+			FieldModel,
+			ContentComponent,
+			HashMap<String, FieldConfigContent>,
+		)>,
 	)> for ContentComponentWithFieldsDTO
 {
 	fn from(
 		(content_component, configuration_fields, sub_fields): (
 			ContentComponent,
-			Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
-			Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+			Vec<(
+				FieldModel,
+				ContentComponent,
+				HashMap<String, FieldConfigContent>,
+			)>,
+			Vec<(
+				FieldModel,
+				ContentComponent,
+				HashMap<String, FieldConfigContent>,
+			)>,
 		),
 	) -> Self {
 		Self {
@@ -189,8 +252,16 @@ impl
 	From<(
 		Vec<(
 			ContentComponent,
-			Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
-			Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+			Vec<(
+				FieldModel,
+				ContentComponent,
+				HashMap<String, FieldConfigContent>,
+			)>,
+			Vec<(
+				FieldModel,
+				ContentComponent,
+				HashMap<String, FieldConfigContent>,
+			)>,
 		)>,
 		HALPage,
 		Uuid,
@@ -200,8 +271,16 @@ impl
 		(content_components, page, site_id): (
 			Vec<(
 				ContentComponent,
-				Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
-				Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+				Vec<(
+					FieldModel,
+					ContentComponent,
+					HashMap<String, FieldConfigContent>,
+				)>,
+				Vec<(
+					FieldModel,
+					ContentComponent,
+					HashMap<String, FieldConfigContent>,
+				)>,
 			)>,
 			HALPage,
 			Uuid,

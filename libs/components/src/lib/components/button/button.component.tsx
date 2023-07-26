@@ -16,11 +16,20 @@ export const Button: FC<IButtonProps> = ({
 	block,
 	className,
 	onClick,
+	disabled,
 }: IButtonProps) => {
 	return (
-		<button type={htmlType} onClick={onClick} className={classNames(className, cxBind('a-button', `a-button--${type}`, `a-button--${size}`, {
-			'a-button--block': block,
-		}))}>
+		<button
+			disabled={disabled}
+			type={htmlType}
+			onClick={onClick}
+			className={classNames(
+				className,
+				cxBind('a-button', `a-button--${type}`, `a-button--${size}`, {
+					'a-button--block': block,
+				})
+			)}
+		>
 			{children}
 		</button>
 	);

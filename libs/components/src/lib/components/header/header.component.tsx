@@ -1,27 +1,70 @@
 import { FC } from 'react';
 import cx from 'classnames/bind';
 import classNames from 'classnames';
+import { Link, NavLink } from 'react-router-dom';
 
 import { IHeaderProps } from './header.types';
 import styles from './header.module.scss';
 
 const cxBind = cx.bind(styles);
 
+const navLinkBinding = (disabled: boolean) => ({
+	className: ({
+		isActive,
+		isPending,
+	}: {
+		isActive: boolean;
+		isPending: boolean;
+	}) =>
+		cxBind({
+			'm-header__tabs__link': true,
+			'm-header__tabs__link--active': isActive,
+			'm-header__tabs__link--pending': isPending,
+			'm-header__tabs__link--disabled': disabled,
+		}),
+});
+
 export const Header: FC<IHeaderProps> = ({
 	title,
-	subTitle,
 	className,
-	action
+	action,
+	tabs = [],
+	breadcrumbs = [],
 }: IHeaderProps) => {
 	return (
 		<div className={classNames(className, cxBind('m-header'))}>
-			<div className={cxBind('m-header__content')}>
-				{subTitle && <p className={cxBind('m-header__sub-title')}>{subTitle}</p>}
-				<h1 className={cxBind('m-header__title')}>{title}</h1>
+			<div className={cxBind('m-header__top')}>
+				<div className={cxBind('m-header__content')}>
+					{!!breadcrumbs?.length && (
+						<ul className={cxBind('m-header__breadcrumbs')}>
+							{breadcrumbs.map((breadcrumb, i) => (
+								<li key={i} className={cxBind('m-header__breadcrumbs__item', {
+									'm-header__breadcrumbs__item--disabled': breadcrumb.disabled
+								})}>
+									{breadcrumb.to ? (
+										<Link to={breadcrumb.to}>
+											{breadcrumb.label || '...'}
+										</Link>
+									) : (
+										<p>{breadcrumb.label || '...'}</p>
+									)}
+								</li>
+							))}
+						</ul>
+					)}
+					<h1 className={cxBind('m-header__title')}>{title}</h1>
+				</div>
+				{action && (
+					<div className={cxBind('m-header__action')}>{action}</div>
+				)}
 			</div>
-			{action && (
-				<div className={cxBind('m-header__action')}>
-					{action}
+			{!!tabs?.length && (
+				<div className={cxBind('m-header__tabs')}>
+					{tabs.map((tab) => (
+						<NavLink {...navLinkBinding(!!tab.disabled)} to={tab.to} key={tab.to}>
+							{tab.label}
+						</NavLink>
+					))}
 				</div>
 			)}
 		</div>

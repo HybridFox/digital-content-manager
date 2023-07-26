@@ -1,30 +1,12 @@
-import { Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
-import * as yup from 'yup';
+import { IHeaderTab } from '@ibs/components';
 
-export const addContentComponentSchema = yup.object({
-	contentComponentId: yup.string().required(),
-	name: yup.string().required(),
-});
-
-export const CONTENT_TYPE_DETAIL_COLUMNS: ITableColumn[] = [
+export const CONTENT_TYPE_DETAIL_TABS: IHeaderTab[] = [
 	{
-		id: 'name',
-		label: 'Name',
+		to: 'settings',
+		label: 'Settings',
 	},
 	{
-		id: 'slug',
-		label: 'Slug',
-	},
-	{
-		id: 'contentComponent.name',
-		label: 'Content Component',
-	},
-	{
-		id: 'actions',
-		label: '',
-		format: (value, key, item) => <div className='u-display-flex'>
-			<ButtonLink to={`fields/${item.id}`} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className='u-margin-left-auto'><i className='las la-pen'></i> Edit</ButtonLink>
-			<Button size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className='u-margin-left-sm'><i className='las la-trash'></i> Delete</Button>
-		</div>,
-	},
+		to: 'content-components',
+		label: 'Content Components',
+	}
 ];

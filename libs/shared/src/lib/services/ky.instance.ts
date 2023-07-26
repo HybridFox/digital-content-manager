@@ -8,7 +8,6 @@ export const kyInstance = ky.extend({
 		beforeRequest: [(request) => {
 			const token = useAuthStore.getState().token;
 
-			console.log('token', token)
 			if (token) {
 				request.headers.set('Authorization', `Bearer ${token}`);
 			}

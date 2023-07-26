@@ -1,10 +1,11 @@
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, TextInput, TextInputTypes } from "@ibs/components"
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from "@ibs/components"
 import cx from 'classnames/bind';
 import classNames from "classnames";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useNavigate } from "react-router-dom";
 import { IAPIError, useAuthStore } from "@ibs/shared";
+import { TextField, TextFieldTypes } from "@ibs/forms";
 
 import styles from './login.module.scss';
 import { loginSchema } from "./login.const";
@@ -42,10 +43,10 @@ export const LoginPage = () => {
 					<FormProvider {...formMethods}>
 						<form onSubmit={handleSubmit(onSubmit)}>
 							<div className="u-margin-bottom">
-								<TextInput name="email" label="Email" type={TextInputTypes.EMAIL} fieldOptions={{ required: true }} />
+								<TextField name="email" label="Email" type={TextFieldTypes.EMAIL} fieldOptions={{ required: true }} />
 							</div>
 							<div className="u-margin-bottom">
-								<TextInput name="password" label="Password" type={TextInputTypes.PASSWORD} fieldOptions={{ required: true }} />
+								<TextField name="password" label="Password" type={TextFieldTypes.PASSWORD} fieldOptions={{ required: true }} />
 							</div>
 							<div>
 								<Button className="u-margin-right-sm" htmlType={HTMLButtonTypes.SUBMIT}>Login</Button>

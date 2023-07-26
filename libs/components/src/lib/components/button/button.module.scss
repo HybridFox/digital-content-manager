@@ -13,7 +13,13 @@
 	display: inline-block;
 	height: 44px;
 
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
 	&:hover {
+		position: relative;
 		border: 2px solid var(--color-primary);
 		background: transparent;
 	}
@@ -35,6 +41,12 @@
 		height: 32px;
 	}
 
+	&--x-small {
+		padding: var(--spacer-xxxs) var(--spacer-xs);
+		font-size: 0.9rem;
+		height: auto;
+	}
+
 	&--secondary {
 		text-transform: none;
 		font-weight: 500;
@@ -46,6 +58,6 @@
 		text-transform: none;
 		font-weight: 500;
 		background: none;
-		border: 2px solid transparent;
+		border: 2px solid var(--color-gray-lighter);
 	}
 }

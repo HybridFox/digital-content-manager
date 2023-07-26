@@ -1,4 +1,7 @@
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use utoipa::ToSchema;
 use uuid::Uuid;
 
@@ -25,4 +28,9 @@ pub struct CreateFieldDTO {
 pub struct UpdateFieldDTO {
 	pub name: Option<String>,
 	pub description: Option<String>,
+	pub min: Option<i32>,
+	pub max: Option<i32>,
+	pub hidden: Option<bool>,
+	pub multi_language: Option<bool>,
+	pub config: HashMap<String, Value>
 }

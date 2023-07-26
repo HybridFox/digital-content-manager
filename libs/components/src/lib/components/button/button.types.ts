@@ -10,4 +10,5 @@ export interface IButtonProps {
 	className?: string;
 	onClick?: () => void;
 	block?: boolean;
+	disabled?: boolean;
 }

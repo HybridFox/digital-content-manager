@@ -52,5 +52,37 @@ export const useContentTypeFieldStore = create<IContentTypeFieldStoreState>()(de
 			return result;
 		},
 		createFieldLoading: false,
+
+		updateField: async (contentTypeId, fieldId, field) => {
+			set(() => ({ createFieldLoading: true }));
+			const { selectedSiteId } = useAuthStore.getState();
+			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${selectedSiteId}/content-types/${contentTypeId}/fields/${fieldId}`, {
+				json: field,
+			}).json<IContentTypeField>());
+
+			if (error) {
+				set(() => ({ updateFieldLoading: false }));
+				throw error;
+			}
+			
+			set(() => ({ updateFieldLoading: false, field: result }));
+			return result;
+		},
+		updateFieldLoading: false,
+
+		deleteField: async (contentTypeId, fieldId) => {
+			set(() => ({ deleteFieldLoading: true }));
+			const { selectedSiteId } = useAuthStore.getState();
+			const [, error] = await wrapApi(kyInstance.delete(`/api/v1/sites/${selectedSiteId}/content-types/${contentTypeId}/fields/${fieldId}`));
+
+			if (error) {
+				set(() => ({ deleteFieldLoading: false }));
+				throw error;
+			}
+			
+			set(({ fields }) => ({ deleteFieldLoading: false, fields: fields.filter((field) => field.id === fieldId) }));
+			return;
+		},
+		deleteFieldLoading: false,
 	}), { name: 'fieldStore' }
 ))

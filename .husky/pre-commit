@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-cd api
+cd apps/api
 cargo fmt --all -- --color always
 git add *.rs

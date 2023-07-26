@@ -1,20 +1,31 @@
 import { useEffect } from 'react';
-import { useContentTypeStore } from '@ibs/shared';
+import { useContentTypeStore, useHeaderStore } from '@ibs/shared';
 import { ButtonLink, Header, Loading, Table } from '@ibs/components';
 
 import { CONTENT_TYPE_LIST_COLUMNS } from './ct-list.const';
 
 export const CTListPage = () => {
-	const [contentTypes, contentTypesLoading, fetchContentTypes] = useContentTypeStore((state) => [state.contentTypes, state.contentTypesLoading, state.fetchContentTypes]);
+	const [contentTypes, contentTypesLoading, fetchContentTypes] =
+		useContentTypeStore((state) => [
+			state.contentTypes,
+			state.contentTypesLoading,
+			state.fetchContentTypes,
+		]);
+	const [breadcrumbs, setBreadcrumbs] =
+		useHeaderStore((state) => [
+			state.breadcrumbs,
+			state.setBreadcrumbs
+		]);
 
 	useEffect(() => {
 		fetchContentTypes();
+		setBreadcrumbs([{ label: 'Content Types' }])
 	}, []);
 
 	return (
 		<>
 			<Header
-				subTitle="Content Types"
+				breadcrumbs={breadcrumbs}
 				title="All Content Types"
 				action={
 					<ButtonLink to="create">
@@ -23,8 +34,14 @@ export const CTListPage = () => {
 					</ButtonLink>
 				}
 			></Header>
-			<Loading loading={contentTypesLoading} text='Loading content types...'>
-				<Table columns={CONTENT_TYPE_LIST_COLUMNS} rows={contentTypes}></Table>
+			<Loading
+				loading={contentTypesLoading}
+				text="Loading content types..."
+			>
+				<Table
+					columns={CONTENT_TYPE_LIST_COLUMNS}
+					rows={contentTypes}
+				></Table>
 			</Loading>
 		</>
 	);

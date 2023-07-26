@@ -1,6 +1,6 @@
 use crate::modules::{
 	content_types::models::{
-		content_type::ContentType, field::FieldModel, field_config::FieldConfig,
+		content_type::ContentType, field::FieldModel, field_config::FieldConfigContent,
 	},
 	core::models::hal::{HALLinkList, HALPage},
 	content_components::{models::content_component::ContentComponent, dto::response::FieldDTO},
@@ -9,7 +9,7 @@ use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 use uuid::Uuid;
-use std::convert::From;
+use std::{convert::From, collections::HashMap};
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
@@ -17,6 +17,7 @@ pub struct ContentTypeDTO {
 	pub id: Uuid,
 	pub name: String,
 	pub slug: String,
+	pub description: Option<String>,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 	pub fields: Vec<FieldDTO>,
@@ -25,19 +26,20 @@ pub struct ContentTypeDTO {
 impl
 	From<(
 		ContentType,
-		Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+		Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
 	)> for ContentTypeDTO
 {
 	fn from(
 		(content_type, fields): (
 			ContentType,
-			Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+			Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
 		),
 	) -> Self {
 		Self {
 			id: content_type.id,
 			name: content_type.name,
 			slug: content_type.slug,
+			description: content_type.description,
 			fields: fields.into_iter().map(FieldDTO::from).collect(),
 			created_at: content_type.created_at,
 			updated_at: content_type.updated_at,
@@ -62,7 +64,7 @@ impl
 	From<(
 		Vec<(
 			ContentType,
-			Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+			Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
 		)>,
 		HALPage,
 		Uuid,
@@ -72,7 +74,7 @@ impl
 		(content_types, page, site_id): (
 			Vec<(
 				ContentType,
-				Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+				Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
 			)>,
 			HALPage,
 			Uuid,
@@ -106,7 +108,7 @@ pub struct FieldsDTO {
 
 impl
 	From<(
-		Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+		Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
 		HALPage,
 		Uuid,
 		Uuid,
@@ -114,7 +116,7 @@ impl
 {
 	fn from(
 		(fields, page, site_id, content_type_id): (
-			Vec<(FieldModel, ContentComponent, Vec<FieldConfig>)>,
+			Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
 			HALPage,
 			Uuid,
 			Uuid,
