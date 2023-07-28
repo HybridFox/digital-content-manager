@@ -8,6 +8,7 @@ CREATE TABLE content_types (
 	description TEXT,
 	kind content_type_kinds NOT NULL,
 	slug TEXT NOT NULL,
+	deleted BOOLEAN NOT NULL DEFAULT FALSE,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );

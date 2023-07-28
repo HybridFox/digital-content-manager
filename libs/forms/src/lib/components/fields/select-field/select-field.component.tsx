@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
 import { Tooltip } from 'react-tooltip';
 
-import { ISelectFieldProps } from './select-field.types';
+import { ISelectFieldProps, ISelectOptions } from './select-field.types';
 import styles from './select-field.module.scss';
 
 const cxBind = cx.bind(styles);
@@ -12,7 +12,7 @@ export const SelectField: FC<ISelectFieldProps> = ({
 	name,
 	label,
 	placeholder,
-	options,
+	fieldConfiguration,
 	fieldOptions,
 }: ISelectFieldProps) => {
 	const { register, formState: { errors } } = useFormContext();
@@ -35,7 +35,7 @@ export const SelectField: FC<ISelectFieldProps> = ({
 						...fieldOptions,
 					})}
 				>
-					{options.map((option, i) => (
+					{(fieldConfiguration?.options as ISelectOptions[] || []).map((option, i) => (
 						<option key={i} value={option.value}>{option.label}</option>
 					))}
 				</select>

@@ -1,10 +1,10 @@
-import { IAPIError, useContentTypeStore, useHeaderStore } from '@ibs/shared';
+import { CONTENT_TYPE_KINDS_OPTIONS, IAPIError, useContentTypeStore, useHeaderStore } from '@ibs/shared';
 import { Alert, AlertTypes, Button, HTMLButtonTypes, Header } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { TextField, TextareaField } from '@ibs/forms';
+import { SelectField, TextField, TextareaField } from '@ibs/forms';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 
@@ -57,6 +57,13 @@ export const CTCreatePage = () => {
 							name="description"
 							label="Description"
 						></TextareaField>
+					</div>
+					<div className="u-margin-top">
+						<SelectField
+							name="kind"
+							label="Content Type Kind"
+							fieldConfiguration={{ options: CONTENT_TYPE_KINDS_OPTIONS }}
+						/>
 					</div>
 					<div className="u-margin-top">
 						<Button htmlType={HTMLButtonTypes.SUBMIT}>Create</Button>

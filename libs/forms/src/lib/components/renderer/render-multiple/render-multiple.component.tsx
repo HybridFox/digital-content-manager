@@ -7,7 +7,7 @@ import { IRenderMultipleProps } from './render-multiple.types';
 import styles from './render-multiple.module.scss';
 const cxBind = cx.bind(styles);
 
-export const RenderMultiple: FC<IRenderMultipleProps> = ({ field, children, fieldPrefix }: IRenderMultipleProps) => {
+export const RenderMultiple: FC<IRenderMultipleProps> = ({ field, children, fieldPrefix = '' }: IRenderMultipleProps) => {
 	const { fields, append, remove, move } = useFieldArray({
 		name: `${fieldPrefix}${field.slug}`,
 	});

@@ -2,10 +2,15 @@
 	border-bottom: 1px solid var(--color-gray-lightest);
 	margin-bottom: var(--spacer);
 
+	&__content {
+		min-width: 0;
+	}
+
 	&__top {
 		display: flex;
 		justify-content: space-between;
 		padding: 0 0 var(--spacer) 0;
+		align-items: flex-end;
 	}
 
 	&__title {
@@ -50,6 +55,7 @@
 		&__item {
 			display: flex;
 			align-items: center;
+			min-width: 0;
 
 			&--disabled {
 				pointer-events: none;
@@ -66,6 +72,13 @@
 				color: var(--color-gray-light);
 			}
 
+			p, a {
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				overflow: hidden;
+				padding-bottom: 3px;
+			}
+
 			p {
 				margin: 0;
 				padding-right: var(--spacer-sm);
@@ -77,7 +90,7 @@
 				margin: 0;
 				padding-right: var(--spacer-sm);
 				color: var(--color-gray-dark);
-				text-decoration-color: var(--color-gray);
+				text-decoration-color: var(--color-gray-light);
 			}
 		}
 	}

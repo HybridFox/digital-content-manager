@@ -1,9 +1,9 @@
 INSERT INTO content_components (id, name, slug, component_name, hidden, internal) VALUES (
-			'9a603b38-d6e7-420b-935b-98a6e6875969',
+			'4ad72443-b7ae-41d8-b814-22f6d8c0b246',
 			'Richtext',
 			'richtext',
-			'RICHTEXT',
+			'RICH_TEXT',
 			'false',
-			'false'
+			'true'
 		);
 

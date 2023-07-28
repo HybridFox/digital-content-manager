@@ -3,15 +3,21 @@ import { devtools } from 'zustand/middleware'
 
 import { kyInstance, wrapApi } from '../../services/ky.instance';
 import { useAuthStore } from '../auth';
+import { DEFAULT_PAGINATION_OPTIONS } from '../../const';
 
 import { IContentType, IContentTypeStoreState, IContentTypesResponse } from './content-type.types';
 
 export const useContentTypeStore = create<IContentTypeStoreState>()(devtools(
 	(set) => ({
-		fetchContentTypes: async () => {
+		fetchContentTypes: async (searchParams) => {
 			set(() => ({ contentTypesLoading: true }));
 			const { selectedSiteId } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${selectedSiteId}/content-types`).json<IContentTypesResponse>());
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${selectedSiteId}/content-types`, {
+				searchParams: {
+					...DEFAULT_PAGINATION_OPTIONS,
+					...searchParams,
+				}
+			}).json<IContentTypesResponse>());
 
 			if (error) {
 				return set(() => ({ contentTypes: [], contentTypesLoading: false }))

@@ -60,12 +60,28 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 							)
 					)
 					.service(
+						web::scope("/{site_id}/content")
+							.service(modules::content::controllers::content::create)
+							.service(modules::content::controllers::content::find_all)
+							.service(modules::content::controllers::content::find_one)
+							.service(modules::content::controllers::content::update)
+							.service(modules::content::controllers::content::remove)
+					)
+					.service(
 						web::scope("/{site_id}/content-components")
 							.service(modules::content_components::controllers::content_components::create)
 							.service(modules::content_components::controllers::content_components::find_all)
 							.service(modules::content_components::controllers::content_components::find_one)
 							// .service(modules::content_components::controllers::content_components::update)
 							.service(modules::content_components::controllers::content_components::remove),
+					)
+					.service(
+						web::scope("/{site_id}/workflows")
+							.service(modules::workflows::controllers::workflows::create)
+							.service(modules::workflows::controllers::workflows::find_all)
+							.service(modules::workflows::controllers::workflows::find_one)
+							.service(modules::workflows::controllers::workflows::update)
+							.service(modules::workflows::controllers::workflows::remove)
 					)
 					.service(
 						web::scope("/{site_id}/assets")

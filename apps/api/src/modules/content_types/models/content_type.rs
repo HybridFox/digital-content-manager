@@ -4,8 +4,8 @@ use std::io::Write;
 use chrono::NaiveDateTime;
 use diesel::{prelude::*, FromSqlRow, AsExpression};
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 use uuid::Uuid;
-use slug::slugify;
 use tracing::instrument;
 use diesel::pg::{Pg, PgValue};
 use diesel::deserialize::{self, FromSql};
@@ -21,22 +21,23 @@ use super::field::FieldModel;
 use super::field_config::{FieldConfig, FieldConfigContent};
 use super::site_content_type::SiteContentType;
 
-#[derive(Debug, PartialEq, FromSqlRow, AsExpression, Eq, Clone, Deserialize, Serialize)]
+#[derive(
+	Debug, PartialEq, FromSqlRow, AsExpression, Eq, Clone, Deserialize, Serialize, ToSchema, Copy,
+)]
 #[diesel(sql_type = ContentTypeKinds)]
+#[allow(non_camel_case_types)]
 pub enum ContentTypeKindEnum {
-	Content,
-	Page,
-	ContentBlock,
+	CONTENT,
+	PAGE,
+	CONTENT_BLOCK,
 }
 
 impl ToSql<ContentTypeKinds, Pg> for ContentTypeKindEnum {
 	fn to_sql<'b>(&'b self, out: &mut Output<'b, '_, Pg>) -> serialize::Result {
 		match *self {
-			ContentTypeKindEnum::Content => out.write_all(b"CONTENT")?,
-			ContentTypeKindEnum::Page => out.write_all(b"PAGE")?,
-			ContentTypeKindEnum::ContentBlock => {
-				out.write_all(b"CONTENT_BLOCK")?
-			}
+			ContentTypeKindEnum::CONTENT => out.write_all(b"CONTENT")?,
+			ContentTypeKindEnum::PAGE => out.write_all(b"PAGE")?,
+			ContentTypeKindEnum::CONTENT_BLOCK => out.write_all(b"CONTENT_BLOCK")?,
 		}
 		Ok(IsNull::No)
 	}
@@ -45,9 +46,9 @@ impl ToSql<ContentTypeKinds, Pg> for ContentTypeKindEnum {
 impl FromSql<ContentTypeKinds, Pg> for ContentTypeKindEnum {
 	fn from_sql(bytes: PgValue<'_>) -> deserialize::Result<Self> {
 		match bytes.as_bytes() {
-			b"CONTENT" => Ok(ContentTypeKindEnum::Content),
-			b"PAGE" => Ok(ContentTypeKindEnum::Page),
-			b"CONTENT_BLOCK" => Ok(ContentTypeKindEnum::ContentBlock),
+			b"CONTENT" => Ok(ContentTypeKindEnum::CONTENT),
+			b"PAGE" => Ok(ContentTypeKindEnum::PAGE),
+			b"CONTENT_BLOCK" => Ok(ContentTypeKindEnum::CONTENT_BLOCK),
 			_ => Err("Unrecognized enum variant".into()),
 		}
 	}
@@ -62,6 +63,7 @@ pub struct ContentType {
 	pub description: Option<String>,
 	pub kind: ContentTypeKindEnum,
 	pub slug: String,
+	pub deleted: bool,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 }
@@ -71,15 +73,10 @@ impl ContentType {
 	pub fn create(
 		conn: &mut PgConnection,
 		site_id: Uuid,
-		name: &String,
-		description: &String,
+		values: CreateContentType,
 	) -> Result<Self, AppError> {
 		let content_type = diesel::insert_into(content_types::table)
-			.values(CreateContentType {
-				name: name.to_owned(),
-				description: description.to_owned(),
-				slug: slugify(name),
-			})
+			.values(values)
 			.returning(ContentType::as_returning())
 			.get_result(conn)?;
 
@@ -116,6 +113,7 @@ impl ContentType {
 		site_id: Uuid,
 		page: i64,
 		pagesize: i64,
+		kind: Option<ContentTypeKindEnum>,
 	) -> Result<
 		(
 			Vec<(
@@ -130,13 +128,27 @@ impl ContentType {
 		),
 		AppError,
 	> {
-		let content_types = sites_content_types::table
-			.filter(sites_content_types::site_id.eq(site_id))
-			.offset((page - 1) * pagesize)
-			.limit(pagesize)
-			.inner_join(
-				content_types::table.on(content_types::id.eq(sites_content_types::content_type_id)),
-			)
+		let query = {
+			let mut query = sites_content_types::table
+				.filter(sites_content_types::site_id.eq(site_id))
+				.inner_join(
+					content_types::table
+						.on(content_types::id.eq(sites_content_types::content_type_id)),
+				)
+				.into_boxed();
+
+			if let Some(kind) = kind {
+				query = query.filter(content_types::kind.eq(kind));
+			}
+
+			if pagesize != -1 {
+				query = query.offset((page - 1) * pagesize).limit(pagesize);
+			};
+
+			query
+		};
+
+		let content_types = query
 			.select(ContentType::as_select())
 			.load::<ContentType>(conn)?;
 
@@ -255,9 +267,10 @@ impl ContentType {
 #[derive(Insertable, Debug, Deserialize)]
 #[diesel(table_name = content_types)]
 pub struct CreateContentType {
-	name: String,
-	description: String,
-	slug: String,
+	pub name: String,
+	pub description: String,
+	pub slug: String,
+	pub kind: ContentTypeKindEnum,
 }
 
 #[derive(AsChangeset, Debug, Deserialize, Clone)]

@@ -13,18 +13,18 @@ import { FieldConfigurationPage } from './pages/field-configuration/field-config
 export const CONTENT_TYPES_ROUTES: RouteObject[] = [
 	{
 		path: CONTENT_TYPES_PATHS.ROOT,
-		element: <CTListPage />,
+		lazy: async () => ({ Component: (await import('./pages/ct-list/ct-list.page')).CTListPage }),
 	},
 	{
 		path: CONTENT_TYPES_PATHS.CREATE,
-		element: <CTCreatePage />,
+		lazy: async () => ({ Component: (await import('./pages/ct-create/ct-create.page')).CTCreatePage }),
 	},
 	{
 		path: CONTENT_TYPES_PATHS.DETAIL,
 		children: [
 			{
 				path: '',
-				element: <CTDetailPage />,
+				lazy: async () => ({ Component: (await import('./pages/ct-detail/ct-detail.page')).CTDetailPage }),
 				children: [
 					{
 						path: '',
@@ -32,17 +32,17 @@ export const CONTENT_TYPES_ROUTES: RouteObject[] = [
 					},
 					{
 						path: CONTENT_TYPES_PATHS.DETAIL_SETTINGS,
-						element: <CTSettingsPage />,
+						lazy: async () => ({ Component: (await import('./pages/ct-settings/ct-settings.page')).CTSettingsPage }),
 					},
 					{
 						path: CONTENT_TYPES_PATHS.DETAIL_CC,
-						element: <CTContentComponentsPage />,
+						lazy: async () => ({ Component: (await import('./pages/ct-content-components/ct-content-components.page')).CTContentComponentsPage }),
 					},
 				],
 			},
 			{
 				path: CONTENT_TYPES_PATHS.FIELD_DETAIL,
-				element: <FieldDetailPage />,
+				lazy: async () => ({ Component: (await import('./pages/field-detail/field-detail.page')).FieldDetailPage }),
 				children: [
 					{
 						path: '',
@@ -50,11 +50,11 @@ export const CONTENT_TYPES_ROUTES: RouteObject[] = [
 					},
 					{
 						path: CONTENT_TYPES_PATHS.FIELD_DETAIL_SETTINGS,
-						element: <FieldSettingsPage />
+						lazy: async () => ({ Component: (await import('./pages/field-settings/field-settings.page')).FieldSettingsPage }),
 					},
 					{
 						path: CONTENT_TYPES_PATHS.FIELD_DETAIL_CONFIGURATION,
-						element: <FieldConfigurationPage />
+						lazy: async () => ({ Component: (await import('./pages/field-configuration/field-configuration.page')).FieldConfigurationPage }),
 					}
 				]
 			},

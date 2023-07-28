@@ -5,7 +5,7 @@ import { IHeaderBreadcrumb } from './header.types';
 
 interface IHeaderStoreState {
 	breadcrumbs?: IHeaderBreadcrumb[];
-	setBreadcrumbs: (breadcrumbs:IHeaderBreadcrumb[]) => void;
+	setBreadcrumbs: (breadcrumbs: IHeaderBreadcrumb[]) => void;
 }
 
 export const useHeaderStore = create<IHeaderStoreState>()(devtools(

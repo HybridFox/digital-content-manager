@@ -6,6 +6,7 @@ import { AnonymousView } from './modules/core/views/anonymous/anonymous.view';
 import { AuthenticatedView } from './modules/core/views/authenticated/authenticated.view';
 import { DASHBOARD_ROUTES } from './modules/dashboard';
 import { CONTENT_TYPES_ROUTES } from './modules/content-types';
+import { CONTENT_ROUTES } from './modules/content';
 
 const router = createBrowserRouter([
 	{
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
 				children: [
 					...DASHBOARD_ROUTES,
 					...CONTENT_TYPES_ROUTES,
+					...CONTENT_ROUTES,
 				]
 			}
 		]

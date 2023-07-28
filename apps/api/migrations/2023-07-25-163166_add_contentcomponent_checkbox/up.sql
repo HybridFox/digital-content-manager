@@ -4,6 +4,6 @@ INSERT INTO content_components (id, name, slug, component_name, hidden, internal
 			'checkbox',
 			'CHECKBOX',
 			'false',
-			'false'
+			'true'
 		);
 

@@ -1,6 +1,6 @@
 use crate::modules::{
 	content_types::models::{
-		content_type::ContentType, field::FieldModel, field_config::FieldConfigContent,
+		content_type::{ContentType, ContentTypeKindEnum}, field::FieldModel, field_config::FieldConfigContent,
 	},
 	core::models::hal::{HALLinkList, HALPage},
 	content_components::{models::content_component::ContentComponent, dto::response::FieldDTO},
@@ -17,6 +17,7 @@ pub struct ContentTypeDTO {
 	pub id: Uuid,
 	pub name: String,
 	pub slug: String,
+	pub kind: ContentTypeKindEnum,
 	pub description: Option<String>,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
@@ -39,6 +40,7 @@ impl
 			id: content_type.id,
 			name: content_type.name,
 			slug: content_type.slug,
+			kind: content_type.kind,
 			description: content_type.description,
 			fields: fields.into_iter().map(FieldDTO::from).collect(),
 			created_at: content_type.created_at,

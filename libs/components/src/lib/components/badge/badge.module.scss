@@ -1,0 +1,12 @@
+.a-badge {
+	border-radius: var(--border-radius-sm);
+	background: var(--color-gray-lightest);
+	padding: var(--spacer-xxxs) var(--spacer-xs);
+	font-size: 0.8rem;
+	text-transform: uppercase;
+	font-weight: normal;
+	
+	&__title {
+		margin: 0 0 var(--spacer) 0;
+	}
+}

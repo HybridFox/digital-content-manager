@@ -16,7 +16,6 @@ const contentComponents = [
 		slug: 'field-group',
 		componentName: 'FIELD_GROUP',
 		hidden: true,
-		internal: true,
 		configurationFields: []
 	},
 	{
@@ -286,7 +285,7 @@ contentComponents.forEach((partialCc) => {
 	const cc = {
 		id: crypto.randomUUID(),
 		hidden: false,
-		internal: false,
+		internal: true,
 		...partialCc,
 	}
 	const folderName = `2023-07-25-${number}_add_contentcomponent_${cc.slug}`;

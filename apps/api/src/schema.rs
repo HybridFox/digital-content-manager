@@ -12,6 +12,10 @@ pub mod sql_types {
     #[derive(diesel::query_builder::QueryId, diesel::sql_types::SqlType)]
     #[diesel(postgres_type(name = "field_types"))]
     pub struct FieldTypes;
+
+    #[derive(diesel::query_builder::QueryId, diesel::sql_types::SqlType)]
+    #[diesel(postgres_type(name = "workflow_state_technical_states"))]
+    pub struct WorkflowStateTechnicalStates;
 }
 
 diesel::table! {
@@ -35,6 +39,22 @@ diesel::table! {
         file_extension -> Text,
         file_mime -> Text,
         file_size -> Int8,
+        deleted -> Bool,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    content (id) {
+        id -> Uuid,
+        name -> Text,
+        slug -> Text,
+        workflow_state_id -> Uuid,
+        translation_id -> Uuid,
+        site_id -> Uuid,
+        published -> Bool,
+        deleted -> Bool,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -47,9 +67,20 @@ diesel::table! {
         slug -> Text,
         hidden -> Bool,
         internal -> Bool,
+        deleted -> Bool,
+        removeable -> Bool,
         component_name -> Text,
         created_at -> Timestamp,
         updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    content_fields (id) {
+        id -> Uuid,
+        name -> Text,
+        value -> Nullable<Jsonb>,
+        parent_id -> Uuid,
     }
 }
 
@@ -63,6 +94,7 @@ diesel::table! {
         description -> Nullable<Text>,
         kind -> ContentTypeKinds,
         slug -> Text,
+        deleted -> Bool,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -195,6 +227,7 @@ diesel::table! {
         url -> Nullable<Text>,
         image -> Nullable<Text>,
         description -> Nullable<Text>,
+        deleted -> Bool,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -252,6 +285,62 @@ diesel::table! {
     }
 }
 
+diesel::table! {
+    use diesel::sql_types::*;
+    use super::sql_types::WorkflowStateTechnicalStates;
+
+    workflow_states (id) {
+        id -> Uuid,
+        name -> Text,
+        slug -> Text,
+        description -> Text,
+        technical_state -> WorkflowStateTechnicalStates,
+        internal -> Bool,
+        removable -> Bool,
+        deleted -> Bool,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    workflow_transition_requirements (id) {
+        id -> Uuid,
+        workflow_transition_id -> Uuid,
+        #[sql_name = "type"]
+        type_ -> Text,
+        value -> Jsonb,
+    }
+}
+
+diesel::table! {
+    workflow_transitions (id) {
+        id -> Uuid,
+        workflow_id -> Uuid,
+        from_workflow_state_id -> Uuid,
+        to_workflow_state_id -> Uuid,
+    }
+}
+
+diesel::table! {
+    workflows (id) {
+        id -> Uuid,
+        name -> Text,
+        slug -> Text,
+        description -> Text,
+        default_workflow_state_id -> Uuid,
+        internal -> Bool,
+        removable -> Bool,
+        active -> Bool,
+        deleted -> Bool,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::joinable!(asset_metadata -> assets (asset_id));
+diesel::joinable!(content -> sites (site_id));
+diesel::joinable!(content -> workflow_states (workflow_state_id));
 diesel::joinable!(iam_policies -> sites (site_id));
 diesel::joinable!(permissions -> iam_policies (iam_policy_id));
 diesel::joinable!(permissions_iam_actions -> iam_actions (iam_action_key));
@@ -271,11 +360,15 @@ diesel::joinable!(sites_users_iam_policies -> users (user_id));
 diesel::joinable!(sites_users_roles -> roles (role_id));
 diesel::joinable!(sites_users_roles -> sites (site_id));
 diesel::joinable!(sites_users_roles -> users (user_id));
+diesel::joinable!(workflow_transition_requirements -> workflow_transitions (workflow_transition_id));
+diesel::joinable!(workflow_transitions -> workflows (workflow_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     asset_metadata,
     assets,
+    content,
     content_components,
+    content_fields,
     content_types,
     field_config,
     fields,
@@ -293,4 +386,8 @@ diesel::allow_tables_to_appear_in_same_query!(
     sites_users_iam_policies,
     sites_users_roles,
     users,
+    workflow_states,
+    workflow_transition_requirements,
+    workflow_transitions,
+    workflows,
 );

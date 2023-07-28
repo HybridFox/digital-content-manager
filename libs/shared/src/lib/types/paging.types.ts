@@ -22,3 +22,8 @@ export interface IAPIHALResponse<T extends string = string, V = unknown> {
 		next: IAPIHalLink;
 	};
 }
+
+export interface IPageParameters {
+	pagesize?: number;
+	page?: number
+}

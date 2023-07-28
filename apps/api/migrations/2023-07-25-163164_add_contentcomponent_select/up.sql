@@ -4,11 +4,11 @@ INSERT INTO content_components (id, name, slug, component_name, hidden, internal
 			'select',
 			'SELECT',
 			'false',
-			'false'
+			'true'
 		);
 
 INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_component_id, field_type) VALUES (
-				'b877166d-69cf-4745-8804-a439ed6f3daa',
+				'8146d2a0-ecae-460a-9255-2326604b3990',
 				'Options',
 				'options',
 				'Options shown in the dropdown',
@@ -20,48 +20,48 @@ INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_co
 			);
 
 INSERT INTO field_config (id, field_id, config_key, config_type, content) VALUES (
-						'4531db15-2825-4d5e-a8c6-a52969e3e982',
-						'b877166d-69cf-4745-8804-a439ed6f3daa',
+						'0310cd76-dd47-449d-930b-38a2c8b9adb7',
+						'8146d2a0-ecae-460a-9255-2326604b3990',
 						'fields',
 						'FIELDS',
 						NULL
 					);
 
 INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_component_id, field_type) VALUES (
-				'5a02d81d-5fd4-4907-82d5-c4260abb9c4f',
+				'1f30f681-d20f-41db-b88b-cf9c88a698d8',
 				'Label',
 				'label',
 				'This is the label',
 				1,
 				1,
-				'4531db15-2825-4d5e-a8c6-a52969e3e982',
+				'0310cd76-dd47-449d-930b-38a2c8b9adb7',
 				'9c203432-ab17-4801-b518-cfd0a5e85ef5',
 				'CONTENT-COMPONENT_CONFIG-FIELD'
 			);
 
 INSERT INTO field_config (id, field_id, config_key, config_type, content) VALUES (
-						'd2f756ba-799f-4aff-93bf-aaecbf39dd26',
-						'5a02d81d-5fd4-4907-82d5-c4260abb9c4f',
+						'af3d4f2c-58e8-4f4b-9d9a-e8b161788885',
+						'1f30f681-d20f-41db-b88b-cf9c88a698d8',
 						'wrapperClassName',
 						'TEXT',
 						'u-col-md-6'
 					);
 
 INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_component_id, field_type) VALUES (
-				'a6fb52ea-ef0f-4c46-924e-95a3555934c6',
+				'0c15e59f-58af-49fa-a183-d6c684dd0661',
 				'Value',
 				'value',
 				'This is the value',
 				1,
 				1,
-				'4531db15-2825-4d5e-a8c6-a52969e3e982',
+				'0310cd76-dd47-449d-930b-38a2c8b9adb7',
 				'9c203432-ab17-4801-b518-cfd0a5e85ef5',
 				'CONTENT-COMPONENT_CONFIG-FIELD'
 			);
 
 INSERT INTO field_config (id, field_id, config_key, config_type, content) VALUES (
-						'b5693b62-7774-4be0-9bd1-594fd7a65419',
-						'a6fb52ea-ef0f-4c46-924e-95a3555934c6',
+						'e3f50f09-f984-49b6-a3ed-1a56d65cfc31',
+						'0c15e59f-58af-49fa-a183-d6c684dd0661',
 						'wrapperClassName',
 						'TEXT',
 						'u-col-md-6'

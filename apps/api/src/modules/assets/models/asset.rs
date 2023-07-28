@@ -18,6 +18,7 @@ pub struct Asset {
 	pub file_extension: String,
 	pub file_mime: String,
 	pub file_size: i64,
+	pub deleted: bool,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 }

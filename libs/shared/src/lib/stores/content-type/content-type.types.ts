@@ -1,4 +1,4 @@
-import { IAPIHALResponse } from "../../types/paging.types";
+import { IAPIHALResponse, IPageParameters } from "../../types/paging.types";
 import { IContentComponent } from "../content-component";
 
 export enum FIELD_KEYS {
@@ -21,6 +21,7 @@ export interface IContentType {
 	id: string;
 	name: string;
 	slug: string;
+	kind: ContentTypeKinds;
 	createdAt: string;
 	updatedAt: string;
 	fields: IField[];
@@ -36,10 +37,39 @@ export interface IField {
 	config: Record<string, string>;
 }
 
+export enum ContentTypeKinds {
+	CONTENT = 'CONTENT',
+	PAGE = 'PAGE',
+	CONTENT_BLOCK = 'CONTENT_BLOCK',
+}
+
+export const CONTENT_TYPE_KINDS_TRANSLATIONS: Record<ContentTypeKinds, string> = {
+	[ContentTypeKinds.CONTENT]: 'Content',
+	[ContentTypeKinds.PAGE]: 'Page',
+	[ContentTypeKinds.CONTENT_BLOCK]: 'Content Block',
+};
+
+export const CONTENT_TYPE_KINDS_PARAMETER_MAP: Record<string, ContentTypeKinds> = {
+	content: ContentTypeKinds.CONTENT,
+	pages: ContentTypeKinds.PAGE,
+	'content-blocks': ContentTypeKinds.CONTENT_BLOCK,
+}
+
+export const CONTENT_TYPE_KINDS_OPTIONS: { value: string; label: string }[] = Object.keys(CONTENT_TYPE_KINDS_TRANSLATIONS).map(
+	(key: string) => ({
+		label: CONTENT_TYPE_KINDS_TRANSLATIONS[key as ContentTypeKinds],
+		value: key,
+	})
+);
+
+export interface IFetchContentTypesParameters {
+	kind?: ContentTypeKinds
+};
+
 export type IContentTypesResponse = IAPIHALResponse<'contentTypes', IContentType>
 
 export interface IContentTypeStoreState {
-	fetchContentTypes: () => Promise<void>;
+	fetchContentTypes: (params?: IPageParameters & IFetchContentTypesParameters) => Promise<void>;
 	contentTypes: IContentType[];
 	contentTypesLoading: boolean;
 

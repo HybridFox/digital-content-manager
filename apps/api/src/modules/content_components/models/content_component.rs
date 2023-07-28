@@ -23,6 +23,8 @@ pub struct ContentComponent {
 	pub slug: String,
 	pub hidden: bool,
 	pub internal: bool,
+	pub deleted: bool,
+	pub removeable: bool,
 	pub component_name: String,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,

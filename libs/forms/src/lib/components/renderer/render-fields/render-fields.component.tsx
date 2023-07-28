@@ -7,7 +7,7 @@ import { RenderMultiple } from "../render-multiple";
 
 import { IRenderFieldsProps } from "./render-fields.types";
 
-export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix }: IRenderFieldsProps) => {
+export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix = '' }: IRenderFieldsProps) => {
 	const renderContentComponent = (field: IField) => {
 		const Component = FIELD_COMPONENTS[field.contentComponent.componentName];
 

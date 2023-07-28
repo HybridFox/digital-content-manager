@@ -6,7 +6,7 @@ import {
 	Button,
 	HTMLButtonTypes,
 } from '@ibs/components';
-import { IAPIError, useContentTypeStore, useHeaderStore } from '@ibs/shared';
+import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentTypeStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { generatePath } from 'react-router-dom';
 import { TextField, TextareaField } from '@ibs/forms';
@@ -60,11 +60,12 @@ export const CTSettingsPage = () => {
 			{ label: 'Content Types', to: CONTENT_TYPES_PATHS.ROOT },
 			{
 				label: contentType?.name,
+				badge: contentType && CONTENT_TYPE_KINDS_TRANSLATIONS[contentType.kind],
 				to: generatePath(CONTENT_TYPES_PATHS.DETAIL, {
 					contentTypeId: contentType?.id || '',
 				}),
 			},
-			{ label: 'Content Components' },
+			{ label: 'Settings' },
 		]);
 	}, [contentType]);
 

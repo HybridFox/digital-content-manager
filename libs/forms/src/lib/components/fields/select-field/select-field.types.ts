@@ -7,5 +7,4 @@ export interface ISelectOptions {
 
 export interface ISelectFieldProps extends IGenericFieldProps {
 	placeholder?: string;
-	options: ISelectOptions[];
 }

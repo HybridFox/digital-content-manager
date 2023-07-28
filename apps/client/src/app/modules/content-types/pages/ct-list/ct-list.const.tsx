@@ -1,4 +1,5 @@
-import { Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
+import { Badge, Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
+import { CONTENT_TYPE_KINDS_TRANSLATIONS, ContentTypeKinds, IField } from '@ibs/shared';
 import * as yup from 'yup';
 
 export const addContentComponentSchema = yup.object({
@@ -16,11 +17,27 @@ export const CONTENT_TYPE_LIST_COLUMNS: ITableColumn[] = [
 		label: 'Slug',
 	},
 	{
+		id: 'kind',
+		label: 'Kind',
+		format: (value) => <Badge>{CONTENT_TYPE_KINDS_TRANSLATIONS[value as ContentTypeKinds]}</Badge>,
+	},
+	{
+		id: 'fields',
+		label: 'Content Components',
+		format: (value) => ((value as IField[]) || []).length,
+	},
+	{
 		id: 'actions',
 		label: '',
-		format: (value, key, item) => <div className='u-display-flex'>
-			<ButtonLink to={`${item.id}`} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className='u-margin-left-auto'><i className='las la-pen'></i> Edit</ButtonLink>
-			<Button size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className='u-margin-left-sm'><i className='las la-trash'></i></Button>
-		</div>,
+		format: (value, key, item) => (
+			<div className="u-display-flex">
+				<ButtonLink to={`${item.id}`} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className="u-margin-left-auto">
+					<i className="las la-pen"></i> Edit
+				</ButtonLink>
+				<Button size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className="u-margin-left-sm">
+					<i className="las la-trash"></i>
+				</Button>
+			</div>
+		),
 	},
 ];

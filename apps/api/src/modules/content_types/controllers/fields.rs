@@ -20,7 +20,6 @@ pub struct FindPathParams {
 #[derive(Deserialize, IntoParams)]
 pub struct FindOnePathParams {
 	site_id: Uuid,
-	content_type_id: Uuid,
 	field_id: Uuid,
 }
 

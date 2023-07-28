@@ -4,6 +4,6 @@ INSERT INTO content_components (id, name, slug, component_name, hidden, internal
 			'radio',
 			'RADIO',
 			'false',
-			'false'
+			'true'
 		);
 

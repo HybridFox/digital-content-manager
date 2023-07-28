@@ -3,6 +3,8 @@ import cx from 'classnames/bind';
 import classNames from 'classnames';
 import { Link, NavLink } from 'react-router-dom';
 
+import { Badge } from '../badge';
+
 import { IHeaderProps } from './header.types';
 import styles from './header.module.scss';
 
@@ -47,6 +49,9 @@ export const Header: FC<IHeaderProps> = ({
 										</Link>
 									) : (
 										<p>{breadcrumb.label || '...'}</p>
+									)}
+									{breadcrumb.badge && (
+										<Badge>{breadcrumb.badge}</Badge>
 									)}
 								</li>
 							))}

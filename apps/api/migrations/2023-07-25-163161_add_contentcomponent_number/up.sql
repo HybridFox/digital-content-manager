@@ -4,11 +4,11 @@ INSERT INTO content_components (id, name, slug, component_name, hidden, internal
 			'number',
 			'NUMBER',
 			'false',
-			'false'
+			'true'
 		);
 
 INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_component_id, field_type) VALUES (
-				'64e1b06e-8d34-4150-9a0e-e895e9b47b5e',
+				'74f67f9e-00eb-49bd-b815-8f317a8cb5fb',
 				'Placeholder',
 				'placeholder',
 				'This field should contain the placeholder text',
@@ -20,15 +20,15 @@ INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_co
 			);
 
 INSERT INTO field_config (id, field_id, config_key, config_type, content) VALUES (
-						'70bf91a8-499e-45e4-8e14-3ee8cf0eff64',
-						'64e1b06e-8d34-4150-9a0e-e895e9b47b5e',
+						'3db1c7d1-9e8d-4043-b700-0596d82c98ec',
+						'74f67f9e-00eb-49bd-b815-8f317a8cb5fb',
 						'placeholder',
 						'TEXT',
 						'This is the placeholder text'
 					);
 
 INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_component_id, field_type) VALUES (
-				'2dcdc947-9a66-4e43-b951-6f227b6f62f1',
+				'd0947815-96d8-41ca-81af-3973c418dada',
 				'Minimum',
 				'min',
 				'Minimum the number should be',
@@ -40,15 +40,15 @@ INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_co
 			);
 
 INSERT INTO field_config (id, field_id, config_key, config_type, content) VALUES (
-						'9ebb3324-6c2d-4f6c-8bca-a223e7db1a3e',
-						'2dcdc947-9a66-4e43-b951-6f227b6f62f1',
+						'10a66c10-08c4-4110-884b-ea3d7e34f3e1',
+						'd0947815-96d8-41ca-81af-3973c418dada',
 						'placeholder',
 						'TEXT',
 						'0'
 					);
 
 INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_component_id, field_type) VALUES (
-				'3a56efc1-8288-4b69-af71-2c51b51a58cd',
+				'8bdf54f8-a898-45fe-8769-12063d5072fc',
 				'Maximum',
 				'max',
 				'Maximum the number should be',
@@ -60,8 +60,8 @@ INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_co
 			);
 
 INSERT INTO field_config (id, field_id, config_key, config_type, content) VALUES (
-						'33d471f0-d06f-4435-8bfa-b949f5b4d90d',
-						'3a56efc1-8288-4b69-af71-2c51b51a58cd',
+						'82caf9cf-b74e-4b8d-9908-a41de1615504',
+						'8bdf54f8-a898-45fe-8769-12063d5072fc',
 						'placeholder',
 						'TEXT',
 						'50'

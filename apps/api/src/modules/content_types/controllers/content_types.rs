@@ -1,11 +1,12 @@
 use super::super::dto::{request, response};
 use crate::{errors::AppError, modules::content_types::models::content_type::UpdateContentType};
-use crate::modules::content_types::models::content_type::ContentType;
+use crate::modules::content_types::models::content_type::{ContentType, CreateContentType, ContentTypeKindEnum};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
 use actix_web::{get, post, web, HttpResponse, delete, put};
 use serde::Deserialize;
+use slug::slugify;
 use utoipa::IntoParams;
 use uuid::Uuid;
 
@@ -24,6 +25,7 @@ pub struct FindOnePathParams {
 pub struct FindAllQueryParams {
 	page: Option<i64>,
 	pagesize: Option<i64>,
+	kind: Option<ContentTypeKindEnum>,
 }
 
 #[utoipa::path(
@@ -45,7 +47,12 @@ pub async fn create(
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let content_type = ContentType::create(conn, params.site_id, &form.name, &form.description)?;
+	let content_type = ContentType::create(conn, params.site_id, CreateContentType {
+		name: form.name.clone(),
+		slug: slugify(&form.name),
+		description: form.description.clone(),
+		kind: form.kind.clone()
+	})?;
 	let res = response::ContentTypeDTO::from((content_type, Vec::new()));
 	Ok(HttpResponse::Ok().json(res))
 }
@@ -71,7 +78,7 @@ pub async fn find_all(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
 
-	let (content_types, total_elements) = ContentType::find(conn, params.site_id, page, pagesize)?;
+	let (content_types, total_elements) = ContentType::find(conn, params.site_id, page, pagesize, query.kind)?;
 
 	let res = response::ContentTypesDTO::from((
 		content_types,

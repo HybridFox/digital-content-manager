@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { useNavigate } from "react-router-dom";
 import { IAPIError, useAuthStore } from "@ibs/shared";
 import { TextField, TextFieldTypes } from "@ibs/forms";
+import { useTranslation } from "react-i18next";
 
 import styles from './login.module.scss';
 import { loginSchema } from "./login.const";
@@ -21,13 +22,14 @@ export const LoginPage = () => {
 	const navigate = useNavigate();
 	const formMethods = useForm<ILoginForm>({ resolver: yupResolver(loginSchema) });
 	const { handleSubmit, setError, formState: { errors } } = formMethods;
+	const { t } = useTranslation();
 
 	const onSubmit = ({ email, password }: ILoginForm) => {
 		authStore.login(email, password)
 			.then(() => navigate('/app/dashboard'))
 			.catch((error: IAPIError) => {
 				setError('root', {
-					message: error.code
+					message: t(`API_MESSAGES.${error.code}`)
 				})
 			});
 	}

@@ -1,7 +1,6 @@
-import { ReactNode } from "react";
-
 export interface IHeaderBreadcrumb {
 	to?: string;
-	label?: ReactNode;
+	label?: string;
+	badge?: string;
 	disabled?: boolean;
 }

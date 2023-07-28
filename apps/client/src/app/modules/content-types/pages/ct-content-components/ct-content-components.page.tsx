@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
+	CONTENT_TYPE_KINDS_TRANSLATIONS,
 	IAPIError,
 	useContentComponentStore,
 	useContentTypeFieldStore,
@@ -43,11 +44,10 @@ export const CTContentComponentsPage = () => {
 		state.contentType,
 		state.fetchContentType,
 	]);
-	const [createFieldLoading, createField, deleteFieldLoading, deleteField] =
+	const [createFieldLoading, createField, deleteField] =
 		useContentTypeFieldStore((state) => [
 			state.createFieldLoading,
 			state.createField,
-			state.deleteFieldLoading,
 			state.deleteField,
 		]);
 	const params = useParams();
@@ -67,6 +67,7 @@ export const CTContentComponentsPage = () => {
 			{ label: 'Content Types', to: CONTENT_TYPES_PATHS.ROOT },
 			{
 				label: contentType?.name,
+				badge: contentType && CONTENT_TYPE_KINDS_TRANSLATIONS[contentType.kind],
 				to: generatePath(CONTENT_TYPES_PATHS.DETAIL, {
 					contentTypeId: contentType?.id || '',
 				}),
@@ -144,10 +145,10 @@ export const CTContentComponentsPage = () => {
 								<SelectField
 									name="contentComponentId"
 									label="Content Component"
-									options={contentComponents.map((cc) => ({
+									fieldConfiguration={{ options: contentComponents.map((cc) => ({
 										label: cc.name,
 										value: cc.id,
-									}))}
+									})) }}
 								></SelectField>
 							</div>
 							<div className="u-col-md-5">

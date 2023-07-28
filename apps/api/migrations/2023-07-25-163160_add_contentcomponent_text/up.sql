@@ -4,11 +4,11 @@ INSERT INTO content_components (id, name, slug, component_name, hidden, internal
 			'text',
 			'TEXT',
 			'false',
-			'false'
+			'true'
 		);
 
 INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_component_id, field_type) VALUES (
-				'9a20d59c-8169-4609-a690-49c9d101e215',
+				'08aa003c-b4b0-407f-a354-03cdba620f1a',
 				'Placeholder',
 				'placeholder',
 				'This field should contain the placeholder text',
@@ -20,15 +20,15 @@ INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_co
 			);
 
 INSERT INTO field_config (id, field_id, config_key, config_type, content) VALUES (
-						'a51da2d1-26ac-4ac9-b112-e1c5b8b8e4a8',
-						'9a20d59c-8169-4609-a690-49c9d101e215',
+						'1a1bde60-6ac3-42dc-8f55-1bb250a31599',
+						'08aa003c-b4b0-407f-a354-03cdba620f1a',
 						'placeholder',
 						'TEXT',
 						'This is the placeholder text'
 					);
 
 INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_component_id, field_type) VALUES (
-				'd11a3cc6-3e89-4ae5-8eaa-2bf7bbe131d3',
+				'3b9b9694-bf68-4e52-b3e2-6647755a9d14',
 				'Minimum Length',
 				'minLength',
 				'Minimum length the text should be',
@@ -40,15 +40,15 @@ INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_co
 			);
 
 INSERT INTO field_config (id, field_id, config_key, config_type, content) VALUES (
-						'b0b959a1-1307-4d30-94bf-faec1bc1f458',
-						'd11a3cc6-3e89-4ae5-8eaa-2bf7bbe131d3',
+						'62730ebe-47d3-4a80-841f-1678095a7d2a',
+						'3b9b9694-bf68-4e52-b3e2-6647755a9d14',
 						'placeholder',
 						'TEXT',
 						'0'
 					);
 
 INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_component_id, field_type) VALUES (
-				'5324eb26-4c4b-4412-b2c8-53573715ae3c',
+				'6b0a3690-a7d3-4a63-98f7-2e02aa91c9bd',
 				'Maximum Length',
 				'maxLength',
 				'Maximum length the text should be',
@@ -60,8 +60,8 @@ INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_co
 			);
 
 INSERT INTO field_config (id, field_id, config_key, config_type, content) VALUES (
-						'f6432576-e9e5-42a5-b8ed-948200b5b5fa',
-						'5324eb26-4c4b-4412-b2c8-53573715ae3c',
+						'c3136e59-74db-4f1a-ae17-2e195df29cd0',
+						'6b0a3690-a7d3-4a63-98f7-2e02aa91c9bd',
 						'placeholder',
 						'TEXT',
 						'50'

@@ -18,6 +18,7 @@ pub struct Site {
 	pub url: Option<String>,
 	pub image: Option<String>,
 	pub description: Option<String>,
+	pub deleted: bool,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 }
