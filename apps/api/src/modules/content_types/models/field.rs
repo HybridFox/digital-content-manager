@@ -7,7 +7,7 @@ use slug::slugify;
 use diesel::deserialize::{self, FromSql};
 use diesel::pg::{Pg, PgValue};
 use serde::{Deserialize, Serialize};
-use crate::modules::content_components::models::content_component::ContentComponent;
+use crate::modules::content_components::models::content_component::{ContentComponent, PopulatedContentComponent};
 use crate::modules::content_types::models::content_type::ContentType;
 use crate::schema::field_config;
 use uuid::Uuid;
@@ -22,7 +22,7 @@ use super::field_config::{FieldConfig, FieldConfigContent};
 #[diesel(sql_type = FieldTypes)]
 pub enum FieldTypeEnum {
 	ContentTypeField,
-	ContentCompentSubField,
+	ContentCompentField,
 	ContentCompentConfigField,
 }
 
@@ -30,8 +30,8 @@ impl ToSql<FieldTypes, Pg> for FieldTypeEnum {
 	fn to_sql<'b>(&'b self, out: &mut Output<'b, '_, Pg>) -> serialize::Result {
 		match *self {
 			FieldTypeEnum::ContentTypeField => out.write_all(b"CONTENT-TYPE_FIELD")?,
-			FieldTypeEnum::ContentCompentSubField => {
-				out.write_all(b"CONTENT-COMPONENT_SUB-FIELD")?
+			FieldTypeEnum::ContentCompentField => {
+				out.write_all(b"CONTENT-COMPONENT_FIELD")?
 			}
 			FieldTypeEnum::ContentCompentConfigField => {
 				out.write_all(b"CONTENT-COMPONENT_CONFIG-FIELD")?
@@ -45,7 +45,7 @@ impl FromSql<FieldTypes, Pg> for FieldTypeEnum {
 	fn from_sql(bytes: PgValue<'_>) -> deserialize::Result<Self> {
 		match bytes.as_bytes() {
 			b"CONTENT-TYPE_FIELD" => Ok(FieldTypeEnum::ContentTypeField),
-			b"CONTENT-COMPONENT_SUB-FIELD" => Ok(FieldTypeEnum::ContentCompentSubField),
+			b"CONTENT-COMPONENT_FIELD" => Ok(FieldTypeEnum::ContentCompentField),
 			b"CONTENT-COMPONENT_CONFIG-FIELD" => Ok(FieldTypeEnum::ContentCompentConfigField),
 			_ => Err("Unrecognized enum variant".into()),
 		}
@@ -83,11 +83,7 @@ impl FieldModel {
 	) -> Result<
 		(
 			Self,
-			(
-				ContentComponent,
-				Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
-				Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
-			),
+			PopulatedContentComponent,
 			HashMap<String, FieldConfigContent>,
 		),
 		AppError,
@@ -116,11 +112,7 @@ impl FieldModel {
 	) -> Result<
 		(
 			Self,
-			(
-				ContentComponent,
-				Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
-				Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
-			),
+			PopulatedContentComponent,
 			HashMap<String, FieldConfigContent>,
 		),
 		AppError,
@@ -150,7 +142,7 @@ impl FieldModel {
 		parent_id: Uuid,
 		page: i64,
 		pagesize: i64,
-	) -> Result<(Vec<(Self, ContentComponent, HashMap<String, FieldConfigContent>)>, i64), AppError> {
+	) -> Result<(Vec<(Self, PopulatedContentComponent, HashMap<String, FieldConfigContent>)>, i64), AppError> {
 		let fields = fields::table
 			.filter(fields::parent_id.eq(parent_id))
 			.offset((page - 1) * pagesize)
@@ -171,7 +163,7 @@ impl FieldModel {
 	pub fn populate_fields(
 		conn: &mut PgConnection,
 		fields: Vec<Self>
-	) -> Result<Vec<(Self, ContentComponent, HashMap<String, FieldConfigContent>)>, AppError> {
+	) -> Result<Vec<(Self, PopulatedContentComponent, HashMap<String, FieldConfigContent>)>, AppError> {
 		let all_content_components = content_components::table
 			.select(ContentComponent::as_select())
 			.load::<ContentComponent>(conn)?;
@@ -185,15 +177,16 @@ impl FieldModel {
 			.into_iter()
 			.zip(grouped_config)
 			.map(|(field, field_configs)| {
-				let populated_field_configs = ContentComponent::populate_config(conn, field_configs)?;
 				let content_component = all_content_components
 					.iter()
 					.find(|cp| cp.id == field.content_component_id)
 					.map(|cp| cp.to_owned());
-
-				Ok((field, content_component.unwrap(), populated_field_configs))
+				let populated_field_configs = ContentComponent::populate_config(conn, field_configs)?;
+				let populated_content_components = ContentComponent::populate_fields(conn, vec![content_component.unwrap()])?;
+				
+				Ok((field, populated_content_components.first().unwrap().to_owned(), populated_field_configs))
 			})
-			.collect::<Result<Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>, AppError>>()?;
+			.collect::<Result<Vec<_>, AppError>>()?;
 
 		Ok(fields_with_config)
 	}
@@ -207,11 +200,7 @@ impl FieldModel {
 	) -> Result<
 		(
 			Self,
-			(
-				ContentComponent,
-				Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
-				Vec<(FieldModel, ContentComponent, HashMap<String, FieldConfigContent>)>,
-			),
+			PopulatedContentComponent,
 			HashMap<String, FieldConfigContent>,
 		),
 		AppError,

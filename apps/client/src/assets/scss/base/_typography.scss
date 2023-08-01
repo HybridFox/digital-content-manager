@@ -27,3 +27,15 @@ button,
 body, html {
 	font-family: 'Cera Pro';
 }
+
+.u-text--success {
+	color: var(--color-state-success);
+}
+
+.u-text--danger {
+	color: var(--color-state-danger);
+}
+
+.u-text--light {
+	color: var(--color-gray-light);
+}

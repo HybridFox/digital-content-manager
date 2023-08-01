@@ -2,10 +2,13 @@ import { IAPIHALResponse } from "../../types/paging.types";
 import { IContentComponent } from "../content-component";
 
 export interface IContentTypeField {
-	id: string,
-	name: string,
-	slug: string,
-	contentComponent: IContentComponent,
+	id: string;
+	name: string;
+	slug: string;
+	contentComponent: IContentComponent;
+	min: number;
+	max: number;
+	multiLanguage: boolean;
 	config: Record<string, string>
 }
 

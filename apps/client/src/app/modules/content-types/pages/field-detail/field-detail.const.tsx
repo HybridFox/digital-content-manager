@@ -7,6 +7,9 @@ import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 
 export const editFieldSchema = yup.object({
 	name: yup.string().required(),
+	min: yup.number().required(),
+	max: yup.number().required(),
+	multiLanguage: yup.boolean().required(),
 	config: yup.object(),
 });
 

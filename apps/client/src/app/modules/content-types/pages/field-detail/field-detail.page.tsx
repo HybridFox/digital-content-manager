@@ -22,6 +22,9 @@ import { FIELD_DETAIL_TABS, editFieldSchema } from './field-detail.const';
 interface IEditFieldForm {
 	name: string;
 	config: Record<string, unknown>;
+	min: number;
+	max: number;
+	multiLanguage: boolean;
 }
 
 export const FieldDetailPage = () => {

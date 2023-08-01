@@ -1,9 +1,10 @@
-INSERT INTO content_components (id, name, slug, component_name, hidden, internal) VALUES (
-			'c6db685b-36ad-455f-af46-9a0495deefe2',
+INSERT INTO content_components (id, name, slug, component_name, hidden, internal, data_type) VALUES (
+			'a62ba634-799d-4172-8c3b-77c6edb03abd',
 			'Reference',
 			'reference',
 			'REFERENCE',
 			'false',
-			'true'
+			'true',
+			'REFERENCE'
 		);
 

@@ -19,7 +19,8 @@ export const ContentListPage = () => {
 		]);
 
 	useEffect(() => {
-		fetchContent();
+		console.log(kind);
+		fetchContent({ kind: kind?.toUpperCase().replace('-', '_') });
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`) }])
 	}, [kind]);
 

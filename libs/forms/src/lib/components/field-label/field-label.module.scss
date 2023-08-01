@@ -1,0 +1,10 @@
+.a-input {
+	&__label {
+		color: var(--color-gray-dark);
+		font-size: var(--font-size-small);
+		margin-bottom: var(--spacer-xs);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+}

@@ -1,6 +1,6 @@
 use crate::modules::{
 	auth::models::user::User,
-	sites::{dto::response::SiteWithRolesDTO, models::site::Site},
+	sites::{dto::response::SiteWithRolesDTO, models::{site::Site, language::Language}},
 	roles::models::role::Role,
 	iam_policies::models::{iam_policy::IAMPolicy, permission::Permission},
 };
@@ -40,6 +40,7 @@ impl
 		Vec<(
 			Site,
 			Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
+			Vec<Language>
 		)>,
 		String,
 	)> for AuthDTO
@@ -50,6 +51,7 @@ impl
 			Vec<(
 				Site,
 				Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
+				Vec<Language>
 			)>,
 			String,
 		),

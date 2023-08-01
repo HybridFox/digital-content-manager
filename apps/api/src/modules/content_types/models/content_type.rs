@@ -12,7 +12,9 @@ use diesel::deserialize::{self, FromSql};
 use diesel::serialize::{self, IsNull, Output, ToSql};
 
 use crate::errors::AppError;
-use crate::modules::content_components::models::content_component::ContentComponent;
+use crate::modules::content_components::models::content_component::{
+	ContentComponent, PopulatedContentComponent,
+};
 use crate::schema::{
 	content_types, sites_content_types, content_components, sql_types::ContentTypeKinds,
 };
@@ -20,6 +22,12 @@ use crate::schema::{
 use super::field::FieldModel;
 use super::field_config::{FieldConfig, FieldConfigContent};
 use super::site_content_type::SiteContentType;
+
+pub type PopulatedContentTypeField = (
+	FieldModel,
+	PopulatedContentComponent,
+	HashMap<String, FieldConfigContent>,
+);
 
 #[derive(
 	Debug, PartialEq, FromSqlRow, AsExpression, Eq, Clone, Deserialize, Serialize, ToSchema, Copy,
@@ -62,6 +70,7 @@ pub struct ContentType {
 	pub name: String,
 	pub description: Option<String>,
 	pub kind: ContentTypeKindEnum,
+	pub workflow_id: Uuid,
 	pub slug: String,
 	pub deleted: bool,
 	pub created_at: NaiveDateTime,
@@ -90,17 +99,7 @@ impl ContentType {
 		conn: &mut PgConnection,
 		_site_id: Uuid,
 		id: Uuid,
-	) -> Result<
-		(
-			Self,
-			Vec<(
-				FieldModel,
-				ContentComponent,
-				HashMap<String, FieldConfigContent>,
-			)>,
-		),
-		AppError,
-	> {
+	) -> Result<(Self, Vec<PopulatedContentTypeField>), AppError> {
 		let content_type = content_types::table.find(id).first::<Self>(conn)?;
 		let fields_with_config = Self::find_fields(conn, &vec![content_type.clone()])?;
 
@@ -114,20 +113,7 @@ impl ContentType {
 		page: i64,
 		pagesize: i64,
 		kind: Option<ContentTypeKindEnum>,
-	) -> Result<
-		(
-			Vec<(
-				Self,
-				Vec<(
-					FieldModel,
-					ContentComponent,
-					HashMap<String, FieldConfigContent>,
-				)>,
-			)>,
-			i64,
-		),
-		AppError,
-	> {
+	) -> Result<(Vec<Self>, i64), AppError> {
 		let query = {
 			let mut query = sites_content_types::table
 				.filter(sites_content_types::site_id.eq(site_id))
@@ -152,27 +138,12 @@ impl ContentType {
 			.select(ContentType::as_select())
 			.load::<ContentType>(conn)?;
 
-		let fields_with_config = Self::find_fields(conn, &content_types)?;
-		let content_types_with_fields: Vec<(
-			Self,
-			Vec<(
-				FieldModel,
-				ContentComponent,
-				HashMap<String, FieldConfigContent>,
-			)>,
-		)> = fields_with_config
-			.grouped_by(&content_types)
-			.into_iter()
-			.zip(content_types)
-			.map(|(fields, content_type)| (content_type, fields))
-			.collect();
-
 		let total_elements = sites_content_types::table
 			.filter(sites_content_types::site_id.eq(site_id))
 			.count()
 			.get_result::<i64>(conn)?;
 
-		Ok((content_types_with_fields, total_elements))
+		Ok((content_types, total_elements))
 	}
 
 	#[instrument(skip(conn))]
@@ -181,17 +152,7 @@ impl ContentType {
 		site_id: Uuid,
 		id: Uuid,
 		changeset: UpdateContentType,
-	) -> Result<
-		(
-			Self,
-			Vec<(
-				FieldModel,
-				ContentComponent,
-				HashMap<String, FieldConfigContent>,
-			)>,
-		),
-		AppError,
-	> {
+	) -> Result<(Self, Vec<PopulatedContentTypeField>), AppError> {
 		let target = content_types::table.find(id);
 		diesel::update(target)
 			.set(changeset)
@@ -217,14 +178,7 @@ impl ContentType {
 	pub fn find_fields(
 		conn: &mut PgConnection,
 		content_types: &Vec<ContentType>,
-	) -> Result<
-		Vec<(
-			FieldModel,
-			ContentComponent,
-			HashMap<String, FieldConfigContent>,
-		)>,
-		AppError,
-	> {
+	) -> Result<Vec<PopulatedContentTypeField>, AppError> {
 		let all_content_components = content_components::table
 			.select(ContentComponent::as_select())
 			.load::<ContentComponent>(conn)?;
@@ -244,21 +198,22 @@ impl ContentType {
 			.map(|(field, field_configs)| {
 				let populated_field_configs =
 					ContentComponent::populate_config(conn, field_configs)?;
+
 				let content_component = all_content_components
 					.iter()
 					.find(|cp| cp.id == field.content_component_id)
 					.map(|cp| cp.to_owned());
 
-				Ok((field, content_component.unwrap(), populated_field_configs))
+				let populated_cc =
+					ContentComponent::populate_fields(conn, vec![content_component.unwrap()])?;
+
+				Ok((
+					field,
+					populated_cc.first().unwrap().clone(),
+					populated_field_configs,
+				))
 			})
-			.collect::<Result<
-				Vec<(
-					FieldModel,
-					ContentComponent,
-					HashMap<String, FieldConfigContent>,
-				)>,
-				AppError,
-			>>()?;
+			.collect::<Result<Vec<PopulatedContentTypeField>, AppError>>()?;
 
 		Ok(fields_with_config)
 	}
@@ -270,6 +225,7 @@ pub struct CreateContentType {
 	pub name: String,
 	pub description: String,
 	pub slug: String,
+	pub workflow_id: Uuid,
 	pub kind: ContentTypeKindEnum,
 }
 

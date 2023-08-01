@@ -6,6 +6,8 @@ const cxBind = cx.bind(styles);
 
 export const AnonymousView = () => {
 	return <div className={cxBind('u-anonymous')}>
-		<Outlet />
+		<div className={cxBind('u-anonymous__content')}>
+			<Outlet />
+		</div>
 	</div>
 }

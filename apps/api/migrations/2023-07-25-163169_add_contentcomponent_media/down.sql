@@ -1,1 +1,1 @@
-DELETE FROM content_components WHERE id = '17e8f165-e9b4-4e33-ad2c-b1ffcab35bc6';
+DELETE FROM content_components WHERE id = '83b24dc6-b935-496e-a967-6cdd36a2a36c';

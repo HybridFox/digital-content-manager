@@ -14,6 +14,7 @@ const contentComponents = [
 		id: CC_FIELD_GROUP,
 		name: 'Field Group',
 		slug: 'field-group',
+		dataType: 'OBJECT',
 		componentName: 'FIELD_GROUP',
 		hidden: true,
 		configurationFields: []
@@ -22,6 +23,7 @@ const contentComponents = [
 		id: CC_TEXT,
 		name: 'Text',
 		slug: 'text',
+		dataType: 'TEXT',
 		componentName: 'TEXT',
 		configurationFields: [
 			{
@@ -63,6 +65,7 @@ const contentComponents = [
 		id: CC_NUMBER,
 		name: 'Number',
 		slug: 'number',
+		dataType: 'NUMBER',
 		componentName: 'NUMBER',
 		configurationFields: [
 			{
@@ -103,12 +106,14 @@ const contentComponents = [
 	{
 		name: 'Richtext',
 		slug: 'richtext',
+		dataType: 'TEXT',
 		componentName: 'RICH_TEXT',
 		configurationFields: []
 	},
 	{
 		name: 'URL',
 		slug: 'url',
+		dataType: 'TEXT',
 		componentName: 'URL',
 		configurationFields: [
 			// HTTPS/HTTP/ETC...
@@ -118,6 +123,7 @@ const contentComponents = [
 		id: CC_SELECT,
 		name: 'Select',
 		slug: 'select',
+		dataType: 'TEXT',
 		componentName: 'SELECT',
 		configurationFields: [,
 			{
@@ -163,6 +169,7 @@ const contentComponents = [
 		id: CC_RADIO,
 		name: 'Radio',
 		slug: 'radio',
+		dataType: 'TEXT',
 		componentName: 'RADIO',
 		configurationFields: []
 	},
@@ -170,36 +177,42 @@ const contentComponents = [
 		id: CC_CHECKBOX,
 		name: 'Checkbox',
 		slug: 'checkbox',
+		dataType: 'TEXT',
 		componentName: 'CHECKBOX',
 		configurationFields: []
 	},
 	{
 		name: 'Datetime',
 		slug: 'datetime',
+		dataType: 'TEXT',
 		componentName: 'DATETIME',
 		configurationFields: []
 	},
 	{
 		name: 'Map',
 		slug: 'map',
+		dataType: 'TEXT',
 		componentName: 'MAP',
 		configurationFields: []
 	},
 	{
 		name: 'Media',
 		slug: 'media',
+		dataType: 'TEXT',
 		componentName: 'MEDIA',
 		configurationFields: []
 	},
 	{
 		name: 'Toggle',
 		slug: 'toggle',
+		dataType: 'BOOLEAN',
 		componentName: 'TOGGLE',
 		configurationFields: []
 	},
 	{
 		name: 'Reference',
 		slug: 'reference',
+		dataType: 'REFERENCE',
 		componentName: 'REFERENCE',
 		configurationFields: []
 	},
@@ -294,13 +307,14 @@ contentComponents.forEach((partialCc) => {
 	fs.mkdirSync(path.join(__dirname, 'output', folderName));
 	fs.appendFileSync(
 		path.join(__dirname, 'output', folderName, 'up.sql'),
-		`INSERT INTO content_components (id, name, slug, component_name, hidden, internal) VALUES (
+		`INSERT INTO content_components (id, name, slug, component_name, hidden, internal, data_type) VALUES (
 			'${cc.id}',
 			'${cc.name}',
 			'${cc.slug}',
 			'${cc.componentName}',
 			'${cc.hidden}',
-			'${cc.internal}'
+			'${cc.internal}',
+			'${cc.dataType}'
 		);\n\n`
 	);
 	fs.appendFileSync(path.join(__dirname, 'output', folderName, 'down.sql'), `DELETE FROM content_components WHERE id = '${cc.id}';\n`);

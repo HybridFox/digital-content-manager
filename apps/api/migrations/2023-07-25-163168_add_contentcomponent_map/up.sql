@@ -1,9 +1,10 @@
-INSERT INTO content_components (id, name, slug, component_name, hidden, internal) VALUES (
-			'0c5bb357-356d-49f7-9cad-42f8bfc6e6a5',
+INSERT INTO content_components (id, name, slug, component_name, hidden, internal, data_type) VALUES (
+			'11c58387-975b-476e-b919-4ac028362edd',
 			'Map',
 			'map',
 			'MAP',
 			'false',
-			'true'
+			'true',
+			'TEXT'
 		);
 

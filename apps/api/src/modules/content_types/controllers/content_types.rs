@@ -1,4 +1,4 @@
-use super::super::dto::{request, response};
+use super::super::dto::content_types::{request, response};
 use crate::{errors::AppError, modules::content_types::models::content_type::UpdateContentType};
 use crate::modules::content_types::models::content_type::{ContentType, CreateContentType, ContentTypeKindEnum};
 use crate::modules::core::middleware::state::AppState;
@@ -51,9 +51,10 @@ pub async fn create(
 		name: form.name.clone(),
 		slug: slugify(&form.name),
 		description: form.description.clone(),
+		workflow_id: form.workflow_id.clone(),
 		kind: form.kind.clone()
 	})?;
-	let res = response::ContentTypeDTO::from((content_type, Vec::new()));
+	let res = response::ContentTypeWithFieldsDTO::from((content_type, Vec::new()));
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -97,7 +98,7 @@ pub async fn find_all(
 #[utoipa::path(
 	context_path = "/api/v1/sites/{site_id}/content-types",
 	responses(
-		(status = 200, body = ContentTypeDTO),
+		(status = 200, body = ContentTypeWithFieldsDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
 	),
     security(
@@ -112,8 +113,7 @@ pub async fn find_one(
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let content_type = ContentType::find_one(conn, params.site_id, params.content_type_id)?;
-
-	let res = response::ContentTypeDTO::from(content_type);
+	let res = response::ContentTypeWithFieldsDTO::from(content_type);
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -145,7 +145,7 @@ pub async fn update(
 			description: form.description.clone(),
 		},
 	)?;
-	let res = response::ContentTypeDTO::from(content_type);
+	let res = response::ContentTypeWithFieldsDTO::from(content_type);
 	Ok(HttpResponse::Ok().json(res))
 }
 

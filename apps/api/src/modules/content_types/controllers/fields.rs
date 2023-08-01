@@ -1,5 +1,5 @@
-use super::super::dto::{request, response};
-use crate::modules::content_components::dto::response::FieldWithContentComponentDTO;
+use super::super::dto::fields::{request, response};
+use crate::modules::content_components::dto::content_components::response::FieldWithContentComponentDTO;
 use crate::modules::content_types::models::field::{UpdateField, FieldTypeEnum};
 use crate::modules::content_types::models::field_config::FieldConfig;
 use crate::{errors::AppError, modules::content_types::models::field::FieldModel};

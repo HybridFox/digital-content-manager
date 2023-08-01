@@ -1,37 +1,26 @@
 .a-table {
 	border-radius: var(--border-radius-sm);
 	border: 1px solid var(--color-gray-lightest);
+	overflow: hidden;
 
 	&__data {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+		border-collapse: collapse;
+		width: 100%;
 	}
 
 	&__header {
-		display: contents;
 		font-weight: bold;
 
 		&__column {
 			background-color: var(--color-gray-lightest);
 			padding: var(--spacer);
+			text-align: left;
 		}
 	}
 
-	&__content {
-		display: contents;
-	}
-
 	&__row {
-		display: contents;
-
 		&__cell {
 			padding: var(--spacer);
-			display: flex;
-			align-items: center;
-
-			&:first-child {
-				grid-column-start: 1;
-			}
 		}
 	}
 

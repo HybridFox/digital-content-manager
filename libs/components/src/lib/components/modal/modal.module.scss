@@ -1,0 +1,31 @@
+.m-modal {
+	background-color: var(--color-white);
+	transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+	position: absolute;
+	min-width: 700px;
+	padding: var(--spacer);
+	border-radius: var(--border-radius-sm);
+
+	&__header {
+		border-bottom: 1px solid var(--color-gray-lightest);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-bottom: var(--spacer-sm);
+		margin-bottom: var(--spacer);
+	}
+		
+	&__title {
+		margin: 0;
+	}
+
+	&__footer {
+		padding-top: var(--spacer-sm);
+		margin-top: var(--spacer);
+		border-top: 1px solid var(--color-gray-lightest);
+		display: flex;
+		justify-content: flex-end;
+	}
+}

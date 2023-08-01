@@ -1,9 +1,10 @@
-INSERT INTO content_components (id, name, slug, component_name, hidden, internal) VALUES (
-			'17e8f165-e9b4-4e33-ad2c-b1ffcab35bc6',
+INSERT INTO content_components (id, name, slug, component_name, hidden, internal, data_type) VALUES (
+			'83b24dc6-b935-496e-a967-6cdd36a2a36c',
 			'Media',
 			'media',
 			'MEDIA',
 			'false',
-			'true'
+			'true',
+			'TEXT'
 		);
 

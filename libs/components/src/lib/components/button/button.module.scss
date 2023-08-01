@@ -58,6 +58,13 @@
 		text-transform: none;
 		font-weight: 500;
 		background: none;
+		border: 2px solid transparent;
+	}
+
+	&--outline {
+		text-transform: none;
+		font-weight: 500;
+		background: none;
 		border: 2px solid var(--color-gray-lighter);
 	}
 }

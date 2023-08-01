@@ -15,4 +15,22 @@ export const CONTENT_ROUTES: RouteObject[] = [
 		path: CONTENT_PATHS.CREATE_DETAIL,
 		lazy: async () => ({ Component: (await import('./pages/content-create-detail/content-create-detail.page')).ContentCreateDetailPage }),
 	},
+	{
+		path: CONTENT_PATHS.DETAIL,
+		lazy: async () => ({ Component: (await import('./pages/content-detail/content-detail.page')).ContentDetailPage }),
+		children: [
+			{
+				path: '',
+				element: <Navigate to="fields" />,
+			},
+			{
+				path: CONTENT_PATHS.DETAIL_FIELDS,
+				lazy: async () => ({ Component: (await import('./pages/content-detail-fields/content-detail-fields.page')).ContentDetailFieldsPage }),
+			},
+			{
+				path: CONTENT_PATHS.DETAIL_TRANSLATIONS,
+				lazy: async () => ({ Component: (await import('./pages/content-detail-translations/content-detail-translations.page')).ContentDetailTranslationsPage }),
+			}
+		]
+	},
 ];

@@ -5,7 +5,7 @@ CREATE TABLE roles_iam_policies (
 	role_id UUID NOT NULL REFERENCES roles (id) ON DELETE CASCADE,
 	PRIMARY KEY (role_id, iam_policy_id),
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+	updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX roles_iam_policies_iam_policy_id_idx ON roles_iam_policies (iam_policy_id);

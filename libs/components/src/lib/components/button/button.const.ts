@@ -7,6 +7,7 @@ export enum ButtonTypes {
 	PRIMARY = 'primary',
 	SECONDARY = 'secondary',
 	TRANSPARENT = 'transparent',
+	OUTLINE = 'outline',
 }
 
 export enum ButtonSizes {

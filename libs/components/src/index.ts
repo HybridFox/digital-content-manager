@@ -5,3 +5,4 @@ export * from './lib/components/card';
 export * from './lib/components/table';
 export * from './lib/components/loading';
 export * from './lib/components/badge';
+export * from './lib/components/modal';

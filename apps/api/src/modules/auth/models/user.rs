@@ -7,12 +7,13 @@ use crate::modules::iam_policies::models::permission::Permission;
 use crate::modules::iam_policies::models::permission_iam_action::PermissionIAMAction;
 use crate::modules::iam_policies::models::roles_iam_policies::RoleIAMPolicy;
 use crate::modules::roles::models::role::Role;
+use crate::modules::sites::models::language::Language;
 use crate::modules::sites::models::site::Site;
+use crate::modules::sites::models::site_language::SiteLanguage;
 use crate::modules::sites::models::site_user::SiteUser;
 use crate::modules::sites::models::site_user_role::SiteUserRole;
 use crate::schema::{
-	users, sites, sites_users, roles, sites_users_roles, roles_iam_policies, iam_policies,
-	iam_actions, permissions_iam_actions,
+	users, sites, sites_users, roles, sites_users_roles, roles_iam_policies, iam_policies, sites_languages, languages,
 };
 use crate::utils::{hasher, token};
 use actix_web::http::StatusCode;
@@ -207,6 +208,7 @@ impl User {
 		Vec<(
 			Site,
 			Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
+			Vec<Language>,
 		)>,
 		AppError,
 	> {
@@ -220,6 +222,12 @@ impl User {
 			.inner_join(roles::table.on(roles::id.eq(sites_users_roles::role_id)))
 			.select(Role::as_select())
 			.load::<Role>(conn)?;
+
+		let languages = SiteLanguage::belonging_to(&sites)
+			.inner_join(languages::table.on(languages::id.eq(sites_languages::language_id)))
+			.select((SiteLanguage::as_select(), Language::as_select()))
+			.load::<(SiteLanguage, Language)>(conn)?;
+		let grouped_languages = languages.grouped_by(&sites);
 
 		let iam_policies = RoleIAMPolicy::belonging_to(&roles)
 			.inner_join(
@@ -238,9 +246,6 @@ impl User {
 		.load(conn)?;
 
 		let actions = PermissionIAMAction::belonging_to(&permissions)
-			.inner_join(
-				iam_actions::table.on(iam_actions::key.eq(permissions_iam_actions::iam_action_key)),
-			)
 			.select(PermissionIAMAction::as_select())
 			.load::<PermissionIAMAction>(conn)?;
 
@@ -297,15 +302,22 @@ impl User {
 		let sites_with_roles: Vec<(
 			Site,
 			Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
+			Vec<Language>
 		)> = sites
 			.into_iter()
-			.map(|site| {
+			.zip(grouped_languages)
+			.map(|(site, languages)| {
 				let roles = &roles_with_iam_policies
 					.iter()
 					.filter(|(role, _)| role.site_id == site.id)
 					.map(|vec| vec.to_owned())
 					.collect::<Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>>();
-				(site.to_owned(), roles.to_owned())
+				let langs = languages
+					.iter()
+					.map(|(_site_language, language)| language.to_owned())
+					.collect::<Vec<Language>>();
+
+				(site.to_owned(), roles.to_owned(), langs)
 			})
 			.collect();
 

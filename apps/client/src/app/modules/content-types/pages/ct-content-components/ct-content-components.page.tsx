@@ -81,7 +81,7 @@ export const CTContentComponentsPage = () => {
 			return navigate('/not-found');
 		}
 
-		fetchContentComponents({ pagesize: -1 });
+		fetchContentComponents({ pagesize: -1, includeInternal: true });
 	}, []);
 
 	const onCreateField = (values: IAddContentComponentForm) => {

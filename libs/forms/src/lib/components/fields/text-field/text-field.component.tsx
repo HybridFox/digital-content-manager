@@ -3,6 +3,8 @@ import { useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
 import { Tooltip } from 'react-tooltip'
 
+import { FieldLabel } from '../../field-label/field-label.component';
+
 import { ITextFieldProps } from './text-field.types';
 import styles from './text-field.module.scss';
 import { TextFieldTypes } from './text-field.const';
@@ -15,6 +17,7 @@ export const TextField: FC<ITextFieldProps> = ({
 	label,
 	placeholder,
 	fieldOptions,
+	fieldConfiguration
 }: ITextFieldProps) => {
 	const { register, formState: { errors } } = useFormContext();
 	const error = errors?.[name];
@@ -23,11 +26,7 @@ export const TextField: FC<ITextFieldProps> = ({
 		<div className={cxBind('a-input', {
 			'a-input--has-error': !!error
 		})}>
-			{label && (
-				<label htmlFor={name} className={cxBind('a-input__label')}>
-					{label}
-				</label>
-			)}
+			<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} name={name} />
 			<div className={cxBind('a-input__field-wrapper')}>
 				<input
 					type={type}

@@ -1,4 +1,8 @@
-.u-root {
-	padding: var(--spacer-lg);
+.u-anonymous {
 	height: 100%;
+
+	&__content {
+		padding: var(--spacer-lg);
+		min-width: 0;
+	}
 }

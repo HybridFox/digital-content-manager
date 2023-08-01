@@ -1,14 +1,15 @@
-INSERT INTO content_components (id, name, slug, component_name, hidden, internal) VALUES (
+INSERT INTO content_components (id, name, slug, component_name, hidden, internal, data_type) VALUES (
 			'51431723-714f-42d1-8ea7-eac549189b63',
 			'Number',
 			'number',
 			'NUMBER',
 			'false',
-			'true'
+			'true',
+			'NUMBER'
 		);
 
 INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_component_id, field_type) VALUES (
-				'74f67f9e-00eb-49bd-b815-8f317a8cb5fb',
+				'6cdd08f4-43ea-46b0-a3d4-b729c4342241',
 				'Placeholder',
 				'placeholder',
 				'This field should contain the placeholder text',
@@ -20,15 +21,15 @@ INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_co
 			);
 
 INSERT INTO field_config (id, field_id, config_key, config_type, content) VALUES (
-						'3db1c7d1-9e8d-4043-b700-0596d82c98ec',
-						'74f67f9e-00eb-49bd-b815-8f317a8cb5fb',
+						'3a1b4609-be87-43bf-a081-c922802d0305',
+						'6cdd08f4-43ea-46b0-a3d4-b729c4342241',
 						'placeholder',
 						'TEXT',
 						'This is the placeholder text'
 					);
 
 INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_component_id, field_type) VALUES (
-				'd0947815-96d8-41ca-81af-3973c418dada',
+				'54d9d2fe-c98d-49a6-a314-835a1ebfdb6d',
 				'Minimum',
 				'min',
 				'Minimum the number should be',
@@ -40,15 +41,15 @@ INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_co
 			);
 
 INSERT INTO field_config (id, field_id, config_key, config_type, content) VALUES (
-						'10a66c10-08c4-4110-884b-ea3d7e34f3e1',
-						'd0947815-96d8-41ca-81af-3973c418dada',
+						'8e7319b9-36e1-45b6-b69b-a0305dae31d9',
+						'54d9d2fe-c98d-49a6-a314-835a1ebfdb6d',
 						'placeholder',
 						'TEXT',
 						'0'
 					);
 
 INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_component_id, field_type) VALUES (
-				'8bdf54f8-a898-45fe-8769-12063d5072fc',
+				'88077646-73ea-4c33-a6cc-b2b6fb6e597d',
 				'Maximum',
 				'max',
 				'Maximum the number should be',
@@ -60,8 +61,8 @@ INSERT INTO fields (id, name, slug, description, min, max, parent_id, content_co
 			);
 
 INSERT INTO field_config (id, field_id, config_key, config_type, content) VALUES (
-						'82caf9cf-b74e-4b8d-9908-a41de1615504',
-						'8bdf54f8-a898-45fe-8769-12063d5072fc',
+						'd1c1cd1d-8d29-4f86-94f3-f4b770fc5b8c',
+						'88077646-73ea-4c33-a6cc-b2b6fb6e597d',
 						'placeholder',
 						'TEXT',
 						'50'

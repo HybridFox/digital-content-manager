@@ -16,6 +16,11 @@ export const kyInstance = ky.extend({
 		}],
 		beforeError: [async (error) => {
 			const errorBody = await error.response.json();
+
+			if (errorBody.status === 401) {
+				window.location.href = '/auth/login'
+			}
+
 			return errorBody;
 		}]
 	}

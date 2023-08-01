@@ -6,6 +6,10 @@ pub mod sql_types {
     pub struct ContentTypeKinds;
 
     #[derive(diesel::query_builder::QueryId, diesel::sql_types::SqlType)]
+    #[diesel(postgres_type(name = "data_types"))]
+    pub struct DataTypes;
+
+    #[derive(diesel::query_builder::QueryId, diesel::sql_types::SqlType)]
     #[diesel(postgres_type(name = "field_config_types"))]
     pub struct FieldConfigTypes;
 
@@ -52,7 +56,9 @@ diesel::table! {
         slug -> Text,
         workflow_state_id -> Uuid,
         translation_id -> Uuid,
+        language_id -> Uuid,
         site_id -> Uuid,
+        content_type_id -> Uuid,
         published -> Bool,
         deleted -> Bool,
         created_at -> Timestamp,
@@ -61,10 +67,15 @@ diesel::table! {
 }
 
 diesel::table! {
+    use diesel::sql_types::*;
+    use super::sql_types::DataTypes;
+
     content_components (id) {
         id -> Uuid,
         name -> Text,
         slug -> Text,
+        description -> Nullable<Text>,
+        data_type -> DataTypes,
         hidden -> Bool,
         internal -> Bool,
         deleted -> Bool,
@@ -76,11 +87,18 @@ diesel::table! {
 }
 
 diesel::table! {
+    use diesel::sql_types::*;
+    use super::sql_types::DataTypes;
+
     content_fields (id) {
         id -> Uuid,
         name -> Text,
         value -> Nullable<Jsonb>,
-        parent_id -> Uuid,
+        parent_id -> Nullable<Uuid>,
+        source_id -> Uuid,
+        content_component_id -> Nullable<Uuid>,
+        sequence_number -> Nullable<Int4>,
+        data_type -> DataTypes,
     }
 }
 
@@ -93,6 +111,7 @@ diesel::table! {
         name -> Text,
         description -> Nullable<Text>,
         kind -> ContentTypeKinds,
+        workflow_id -> Uuid,
         slug -> Text,
         deleted -> Bool,
         created_at -> Timestamp,
@@ -163,6 +182,14 @@ diesel::table! {
         site_id -> Uuid,
         created_at -> Timestamp,
         updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    languages (id) {
+        id -> Uuid,
+        key -> Text,
+        name -> Text,
     }
 }
 
@@ -239,6 +266,13 @@ diesel::table! {
         content_type_id -> Uuid,
         created_at -> Timestamp,
         updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    sites_languages (site_id, language_id) {
+        site_id -> Uuid,
+        language_id -> Uuid,
     }
 }
 
@@ -339,6 +373,7 @@ diesel::table! {
 }
 
 diesel::joinable!(asset_metadata -> assets (asset_id));
+diesel::joinable!(content -> content_types (content_type_id));
 diesel::joinable!(content -> sites (site_id));
 diesel::joinable!(content -> workflow_states (workflow_state_id));
 diesel::joinable!(iam_policies -> sites (site_id));
@@ -352,6 +387,8 @@ diesel::joinable!(roles_iam_policies -> iam_policies (iam_policy_id));
 diesel::joinable!(roles_iam_policies -> roles (role_id));
 diesel::joinable!(sites_content_types -> content_types (content_type_id));
 diesel::joinable!(sites_content_types -> sites (site_id));
+diesel::joinable!(sites_languages -> languages (language_id));
+diesel::joinable!(sites_languages -> sites (site_id));
 diesel::joinable!(sites_users -> sites (site_id));
 diesel::joinable!(sites_users -> users (user_id));
 diesel::joinable!(sites_users_iam_policies -> iam_policies (iam_policy_id));
@@ -375,6 +412,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     iam_actions,
     iam_conditions,
     iam_policies,
+    languages,
     permissions,
     permissions_iam_actions,
     permissions_iam_conditions,
@@ -382,6 +420,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     roles_iam_policies,
     sites,
     sites_content_types,
+    sites_languages,
     sites_users,
     sites_users_iam_policies,
     sites_users_roles,

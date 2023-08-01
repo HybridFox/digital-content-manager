@@ -1,7 +1,7 @@
 import { CONTENT_TYPE_KINDS_TRANSLATIONS, useContentTypeFieldStore, useContentTypeStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { generatePath } from 'react-router-dom';
-import { TextField, TextareaField } from '@ibs/forms';
+import { NumberField, TextField, TextareaField, ToggleField } from '@ibs/forms';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 
@@ -53,6 +53,24 @@ export const FieldSettingsPage = () => {
 					name="description"
 					label="Description"
 				></TextareaField>
+			</div>
+			<div className="u-margin-top">
+				<NumberField
+					name="min"
+					label="Min"
+				></NumberField>
+			</div>
+			<div className="u-margin-top">
+				<NumberField
+					name="max"
+					label="Max"
+				></NumberField>
+			</div>
+			<div className="u-margin-top">
+				<ToggleField
+					name="multiLanguage"
+					label="Multi Language"
+				></ToggleField>
 			</div>
 		</>
 	);

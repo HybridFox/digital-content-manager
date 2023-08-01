@@ -74,8 +74,14 @@ impl Modify for SecurityAddon {
 		super::modules::content_components::controllers::content_components::create,
 		super::modules::content_components::controllers::content_components::find_all,
 		super::modules::content_components::controllers::content_components::find_one,
-		// super::modules::content_components::controllers::content_components::update,
+		super::modules::content_components::controllers::content_components::update,
 		super::modules::content_components::controllers::content_components::remove,
+
+		super::modules::content_components::controllers::fields::create,
+		super::modules::content_components::controllers::fields::find_all,
+		super::modules::content_components::controllers::fields::find_one,
+		super::modules::content_components::controllers::fields::update,
+		super::modules::content_components::controllers::fields::remove,
 
 		super::modules::workflows::controllers::workflows::create,
 		super::modules::workflows::controllers::workflows::find_all,
@@ -144,32 +150,33 @@ impl Modify for SecurityAddon {
 			super::modules::iam_policies::dto::request::UpdateIAMPolicyDTO,
 
 			// Content Types
-			super::modules::content_types::dto::response::ContentTypeDTO,
-			super::modules::content_types::dto::response::ContentTypesDTO,
-			super::modules::content_types::dto::response::ContentTypesEmbeddedDTO,
-			super::modules::content_types::dto::request::CreateContentTypeDTO,
-			super::modules::content_types::dto::request::UpdateContentTypeDTO,
+			super::modules::content_types::dto::content_types::response::ContentTypeDTO,
+			super::modules::content_types::dto::content_types::response::ContentTypesDTO,
+			super::modules::content_types::dto::content_types::response::ContentTypesEmbeddedDTO,
+			super::modules::content_types::dto::content_types::request::CreateContentTypeDTO,
+			super::modules::content_types::dto::content_types::request::UpdateContentTypeDTO,
 			super::modules::content_types::models::content_type::ContentTypeKindEnum,
 
 			// Fields
-			super::modules::content_types::dto::request::CreateFieldDTO,
-			super::modules::content_types::dto::response::FieldsDTO,
-			super::modules::content_types::dto::response::FieldsEmbeddedDTO,
+			super::modules::content_types::dto::fields::request::CreateFieldDTO,
+			super::modules::content_types::dto::fields::response::FieldsDTO,
+			super::modules::content_types::dto::fields::response::FieldsEmbeddedDTO,
 
 			// Content
 			super::modules::content::dto::response::ContentDTO,
+			super::modules::content::dto::response::ContentWithFieldsDTO,
 			super::modules::content::dto::response::ContentListDTO,
 			super::modules::content::dto::response::ContentListEmbeddedDTO,
 			super::modules::content::dto::request::CreateContentDTO,
 			super::modules::content::dto::request::UpdateContentDTO,
 
 			// Content Components
-			super::modules::content_components::dto::response::ContentComponentDTO,
-			super::modules::content_components::dto::response::ContentComponentsDTO,
-			super::modules::content_components::dto::response::ContentComponentWithFieldsDTO,
-			super::modules::content_components::dto::response::FieldDTO,
-			super::modules::content_components::dto::response::ContentComponentsEmbeddedDTO,
-			super::modules::content_components::dto::request::CreateContentComponentDTO,
+			super::modules::content_components::dto::content_components::response::ContentComponentDTO,
+			super::modules::content_components::dto::content_components::response::ContentComponentsDTO,
+			super::modules::content_components::dto::content_components::response::ContentComponentWithFieldsDTO,
+			super::modules::content_components::dto::content_components::response::FieldDTO,
+			super::modules::content_components::dto::content_components::response::ContentComponentsEmbeddedDTO,
+			super::modules::content_components::dto::content_components::request::CreateContentComponentDTO,
 
 			// Workflows
 			super::modules::workflows::dto::workflows::response::WorkflowDTO,

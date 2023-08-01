@@ -5,3 +5,7 @@ body, #root {
 * {
 	box-sizing: border-box;
 }
+
+.ReactModal__Overlay {
+	background-color: rgba($color: #000000, $alpha: 0.5) !important;
+}

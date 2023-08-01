@@ -7,6 +7,7 @@ import { AuthenticatedView } from './modules/core/views/authenticated/authentica
 import { DASHBOARD_ROUTES } from './modules/dashboard';
 import { CONTENT_TYPES_ROUTES } from './modules/content-types';
 import { CONTENT_ROUTES } from './modules/content';
+import { CONTENT_COMPONENTS_ROUTES } from './modules/content-components';
 
 const router = createBrowserRouter([
 	{
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
 					...DASHBOARD_ROUTES,
 					...CONTENT_TYPES_ROUTES,
 					...CONTENT_ROUTES,
+					...CONTENT_COMPONENTS_ROUTES,
 				]
 			}
 		]

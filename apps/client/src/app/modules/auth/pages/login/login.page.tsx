@@ -52,7 +52,7 @@ export const LoginPage = () => {
 							</div>
 							<div>
 								<Button className="u-margin-right-sm" htmlType={HTMLButtonTypes.SUBMIT}>Login</Button>
-								<Button type={ButtonTypes.TRANSPARENT}>Forgot password</Button>
+								<Button type={ButtonTypes.OUTLINE}>Forgot password</Button>
 							</div>
 						</form>
 					</FormProvider>

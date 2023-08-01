@@ -32,6 +32,7 @@ export const Header: FC<IHeaderProps> = ({
 	action,
 	tabs = [],
 	breadcrumbs = [],
+	metaInfo
 }: IHeaderProps) => {
 	return (
 		<div className={classNames(className, cxBind('m-header'))}>
@@ -63,15 +64,22 @@ export const Header: FC<IHeaderProps> = ({
 					<div className={cxBind('m-header__action')}>{action}</div>
 				)}
 			</div>
-			{!!tabs?.length && (
-				<div className={cxBind('m-header__tabs')}>
-					{tabs.map((tab) => (
-						<NavLink {...navLinkBinding(!!tab.disabled)} to={tab.to} key={tab.to}>
-							{tab.label}
-						</NavLink>
-					))}
-				</div>
-			)}
+			<div className={cxBind("m-header__footer")}>
+				{!!tabs?.length && (
+					<div className={cxBind('m-header__tabs')}>
+						{tabs.map((tab) => (
+							<NavLink {...navLinkBinding(!!tab.disabled)} to={tab.to} key={tab.to}>
+								{tab.label}
+							</NavLink>
+						))}
+					</div>
+				)}
+				{metaInfo && (
+					<div className={cxBind("m-header__meta")}>
+						{metaInfo}
+					</div>
+				)}
+			</div>
 		</div>
 	);
 };

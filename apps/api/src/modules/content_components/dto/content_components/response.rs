@@ -1,5 +1,5 @@
 use crate::modules::{
-	content_components::models::content_component::ContentComponent,
+	content_components::models::content_component::{ContentComponent, PopulatedContentComponent},
 	core::models::hal::{HALLinkList, HALPage},
 	content_types::models::{field::FieldModel, field_config::FieldConfigContent},
 };
@@ -16,6 +16,7 @@ pub struct ContentComponentDTO {
 	pub id: Uuid,
 	pub name: String,
 	pub slug: String,
+	pub description: Option<String>,
 	pub component_name: String,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
@@ -27,6 +28,7 @@ impl From<ContentComponent> for ContentComponentDTO {
 			id: content_component.id,
 			name: content_component.name,
 			slug: content_component.slug,
+			description: content_component.description,
 			component_name: content_component.component_name,
 			created_at: content_component.created_at,
 			updated_at: content_component.updated_at,
@@ -52,14 +54,14 @@ pub struct FieldDTO {
 impl
 	From<(
 		FieldModel,
-		ContentComponent,
+		PopulatedContentComponent,
 		HashMap<String, FieldConfigContent>,
 	)> for FieldDTO
 {
 	fn from(
 		(field, content_component, config): (
 			FieldModel,
-			ContentComponent,
+			PopulatedContentComponent,
 			HashMap<String, FieldConfigContent>,
 		),
 	) -> Self {
@@ -72,7 +74,7 @@ impl
 			hidden: field.hidden,
 			min: field.min,
 			max: field.max,
-			content_component: ContentComponentDTO::from(content_component),
+			content_component: ContentComponentDTO::from(content_component.content_component),
 			config: config
 				.into_iter()
 				.map(|(key, config_item)| {
@@ -111,38 +113,14 @@ pub struct FieldWithContentComponentDTO {
 impl
 	From<(
 		FieldModel,
-		(
-			ContentComponent,
-			Vec<(
-				FieldModel,
-				ContentComponent,
-				HashMap<String, FieldConfigContent>,
-			)>,
-			Vec<(
-				FieldModel,
-				ContentComponent,
-				HashMap<String, FieldConfigContent>,
-			)>,
-		),
+		PopulatedContentComponent,
 		HashMap<String, FieldConfigContent>,
 	)> for FieldWithContentComponentDTO
 {
 	fn from(
 		(field, content_component, config): (
 			FieldModel,
-			(
-				ContentComponent,
-				Vec<(
-					FieldModel,
-					ContentComponent,
-					HashMap<String, FieldConfigContent>,
-				)>,
-				Vec<(
-					FieldModel,
-					ContentComponent,
-					HashMap<String, FieldConfigContent>,
-				)>,
-			),
+			PopulatedContentComponent,
 			HashMap<String, FieldConfigContent>,
 		),
 	) -> Self {
@@ -182,55 +160,33 @@ pub struct ContentComponentWithFieldsDTO {
 	pub id: Uuid,
 	pub name: String,
 	pub slug: String,
+	pub description: Option<String>,
 	pub component_name: String,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
-	pub configuration_fields: Vec<FieldDTO>,
-	pub sub_fields: Vec<FieldDTO>,
+	pub configuration_fields: Vec<FieldWithContentComponentDTO>,
+	pub fields: Vec<FieldWithContentComponentDTO>,
 }
 
 impl
-	From<(
-		ContentComponent,
-		Vec<(
-			FieldModel,
-			ContentComponent,
-			HashMap<String, FieldConfigContent>,
-		)>,
-		Vec<(
-			FieldModel,
-			ContentComponent,
-			HashMap<String, FieldConfigContent>,
-		)>,
-	)> for ContentComponentWithFieldsDTO
+	From<PopulatedContentComponent> for ContentComponentWithFieldsDTO
 {
 	fn from(
-		(content_component, configuration_fields, sub_fields): (
-			ContentComponent,
-			Vec<(
-				FieldModel,
-				ContentComponent,
-				HashMap<String, FieldConfigContent>,
-			)>,
-			Vec<(
-				FieldModel,
-				ContentComponent,
-				HashMap<String, FieldConfigContent>,
-			)>,
-		),
+		cc: PopulatedContentComponent,
 	) -> Self {
 		Self {
-			id: content_component.id,
-			name: content_component.name,
-			slug: content_component.slug,
-			component_name: content_component.component_name,
-			created_at: content_component.created_at,
-			updated_at: content_component.updated_at,
-			configuration_fields: configuration_fields
+			id: cc.content_component.id,
+			name: cc.content_component.name,
+			slug: cc.content_component.slug,
+			description: cc.content_component.description,
+			component_name: cc.content_component.component_name,
+			created_at: cc.content_component.created_at,
+			updated_at: cc.content_component.updated_at,
+			configuration_fields: cc.configuration_fields
 				.into_iter()
-				.map(FieldDTO::from)
+				.map(FieldWithContentComponentDTO::from)
 				.collect(),
-			sub_fields: sub_fields.into_iter().map(FieldDTO::from).collect(),
+			fields: cc.fields.into_iter().map(FieldWithContentComponentDTO::from).collect(),
 		}
 	}
 }
@@ -238,7 +194,7 @@ impl
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct ContentComponentsEmbeddedDTO {
-	pub content_components: Vec<ContentComponentWithFieldsDTO>,
+	pub content_components: Vec<ContentComponentDTO>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
@@ -250,38 +206,14 @@ pub struct ContentComponentsDTO {
 
 impl
 	From<(
-		Vec<(
-			ContentComponent,
-			Vec<(
-				FieldModel,
-				ContentComponent,
-				HashMap<String, FieldConfigContent>,
-			)>,
-			Vec<(
-				FieldModel,
-				ContentComponent,
-				HashMap<String, FieldConfigContent>,
-			)>,
-		)>,
+		Vec<ContentComponent>,
 		HALPage,
 		Uuid,
 	)> for ContentComponentsDTO
 {
 	fn from(
 		(content_components, page, site_id): (
-			Vec<(
-				ContentComponent,
-				Vec<(
-					FieldModel,
-					ContentComponent,
-					HashMap<String, FieldConfigContent>,
-				)>,
-				Vec<(
-					FieldModel,
-					ContentComponent,
-					HashMap<String, FieldConfigContent>,
-				)>,
-			)>,
+			Vec<ContentComponent>,
 			HALPage,
 			Uuid,
 		),
@@ -294,7 +226,7 @@ impl
 			_embedded: ContentComponentsEmbeddedDTO {
 				content_components: content_components
 					.into_iter()
-					.map(|content_component| ContentComponentWithFieldsDTO::from(content_component))
+					.map(|content_component| ContentComponentDTO::from(content_component))
 					.collect(),
 			},
 			_page: page,

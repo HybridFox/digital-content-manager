@@ -1,5 +1,6 @@
 use super::super::dto::{request, response};
 use crate::modules::content::models::content::{CreateContent, UpdateContent};
+use crate::modules::content_types::models::content_type::ContentTypeKindEnum;
 use crate::{errors::AppError, modules::content::models::content::Content};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
@@ -22,16 +23,20 @@ pub struct FindOnePathParams {
 }
 
 #[derive(Deserialize, IntoParams)]
+#[serde(rename_all = "camelCase")]
 pub struct FindAllQueryParams {
 	page: Option<i64>,
-	pagesize: Option<i64>
+	pagesize: Option<i64>,
+	kind: Option<ContentTypeKindEnum>,
+	language_id: Option<Uuid>,
+	translation_id: Option<Uuid>
 }
 
 #[utoipa::path(
 	context_path = "/api/v1/sites/{site_id}/content",
     request_body = CreateContentDTO,
 	responses(
-		(status = 200, body = ContentDTO),
+		(status = 200, body = ContentWithFieldsDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
 	),
     security(
@@ -48,18 +53,25 @@ pub async fn create(
 	let conn = &mut state.get_conn()?;
 	let translation_id = match form.translation_id {
 		Some(id) => id,
-		None => Uuid::new_v4()
+		None => Uuid::new_v4(),
 	};
-	
-	let content = Content::create(conn, params.site_id, CreateContent {
-		name: form.name.clone(),
-		slug: slugify(&form.name),
-		workflow_state_id: form.workflow_state_id.clone(),
-		translation_id,
-		site_id: params.site_id,
-	})?;
 
-	let res = response::ContentDTO::from(content);
+	let content = Content::create(
+		conn,
+		params.site_id,
+		CreateContent {
+			name: form.name.clone(),
+			content_type_id: form.content_type_id.clone(),
+			slug: slugify(&form.name),
+			workflow_state_id: form.workflow_state_id.clone(),
+			language_id: form.language_id.clone(),
+			translation_id,
+			site_id: params.site_id,
+		},
+		form.fields.clone(),
+	)?;
+
+	let res = response::ContentWithFieldsDTO::from(content);
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -84,7 +96,7 @@ pub async fn find_all(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
 
-	let (content, total_elements) = Content::find(conn, params.site_id, page, pagesize)?;
+	let (content, total_elements) = Content::find(conn, params.site_id, page, pagesize, query.kind, query.language_id, query.translation_id)?;
 
 	let res = response::ContentListDTO::from((
 		content,
@@ -103,7 +115,7 @@ pub async fn find_all(
 #[utoipa::path(
 	context_path = "/api/v1/sites/{site_id}/content",
 	responses(
-		(status = 200, body = ContentDTO),
+		(status = 200, body = ContentWithFieldsDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
 	),
     security(
@@ -119,7 +131,7 @@ pub async fn find_one(
 	let conn = &mut state.get_conn()?;
 	let content = Content::find_one(conn, params.site_id, params.content_id)?;
 
-	let res = response::ContentDTO::from(content);
+	let res = response::ContentWithFieldsDTO::from(content);
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -127,7 +139,7 @@ pub async fn find_one(
 	context_path = "/api/v1/sites/{site_id}/content",
     request_body = UpdateContentDTO,
 	responses(
-		(status = 200, body = SiteDTO),
+		(status = 200, body = ContentWithFieldsDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
 	),
     security(
@@ -145,13 +157,15 @@ pub async fn update(
 	let content = Content::update(
 		conn,
 		params.site_id,
+		form.content_type_id.clone(),
 		params.content_id,
 		UpdateContent {
 			name: form.name.clone(),
 			workflow_state_id: form.workflow_state_id.clone(),
 		},
+		form.fields.clone(),
 	)?;
-	let res = response::ContentDTO::from(content);
+	let res = response::ContentWithFieldsDTO::from(content);
 	Ok(HttpResponse::Ok().json(res))
 }
 

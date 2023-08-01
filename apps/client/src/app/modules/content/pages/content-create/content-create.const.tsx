@@ -1,7 +1,12 @@
-import { ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
+import { Button, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
 import { IField } from '@ibs/shared';
+import * as yup from 'yup';
 
-export const CONTENT_CREATE_COLUMNS: ITableColumn[] = [
+export const selectLanguageSchema = yup.object({
+	language: yup.string().required()
+})
+
+export const CONTENT_CREATE_COLUMNS = (onSelectContentType: (contentTypeId: string) => void): ITableColumn[] => [
 	{
 		id: 'name',
 		label: 'Name',
@@ -25,9 +30,9 @@ export const CONTENT_CREATE_COLUMNS: ITableColumn[] = [
 		label: '',
 		format: (value, key, item) => (
 			<div className="u-display-flex">
-				<ButtonLink to={`${item.id}`} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className="u-margin-left-auto">
+				<Button onClick={() => onSelectContentType(item.id as string)} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className="u-margin-left-auto">
 					<i className="las la-plus"></i> Create
-				</ButtonLink>
+				</Button>
 			</div>
 		),
 	},

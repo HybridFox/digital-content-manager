@@ -1,5 +1,5 @@
 use crate::modules::{
-	sites::models::site::Site,
+	sites::models::{site::Site, language::Language},
 	core::models::hal::{HALLinkList, HALPage},
 	roles::{dto::response::RoleWithPoliciesWithPermissionsDTO, models::role::Role},
 	iam_policies::models::{iam_policy::IAMPolicy, permission::Permission},
@@ -9,6 +9,8 @@ use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 use uuid::Uuid;
 use std::convert::From;
+
+use super::languages::response::LanguageDTO;
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct SiteDTO {
@@ -39,17 +41,20 @@ pub struct SiteWithRolesDTO {
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 	pub roles: Vec<RoleWithPoliciesWithPermissionsDTO>,
+	pub languages: Vec<LanguageDTO>
 }
 impl
 	From<(
 		Site,
 		Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
+		Vec<Language>
 	)> for SiteWithRolesDTO
 {
 	fn from(
-		(site, roles): (
+		(site, roles, languages): (
 			Site,
 			Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
+			Vec<Language>
 		),
 	) -> Self {
 		Self {
@@ -61,6 +66,10 @@ impl
 			roles: roles
 				.into_iter()
 				.map(|role| RoleWithPoliciesWithPermissionsDTO::from(role))
+				.collect(),
+			languages: languages
+				.into_iter()
+				.map(|language| LanguageDTO::from(language))
 				.collect(),
 		}
 	}

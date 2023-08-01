@@ -5,22 +5,6 @@ use serde_json::Value;
 use utoipa::ToSchema;
 use uuid::Uuid;
 
-use crate::modules::content_types::models::content_type::ContentTypeKindEnum;
-
-#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
-pub struct CreateContentTypeDTO {
-	pub name: String,
-	pub description: String,
-	// pub slug: Option<String>,
-	pub kind: ContentTypeKindEnum,
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
-pub struct UpdateContentTypeDTO {
-	pub name: Option<String>,
-	pub description: Option<String>,
-}
-
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateFieldDTO {
@@ -29,6 +13,7 @@ pub struct CreateFieldDTO {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct UpdateFieldDTO {
 	pub name: Option<String>,
 	pub description: Option<String>,

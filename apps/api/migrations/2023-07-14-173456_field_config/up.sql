@@ -9,7 +9,7 @@ CREATE TABLE field_config (
 	config_type field_config_types NOT NULL,
 	content TEXT,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+	updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX field_config_field_id_idx ON field_config (field_id);

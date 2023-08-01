@@ -7,7 +7,7 @@ CREATE TABLE permissions_iam_conditions (
 	value JSONB NOT NULL,
 	active BOOLEAN DEFAULT TRUE,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+	updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX permissions_iam_conditions_permission_id_idx ON permissions_iam_conditions (permission_id);

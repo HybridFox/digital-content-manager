@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 use tracing::{instrument};
 
 use crate::errors::AppError;
-use crate::modules::content_components::models::content_component::ContentComponent;
+use crate::modules::content_components::models::content_component::PopulatedContentComponent;
 use crate::modules::content_types::models::field::FieldModel;
 use crate::schema::{field_config, sql_types::FieldConfigTypes};
 
@@ -67,7 +67,7 @@ pub enum FieldConfigContent {
 	Fields(
 		Vec<(
 			FieldModel,
-			ContentComponent,
+			PopulatedContentComponent,
 			HashMap<String, FieldConfigContent>,
 		)>,
 	),

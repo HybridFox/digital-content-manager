@@ -1,2 +1,2 @@
-pub mod request;
-pub mod response;
+pub mod fields;
+pub mod content_types;

@@ -13,6 +13,7 @@ $breakpoints: (
 
 	@for $i from 1 through $columns {
 		.u-col#{$infix}-#{$i} {
+			grid-column-start: unset;
 			grid-column-end: span $i;
 		}
 		.u-col--offset#{$infix}-#{$i} {
@@ -37,6 +38,11 @@ $breakpoints: (
 	grid-template-columns: repeat($columns, 1fr);
 	grid-gap: $gap;
 	gap: $gap;
+
+	> * {
+		grid-column-start: 1;
+		grid-column-end: $columns + 1;
+	}
 }
 
 @include create-selectors;

@@ -13,4 +13,5 @@ export interface IHeaderProps {
 	className?: string;
 	tabs?: IHeaderTab[];
 	breadcrumbs?: IHeaderBreadcrumb[];
+	metaInfo?: string;
 }

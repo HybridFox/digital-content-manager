@@ -21,6 +21,7 @@ export interface IContentType {
 	id: string;
 	name: string;
 	slug: string;
+	workflowId: string;
 	kind: ContentTypeKinds;
 	createdAt: string;
 	updatedAt: string;
@@ -33,6 +34,7 @@ export interface IField {
 	slug: string;
 	min: number;
 	max: number;
+	multiLanguage: boolean;
 	contentComponent: IContentComponent;
 	config: Record<string, string>;
 }
@@ -73,7 +75,7 @@ export interface IContentTypeStoreState {
 	contentTypes: IContentType[];
 	contentTypesLoading: boolean;
 
-	fetchContentType: (contentTypeId: string) => Promise<void>;
+	fetchContentType: (contentTypeId: string) => Promise<IContentType>;
 	contentType?: IContentType,
 	contentTypeLoading: boolean;
 

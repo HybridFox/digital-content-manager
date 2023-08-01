@@ -7,7 +7,7 @@ CREATE TABLE permissions (
 	resources JSONB NOT NULL,
 	effect TEXT NOT NULL,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+	updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX permissions_iam_policy_id_idx ON permissions (iam_policy_id)

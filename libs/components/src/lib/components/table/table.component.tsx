@@ -23,24 +23,25 @@ export const Table: FC<ITableProps> = ({
 		}
 
 		if (column.format && typeof column.format === 'function') {
-			return column.format(row[column.id], column.id, row, i);
+			return column.format(path<ReactNode>(column.id.split('.'))(row), column.id, row, i);
 		}
 
 		return path<ReactNode>(column.id.split('.'))(row);
 	};
 
 	const renderRows = () => {
-		return rows.map((row) => (
-			<div key={row.id} className={cxBind('a-table__row')}>
+		return rows.map((row, i) => (
+			<tr key={i} className={cxBind('a-table__row')}>
 				{columns.map((column, i) => (
-					<div
-						key={`${row.id}-${column.id}`}
+					<td
+						key={`${row.id}-${i}`}
 						className={cxBind('a-table__row__cell')}
+						style={column.width ? { width: column.width } : {}}
 					>
 						{renderCell(i, row, column)}
-					</div>
+					</td>
 				))}
-			</div>
+			</tr>
 		));
 	};
 
@@ -58,19 +59,22 @@ export const Table: FC<ITableProps> = ({
 
 	return (
 		<div className={classNames(className, cxBind('a-table'))}>
-			<div className={cxBind('a-table__data')}>
-				<div className={cxBind('a-table__header')}>
-					{columns.map((column) => (
-						<div
-							key={column.id}
-							className={cxBind('a-table__header__column')}
-						>
-							{column.label}
-						</div>
-					))}
-				</div>
-				<div className={cxBind('a-table__content')}>{renderRows()}</div>
-			</div>
+			<table className={cxBind('a-table__data')}>
+				<thead className={cxBind('a-table__header')}>
+					<tr>
+						{columns.map((column, i) => (
+							<th
+								key={i}
+								className={cxBind('a-table__header__column')}
+								style={column.width ? { width: column.width } : {}}
+							>
+								{column.label}
+							</th>
+						))}
+					</tr>
+				</thead>
+				<tbody className={cxBind('a-table__content')}>{renderRows()}</tbody>
+			</table>
 			{renderNoData()}
 		</div>
 	);

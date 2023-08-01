@@ -72,8 +72,16 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 							.service(modules::content_components::controllers::content_components::create)
 							.service(modules::content_components::controllers::content_components::find_all)
 							.service(modules::content_components::controllers::content_components::find_one)
-							// .service(modules::content_components::controllers::content_components::update)
-							.service(modules::content_components::controllers::content_components::remove),
+							.service(modules::content_components::controllers::content_components::update)
+							.service(modules::content_components::controllers::content_components::remove)
+							.service(
+								web::scope("/{content_component_id}/fields")
+									.service(modules::content_components::controllers::fields::create)
+									.service(modules::content_components::controllers::fields::find_all)
+									.service(modules::content_components::controllers::fields::find_one)
+									.service(modules::content_components::controllers::fields::update)
+									.service(modules::content_components::controllers::fields::remove)
+							)
 					)
 					.service(
 						web::scope("/{site_id}/workflows")

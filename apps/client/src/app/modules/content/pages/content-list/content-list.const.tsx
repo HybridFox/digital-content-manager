@@ -1,7 +1,7 @@
-import { Badge, Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
-import { CONTENT_TYPE_KINDS_TRANSLATIONS, ContentTypeKinds, IField } from '@ibs/shared';
+import { Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
 import { TFunction } from 'i18next';
 import * as yup from 'yup';
+import dayjs from 'dayjs';
 
 export const addContentComponentSchema = yup.object({
 	contentComponentId: yup.string().required(),
@@ -14,18 +14,29 @@ export const CONTENT_LIST_COLUMNS = (t: TFunction): ITableColumn[] => [
 		label: 'Name',
 	},
 	{
-		id: 'slug',
-		label: 'Slug',
+		id: 'language.key',
+		label: 'Language',
+		format: (value) => (value as string).toUpperCase()
 	},
 	{
-		id: 'kind',
-		label: 'Kind',
-		format: (value) => <Badge>{CONTENT_TYPE_KINDS_TRANSLATIONS[value as ContentTypeKinds]}</Badge>,
+		id: 'contentType.name',
+		label: 'Content Type',
 	},
 	{
-		id: 'fields',
-		label: 'Content Components',
-		format: (value) => ((value as IField[]) || []).length,
+		id: 'updatedAt',
+		label: 'Updated At',
+		format: (value) => dayjs.utc(value as string).fromNow()
+	},
+	{
+		id: 'published',
+		label: 'Published',
+		format(value, key, item, index) {
+			if (value) {
+				return <span className='las la-check u-text--success'></span>
+			}
+
+			return <span className='las la-times u-text--danger'></span>;
+		},
 	},
 	{
 		id: 'actions',

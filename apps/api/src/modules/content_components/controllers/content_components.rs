@@ -1,10 +1,10 @@
-use super::super::dto::{request, response};
-use crate::errors::AppError;
+use super::super::dto::content_components::{request, response};
+use crate::{errors::AppError, modules::content_components::models::content_component::UpdateContentComponent};
 use crate::modules::content_components::models::content_component::ContentComponent;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, HttpResponse, delete};
+use actix_web::{get, post, web, put, HttpResponse, delete};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;
@@ -21,16 +21,19 @@ pub struct FindOnePathParams {
 }
 
 #[derive(Deserialize, IntoParams)]
+#[serde(rename_all = "camelCase")]
 pub struct FindAllQueryParams {
 	page: Option<i64>,
 	pagesize: Option<i64>,
+	include_internal: Option<bool>,
+	include_hidden: Option<bool>
 }
 
 #[utoipa::path(
 	context_path = "/api/v1/sites/{site_id}/content-components",
     request_body = CreateContentComponentDTO,
 	responses(
-		(status = 200, body = ContentComponentDTO),
+		(status = 200, body = ContentComponentWithFieldsDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
 	),
     security(
@@ -42,14 +45,15 @@ pub struct FindAllQueryParams {
 pub async fn create(
 	state: web::Data<AppState>,
 	form: web::Json<request::CreateContentComponentDTO>,
-	params: web::Path<FindOnePathParams>,
+	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let content_component = ContentComponent::create(
 		conn,
 		params.site_id,
 		form.name.clone(),
-		"fieldGroup".to_owned(),
+		form.description.clone(),
+		form.component_name.clone(),
 	)?;
 	let res = response::ContentComponentWithFieldsDTO::from(content_component);
 	Ok(HttpResponse::Ok().json(res))
@@ -75,9 +79,11 @@ pub async fn find_all(
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
+	let include_internal = query.include_internal.unwrap_or(false);
+	let include_hidden = query.include_hidden.unwrap_or(false);
 
 	let (content_components, total_elements) =
-		ContentComponent::find(conn, params.site_id, page, pagesize)?;
+		ContentComponent::find(conn, params.site_id, page, pagesize, include_hidden, include_internal)?;
 
 	let res = response::ContentComponentsDTO::from((
 		content_components,
@@ -115,41 +121,40 @@ pub async fn find_one(
 	let populated_content_components =
 		ContentComponent::populate_fields(conn, vec![content_component])?;
 
-	let res = response::ContentComponentWithFieldsDTO::from(
-		populated_content_components.first().unwrap().clone(),
-	);
+	let res = response::ContentComponentWithFieldsDTO::from(populated_content_components.first().unwrap().clone());
 	Ok(HttpResponse::Ok().json(res))
 }
 
-// #[utoipa::path(
-// 	context_path = "/api/v1/sites",
-//     request_body = UpdateSiteDTO,
-// 	responses(
-// 		(status = 200, body = SiteDTO),
-// 		(status = 401, body = AppErrorValue, description = "Unauthorized")
-// 	),
-//     security(
-//         ("jwt_token" = [])
-//     ),
-// 	params(FindPathParams)
-// )]
-// #[put("/{site_id}")]
-// pub async fn update(
-// 	state: web::Data<AppState>,
-// 	params: web::Path<FindPathParams>,
-// 	form: web::Json<request::UpdateSiteDTO>,
-// ) -> ApiResponse {
-// 	let conn = &mut state.get_conn()?;
-// 	let site = Site::update(
-// 		conn,
-// 		params.site_id,
-// 		UpdateSite {
-// 			name: form.name.clone(),
-// 		},
-// 	)?;
-// 	let res = response::SiteDTO::from(site);
-// 	Ok(HttpResponse::Ok().json(res))
-// }
+#[utoipa::path(
+	context_path = "/api/v1/sites/{site_id}/content-components",
+    request_body = UpdateContentComponentDTO,
+	responses(
+		(status = 200, body = ContentComponentWithFieldsDTO),
+		(status = 401, body = AppErrorValue, description = "Unauthorized")
+	),
+    security(
+        ("jwt_token" = [])
+    ),
+	params(FindPathParams)
+)]
+#[put("/{content_component_id}")]
+pub async fn update(
+	state: web::Data<AppState>,
+	params: web::Path<FindOnePathParams>,
+	form: web::Json<request::UpdateContentComponentDTO>,
+) -> ApiResponse {
+	let conn = &mut state.get_conn()?;
+	let content_component = ContentComponent::update(
+		conn,
+		params.content_component_id,
+		UpdateContentComponent {
+			name: form.name.clone(),
+			description: form.description.clone(),
+		},
+	)?;
+	let res = response::ContentComponentWithFieldsDTO::from(content_component);
+	Ok(HttpResponse::Ok().json(res))
+}
 
 #[utoipa::path(
 	context_path = "/api/v1/sites/{site_id}/content-components",

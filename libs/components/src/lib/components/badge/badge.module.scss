@@ -9,4 +9,9 @@
 	&__title {
 		margin: 0 0 var(--spacer) 0;
 	}
+	
+	&--sm {
+		padding: 0.1rem var(--spacer-xxs);
+		font-size: 0.7rem;
+	}
 }
