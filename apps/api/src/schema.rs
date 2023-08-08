@@ -277,6 +277,13 @@ diesel::table! {
 }
 
 diesel::table! {
+    sites_storage_repositories (site_id, storage_repository_id) {
+        site_id -> Uuid,
+        storage_repository_id -> Uuid,
+    }
+}
+
+diesel::table! {
     sites_users (site_id, user_id) {
         user_id -> Uuid,
         site_id -> Uuid,
@@ -300,6 +307,17 @@ diesel::table! {
         user_id -> Uuid,
         site_id -> Uuid,
         role_id -> Uuid,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    storage_repositories (id) {
+        id -> Uuid,
+        name -> Text,
+        kind -> Text,
+        configuration -> Jsonb,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -389,6 +407,8 @@ diesel::joinable!(sites_content_types -> content_types (content_type_id));
 diesel::joinable!(sites_content_types -> sites (site_id));
 diesel::joinable!(sites_languages -> languages (language_id));
 diesel::joinable!(sites_languages -> sites (site_id));
+diesel::joinable!(sites_storage_repositories -> sites (site_id));
+diesel::joinable!(sites_storage_repositories -> storage_repositories (storage_repository_id));
 diesel::joinable!(sites_users -> sites (site_id));
 diesel::joinable!(sites_users -> users (user_id));
 diesel::joinable!(sites_users_iam_policies -> iam_policies (iam_policy_id));
@@ -421,9 +441,11 @@ diesel::allow_tables_to_appear_in_same_query!(
     sites,
     sites_content_types,
     sites_languages,
+    sites_storage_repositories,
     sites_users,
     sites_users_iam_policies,
     sites_users_roles,
+    storage_repositories,
     users,
     workflow_states,
     workflow_transition_requirements,

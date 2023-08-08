@@ -113,8 +113,8 @@ export const Menu = () => {
 						</NavLink>
 					</li>
 					<li>
-						<NavLink {...navLinkBinding} to="/app/storage">
-							<i className="las la-list-alt"></i>
+						<NavLink {...navLinkBinding} to="/app/storage-engines">
+							<i className="las la-server"></i>
 							<span>Storage</span>
 						</NavLink>
 					</li>

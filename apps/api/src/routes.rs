@@ -66,6 +66,7 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 							.service(modules::content::controllers::content::find_one)
 							.service(modules::content::controllers::content::update)
 							.service(modules::content::controllers::content::remove)
+							.service(modules::content::controllers::content::default_values)
 					)
 					.service(
 						web::scope("/{site_id}/content-components")
@@ -91,11 +92,31 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 							.service(modules::workflows::controllers::workflows::update)
 							.service(modules::workflows::controllers::workflows::remove)
 					)
+					// .service(
+					// 	web::scope("/{site_id}/assets")
+					// 		.service(modules::assets::controllers::assets::upload)
+					// 		.service(modules::assets::controllers::assets::find_all)
+					// 		.service(modules::assets::controllers::assets::find_one)
+					// )
 					.service(
-						web::scope("/{site_id}/assets")
-							.service(modules::assets::controllers::assets::upload)
-							.service(modules::assets::controllers::assets::find_all)
-							.service(modules::assets::controllers::assets::find_one)
+						web::scope("/{site_id}/storage-repositories")
+							.service(modules::resources::controllers::storage_repositories::create)
+							.service(modules::resources::controllers::storage_repositories::find_all)
+							.service(modules::resources::controllers::storage_repositories::find_one)
+							.service(modules::resources::controllers::storage_repositories::update)
+							.service(modules::resources::controllers::storage_repositories::remove)
+							.service(
+								web::scope("/{storage_repository_id}/files")
+									.service(modules::resources::controllers::files::upload_file)
+									.service(modules::resources::controllers::files::read_file)
+									.service(modules::resources::controllers::files::remove_file)
+							)
+							.service(
+								web::scope("/{storage_repository_id}/directories")
+									.service(modules::resources::controllers::directories::read_directory)
+									.service(modules::resources::controllers::directories::create_directory)
+									.service(modules::resources::controllers::directories::remove_directory)
+							)
 					),
 			)
 			.service(

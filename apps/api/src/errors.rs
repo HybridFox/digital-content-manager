@@ -236,6 +236,28 @@ impl From<TryFromIntError> for AppError {
 	}
 }
 
+impl From<std::io::Error> for AppError {
+	fn from(err: std::io::Error) -> Self {
+		AppError::InternalServerError(AppErrorValue {
+			message: err.to_string(),
+			status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+			code: "IO_ERROR".to_owned(),
+			..Default::default()
+		})
+	}
+}
+
+impl From<std::time::SystemTimeError> for AppError {
+	fn from(err: std::time::SystemTimeError) -> Self {
+		AppError::InternalServerError(AppErrorValue {
+			message: err.to_string(),
+			status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+			code: "SYSTEM_TIME_ERROR".to_owned(),
+			..Default::default()
+		})
+	}
+}
+
 impl From<VarError> for AppError {
 	fn from(_err: VarError) -> Self {
 		AppError::InternalServerError(AppErrorValue {

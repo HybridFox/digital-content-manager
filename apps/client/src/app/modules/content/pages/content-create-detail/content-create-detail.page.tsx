@@ -25,9 +25,16 @@ export const ContentCreateDetailPage = () => {
 	const navigate = useNavigate();
 	const [createContentItem, createContentItemLoading] = useContentStore((state) => [state.createContentItem, state.createContentItemLoading]);
 	const { t } = useTranslation();
+	const [defaultValues, defaultValuesLoading, fetchDefaultValues] = useContentStore((state) => [
+		state.defaultValues,
+		state.defaultValuesLoading,
+		state.fetchDefaultValues,
+	]);
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 	const { kind, contentTypeId } = useParams();
-	const formMethods = useForm<CreateContentForm>();
+	const formMethods = useForm<CreateContentForm>({
+		values: defaultValues
+	});
 
 	const {
 		handleSubmit,
@@ -41,6 +48,7 @@ export const ContentCreateDetailPage = () => {
 		}
 
 		fetchContentType(contentTypeId).then((contentType) => fetchWorkflow(contentType.workflowId));
+		fetchDefaultValues(searchParams.get('translationId')!);
 	}, [contentTypeId]);
 
 	useEffect(() => {
@@ -93,7 +101,7 @@ export const ContentCreateDetailPage = () => {
 				}
 			></Header>
 			<div className="u-margin-top">
-				<Loading loading={contentTypeLoading || workflowLoading} text="Loading data...">
+				<Loading loading={contentTypeLoading || workflowLoading || defaultValuesLoading} text="Loading data...">
 					<FormProvider {...formMethods}>
 						<Alert className="u-margin-bottom" type={AlertTypes.DANGER}>
 							{errors?.root?.message}

@@ -8,6 +8,7 @@ import { DASHBOARD_ROUTES } from './modules/dashboard';
 import { CONTENT_TYPES_ROUTES } from './modules/content-types';
 import { CONTENT_ROUTES } from './modules/content';
 import { CONTENT_COMPONENTS_ROUTES } from './modules/content-components';
+import { RESOURCE_ROUTES } from './modules/resources';
 
 const router = createBrowserRouter([
 	{
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
 					...CONTENT_TYPES_ROUTES,
 					...CONTENT_ROUTES,
 					...CONTENT_COMPONENTS_ROUTES,
+					...RESOURCE_ROUTES,
 				]
 			}
 		]

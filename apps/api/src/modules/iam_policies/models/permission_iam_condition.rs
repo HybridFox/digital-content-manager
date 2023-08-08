@@ -10,7 +10,7 @@ use uuid::Uuid;
 use crate::modules::iam_policies::models::permission::Permission;
 
 use crate::errors::AppError;
-use crate::schema::{permissions_iam_conditions};
+use crate::schema::permissions_iam_conditions;
 
 #[derive(FromSqlRow, AsExpression, serde::Serialize, serde::Deserialize, Debug, Default)]
 #[diesel(sql_type = Jsonb)]

@@ -83,6 +83,20 @@ impl Content {
 	}
 
 	#[instrument(skip(conn))]
+	pub fn default_values(
+		conn: &mut PgConnection,
+		_site_id: Uuid,
+		translation_id: Uuid,
+	) -> Result<Vec<ContentField>, AppError> {
+		let fields = content_fields::table
+			.filter(content_fields::source_id.eq_any(vec![translation_id]))
+			.select(ContentField::as_select())
+			.load::<ContentField>(conn)?;
+
+		Ok(fields)
+	}
+
+	#[instrument(skip(conn))]
 	pub fn find(
 		conn: &mut PgConnection,
 		site_id: Uuid,
@@ -402,4 +416,5 @@ pub struct CreateContent {
 pub struct UpdateContent {
 	pub name: Option<String>,
 	pub workflow_state_id: Uuid,
+	pub updated_at: NaiveDateTime,
 }

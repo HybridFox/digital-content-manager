@@ -72,5 +72,21 @@ export const useContentStore = create<IContentStoreState>()(devtools(
 			return result;
 		},
 		updateContentItemLoading: false,
+
+		fetchDefaultValues: async (translationId) => {
+			set(() => ({ defaultValuesLoading: true }));
+			const { activeSite } = useAuthStore.getState();
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/content/${translationId}/default-values`).json<IContentItem>());
+
+			if (error) {
+				set(() => ({ defaultValues: undefined, defaultValuesLoading: false }));
+				throw error;
+			}
+			
+			set(() => ({ defaultValues: result, defaultValuesLoading: false }));
+			return result;
+		},
+		defaultValues: undefined,
+		defaultValuesLoading: false,
 	}), { name: 'contentStore' }
 ))

@@ -3,8 +3,13 @@
 .o-menu {
 	position: fixed;
 	height: 100vh;
+	width: 350px;
 	display: flex;
 	flex-direction: column;
+
+	@include tools.to('md') {
+		width: 60px;
+	}
 
 	&__logo {
 		font-weight: 700;

@@ -10,3 +10,4 @@ pub mod roles;
 pub mod sites;
 pub mod content;
 pub mod workflows;
+pub mod resources;

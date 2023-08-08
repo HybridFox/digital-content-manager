@@ -6,6 +6,7 @@ use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
 use actix_web::{get, post, web, HttpResponse, delete, put};
+use chrono::Utc;
 use serde::Deserialize;
 use slug::slugify;
 use utoipa::IntoParams;
@@ -20,6 +21,12 @@ pub struct FindPathParams {
 pub struct FindOnePathParams {
 	site_id: Uuid,
 	content_id: Uuid,
+}
+
+#[derive(Deserialize, IntoParams)]
+pub struct DefaultValuesPathParams {
+	site_id: Uuid,
+	translation_id: Uuid,
 }
 
 #[derive(Deserialize, IntoParams)]
@@ -162,6 +169,7 @@ pub async fn update(
 		UpdateContent {
 			name: form.name.clone(),
 			workflow_state_id: form.workflow_state_id.clone(),
+			updated_at: Utc::now().naive_utc()
 		},
 		form.fields.clone(),
 	)?;
@@ -188,4 +196,27 @@ pub async fn remove(
 	let conn = &mut state.get_conn()?;
 	Content::remove(conn, params.content_id)?;
 	Ok(HttpResponse::NoContent().body(()))
+}
+
+#[utoipa::path(
+	context_path = "/api/v1/sites/{site_id}/content/{translation_id}/default-values",
+	responses(
+		(status = 200, body = ContentWithFieldsDTO),
+		(status = 401, body = AppErrorValue, description = "Unauthorized")
+	),
+    security(
+        ("jwt_token" = [])
+    ),
+	params(FindPathParams)
+)]
+#[get("/{translation_id}/default-values")]
+pub async fn default_values(
+	state: web::Data<AppState>,
+	params: web::Path<DefaultValuesPathParams>,
+) -> Result<HttpResponse, AppError> {
+	let conn = &mut state.get_conn()?;
+	let content = Content::default_values(conn, params.site_id, params.translation_id)?;
+
+	let res = response::ContentDefaultValuesDTO::from((params.translation_id, content));
+	Ok(HttpResponse::Ok().json(res))
 }

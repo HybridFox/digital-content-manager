@@ -1,0 +1,10 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE storage_repositories (
+	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+	name TEXT NOT NULL,
+	kind TEXT NOT NULL,
+	configuration JSONB NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);

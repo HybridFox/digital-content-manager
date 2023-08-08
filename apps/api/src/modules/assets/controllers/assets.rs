@@ -64,6 +64,7 @@ pub async fn upload(
 	let res = response::AssetDTO::from(asset);
 	Ok(HttpResponse::Ok().json(res))
 }
+
 #[utoipa::path(
 	context_path = "/api/v1/sites/{site_id}/assets",
 	responses(

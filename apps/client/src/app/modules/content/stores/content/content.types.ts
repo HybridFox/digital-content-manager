@@ -35,6 +35,10 @@ export interface IContentStoreState {
 
 	updateContentItem: (contentId: string, values: IContentUpdateDTO) => Promise<IContentItem>;
 	updateContentItemLoading: boolean;
+
+	fetchDefaultValues: (translationId: string) => Promise<IContentItem>;
+	defaultValues?: IContentItem,
+	defaultValuesLoading: boolean;
 }
 
 export interface IContentCreateDTO {

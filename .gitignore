@@ -1,4 +1,5 @@
-/api/target
+/apps/api/target
+/apps/api/data
 /data
 .idea
 /node_modules

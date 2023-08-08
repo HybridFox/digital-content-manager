@@ -32,7 +32,6 @@ pub struct ContentWithFieldsDTO {
 }
 
 fn parse_array_fields(
-	content_id: Uuid,
 	translation_id: Uuid,
 	parent_id: Option<Uuid>,
 	fields: Vec<ContentField>
@@ -47,14 +46,14 @@ fn parse_array_fields(
 				| DataTypeEnum::BOOLEAN
 				| DataTypeEnum::REFERENCE => field.value.clone(),
 				DataTypeEnum::ARRAY => {
-					let sub_fields = parse_array_fields(content_id, translation_id, Some(field.id), fields.clone());
+					let sub_fields = parse_array_fields(translation_id, Some(field.id), fields.clone());
 
 					// TODO: clean this up somehow 🤮
 					let json = serde_json::to_string(&sub_fields).unwrap();
 					serde_json::from_str(&json).unwrap()
 				}
 				DataTypeEnum::OBJECT => {
-					let sub_fields = parse_object_fields(content_id, translation_id, Some(field.id), fields.clone());
+					let sub_fields = parse_object_fields(translation_id, Some(field.id), fields.clone());
 
 					// TODO: clean this up somehow 🤮
 					let json = serde_json::to_string(&sub_fields).unwrap();
@@ -68,7 +67,6 @@ fn parse_array_fields(
 }
 
 fn parse_object_fields(
-	content_id: Uuid,
 	translation_id: Uuid,
 	parent_id: Option<Uuid>,
 	fields: Vec<ContentField>,
@@ -84,14 +82,14 @@ fn parse_object_fields(
 				| DataTypeEnum::BOOLEAN
 				| DataTypeEnum::REFERENCE => (field.name.clone(), field.value.clone()),
 				DataTypeEnum::ARRAY => {
-					let sub_fields = parse_array_fields(content_id, translation_id, Some(field.id), fields.clone());
+					let sub_fields = parse_array_fields(translation_id, Some(field.id), fields.clone());
 
 					// TODO: clean this up somehow 🤮
 					let json = serde_json::to_string(&sub_fields).unwrap();
 					(field.name.clone(), serde_json::from_str(&json).unwrap())
 				}
 				DataTypeEnum::OBJECT => {
-					let sub_fields = parse_object_fields(content_id, translation_id, Some(field.id), fields.clone());
+					let sub_fields = parse_object_fields(translation_id, Some(field.id), fields.clone());
 
 					// TODO: clean this up somehow 🤮
 					let json = serde_json::to_string(&sub_fields).unwrap();
@@ -117,8 +115,22 @@ impl From<(Content, Vec<ContentField>, Language)> for ContentWithFieldsDTO {
 			deleted: content.deleted,
 			created_at: content.created_at,
 			updated_at: content.updated_at,
-			fields: parse_object_fields(content.id, content.translation_id, None, fields),
+			fields: parse_object_fields(content.translation_id, None, fields),
 			language: LanguageDTO::from(language),
+		}
+	}
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct ContentDefaultValuesDTO {
+	pub fields: HashMap<String, Option<Value>>,
+}
+
+impl From<(Uuid, Vec<ContentField>)> for ContentDefaultValuesDTO {
+	fn from((translation_id, fields): (Uuid, Vec<ContentField>)) -> Self {
+		Self {
+			fields: parse_object_fields(translation_id, None, fields)
 		}
 	}
 }
