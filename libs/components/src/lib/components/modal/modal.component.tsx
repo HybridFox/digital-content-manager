@@ -9,15 +9,21 @@ import { IModalFooterProps, IModalProps } from './modal.types';
 
 const cxBind = cx.bind(styles);
 
-export const Modal: FC<IModalProps> = ({ title, children, modalOpen }: IModalProps) => {
+export const Modal: FC<IModalProps> = ({ title, children, modalOpen, onClose, size }: IModalProps) => {
 	const [isOpen, setIsOpen] = useState(true);
 
 	useEffect(() => {
 		setIsOpen(modalOpen);
 	}, [modalOpen]);
 
+	useEffect(() => {
+		if (isOpen === false) {
+			onClose && onClose();
+		}
+	}, [isOpen])
+
 	return (
-		<ReactModal isOpen={isOpen} className={cxBind('m-modal')} onRequestClose={() => setIsOpen(false)}>
+		<ReactModal isOpen={isOpen} className={cxBind('m-modal', `m-modal--${size}`)} onRequestClose={() => setIsOpen(false)}>
 			<div className={cxBind('m-modal__header')}>
 				<h2 className={cxBind('m-modal__title')}>{title}</h2>
 				<Button onClick={() => setIsOpen(false)} size={ButtonSizes.SMALL} type={ButtonTypes.TRANSPARENT} className={cxBind('m-modal__close')}>

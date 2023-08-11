@@ -1,0 +1,28 @@
+.a-toolbar {
+	display: flex;
+	align-items: center;
+	margin-bottom: var(--spacer-sm);
+
+	&__divider {
+		height: 30px;
+		width: 1px;
+		background-color: var(--color-gray-lightest);
+		margin-left: var(--spacer-xxs);
+		margin-right: var(--spacer-sm);
+	}
+
+	&__item {
+		margin-right: var(--spacer-xxs);
+
+		&--format {
+			width: 200px;
+		}
+	}
+
+	& &__color-picker {
+		&__tooltip {
+			padding: 0 !important;
+			background: white !important;
+		}
+	}
+}

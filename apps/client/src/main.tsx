@@ -30,6 +30,7 @@ i18n.use(initReactI18next).init({
 					CONTENT: 'Content',
 					PAGES: 'Pages',
 					'CONTENT-BLOCKS': 'Content Blocks',
+					RESOURCES: 'Resources'
 				},
 				PAGES: {
 					TITLES: {
@@ -42,6 +43,7 @@ i18n.use(initReactI18next).init({
 						CREATE_PAGES: 'Create page',
 						'CREATE_CONTENT-BLOCKS': 'Create content blocks',
 					},
+					RESOURCES: { TITLE: 'Resources', UPLOAD_FILE: 'Upload file', CREATE_FOLDER: 'Create folder' }
 				},
 			},
 		},

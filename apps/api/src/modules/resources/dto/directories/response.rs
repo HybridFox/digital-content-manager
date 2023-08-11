@@ -13,17 +13,21 @@ use std::convert::From;
 pub struct ResourceDTO {
 	pub name: String,
 	pub kind: ResourceItemKind,
+	pub mime_type: Option<String>,
+	pub storage_repository_id: Uuid,
 	pub created_at: Option<NaiveDateTime>,
 	pub updated_at: Option<NaiveDateTime>,
 }
 
-impl From<ResourceItem> for ResourceDTO {
-	fn from(entry: ResourceItem) -> Self {
+impl From<(ResourceItem, Uuid)> for ResourceDTO {
+	fn from((entry, storage_repository_id): (ResourceItem, Uuid)) -> Self {
 		Self {
 			name: entry.name,
 			kind: entry.kind,
+			mime_type: entry.mime_type,
 			created_at: entry.created_at,
 			updated_at: entry.updated_at,
+			storage_repository_id,
 		}
 	}
 }
@@ -40,14 +44,14 @@ pub struct ResourcesDTO {
 	pub _embedded: ResourcesEmbeddedDTO,
 }
 
-impl From<(Vec<ResourceItem>, HALPage, Uuid)> for ResourcesDTO {
-	fn from((resources, page, site_id): (Vec<ResourceItem>, HALPage, Uuid)) -> Self {
+impl From<(Vec<ResourceItem>, HALPage, Uuid, Uuid)> for ResourcesDTO {
+	fn from((resources, page, site_id, storage_repository_id): (Vec<ResourceItem>, HALPage, Uuid, Uuid)) -> Self {
 		Self {
-			_links: HALLinkList::from((format!("/api/v1/sites/{}/resources", site_id), &page)),
+			_links: HALLinkList::from((format!("/api/v1/sites/{}/storage-repositories/{}/directories", site_id, storage_repository_id), &page)),
 			_embedded: ResourcesEmbeddedDTO {
 				resources: resources
 					.into_iter()
-					.map(|entry| ResourceDTO::from(entry))
+					.map(|entry| ResourceDTO::from((entry, storage_repository_id)))
 					.collect(),
 			},
 			_page: page,

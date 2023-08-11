@@ -1,0 +1,31 @@
+.o-explorer-repositories {
+	display: flex;
+
+	&__repository {
+		margin-right: var(--spacer-sm);
+		border: 1px solid var(--color-gray-lightest);
+		text-align: left;
+		padding: var(--spacer);
+		border-radius: var(--border-radius-sm);
+		width: 200px;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		transition: all .2s ease;
+		cursor: pointer;
+
+		h4 {
+			margin: 0 0 var(--spacer-sm) 0;
+		}
+
+		&:hover {
+			border: 1px solid var(--color-primary);
+		}
+
+		&--selected {
+			outline: none;
+			border: 1px solid var(--color-primary);
+			box-shadow: 0px 0px 0px var(--spacer-xxxs) var(--color-primary-light);
+		}
+	}
+}

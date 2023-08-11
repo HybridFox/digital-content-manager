@@ -1,0 +1,139 @@
+.a-input {
+	display: flex;
+	flex-direction: column;
+
+	&--has-error {
+		.a-input__field {
+			border-color: var(--color-state-danger-light);
+
+			&:hover {
+				border-color: var(--color-state-danger);
+			}
+	
+			&:focus {
+				border-color: var(--color-state-danger);
+				box-shadow: 0px 0px 0px var(--spacer-xxxs) var(--color-state-danger-light);
+			}
+		}
+	}
+
+	&__images {
+		margin-bottom: calc(#{var(--spacer-sm)} * -1);
+	}
+
+	&__field-wrapper {
+		position: relative;
+	}
+
+	&__field {
+		display: flex;
+		width: 100%;
+	}
+
+	&__data {
+		border: 2px solid var(--color-gray-lightest);
+		border-radius: var(--border-radius-sm);
+		padding: var(--spacer-xs);
+		height: 100px;
+		width: 100%;
+		margin-left: var(--spacer-sm);
+		flex: 1;
+		display: flex;
+		align-items: center;
+
+		p {
+			margin: 0;
+		}
+	}
+
+	&__image {
+		border: 2px dashed var(--color-gray-lightest);
+		border-radius: var(--border-radius-sm);
+		padding: var(--spacer-xs);
+		height: 100px;
+		width: 100px;
+		cursor: pointer;
+		transition: all .2s ease;
+		position: relative;
+		overflow: hidden;
+
+		img {
+			object-fit: contain;
+			height: 100%;
+			width: 100%;
+		}
+
+		&__overlay {
+			transition: all .2s ease;
+			opacity: 0;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background-color: rgba(0, 0, 0, 0.5);
+
+			span {
+				color: var(--color-gray-lightest);
+				font-size: 2rem;
+			}
+		}
+
+		&:hover {
+			border: 2px solid var(--color-primary);
+
+			.a-input__image__overlay {
+				opacity: 1;
+			}
+		}
+
+		&:focus {
+			outline: none;
+			border: 2px solid var(--color-primary);
+			box-shadow: 0px 0px 0px var(--spacer-xxxs) var(--color-primary-light);
+		}
+	}
+
+	&__add {
+		border: 2px dashed var(--color-gray-lightest);
+		display: flex;
+		width: 100%;
+		background-color: transparent;
+		font-weight: normal;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--border-radius-sm);
+		padding: var(--spacer-sm);
+		cursor: pointer;
+		transition: all .2s ease;
+
+		p {
+			margin: 0 0 0 var(--spacer-xs);
+			font-size: 0.8rem;
+			color: var(--color-gray)
+		}
+
+		&:hover {
+			border: 2px solid var(--color-primary);
+			transition: all .2s ease;
+			background: transparent;
+		}
+
+		&:focus {
+			outline: none;
+			border: 2px solid var(--color-primary);
+			box-shadow: 0px 0px 0px var(--spacer-xxxs) var(--color-primary-light);
+		}
+	}
+
+	&__error {
+		position: absolute;
+		right: var(--spacer-sm);
+		top: var(--spacer-sm);
+		color: var(--color-state-danger);
+		font-size: 1.2rem;
+	}
+}

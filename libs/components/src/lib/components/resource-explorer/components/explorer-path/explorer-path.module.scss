@@ -1,0 +1,24 @@
+.o-explorer-path {
+	background-color: var(--color-gray-lightest);
+	text-align: left;
+	display: flex;
+	padding: var(--spacer-sm);
+	border-radius: var(--border-radius-sm);
+	align-items: center;
+
+	&__piece {
+		margin: 0;
+		display: flex;
+		align-items: center;
+
+		button {
+			font-weight: 400;
+		}
+
+		span {
+			font-weight: 400;
+			color: var(--color-gray-light);
+			font-size: 0.8rem;
+		}
+	}
+}

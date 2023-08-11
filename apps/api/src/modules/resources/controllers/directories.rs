@@ -56,6 +56,7 @@ pub async fn read_directory(
 			total_pages: (total_elements / pagesize + (total_elements % pagesize).signum()).max(1),
 		},
 		params.site_id,
+		params.storage_repository_id
 	));
 
 	Ok(HttpResponse::Ok().json(res))

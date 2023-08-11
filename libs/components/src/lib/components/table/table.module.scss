@@ -19,6 +19,12 @@
 	}
 
 	&__row {
+		&--selectable {
+			&:hover {
+				background-color: var(--color-gray-accent);
+			}
+		}
+
 		&__cell {
 			padding: var(--spacer);
 		}

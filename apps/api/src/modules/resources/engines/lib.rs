@@ -18,6 +18,7 @@ pub enum ResourceItemKind {
 pub struct ResourceItem {
 	pub name: String,
 	pub kind: ResourceItemKind,
+	pub mime_type: Option<String>,
 	pub created_at: Option<NaiveDateTime>,
 	pub updated_at: Option<NaiveDateTime>,
 }

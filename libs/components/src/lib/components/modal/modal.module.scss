@@ -8,6 +8,10 @@
 	padding: var(--spacer);
 	border-radius: var(--border-radius-sm);
 
+	&--lg {
+		min-width: 1200px;
+	}
+
 	&__header {
 		border-bottom: 1px solid var(--color-gray-lightest);
 		display: flex;

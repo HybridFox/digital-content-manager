@@ -16,5 +16,12 @@ export interface ITableColumn {
 export interface ITableProps {
 	className?: string;
 	columns: ITableColumn[];
-	rows: Record<any, any>[]
+	rows: Record<any, any>[];
+	selectable?: boolean;
+	selectablePredicate?: (value: any) => boolean;
+	onSelection?: (selection: any[]) => void;
+	selection?: any[];
+	idKey?: string;
+	minSelection?: number;
+	maxSelection?: number;
 }

@@ -14,6 +14,7 @@ use std::convert::From;
 pub struct StorageRepositoryDTO {
 	pub id: Uuid,
 	pub name: String,
+	pub kind: String,
 	pub configuration: Value,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
@@ -24,6 +25,7 @@ impl From<StorageRepository> for StorageRepositoryDTO {
 		Self {
 			id: storage_repository.id,
 			name: storage_repository.name,
+			kind: storage_repository.kind,
 			configuration: storage_repository.configuration,
 			created_at: storage_repository.created_at,
 			updated_at: storage_repository.updated_at,

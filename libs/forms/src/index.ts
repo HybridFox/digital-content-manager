@@ -1,2 +1,3 @@
-export * from './lib/components/fields';
-export * from './lib/components/renderer';
+export * from './lib/fields';
+export * from './lib/renderer';
+export * from './lib/components';

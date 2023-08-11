@@ -5,6 +5,7 @@ import { path } from 'rambda';
 
 import { ITableColumn, ITableProps } from './table.types';
 import styles from './table.module.scss';
+import { TableCheckbox } from './components/table-checkbox/table-checkbox.component';
 
 const cxBind = cx.bind(styles);
 
@@ -12,12 +13,33 @@ export const Table: FC<ITableProps> = ({
 	className,
 	columns,
 	rows,
+	selectable,
+	idKey = 'id',
+	selectablePredicate,
+	onSelection,
+	selection = [],
+	minSelection = 1,
+	maxSelection = 1
 }: ITableProps) => {
-	const renderCell = (
-		i: number,
-		row: Record<string, ReactNode>,
-		column: ITableColumn
-	): ReactNode => {
+	const handleSelection = (id: string, selected: boolean): void => {
+		if (!onSelection) {
+			return;
+		}
+
+		if (selected) {
+			if (minSelection === 1 && maxSelection === 1) {
+				return onSelection([id]);
+			}
+
+			const newSelection = [...selection, id];
+			return onSelection(newSelection);
+		}
+
+		const newSelection = selection.filter((value) => value !== id);
+		return onSelection(newSelection);
+	};
+
+	const renderCell = (i: number, row: Record<string, ReactNode>, column: ITableColumn): ReactNode => {
 		if (column.component) {
 			return column.component;
 		}
@@ -31,13 +53,27 @@ export const Table: FC<ITableProps> = ({
 
 	const renderRows = () => {
 		return rows.map((row, i) => (
-			<tr key={i} className={cxBind('a-table__row')}>
+			<tr
+				key={i}
+				className={cxBind('a-table__row', {
+					'a-table__row--selectable': selectable && (selectablePredicate ? selectablePredicate(row) : true),
+				})}
+				onClick={() =>
+					selectable &&
+					(selectablePredicate ? selectablePredicate(row) : true) &&
+					handleSelection(row[idKey], !selection.includes(row[idKey]))
+				}
+			>
+				{selectable && (selectablePredicate ? selectablePredicate(row) : true) && (
+					<td className={cxBind('a-table__row__cell')} style={{ width: '50px' }}>
+						<TableCheckbox selected={selection.includes(row[idKey])} onSelection={(selected) => handleSelection(row[idKey], selected)} />
+					</td>
+				)}
+				{selectable && !(selectablePredicate ? selectablePredicate(row) : true) && (
+					<td className={cxBind('a-table__row__cell')} style={{ width: '50px' }}></td>
+				)}
 				{columns.map((column, i) => (
-					<td
-						key={`${row.id}-${i}`}
-						className={cxBind('a-table__row__cell')}
-						style={column.width ? { width: column.width } : {}}
-					>
+					<td key={`${row[idKey]}-${i}`} className={cxBind('a-table__row__cell')} style={column.width ? { width: column.width } : {}}>
 						{renderCell(i, row, column)}
 					</td>
 				))}
@@ -55,19 +91,16 @@ export const Table: FC<ITableProps> = ({
 		}
 
 		return null;
-	}
+	};
 
 	return (
 		<div className={classNames(className, cxBind('a-table'))}>
 			<table className={cxBind('a-table__data')}>
 				<thead className={cxBind('a-table__header')}>
 					<tr>
+						{selectable && <th style={{ width: '50px' }} className={cxBind('a-table__header__column')} />}
 						{columns.map((column, i) => (
-							<th
-								key={i}
-								className={cxBind('a-table__header__column')}
-								style={column.width ? { width: column.width } : {}}
-							>
+							<th key={i} className={cxBind('a-table__header__column')} style={column.width ? { width: column.width } : {}}>
 								{column.label}
 							</th>
 						))}

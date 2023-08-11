@@ -17,9 +17,12 @@ export const Button: FC<IButtonProps> = ({
 	className,
 	onClick,
 	disabled,
+	active,
+	id,
 }: IButtonProps) => {
 	return (
 		<button
+			id={id}
 			disabled={disabled}
 			type={htmlType}
 			onClick={onClick}
@@ -27,6 +30,7 @@ export const Button: FC<IButtonProps> = ({
 				className,
 				cxBind('a-button', `a-button--${type}`, `a-button--${size}`, {
 					'a-button--block': block,
+					'a-button--active': active,
 				})
 			)}
 		>

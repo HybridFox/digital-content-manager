@@ -4,6 +4,8 @@ export interface IModalProps {
 	title: ReactNode;
 	children: ReactNode;
 	modalOpen: boolean;
+	onClose?: () => void;
+	size?: string;
 }
 
 export interface IModalFooterProps {
