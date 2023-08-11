@@ -7,4 +7,5 @@ export * from './workflow';
 export * from './auth';
 export * from './resource';
 export * from './policy';
+export * from './role';
 export * from './storage-repository';

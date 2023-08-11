@@ -1,5 +1,5 @@
 use utoipa::ToSchema;
-use actix_multipart::form::{tempfile::TempFile, text::Text, MultipartForm};
+use actix_multipart::form::{tempfile::TempFile, MultipartForm};
 
 #[derive(Debug, MultipartForm, ToSchema)]
 pub struct CreateFileDTO {

@@ -4,7 +4,7 @@ CREATE TABLE sites_users_roles (
 	user_id UUID NOT NULL REFERENCES users (id) ON DELETE CASCADE,
 	site_id UUID NOT NULL REFERENCES sites (id) ON DELETE CASCADE,
 	role_id UUID NOT NULL REFERENCES roles (id) ON DELETE CASCADE,
-	PRIMARY KEY (site_id, user_id),
+	PRIMARY KEY (site_id, user_id, role_id),
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );

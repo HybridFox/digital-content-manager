@@ -57,8 +57,6 @@ export const PolicyCreatePage = () => {
 			{ label: t(`BREADCRUMBS.CREATE`) },
 		]);
 	}, []);
-	
-	console.log(errors)
 
 	const onSubmit = (values: CreatePolicyForm) => {
 		console.log(values);

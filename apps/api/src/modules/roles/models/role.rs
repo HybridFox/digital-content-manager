@@ -1,4 +1,4 @@
-use crate::errors::{AppError};
+use crate::errors::AppError;
 use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
 use crate::modules::iam_policies::models::roles_iam_policies::RoleIAMPolicy;
 use crate::schema::{roles, iam_policies, roles_iam_policies};
@@ -41,7 +41,7 @@ impl Role {
 			.values(&record)
 			.returning(Role::as_returning())
 			.get_result::<Role>(conn)?;
-		RoleIAMPolicy::create_for_role(conn, role.id, policy_ids)?;
+		RoleIAMPolicy::upsert_for_role(conn, role.id, policy_ids)?;
 		let policies = Self::find_policies(conn, &role)?;
 
 		Ok((role, policies))
@@ -116,7 +116,7 @@ impl Role {
 		let role = diesel::update(target)
 			.set(changeset)
 			.get_result::<Role>(conn)?;
-		RoleIAMPolicy::create_for_role(conn, role_id, policy_ids)?;
+		RoleIAMPolicy::upsert_for_role(conn, role_id, policy_ids)?;
 		let policies = Self::find_policies(conn, &role)?;
 
 		Ok((role, policies))

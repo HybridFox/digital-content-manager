@@ -42,6 +42,34 @@ impl SiteUserRole {
 
 		Ok(permissions_iam_actions)
 	}
+
+	pub fn upsert_many(
+		conn: &mut PgConnection,
+		site_id: Uuid,
+		user_id: Uuid,
+		role_ids: Vec<Uuid>,
+	) -> Result<Vec<Self>, AppError> {
+		let target = sites_users_roles::table
+			.filter(sites_users_roles::site_id.eq(site_id))
+			.filter(sites_users_roles::user_id.eq(user_id));
+		diesel::delete(target).execute(conn)?;
+
+		let insert_items: Vec<CreateSiteUserRole> = role_ids
+			.into_iter()
+			.map(|role_id| CreateSiteUserRole {
+				user_id,
+				site_id,
+				role_id,
+			})
+			.collect();
+
+		let permissions_iam_actions = diesel::insert_into(sites_users_roles::table)
+			.values(insert_items)
+			.returning(SiteUserRole::as_returning())
+			.get_results(conn)?;
+
+		Ok(permissions_iam_actions)
+	}
 }
 
 #[derive(Insertable, Debug, Deserialize)]

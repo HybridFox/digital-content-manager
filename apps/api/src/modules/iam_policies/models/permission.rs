@@ -12,16 +12,8 @@ use uuid::Uuid;
 
 use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
 use crate::{
-	schema::{permissions, iam_actions, iam_conditions},
-	errors::AppError,
-	modules::{
-		iam_actions::models::iam_action::{IAMAction},
-		iam_conditions::models::iam_condition::IAMCondition,
-	},
-};
-
-use super::{
-	permission_iam_action::PermissionIAMAction, permission_iam_condition::PermissionIAMCondition,
+	schema::permissions,
+	errors::AppError
 };
 
 #[derive(FromSqlRow, AsExpression, serde::Serialize, serde::Deserialize, Debug, Default, Clone)]

@@ -4,9 +4,9 @@ use crate::modules::{
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
-use utoipa::{ToSchema};
+use utoipa::ToSchema;
 use uuid::Uuid;
-use std::{convert::From};
+use std::convert::From;
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]

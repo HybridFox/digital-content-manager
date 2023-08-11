@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
-import { DEFAULT_PAGINATION_OPTIONS, IRole, kyInstance, useAuthStore, wrapApi } from '@ibs/shared';
+
+import { IRole, useAuthStore } from '../auth';
+import { kyInstance, wrapApi } from '../../services';
+import { DEFAULT_PAGINATION_OPTIONS } from '../../const';
 
 import { IRoleStoreState, IRolesResponse } from './role.types';
 

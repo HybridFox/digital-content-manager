@@ -40,7 +40,7 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 							// .service(modules::roles::controllers::roles::create)
 							.service(modules::sites::controllers::site_users::find_all)
 							.service(modules::sites::controllers::site_users::find_one)
-							// .service(modules::roles::controllers::roles::update)
+							.service(modules::sites::controllers::site_users::update)
 							// .service(modules::roles::controllers::roles::remove),
 					)
 					.service(

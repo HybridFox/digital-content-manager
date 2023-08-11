@@ -1,41 +1,46 @@
-import { IAPIError, WORKFLOW_TECHNICAL_STATES, useHeaderStore } from '@ibs/shared';
+import { IAPIError, useHeaderStore, useRoleStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { Trans, useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { SelectField, TextField, TextareaField } from '@ibs/forms';
+import { CheckboxField, TextField } from '@ibs/forms';
 
-import { useWorkflowStateStore } from '../../stores/user';
-import { WORKFLOW_PATHS } from '../../users.routes';
-import { WORKFLOW_STATE_TECHNICAL_STATE_OPTIONS } from '../../users.const';
+import { useUserStore } from '../../stores/user';
+import { USER_PATHS } from '../../users.routes';
 
-import { editWorkflowStateSchema } from './user-detail.const';
+import { editUserSchema } from './user-detail.const';
 
-interface EditWorkflowStateForm {
-	name: string;
-	description: undefined | string | null;
-	technicalState: WORKFLOW_TECHNICAL_STATES;
+interface EditUserForm {
+	roles: string[];
 }
 
 export const UserDetailPage = () => {
 	const { t } = useTranslation();
 
-	const [workflowState, workflowStateLoading, fetchWorkflowState] = useWorkflowStateStore((state) => [
-		state.workflowState,
-		state.workflowStateLoading,
-		state.fetchWorkflowState,
+	const [user, userLoading, fetchUser] = useUserStore((state) => [
+		state.user,
+		state.userLoading,
+		state.fetchUser,
 	]);
-	const [updateWorkflowStateLoading, updateWorkflowState] = useWorkflowStateStore((state) => [
-		state.updateWorkflowStateLoading,
-		state.updateWorkflowState,
+	const [updateUserLoading, updateUser] = useUserStore((state) => [
+		state.updateUserLoading,
+		state.updateUser,
+	]);
+	const [roles, rolesLoading, fetchRoles] = useRoleStore((state) => [
+		state.roles,
+		state.rolesLoading,
+		state.fetchRoles
 	]);
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
-	const { workflowStateId } = useParams();
-	const formMethods = useForm<EditWorkflowStateForm>({
-		resolver: yupResolver(editWorkflowStateSchema),
-		values: workflowState,
+	const { userId } = useParams();
+	const formMethods = useForm<EditUserForm>({
+		resolver: yupResolver(editUserSchema),
+		values: {
+			...(user || {}),
+			roles: (user?.roles || []).map((role) => role.id)
+		},
 	});
 
 	const {
@@ -44,26 +49,28 @@ export const UserDetailPage = () => {
 		setError,
 	} = formMethods;
 
-	console.log(errors);
+	useEffect(() => {
+		fetchRoles({ pagesize: -1 });
+	}, [])
 
 	useEffect(() => {
-		setBreadcrumbs([{ label: t(`BREADCRUMBS.WORKFLOW_REPOSITORIES`), to: WORKFLOW_PATHS.WORKFLOW_STATES_ROOT }, { label: t(`BREADCRUMBS.EDIT`) }]);
-	}, [workflowState]);
+		setBreadcrumbs([{ label: t(`BREADCRUMBS.USERS`), to: USER_PATHS.ROOT }, { label: t(`BREADCRUMBS.EDIT`) }]);
+	}, [user]);
 
 	useEffect(() => {
-		if (!workflowStateId) {
+		if (!userId) {
 			return;
 		}
 
-		fetchWorkflowState(workflowStateId);
-	}, [workflowStateId]);
+		fetchUser(userId);
+	}, [userId]);
 
-	const onSubmit = (values: EditWorkflowStateForm) => {
-		if (!workflowStateId) {
+	const onSubmit = (values: any) => {
+		if (!userId) {
 			return;
 		}
 
-		updateWorkflowState(workflowStateId, values).catch((error: IAPIError) => {
+		updateUser(userId, values).catch((error: IAPIError) => {
 			setError('root', {
 				message: error.code,
 			});
@@ -75,27 +82,27 @@ export const UserDetailPage = () => {
 			<Header
 				breadcrumbs={breadcrumbs}
 				title={
-					<Trans t={t} i18nKey="WORKFLOW_STATES.TITLES.EDIT" values={{ workflowStateName: workflowState?.name }} />
+					<Trans t={t} i18nKey="WORKFLOW_STATES.TITLES.EDIT" values={{ userName: user?.name }} />
 				}
 			></Header>
 			<div className="u-margin-top">
-				<Loading loading={workflowStateLoading} text="Loading data...">
+				<Loading loading={userLoading || rolesLoading} text="Loading data...">
 					<FormProvider {...formMethods}>
 						<Alert className="u-margin-bottom" type={AlertTypes.DANGER}>
 							{errors?.root?.message}
 						</Alert>
 						<form onSubmit={handleSubmit(onSubmit)}>
 							<div className="u-margin-bottom">
-								<TextField name="name" label="Name" />
+								<TextField name="name" label="Name" disabled />
 							</div>
 							<div className="u-margin-bottom">
-								<TextareaField name="description" label="Description" />
+								<TextField name="email" label="Email" disabled />
 							</div>
 							<div className="u-margin-bottom">
-								<SelectField name="technicalState" label="Technical State" fieldConfiguration={{ options: WORKFLOW_STATE_TECHNICAL_STATE_OPTIONS }} />
+								<CheckboxField name="roles" label="Roles" fieldConfiguration={{ options: roles.map((role) => ({ label: role.name, value: role.id })) }} />
 							</div>
 							<Button htmlType={HTMLButtonTypes.SUBMIT}>
-								{updateWorkflowStateLoading && <i className="las la-redo-alt la-spin"></i>} Save
+								{updateUserLoading && <i className="las la-redo-alt la-spin"></i>} Save
 							</Button>
 						</form>
 					</FormProvider>

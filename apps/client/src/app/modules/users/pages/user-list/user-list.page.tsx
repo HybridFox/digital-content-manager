@@ -35,11 +35,11 @@ export const UserListPage = () => {
 			<Header
 				breadcrumbs={breadcrumbs}
 				title={t(`WORKFLOW_STATES.TITLES.LIST`)}
-				action={
-					<ButtonLink to="create">
-						<span className="las la-plus"></span> {t(`WORKFLOW_STATES.ACTIONS.CREATE`)}
-					</ButtonLink>
-				}
+				// action={
+				// 	<ButtonLink to="create">
+				// 		<span className="las la-plus"></span> {t(`WORKFLOW_STATES.ACTIONS.CREATE`)}
+				// 	</ButtonLink>
+				// }
 			></Header>
 			<Loading loading={usersLoading} text={t(`GENERAL.LABELS.LOADING`)}>
 				<Table columns={USER_LIST_COLUMNS(t, handleRemove)} rows={users || []}></Table>

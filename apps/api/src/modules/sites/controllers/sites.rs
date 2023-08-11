@@ -1,6 +1,6 @@
 use super::super::models::site::{UpdateSite, Site};
 use super::super::dto::{request, response};
-use crate::errors::{AppError};
+use crate::errors::AppError;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;

@@ -1,4 +1,5 @@
-import { IAPIHALResponse, IPageParameters, IRole } from "@ibs/shared";
+import { IAPIHALResponse, IPageParameters } from "../../types";
+import { IRole } from "../auth";
 
 export type IRolesResponse = IAPIHALResponse<'roles', IRole>
 

@@ -7,7 +7,7 @@ use crate::modules::iam_policies::models::permission::Permission;
 use crate::modules::iam_actions::models::iam_action::IAMAction;
 
 use crate::errors::AppError;
-use crate::schema::{permissions_iam_actions};
+use crate::schema::permissions_iam_actions;
 
 #[derive(Selectable, Queryable, Debug, Identifiable, Associations)]
 #[diesel(belongs_to(Permission))]

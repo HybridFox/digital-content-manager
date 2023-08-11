@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
-import { DEFAULT_PAGINATION_OPTIONS, kyInstance, useAuthStore, wrapApi } from '@ibs/shared';
+
+import { useAuthStore } from '../auth';
+import { kyInstance, wrapApi } from '../../services';
+import { DEFAULT_PAGINATION_OPTIONS } from '../../const';
 
 import { IPolicyStoreState, IPoliciesResponse, IPolicy } from './policy.types';
 

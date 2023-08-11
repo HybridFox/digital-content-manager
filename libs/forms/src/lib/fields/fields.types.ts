@@ -7,6 +7,7 @@ export interface IGenericFieldProps {
 	fieldConfiguration?: Record<string, unknown>;
 	fieldOptions?: RegisterOptions<FieldValues, string>;
 	field?: IField;
+	disabled?: boolean;
 }
 
 export interface IRenderControllerField {

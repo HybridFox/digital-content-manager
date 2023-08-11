@@ -1,4 +1,4 @@
-use crate::errors::{AppError};
+use crate::errors::AppError;
 use crate::schema::iam_actions;
 use chrono::NaiveDateTime;
 use diesel::pg::PgConnection;

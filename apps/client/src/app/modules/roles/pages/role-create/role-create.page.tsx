@@ -2,49 +2,40 @@ import {
 	IAPIError,
 	useHeaderStore,
 	usePolicyStore,
-	useRoleStore,
 } from '@ibs/shared';
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { CheckboxField, TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
 import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { generatePath, useNavigate } from 'react-router-dom';
 
+import { useRoleStore } from '../../../../../../../../libs/shared/src/lib/stores/role';
 import { ROLE_PATHS } from '../../roles.routes';
 
-import { updateRoleSchema } from './role-detail.const';
+import { createRoleSchema } from './role-create.const';
 
-interface UpdateRoleForm {
+interface CreateRoleForm {
 	name: string;
 	policies: string[];
 }
 
-export const RoleDetailPage = () => {
+export const RoleCreatePage = () => {
+	const navigate = useNavigate();
 	const [policies, policiesLoading, fetchPolicies] = usePolicyStore((state) => [
 		state.policies,
 		state.policiesLoading,
 		state.fetchPolicies,
 	]);
-	const [role, roleLoading, fetchRole] = useRoleStore((state) => [
-		state.role,
-		state.roleLoading,
-		state.fetchRole,
+	const [createRoleLoading, createRole] = useRoleStore((state) => [
+		state.createRoleLoading,
+		state.createRole,
 	]);
-	const [updateRoleLoading, updateRole] = useRoleStore((state) => [
-		state.updateRoleLoading,
-		state.updateRole,
-	]);
-	const { roleId } = useParams();
 	const { t } = useTranslation();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
-	const formMethods = useForm<UpdateRoleForm>({
-		resolver: yupResolver(updateRoleSchema),
-		values: {
-			name: role?.name || '',
-			policies: (role?.policies || []).map((policy) => policy.id)
-		},
+	const formMethods = useForm<CreateRoleForm>({
+		resolver: yupResolver(createRoleSchema),
 	});
 
 	const {
@@ -54,24 +45,16 @@ export const RoleDetailPage = () => {
 	} = formMethods;
 
 	useEffect(() => {
-		if (!roleId) {
-			return;
-		}
-
 		fetchPolicies();
-		fetchRole(roleId);
 		setBreadcrumbs([
 			{ label: t(`BREADCRUMBS.ROLES`), to: ROLE_PATHS.ROOT },
 			{ label: t(`BREADCRUMBS.CREATE`) },
 		]);
 	}, []);
 
-	const onSubmit = (values: UpdateRoleForm) => {
-		if (!roleId) {
-			return;
-		}
-	
-		updateRole(roleId, values)
+	const onSubmit = (values: CreateRoleForm) => {
+		createRole(values)
+			.then((role) => navigate(generatePath(ROLE_PATHS.DETAIL, { roleId: role.id })))
 			.catch((error: IAPIError) => {
 				setError('root', {
 					message: error.code,
@@ -86,7 +69,7 @@ export const RoleDetailPage = () => {
 				title={t('ROLES.TITLES.EDIT')}
 			></Header>
 			<div className="u-margin-top">
-				<Loading loading={policiesLoading || roleLoading}>
+				<Loading loading={policiesLoading}>
 					<FormProvider {...formMethods}>
 						<Alert className="u-margin-bottom" type={AlertTypes.DANGER}>
 							{errors?.root?.message}
@@ -96,10 +79,10 @@ export const RoleDetailPage = () => {
 								<TextField name="name" label="Name" />
 							</div>
 							<div className="u-margin-bottom">
-								<CheckboxField name='policies' fieldConfiguration={{ options: policies.map((policy) => ({ label: policy.name, value: policy.id })) }} />
+								<CheckboxField name='policies' fieldConfiguration={{ options: policies.map((policy) => ({ label: policy.name, value: policy.id })) }} label='Roles' />
 							</div>
-							<Button htmlType={HTMLButtonTypes.SUBMIT}>
-								{updateRoleLoading && <i className="las la-redo-alt la-spin"></i>} Save
+							<Button htmlType={HTMLButtonTypes.SUBMIT} disabled={!!Object.keys(errors).length}>
+								{createRoleLoading && <i className="las la-redo-alt la-spin"></i>} Save
 							</Button>
 						</form>
 					</FormProvider>

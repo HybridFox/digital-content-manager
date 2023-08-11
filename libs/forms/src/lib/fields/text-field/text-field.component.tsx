@@ -17,7 +17,8 @@ export const TextField: FC<ITextFieldProps> = ({
 	label,
 	placeholder,
 	fieldOptions,
-	fieldConfiguration
+	fieldConfiguration,
+	disabled,
 }: ITextFieldProps) => {
 	const { register, formState: { errors } } = useFormContext();
 	const error = errors?.[name];
@@ -29,6 +30,7 @@ export const TextField: FC<ITextFieldProps> = ({
 			<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} name={name} />
 			<div className={cxBind('a-input__field-wrapper')}>
 				<input
+					disabled={disabled}
 					type={type}
 					className={cxBind('a-input__field')}
 					id={name}

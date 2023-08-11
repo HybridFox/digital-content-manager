@@ -69,8 +69,6 @@ export const PolicyDetailPage = () => {
 			{ label: t(`BREADCRUMBS.CREATE`) },
 		]);
 	}, []);
-	
-	console.log(errors)
 
 	const onSubmit = (values: UpdatePolicyForm) => {
 		if (!policyId) {

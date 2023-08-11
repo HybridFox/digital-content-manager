@@ -4,5 +4,6 @@ export * from './textarea-field';
 export * from './number-field';
 export * from './toggle-field';
 export * from './radio-field';
+export * from './checkbox-field';
 export * from './file-field';
 export * from './fields.const';

@@ -1,10 +1,5 @@
-import { IAPIHALResponse, IPageParameters, PERMISSION_EFFECT } from "@ibs/shared";
-
-export interface IPermission {
-	effect: PERMISSION_EFFECT;
-	resources: string[];
-	actions: string[];
-}
+import { IAPIHALResponse, IPageParameters } from "../../types";
+import { IPermission } from "../auth";
 
 export interface IPolicy {
 	id: string;

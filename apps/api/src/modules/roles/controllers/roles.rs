@@ -1,6 +1,6 @@
 use super::super::models::role::{UpdateRole, Role};
 use super::super::dto::{request, response};
-use crate::errors::{AppError};
+use crate::errors::AppError;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
@@ -46,7 +46,7 @@ pub async fn create(
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let (role, policies) =
-		Role::create(conn, params.site_id, form.name.clone(), form.roles.clone())?;
+		Role::create(conn, params.site_id, form.name.clone(), form.policies.clone())?;
 	let res = response::RoleWithPoliciesDTO::from((role, policies));
 	Ok(HttpResponse::Ok().json(res))
 }
@@ -137,7 +137,7 @@ pub async fn update(
 		UpdateRole {
 			name: form.name.clone(),
 		},
-		form.roles.clone(),
+		form.policies.clone(),
 	)?;
 	let res = response::RoleWithPoliciesDTO::from((role, policies));
 	Ok(HttpResponse::Ok().json(res))

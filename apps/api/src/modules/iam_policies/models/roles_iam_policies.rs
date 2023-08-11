@@ -4,13 +4,11 @@ use serde::Deserialize;
 use uuid::Uuid;
 
 use crate::modules::roles::models::role::Role;
-// use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
 
 use crate::errors::AppError;
-use crate::schema::{roles_iam_policies};
+use crate::schema::roles_iam_policies;
 
 #[derive(Identifiable, Selectable, Queryable, Associations, Debug, Clone)]
-// #[diesel(belongs_to("IAMPolicy"))]
 #[diesel(belongs_to(Role))]
 #[diesel(table_name = roles_iam_policies)]
 #[diesel(primary_key(iam_policy_id, role_id))]
@@ -22,11 +20,15 @@ pub struct RoleIAMPolicy {
 }
 
 impl RoleIAMPolicy {
-	pub fn create_for_role(
+	pub fn upsert_for_role(
 		conn: &mut PgConnection,
 		role_id: Uuid,
 		iam_policy_ids: Vec<Uuid>,
 	) -> Result<Vec<Self>, AppError> {
+		// Clear existing
+		let target = roles_iam_policies::table.filter(roles_iam_policies::role_id.eq(role_id));
+		diesel::delete(target).execute(conn)?;
+
 		let iam_policies = iam_policy_ids
 			.into_iter()
 			.map(|iam_policy_id| CreateRoleIAMPolicy {

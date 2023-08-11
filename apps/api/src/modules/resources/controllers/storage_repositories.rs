@@ -18,7 +18,7 @@ pub struct FindPathParams {
 
 #[derive(Deserialize, IntoParams)]
 pub struct FindOnePathParams {
-	site_id: Uuid,
+	_site_id: Uuid,
 	storage_repository_id: Uuid,
 }
 
@@ -43,7 +43,7 @@ pub struct FindAllQueryParams {
 pub async fn create(
 	state: web::Data<AppState>,
 	form: web::Json<request::CreateStorageRepositoryDTO>,
-	params: web::Path<FindPathParams>,
+	_params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 
