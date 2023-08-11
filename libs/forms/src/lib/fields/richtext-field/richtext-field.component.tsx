@@ -26,11 +26,9 @@ const InitializeDataPlugin = ({ value }: { value: any }) => {
 
 	useEffect(() => {
 		editor.update(() => {
-			console.log(value);
 			const parser = new DOMParser();
 			const document = parser.parseFromString(value, 'text/html');
 			const nodes = $generateNodesFromDOM(editor, document);
-			console.log(nodes);
 
 			const root = $getRoot().select();
 			root.insertNodes(nodes);

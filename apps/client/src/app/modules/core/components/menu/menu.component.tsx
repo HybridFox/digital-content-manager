@@ -26,12 +26,14 @@ export const Menu = () => {
 				<ul>
 					<li>
 						<NavLink {...navLinkBinding} to="/app/dashboard">
-							<i className="las la-chart-line"></i><span>Dashboard</span>
+							<i className="las la-chart-line"></i>
+							<span>Dashboard</span>
 						</NavLink>
 					</li>
 					<li>
 						<NavLink {...navLinkBinding} to="/app/resources">
-							<i className="las la-photo-video"></i><span>Resources</span>
+							<i className="las la-photo-video"></i>
+							<span>Resources</span>
 						</NavLink>
 					</li>
 				</ul>
@@ -43,17 +45,20 @@ export const Menu = () => {
 				<ul>
 					<li>
 						<NavLink {...navLinkBinding} to="/app/content/content">
-							<i className="las la-th-list"></i><span>Content</span>
+							<i className="las la-th-list"></i>
+							<span>Content</span>
 						</NavLink>
 					</li>
 					<li>
 						<NavLink {...navLinkBinding} to="/app/content/page">
-							<i className="las la-file"></i><span>Pages</span>
+							<i className="las la-file"></i>
+							<span>Pages</span>
 						</NavLink>
 					</li>
 					<li>
 						<NavLink {...navLinkBinding} to="/app/content/content-block">
-							<i className="las la-cubes"></i><span>Blocks</span>
+							<i className="las la-cubes"></i>
+							<span>Blocks</span>
 						</NavLink>
 					</li>
 				</ul>
@@ -78,6 +83,18 @@ export const Menu = () => {
 							<span>Content Components</span>
 						</NavLink>
 					</li>
+					<li>
+						<NavLink {...navLinkBinding} to="/app/workflows">
+							<i className="las la-sitemap"></i>
+							<span>Workflows</span>
+						</NavLink>
+					</li>
+					<li>
+						<NavLink {...navLinkBinding} to="/app/workflow-states">
+							<i className="las la-sliders-h"></i>
+							<span>Workflow States</span>
+						</NavLink>
+					</li>
 					{/* <li>
 					<NavLink {...navLinkBinding} to="/app/views"><i className="las la-folder"></i> Views</NavLink>
 				</li> */}
@@ -92,7 +109,7 @@ export const Menu = () => {
 				</p>
 				<ul>
 					<li>
-						<NavLink {...navLinkBinding} to="/auth">
+						<NavLink {...navLinkBinding} to="/app/users">
 							<i className="las la-user"></i>
 							<span>Users</span>
 						</NavLink>
@@ -101,19 +118,19 @@ export const Menu = () => {
 					<NavLink {...navLinkBinding} to="/auth"><i className="las la-list-alt"></i>Permissions</NavLink>
 				</li> */}
 					<li>
-						<NavLink {...navLinkBinding} to="/auth">
-							<i className="las la-key"></i>
-							<span>Policies</span>
-						</NavLink>
-					</li>
-					<li>
-						<NavLink {...navLinkBinding} to="/auth">
+						<NavLink {...navLinkBinding} to="/app/roles">
 							<i className="las la-list-alt"></i>
 							<span>Roles</span>
 						</NavLink>
 					</li>
 					<li>
-						<NavLink {...navLinkBinding} to="/app/storage-engines">
+						<NavLink {...navLinkBinding} to="/app/policies">
+							<i className="las la-key"></i>
+							<span>Policies</span>
+						</NavLink>
+					</li>
+					<li>
+						<NavLink {...navLinkBinding} to="/app/storage-repositories">
 							<i className="las la-server"></i>
 							<span>Storage</span>
 						</NavLink>

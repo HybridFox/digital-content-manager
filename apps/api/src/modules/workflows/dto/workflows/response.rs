@@ -17,6 +17,7 @@ use std::convert::From;
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct WorkflowTransitionDTO {
+	pub id: Uuid,
 	pub from_state: WorkflowStateDTO,
 	pub to_state: WorkflowStateDTO,
 }
@@ -27,7 +28,7 @@ pub struct WorkflowDTO {
 	pub id: Uuid,
 	pub name: String,
 	pub slug: String,
-	pub description: String,
+	pub description: Option<String>,
 	pub default_workflow_state_id: Uuid,
 	pub internal: bool,
 	pub removable: bool,
@@ -65,7 +66,8 @@ impl
 			transitions: transitions
 				.into_iter()
 				.map(
-					|(_transition, from_state, to_state)| WorkflowTransitionDTO {
+					|(transition, from_state, to_state)| WorkflowTransitionDTO {
+						id: transition.id,
 						from_state: WorkflowStateDTO::from(from_state),
 						to_state: WorkflowStateDTO::from(to_state),
 					},

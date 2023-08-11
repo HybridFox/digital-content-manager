@@ -89,17 +89,20 @@ impl Permission {
 			.select(Self::as_select())
 			.get_result(conn)?;
 
-		let _iam_actions = PermissionIAMAction::belonging_to(&permission)
-			.inner_join(iam_actions::table)
-			.select(IAMAction::as_select())
-			.load(conn)?;
-
-		let _iam_conditions = PermissionIAMCondition::belonging_to(&permission)
-			.inner_join(iam_conditions::table)
-			.select(IAMCondition::as_select())
-			.load(conn)?;
-
 		Ok(permission)
+	}
+
+	pub fn remove_by_policy_id(conn: &mut PgConnection, policy_id: Uuid) -> Result<Vec<Uuid>, AppError> {
+		let permission: Vec<Permission> = permissions::table
+			.filter(permissions::iam_policy_id.eq(policy_id))
+			.select(Self::as_select())
+			.load(conn)?;
+		let id_indices: Vec<Uuid> = permission.iter().map(|permission| permission.id).collect();
+
+		let target = permissions::table.filter(permissions::iam_policy_id.eq(policy_id));
+		diesel::delete(target).execute(conn)?;
+
+		Ok(id_indices)
 	}
 }
 

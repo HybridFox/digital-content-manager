@@ -36,6 +36,14 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 							.service(modules::roles::controllers::roles::remove),
 					)
 					.service(
+						web::scope("/{site_id}/users")
+							// .service(modules::roles::controllers::roles::create)
+							.service(modules::sites::controllers::site_users::find_all)
+							.service(modules::sites::controllers::site_users::find_one)
+							// .service(modules::roles::controllers::roles::update)
+							// .service(modules::roles::controllers::roles::remove),
+					)
+					.service(
 						web::scope("/{site_id}/iam-policies")
 							.service(modules::iam_policies::controllers::iam_policies::create)
 							.service(modules::iam_policies::controllers::iam_policies::find_all)
@@ -91,6 +99,14 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 							.service(modules::workflows::controllers::workflows::find_one)
 							.service(modules::workflows::controllers::workflows::update)
 							.service(modules::workflows::controllers::workflows::remove)
+					)
+					.service(
+						web::scope("/{site_id}/workflow-states")
+							.service(modules::workflows::controllers::workflow_states::create)
+							.service(modules::workflows::controllers::workflow_states::find_all)
+							.service(modules::workflows::controllers::workflow_states::find_one)
+							.service(modules::workflows::controllers::workflow_states::update)
+							.service(modules::workflows::controllers::workflow_states::remove)
 					)
 					// .service(
 					// 	web::scope("/{site_id}/assets")

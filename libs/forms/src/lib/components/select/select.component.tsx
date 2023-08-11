@@ -14,10 +14,10 @@ export const Select: FC<ISelectProps> = ({
 	onChange,
 	className,
 	closeMenuOnSelect,
-	disabled
+	disabled,
+	hasError
 }: ISelectProps) => {
 	const handleSelection = (key: any) => {
-		console.log('aaa', key)
 		if (onChange) {
 			onChange(key.value);
 		}
@@ -34,7 +34,9 @@ export const Select: FC<ISelectProps> = ({
 			className={className}
 			unstyled={true}
 			classNames={{
-				control: () => cxBind('a-select'),
+				control: () => cxBind('a-select', {
+					'a-select--has-error': hasError
+				}),
 				valueContainer: () => cxBind('a-select__value-container'),
 				menu: () => cxBind('a-select__menu'),
 				menuList: () => cxBind('a-select__menu-list'),

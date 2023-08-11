@@ -9,6 +9,11 @@ import { CONTENT_TYPES_ROUTES } from './modules/content-types';
 import { CONTENT_ROUTES } from './modules/content';
 import { CONTENT_COMPONENTS_ROUTES } from './modules/content-components';
 import { RESOURCE_ROUTES } from './modules/resources';
+import { STORAGE_ROUTES } from './modules/storage';
+import { WORKFLOW_ROUTES } from './modules/workflow';
+import { USERS_ROUTES } from './modules/users';
+import { ROLES_ROUTES } from './modules/roles';
+import { POLICIES_ROUTES } from './modules/policies';
 
 const router = createBrowserRouter([
 	{
@@ -29,6 +34,11 @@ const router = createBrowserRouter([
 					...CONTENT_ROUTES,
 					...CONTENT_COMPONENTS_ROUTES,
 					...RESOURCE_ROUTES,
+					...STORAGE_ROUTES,
+					...WORKFLOW_ROUTES,
+					...USERS_ROUTES,
+					...ROLES_ROUTES,
+					...POLICIES_ROUTES
 				]
 			}
 		]

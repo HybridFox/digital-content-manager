@@ -1,6 +1,7 @@
 use super::super::dto::{request, response};
 use crate::modules::content::models::content::{CreateContent, UpdateContent};
 use crate::modules::content_types::models::content_type::ContentTypeKindEnum;
+use crate::modules::workflows::models::workflow_state::{WorkflowState, WorkflowTechnicalStateEnum};
 use crate::{errors::AppError, modules::content::models::content::Content};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
@@ -36,7 +37,7 @@ pub struct FindAllQueryParams {
 	pagesize: Option<i64>,
 	kind: Option<ContentTypeKindEnum>,
 	language_id: Option<Uuid>,
-	translation_id: Option<Uuid>
+	translation_id: Option<Uuid>,
 }
 
 #[utoipa::path(
@@ -103,7 +104,15 @@ pub async fn find_all(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
 
-	let (content, total_elements) = Content::find(conn, params.site_id, page, pagesize, query.kind, query.language_id, query.translation_id)?;
+	let (content, total_elements) = Content::find(
+		conn,
+		params.site_id,
+		page,
+		pagesize,
+		query.kind,
+		query.language_id,
+		query.translation_id,
+	)?;
 
 	let res = response::ContentListDTO::from((
 		content,
@@ -161,6 +170,14 @@ pub async fn update(
 	form: web::Json<request::UpdateContentDTO>,
 ) -> ApiResponse {
 	let conn = &mut state.get_conn()?;
+
+	let workflow_state = WorkflowState::find_one(conn, params.site_id, form.workflow_state_id)?;
+	let published = if workflow_state.technical_state == WorkflowTechnicalStateEnum::PUBLISHED {
+		true
+	} else {
+		false
+	};
+
 	let content = Content::update(
 		conn,
 		params.site_id,
@@ -169,7 +186,8 @@ pub async fn update(
 		UpdateContent {
 			name: form.name.clone(),
 			workflow_state_id: form.workflow_state_id.clone(),
-			updated_at: Utc::now().naive_utc()
+			updated_at: Utc::now().naive_utc(),
+			published,
 		},
 		form.fields.clone(),
 	)?;

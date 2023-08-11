@@ -42,6 +42,13 @@ impl PermissionIAMAction {
 
 		Ok(permissions_iam_actions)
 	}
+
+	pub fn remove_by_permission_ids(conn: &mut PgConnection, permission_ids: Vec<Uuid>) -> Result<(), AppError> {
+		let target = permissions_iam_actions::table.filter(permissions_iam_actions::permission_id.eq_any(permission_ids));
+		diesel::delete(target).execute(conn)?;
+
+		Ok(())
+	}
 }
 
 #[derive(Insertable, Debug, Deserialize)]

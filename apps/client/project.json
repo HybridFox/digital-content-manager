@@ -4,6 +4,9 @@
 	"sourceRoot": "apps/client/src",
 	"projectType": "application",
 	"targets": {
+		"translations:extract": {
+			"command": "i18next-scanner --config apps/client/i18next-scanner.config.js"
+		},
 		"build": {
 			"executor": "@nx/vite:build",
 			"outputs": ["{options.outputPath}"],

@@ -1,25 +1,53 @@
 @use '../tools' as tools;
 
 :root {
-	--font-size-h1: #{tools.rem(70px)};
+	--font-size-h1: #{tools.rem(60px)};
+	--font-size-h2: #{tools.rem(40px)};
+	--font-size-h3: #{tools.rem(30px)};
+	--font-size-h4: #{tools.rem(25px)};
+	--font-size-h5: #{tools.rem(20px)};
+	--font-size-h6: #{tools.rem(16px)};
 	--font-size-p: #{tools.rem(16px)};
 	--font-size-small: #{tools.rem(14px)};
 	--font-w-button: #{tools.rem(700)};
 }
 
-h1,
-.heading-1 {
-	font-size: var(--font-s-h1);
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+}
+
+h1 {
+	font-size: var(--font-size-h1);
+}
+
+h2 {
+	font-size: var(--font-size-h2);
+}
+
+h3 {
+	font-size: var(--font-size-h3);
+}
+
+h4 {
+	font-size: var(--font-size-h4);
+}
+
+h5 {
+	font-size: var(--font-size-h5);
+}
+
+h6 {
+	font-size: var(--font-size-h6);
 }
 
 p,
 .paragraph {
-	font-size: var(--font-s-p);
+	font-size: var(--font-size-p);
 }
 
 button,
 .button {
-	font-size: var(--font-s-p);
+	font-size: var(--font-size-p);
 	font-weight: var(--font-w-button);
 	text-transform: uppercase;
 }

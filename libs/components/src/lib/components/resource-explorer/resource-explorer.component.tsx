@@ -116,7 +116,7 @@ export const ResourceExplorer: FC<IResourceExplorerProps> = ({
 				selectedRepositoryId={repositoryId}
 			/>
 			<ExplorerPath className="u-margin-bottom" onNavigate={onNavigate} path={path.split('/')} />
-			<Loading loading={resourcesLoading} text={t(`GENERAL.LOADING`)}>
+			<Loading loading={resourcesLoading} text={t(`GENERAL.LABELS.LOADING`)}>
 				<Table
 					minSelection={minSelection}
 					maxSelection={maxSelection}

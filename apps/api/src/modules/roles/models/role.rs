@@ -1,7 +1,7 @@
 use crate::errors::{AppError};
 use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
-use crate::modules::iam_policies::models::roles_iam_policies::{RoleIAMPolicy};
-use crate::schema::{roles, iam_policies};
+use crate::modules::iam_policies::models::roles_iam_policies::RoleIAMPolicy;
+use crate::schema::{roles, iam_policies, roles_iam_policies};
 use chrono::NaiveDateTime;
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
@@ -66,16 +66,44 @@ impl Role {
 		site_id: Uuid,
 		page: i64,
 		pagesize: i64,
-	) -> Result<(Vec<Self>, i64), AppError> {
-		let roles = roles::table
-			.select(Role::as_select())
-			.filter(roles::site_id.eq(site_id))
-			.offset((page - 1) * pagesize)
-			.limit(pagesize)
-			.load::<Role>(conn)?;
+	) -> Result<(Vec<(Self, Vec<IAMPolicy>)>, i64), AppError> {
+		let query = {
+			let mut query = roles::table
+				.select(Role::as_select())
+				.filter(roles::site_id.eq(site_id))
+				.into_boxed();
+
+			if pagesize != -1 {
+				query = query.offset((page - 1) * pagesize).limit(pagesize);
+			};
+
+			query
+		};
+
+		let roles = query.load::<Role>(conn)?;
+		let policies: Vec<(RoleIAMPolicy, IAMPolicy)> = RoleIAMPolicy::belonging_to(&roles)
+			.inner_join(
+				iam_policies::table.on(iam_policies::id.eq(roles_iam_policies::iam_policy_id)),
+			)
+			.select((RoleIAMPolicy::as_select(), IAMPolicy::as_select()))
+			.load::<(RoleIAMPolicy, IAMPolicy)>(conn)?;
+		let grouped_policies = policies.grouped_by(&roles);
+		let roles_with_policies = roles
+			.into_iter()
+			.zip(grouped_policies)
+			.map(|(role, policies)| {
+				let only_policies = policies
+					.into_iter()
+					.map(|(_role_policy, policy)| policy)
+					.collect();
+
+				(role, only_policies)
+			})
+			.collect::<Vec<(Self, Vec<IAMPolicy>)>>();
+
 		let total_elements = roles::table.count().get_result::<i64>(conn)?;
 
-		Ok((roles, total_elements))
+		Ok((roles_with_policies, total_elements))
 	}
 
 	pub fn update(

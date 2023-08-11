@@ -1,10 +1,11 @@
+import { ValueOfRecord } from "rambda";
 import { ReactNode } from "react";
 
-export interface ITableColumn {
+export interface ITableColumn<T = Record<string, unknown>> {
 	id: string;
 	label?: string;
 	value?: string;
-	format?: (value: unknown, key: string, item: Record<string, unknown>, index: number) => ReactNode;
+	format?: (value: ValueOfRecord<T>, key: string, item: T, index: number) => ReactNode;
 	sticky?: boolean;
 	disableSorting?: boolean;
 	sort?: string;
@@ -15,7 +16,7 @@ export interface ITableColumn {
 
 export interface ITableProps {
 	className?: string;
-	columns: ITableColumn[];
+	columns: ITableColumn<any>[];
 	rows: Record<any, any>[];
 	selectable?: boolean;
 	selectablePredicate?: (value: any) => boolean;

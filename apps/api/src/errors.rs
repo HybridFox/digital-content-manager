@@ -169,6 +169,14 @@ impl From<DieselError> for AppError {
 						..Default::default()
 					})
 				}
+				DatabaseErrorKind::ForeignKeyViolation => {
+					AppError::UnprocessableEntity(AppErrorValue {
+						message: info.details().unwrap_or_else(|| info.message()).to_string(),
+						status: StatusCode::UNPROCESSABLE_ENTITY.as_u16(),
+						code: "DB_FORGEIGN_KEY_VIOLATION".to_owned(),
+						..Default::default()
+					})
+				}
 				_ => AppError::InternalServerError(AppErrorValue {
 					message: format!("Unimplemented diesel error: {:?}", kind),
 					status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
@@ -183,7 +191,7 @@ impl From<DieselError> for AppError {
 				..Default::default()
 			}),
 			_ => AppError::InternalServerError(AppErrorValue {
-				message: "Diesel error".to_owned(),
+				message: err.to_string(),
 				status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
 				code: "UNIMPLEMENTED_DIESEL_ERROR".to_owned(),
 				..Default::default()

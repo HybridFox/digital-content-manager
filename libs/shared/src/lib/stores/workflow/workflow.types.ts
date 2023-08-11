@@ -1,11 +1,16 @@
 import { IAPIHALResponse, IPageParameters } from "../../types/paging.types";
 
+export enum WORKFLOW_TECHNICAL_STATES {
+	DRAFT = 'DRAFT',
+	PUBLISHED = 'PUBLISHED'
+}
+
 export interface IWorkflowState {
 	id: string;
 	name: string;
 	slug: string;
 	description: string;
-	technicalState: string;
+	technicalState: WORKFLOW_TECHNICAL_STATES;
 	internal: boolean;
 	removable: boolean;
 	deleted: boolean;
@@ -14,6 +19,7 @@ export interface IWorkflowState {
 }
 
 export interface IWorkflowTransition {
+	id: string;
 	fromState: IWorkflowState;
 	toState: IWorkflowState;
 }
@@ -50,12 +56,19 @@ export interface IWorkflowStoreState {
 	updateWorkflowLoading: boolean;
 }
 
+export interface IUpsertWorkflowTransitionDTO {
+	fromWorkflowStateId: string;
+	toWorkflowStateId: string;
+}
+
 export interface IWorkflowCreateDTO {
 	name: string;
 	description?: string;
+	transitions?: IUpsertWorkflowTransitionDTO[]
 }
 
 export interface IWorkflowUpdateDTO {
 	name: string;
 	description?: string;
+	transitions?: IUpsertWorkflowTransitionDTO[]
 }

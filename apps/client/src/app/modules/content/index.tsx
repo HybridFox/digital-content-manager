@@ -30,6 +30,10 @@ export const CONTENT_ROUTES: RouteObject[] = [
 			{
 				path: CONTENT_PATHS.DETAIL_TRANSLATIONS,
 				lazy: async () => ({ Component: (await import('./pages/content-detail-translations/content-detail-translations.page')).ContentDetailTranslationsPage }),
+			},
+			{
+				path: CONTENT_PATHS.DETAIL_STATUS,
+				lazy: async () => ({ Component: (await import('./pages/content-detail-status/content-detail-status.page')).ContentDetailStatusPage }),
 			}
 		]
 	},

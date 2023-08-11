@@ -9,6 +9,7 @@ use uuid::Uuid;
 use std::{convert::From};
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct PermissionDTO {
 	resources: Vec<String>,
 	effect: String,
@@ -26,6 +27,7 @@ impl From<(Permission, Vec<String>)> for PermissionDTO {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct IAMPolicyDTO {
 	pub id: Uuid,
 	pub name: String,
@@ -45,6 +47,7 @@ impl From<IAMPolicy> for IAMPolicyDTO {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct IAMPolicyWithPermissionsDTO {
 	pub id: Uuid,
 	pub name: String,

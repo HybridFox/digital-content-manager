@@ -11,6 +11,19 @@
 	width: 100%;
 	transition: all .2s ease;
 
+	&--has-error {
+		border-color: var(--color-state-danger-light);
+
+		&:hover {
+			border-color: var(--color-state-danger);
+		}
+
+		&:focus {
+			border-color: var(--color-state-danger);
+			box-shadow: 0px 0px 0px var(--spacer-xxxs) var(--color-state-danger-light);
+		}
+	}
+
 	&__menu {
 		background-color: var(--color-gray-lightest);
 		padding: var(--spacer-xs) 0;

@@ -18,7 +18,7 @@ pub struct Workflow {
 	pub id: Uuid,
 	pub name: String,
 	pub slug: String,
-	pub description: String,
+	pub description: Option<String>,
 	pub default_workflow_state_id: Uuid,
 	pub internal: bool,
 	pub removable: bool,
@@ -158,56 +158,6 @@ impl Workflow {
 
 		Ok(())
 	}
-
-	// #[instrument(skip(conn))]
-	// pub fn find_fields(
-	// 	conn: &mut PgConnection,
-	// 	content_types: &Vec<WorkflowType>,
-	// ) -> Result<
-	// 	Vec<(
-	// 		FieldModel,
-	// 		WorkflowComponent,
-	// 		HashMap<String, FieldConfigWorkflow>,
-	// 	)>,
-	// 	AppError,
-	// > {
-	// 	let all_content_components = content_components::table
-	// 		.select(WorkflowComponent::as_select())
-	// 		.load::<WorkflowComponent>(conn)?;
-
-	// 	let fields = FieldModel::belonging_to(content_types)
-	// 		.select(FieldModel::as_select())
-	// 		.load::<FieldModel>(conn)?;
-
-	// 	let field_config = FieldConfig::belonging_to(&fields)
-	// 		.select(FieldConfig::as_select())
-	// 		.load::<FieldConfig>(conn)?;
-
-	// 	let grouped_config: Vec<Vec<FieldConfig>> = field_config.grouped_by(&fields);
-	// 	let fields_with_config = fields
-	// 		.into_iter()
-	// 		.zip(grouped_config)
-	// 		.map(|(field, field_configs)| {
-	// 			let populated_field_configs =
-	// 				WorkflowComponent::populate_config(conn, field_configs)?;
-	// 			let content_component = all_content_components
-	// 				.iter()
-	// 				.find(|cp| cp.id == field.content_component_id)
-	// 				.map(|cp| cp.to_owned());
-
-	// 			Ok((field, content_component.unwrap(), populated_field_configs))
-	// 		})
-	// 		.collect::<Result<
-	// 			Vec<(
-	// 				FieldModel,
-	// 				WorkflowComponent,
-	// 				HashMap<String, FieldConfigWorkflow>,
-	// 			)>,
-	// 			AppError,
-	// 		>>()?;
-
-	// 	Ok(fields_with_config)
-	// }
 }
 
 #[derive(Insertable, Debug, Deserialize)]
@@ -215,7 +165,7 @@ impl Workflow {
 pub struct CreateWorkflow {
 	pub name: String,
 	pub slug: String,
-	pub description: String,
+	pub description: Option<String>,
 	pub default_workflow_state_id: Uuid,
 }
 
@@ -223,6 +173,6 @@ pub struct CreateWorkflow {
 #[diesel(table_name = workflows)]
 pub struct UpdateWorkflow {
 	pub name: String,
-	pub description: String,
+	pub description: Option<String>,
 	pub default_workflow_state_id: Uuid,
 }

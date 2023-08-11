@@ -51,7 +51,7 @@ pub struct WorkflowState {
 	pub id: Uuid,
 	pub name: String,
 	pub slug: String,
-	pub description: String,
+	pub description: Option<String>,
 	pub technical_state: WorkflowTechnicalStateEnum,
 	pub internal: bool,
 	pub removable: bool,
@@ -145,7 +145,7 @@ impl WorkflowState {
 pub struct CreateWorkflowState {
 	pub name: String,
 	pub slug: String,
-	pub description: String,
+	pub description: Option<String>,
 	pub technical_state: WorkflowTechnicalStateEnum,
 }
 
@@ -153,6 +153,6 @@ pub struct CreateWorkflowState {
 #[diesel(table_name = workflow_states)]
 pub struct UpdateWorkflowState {
 	pub name: String,
-	pub description: String,
+	pub description: Option<String>,
 	pub technical_state: WorkflowTechnicalStateEnum,
 }

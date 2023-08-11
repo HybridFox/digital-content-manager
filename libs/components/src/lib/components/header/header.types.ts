@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 
 export interface IHeaderTab {
 	to: string;
-	label: string;
+	label: ReactNode;
 	disabled?: boolean;
 }
 

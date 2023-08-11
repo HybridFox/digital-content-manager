@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import cx from 'classnames/bind';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { Badge } from '../../../badge';
 
@@ -15,6 +16,8 @@ export const ExplorerRepositories: FC<IExplorerRepositoriesProps> = ({
 	selectedRepositoryId,
 	onSelect,
 }: IExplorerRepositoriesProps) => {
+	const { t } = useTranslation();
+
 	return (
 		<div className={classNames(className, cxBind('o-explorer-repositories'))}>
 			{repositories.map((repo) => (
@@ -28,7 +31,7 @@ export const ExplorerRepositories: FC<IExplorerRepositoriesProps> = ({
 					)}
 				>
 					<h4>{repo.name}</h4>
-					<Badge>{repo.kind.toUpperCase()}</Badge>
+					<Badge>{t(`STORAGE_REPOSITORIES.KINDS.${repo.kind.toUpperCase()}`)}</Badge>
 				</div>
 			))}
 		</div>

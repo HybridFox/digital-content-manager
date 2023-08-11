@@ -3,6 +3,8 @@ use super::super::dto::{request, response};
 use crate::errors::{AppError};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
+use crate::modules::iam_policies::models::permission::Permission;
+use crate::modules::iam_policies::models::permission_iam_action::PermissionIAMAction;
 use crate::utils::api::ApiResponse;
 use actix_web::{get, post, web, HttpResponse, put, delete};
 use serde::Deserialize;
@@ -46,6 +48,19 @@ pub async fn create(
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let policy = IAMPolicy::create(conn, params.site_id, &form.name)?;
+
+	form.permissions.iter().try_for_each(|permission| {
+		let created_permission = Permission::create(
+			conn,
+			policy.id,
+			permission.clone().resources,
+			permission.clone().effect,
+		)?;
+		PermissionIAMAction::create(conn, created_permission.id, permission.actions.clone())?;
+
+		Ok::<(), AppError>(())
+	})?;
+
 	let res = response::IAMPolicyDTO::from(policy);
 	Ok(HttpResponse::Ok().json(res))
 }
@@ -136,6 +151,21 @@ pub async fn update(
 			name: form.name.clone(),
 		},
 	)?;
+
+	let removed_permission_ids = Permission::remove_by_policy_id(conn, params.iam_policy_id)?;
+	PermissionIAMAction::remove_by_permission_ids(conn, removed_permission_ids)?;
+	form.permissions.iter().try_for_each(|permission| {
+		let created_permission = Permission::create(
+			conn,
+			policy.id,
+			permission.clone().resources,
+			permission.clone().effect,
+		)?;
+		PermissionIAMAction::create(conn, created_permission.id, permission.actions.clone())?;
+
+		Ok::<(), AppError>(())
+	})?;
+
 	let res = response::IAMPolicyDTO::from(policy);
 	Ok(HttpResponse::Ok().json(res))
 }

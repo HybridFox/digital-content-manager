@@ -7,7 +7,7 @@ use uuid::Uuid;
 pub struct CreateWorkflowDTO {
 	pub name: String,
 	pub slug: String,
-	pub description: String,
+	pub description: Option<String>,
 	pub default_workflow_state_id: Uuid,
 	pub transitions: Vec<UpsertWorkflowTransitionDTO>
 }
@@ -23,7 +23,7 @@ pub struct UpsertWorkflowTransitionDTO {
 #[serde(rename_all = "camelCase")]
 pub struct UpdateWorkflowDTO {
 	pub name: String,
-	pub description: String,
+	pub description: Option<String>,
 	pub default_workflow_state_id: Uuid,
 	pub transitions: Vec<UpsertWorkflowTransitionDTO>
 }

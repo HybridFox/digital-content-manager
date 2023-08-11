@@ -1,4 +1,4 @@
-import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentTypeStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
+import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentTypeStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { RenderFields, TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
@@ -6,27 +6,17 @@ import { Alert, AlertTypes, Button, HTMLButtonTypes } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { CONTENT_PATHS } from '../../content.routes';
-import { useContentStore } from '../../stores/content';
-
-interface EditContentForm {
-	name: string;
-	fields: Record<string, unknown>;
-}
+import { IContentItem, useContentStore } from '../../stores/content';
 
 export const ContentDetailFieldsPage = () => {
 	const [contentType] = useContentTypeStore((state) => [state.contentType]);
-	const [workflow] = useWorkflowStore((state) => [state.workflow]);
 	const [updateContentItem, updateContentItemLoading] = useContentStore((state) => [state.updateContentItem, state.updateContentItemLoading]);
 	const [contentItem] = useContentStore((state) => [state.contentItem]);
 	const { t } = useTranslation();
 	const [setBreadcrumbs] = useHeaderStore((state) => [state.setBreadcrumbs]);
-	const formMethods = useForm<EditContentForm>({
+	const formMethods = useForm<IContentItem>({
 		// resolver: yupResolver(editFieldSchema),
-		values: {
-			name: '',
-			fields: {},
-			...contentItem,
-		},
+		values: contentItem,
 	});
 
 	const {
@@ -46,24 +36,12 @@ export const ContentDetailFieldsPage = () => {
 		]);
 	}, [contentItem, contentType]);
 
-	const onSubmit = (values: EditContentForm) => {
-		if (!workflow) {
-			return setError('root', {
-				message: 'WORKFLOW_MISSING',
-			});
+	const onSubmit = (values: IContentItem) => {
+		if (!contentItem) {
+			return;
 		}
 
-		if (!contentType || !contentItem) {
-			return setError('root', {
-				message: 'CONTENT-TYPE_MISSING',
-			});
-		}
-
-		updateContentItem(contentItem?.id, {
-			...values,
-			workflowStateId: contentItem?.workflowStateId,
-			contentTypeId: contentItem?.contentTypeId,
-		}).catch((error: IAPIError) => {
+		updateContentItem(contentItem.id, values).catch((error: IAPIError) => {
 			setError('root', {
 				message: error.code,
 			});
@@ -77,7 +55,7 @@ export const ContentDetailFieldsPage = () => {
 			</Alert>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<div className="u-margin-bottom">
-					<TextField name="name" label="Name" />
+					<TextField name="name" label="Administrative Name" />
 				</div>
 				<div className="u-margin-bottom">
 					<RenderFields fieldPrefix="fields." fields={contentType?.fields || []} />

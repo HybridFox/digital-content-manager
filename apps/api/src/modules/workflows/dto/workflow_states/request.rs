@@ -7,8 +7,7 @@ use crate::modules::workflows::models::workflow_state::WorkflowTechnicalStateEnu
 #[serde(rename_all = "camelCase")]
 pub struct CreateWorkflowStateDTO {
 	pub name: String,
-	pub slug: String,
-	pub description: String,
+	pub description: Option<String>,
 	pub technical_state: WorkflowTechnicalStateEnum,
 }
 
@@ -16,6 +15,6 @@ pub struct CreateWorkflowStateDTO {
 #[serde(rename_all = "camelCase")]
 pub struct UpdateWorkflowStateDTO {
 	pub name: String,
-	pub description: String,
+	pub description: Option<String>,
 	pub technical_state: WorkflowTechnicalStateEnum,
 }

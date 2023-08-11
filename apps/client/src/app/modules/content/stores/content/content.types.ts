@@ -1,4 +1,4 @@
-import { IAPIHALResponse, ILanguage, IPageParameters } from "@ibs/shared";
+import { IAPIHALResponse, ILanguage, IPageParameters, IWorkflowState } from "@ibs/shared";
 
 export interface IContentItem {
 	id: string;
@@ -10,6 +10,7 @@ export interface IContentItem {
 	workflowStateId: string;
 	fields: Record<string, unknown>;
 	language: ILanguage;
+	currentWorkflowState: IWorkflowState;
 	updatedAt: string;
 	createdAt: string;
 }

@@ -23,33 +23,34 @@ export const SelectField: FC<ISelectFieldProps> = ({
 	const renderField = ({
 		field: { onChange, value },
 		formState: { errors },
-	}: IRenderControllerField) => (
-		<div className={cxBind('a-input', {
-			'a-input--has-error': !!errors?.[name]
-		})}>
-			{label && (
-				<label htmlFor={name} className={cxBind('a-input__label')}>
-					{label}
-				</label>
-			)}
-			<div className={cxBind('a-input__field-wrapper')}>
-				<Select onChange={onChange} value={value} options={(fieldConfiguration?.options as ISelectOptions[] || [])} />
-				{errors?.[name] && (
-					<>
-						<Tooltip anchorSelect={`#${name}-err-tooltip`}>
-							{errors?.[name]?.message?.toString()}
-						</Tooltip>
-						<div className={cxBind('a-input__error')} id={`${name}-err-tooltip`}>
-							<i className="las la-exclamation-triangle"></i>
-						</div>
-					</>
+	}: IRenderControllerField) => {
+		const mappedValue = (fieldConfiguration?.options as ISelectOptions[] || []).find(({ value: optionValue }) => optionValue === value)
+
+		return (
+			<div className={cxBind('a-input', {
+				'a-input--has-error': !!errors?.[name]
+			})}>
+				{label && (
+					<label htmlFor={name} className={cxBind('a-input__label')}>
+						{label}
+					</label>
 				)}
-				<div className={cxBind('a-input__select-icon')}>
-					<i className="las la-angle-down"></i>
+				<div className={cxBind('a-input__field-wrapper')}>
+					<Select hasError={!!errors?.[name]} onChange={onChange} value={mappedValue} options={(fieldConfiguration?.options as ISelectOptions[] || [])} />
+					{errors?.[name] && (
+						<>
+							<Tooltip anchorSelect={`#${name}-err-tooltip`}>
+								{errors?.[name]?.message?.toString()}
+							</Tooltip>
+							<div className={cxBind('a-input__error')} id={`${name}-err-tooltip`}>
+								<i className="las la-exclamation-triangle"></i>
+							</div>
+						</>
+					)}
 				</div>
 			</div>
-		</div>
-	);
+		)
+	};
 
 	return <Controller control={control} name={name} render={renderField} />
 };

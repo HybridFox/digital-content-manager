@@ -1,9 +1,9 @@
-import { RouteObject } from 'react-router-dom';
+import { RouteObject } from "react-router-dom";
 
 import { APP_ROOT_PATH } from "../core/routes.const"
 
-const ROOT_PATH = `${APP_ROOT_PATH}/storage-engines`;
-const DETAIL_PATH = `${ROOT_PATH}/:storageEngineId`;
+const ROOT_PATH = `${APP_ROOT_PATH}/storage-repositories`;
+const DETAIL_PATH = `${ROOT_PATH}/:storageRepositoryId`;
 
 export const STORAGE_PATHS = {
 	ROOT: `${ROOT_PATH}`,
@@ -14,14 +14,14 @@ export const STORAGE_PATHS = {
 export const STORAGE_ROUTES: RouteObject[] = [
 	{
 		path: STORAGE_PATHS.ROOT,
-		lazy: async () => ({ Component: (await import('./pages/storage-list/storage-list.page')).ContentListPage }),
+		lazy: async () => ({ Component: (await import('./pages/storage-repository-list/storage-repository-list.page')).StorageRepositoryListPage }),
 	},
 	{
 		path: STORAGE_PATHS.CREATE,
-		lazy: async () => ({ Component: (await import('./pages/storage-create/content-create.page')).ContentCreateDetailPage }),
+		lazy: async () => ({ Component: (await import('./pages/storage-repository-create/storage-repository-create.page')).StorageRepositoryCreatePage }),
 	},
 	{
 		path: STORAGE_PATHS.DETAIL,
-		lazy: async () => ({ Component: (await import('./pages/storage-detail/storage-detail.page')).ContentCreateDetailPage }),
+		lazy: async () => ({ Component: (await import('./pages/storage-repository-detail/storage-repository-detail.page')).StorageRepositoryDetailPage }),
 	},
 ];

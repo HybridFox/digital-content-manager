@@ -29,7 +29,7 @@ impl WorkflowTransition {
 		values: Vec<CreateWorkflowTransition>,
 	) -> Result<Vec<(Self, WorkflowState, WorkflowState)>, AppError> {
 		let existing_transitions =
-			workflow_transitions::table.filter(workflow_transitions::id.eq(workflow_id));
+			workflow_transitions::table.filter(workflow_transitions::workflow_id.eq(workflow_id));
 		diesel::delete(existing_transitions).execute(conn)?;
 
 		let created_workflow_transitions = diesel::insert_into(workflow_transitions::table)

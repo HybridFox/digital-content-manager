@@ -34,9 +34,9 @@ export interface IField {
 	slug: string;
 	min: number;
 	max: number;
-	multiLanguage: boolean;
+	multiLanguage?: boolean;
 	contentComponent: IContentComponent;
-	config: Record<string, string>;
+	config?: Record<string, string>;
 }
 
 export enum ContentTypeKinds {

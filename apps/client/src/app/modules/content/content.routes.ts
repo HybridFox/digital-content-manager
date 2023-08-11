@@ -11,4 +11,5 @@ export const CONTENT_PATHS = {
 	DETAIL_SETTINGS: `${DETAIL_PATH}/settings`,
 	DETAIL_FIELDS: `${DETAIL_PATH}/fields`,
 	DETAIL_TRANSLATIONS: `${DETAIL_PATH}/translations`,
+	DETAIL_STATUS: `${DETAIL_PATH}/status`,
 }

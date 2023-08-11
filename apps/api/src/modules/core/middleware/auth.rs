@@ -221,6 +221,6 @@ lazy_static! {
 // ================
 // TODO: should inject this func
 fn find_auth_user(conn: &mut PgConnection, user_id: Uuid) -> Result<User, AppError> {
-	let user = User::find(conn, user_id)?;
+	let user = User::find_one(conn, user_id)?;
 	Ok(user)
 }

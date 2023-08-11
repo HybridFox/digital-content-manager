@@ -12,9 +12,9 @@ pub struct CreateIAMPolicyDTO {
 pub struct CreateIAMPolicyPermissionDTO {
 	#[schema(example = "grant", default = "grant")]
 	pub effect: String,
-	pub resource: Vec<String>,
+	pub resources: Vec<String>,
 	pub conditions: Option<Vec<CreateIAMPolicyPermissionConditionDTO>>,
-	pub actions: Vec<CreateIAMPolicyPermissionActionDTO>,
+	pub actions: Vec<String>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
@@ -33,4 +33,5 @@ pub struct CreateIAMPolicyPermissionActionDTO {
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct UpdateIAMPolicyDTO {
 	pub name: Option<String>,
+	pub permissions: Vec<CreateIAMPolicyPermissionDTO>,
 }

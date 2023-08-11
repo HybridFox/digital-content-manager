@@ -42,7 +42,7 @@ pub fn get_storage_engine(
 	let storage_repository = StorageRepository::find_one(conn, storage_repository_id)?;
 
 	match storage_repository.kind.as_str() {
-		"fs" => Ok(FsStorageEngine { configuration: storage_repository.configuration }),
+		"LOCAL_FS" => Ok(FsStorageEngine { configuration: storage_repository.configuration }),
 		_ => Err(AppError::UnprocessableEntity(AppErrorValue {
 			message: "Storage engine is not implemented".to_owned(),
 			status: StatusCode::UNPROCESSABLE_ENTITY.as_u16(),

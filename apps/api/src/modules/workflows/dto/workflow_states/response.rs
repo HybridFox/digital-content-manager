@@ -14,7 +14,7 @@ pub struct WorkflowStateDTO {
 	pub id: Uuid,
 	pub name: String,
 	pub slug: String,
-	pub description: String,
+	pub description: Option<String>,
 	pub technical_state: WorkflowTechnicalStateEnum,
 	pub internal: bool,
 	pub removable: bool,

@@ -22,11 +22,6 @@ export const CONTENT_TYPE_LIST_COLUMNS: ITableColumn[] = [
 		format: (value) => <Badge>{CONTENT_TYPE_KINDS_TRANSLATIONS[value as ContentTypeKinds]}</Badge>,
 	},
 	{
-		id: 'fields',
-		label: 'Content Components',
-		format: (value) => ((value as IField[]) || []).length,
-	},
-	{
 		id: 'actions',
 		label: '',
 		format: (value, key, item) => (

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useHeaderStore } from '@ibs/shared';
 import { Button, ButtonTypes, Header, ResourceExplorer, ResourceExplorerAction } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,11 @@ export const ResourceListPage = () => {
 	const [createDirectoryLoading, createDirectory] = useResourceStore((state) => [state.createDirectoryLoading, state.createDirectory]);
 	const [uploadFileLoading, uploadFile] = useResourceStore((state) => [state.uploadFileLoading, state.uploadFile]);
 	const { t } = useTranslation();
-	const [breadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
+	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
+
+	useEffect(() => {
+		setBreadcrumbs([]);
+	}, [])
 
 	const path = useMemo(() => {
 		return searchParams.get('path') || '';
@@ -51,14 +55,14 @@ export const ResourceListPage = () => {
 		<>
 			<Header
 				breadcrumbs={breadcrumbs}
-				title={t(`PAGES.RESOURCES.TITLE`)}
+				title={t(`RESOURCES.TITLES.LIST`)}
 				action={
 					<>
 						<Button onClick={() => setUploadFileModalOpen(true)}>
-							<span className="las la-plus"></span> {t(`PAGES.RESOURCES.UPLOAD_FILE`)}
+							<span className="las la-plus"></span> {t(`RESOURCES.ACTIONS.UPLOAD_FILE`)}
 						</Button>
 						<Button className="u-margin-left-xs" type={ButtonTypes.OUTLINE} onClick={() => setCreateDirectoryModalOpen(true)}>
-							<span className="las la-plus"></span> {t(`PAGES.RESOURCES.CREATE_FOLDER`)}
+							<span className="las la-plus"></span> {t(`RESOURCES.ACTIONS.CREATE_FOLDER`)}
 						</Button>
 					</>
 				}

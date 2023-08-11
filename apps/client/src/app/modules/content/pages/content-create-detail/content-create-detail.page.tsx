@@ -5,9 +5,12 @@ import { RenderFields, TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
 import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { CONTENT_PATHS } from '../../content.routes';
 import { useContentStore } from '../../stores/content';
+
+import { createContentItemSchema } from './content-create-detail.const';
 
 interface CreateContentForm {
 	name: string;
@@ -33,7 +36,8 @@ export const ContentCreateDetailPage = () => {
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 	const { kind, contentTypeId } = useParams();
 	const formMethods = useForm<CreateContentForm>({
-		values: defaultValues
+		values: defaultValues,
+		resolver: yupResolver(createContentItemSchema) as any,
 	});
 
 	const {
@@ -108,7 +112,7 @@ export const ContentCreateDetailPage = () => {
 						</Alert>
 						<form onSubmit={handleSubmit(onSubmit)}>
 							<div className="u-margin-bottom">
-								<TextField name="name" label="Name" />
+								<TextField name="name" label="Administrative Name" />
 							</div>
 							<div className="u-margin-bottom">
 								<RenderFields fieldPrefix="fields." fields={contentType?.fields || []} />

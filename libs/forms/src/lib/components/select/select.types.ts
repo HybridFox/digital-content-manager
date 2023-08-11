@@ -14,4 +14,5 @@ export interface ISelectProps {
 	className?: string;
 	closeMenuOnSelect?: boolean;
 	disabled?: boolean;
+	hasError?: boolean;
 }

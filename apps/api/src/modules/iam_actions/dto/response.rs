@@ -8,6 +8,7 @@ use utoipa::{ToSchema};
 use std::{convert::From};
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct IAMActionDTO {
 	pub key: String,
 	pub description: Option<String>,
@@ -31,6 +32,7 @@ impl From<IAMAction> for IAMActionDTO {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct IAMActionsEmbeddedDTO {
 	pub iam_actions: Vec<IAMActionDTO>,
 }

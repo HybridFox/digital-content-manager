@@ -74,7 +74,7 @@ pub async fn find_all(
 
 	let (roles, total_elements) = Role::find(conn, params.site_id, page, pagesize)?;
 
-	let res = response::RolesDTO::from((
+	let res = response::RolesWithPoliciesDTO::from((
 		roles,
 		HALPage {
 			number: page,

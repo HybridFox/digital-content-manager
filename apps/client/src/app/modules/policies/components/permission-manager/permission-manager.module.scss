@@ -1,0 +1,48 @@
+.o-permission-manager {
+	margin-bottom: var(--spacer);
+
+	&__permission {
+		display: flex;
+		align-items: flex-end;
+		margin-bottom: var(--spacer);
+
+		&__content {
+			flex: 1;
+		}
+
+		&__actions {
+			margin-left: var(--spacer-sm);
+		}
+	}
+	
+	&__add {
+		border: 2px dashed var(--color-gray-lightest);
+		display: flex;
+		width: 100%;
+		background-color: transparent;
+		font-weight: normal;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--border-radius-sm);
+		padding: var(--spacer-sm);
+		cursor: pointer;
+
+		p {
+			margin: 0 0 0 var(--spacer-xs);
+			font-size: 0.8rem;
+			color: var(--color-gray)
+		}
+
+		&:hover {
+			border: 2px solid var(--color-primary);
+			transition: all .2s ease;
+			background: transparent;
+		}
+
+		&:focus {
+			outline: none;
+			border: 2px solid var(--color-primary);
+			box-shadow: 0px 0px 0px var(--spacer-xxxs) var(--color-primary-light);
+		}
+	}
+}
