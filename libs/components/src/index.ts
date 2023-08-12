@@ -6,4 +6,5 @@ export * from './lib/components/table';
 export * from './lib/components/loading';
 export * from './lib/components/badge';
 export * from './lib/components/modal';
+export * from './lib/components/permission';
 export * from './lib/components/resource-explorer';

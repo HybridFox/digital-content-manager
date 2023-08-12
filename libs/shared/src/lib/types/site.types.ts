@@ -1,10 +1,13 @@
+import { IRole } from "../stores";
+
 export interface ISite {
 	id: string;
 	name: string;
 	slug: string;
 	created_at: string;
 	updated_at: string;
-	languages: ILanguage[]
+	languages: ILanguage[];
+	roles: IRole[];
 }
 
 export interface ILanguage {

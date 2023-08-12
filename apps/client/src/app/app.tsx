@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 
 import { Root } from './modules/core/components/root/root.component';
 import { AUTH_ROUTES } from './modules/auth';
@@ -14,12 +14,17 @@ import { WORKFLOW_ROUTES } from './modules/workflow';
 import { USERS_ROUTES } from './modules/users';
 import { ROLES_ROUTES } from './modules/roles';
 import { POLICIES_ROUTES } from './modules/policies';
+import { AUTHENTICATION_METHODS_ROUTES } from './modules/authentication-methods';
 
 const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <Root />,
 		children: [
+			{
+				path: '/',
+				element: <Navigate to="/app/dashboard" />
+			},
 			{
 				path: 'auth',
 				element: <AnonymousView />,
@@ -38,7 +43,8 @@ const router = createBrowserRouter([
 					...WORKFLOW_ROUTES,
 					...USERS_ROUTES,
 					...ROLES_ROUTES,
-					...POLICIES_ROUTES
+					...POLICIES_ROUTES,
+					...AUTHENTICATION_METHODS_ROUTES
 				]
 			}
 		]

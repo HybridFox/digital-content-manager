@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import cx from 'classnames/bind';
 import { useAuthStore } from '@ibs/shared';
+import { HasPermission } from '@ibs/components';
 
 import styles from './menu.module.scss';
 const cxBind = cx.bind(styles);
@@ -31,10 +32,12 @@ export const Menu = () => {
 						</NavLink>
 					</li>
 					<li>
-						<NavLink {...navLinkBinding} to="/app/resources">
-							<i className="las la-photo-video"></i>
-							<span>Resources</span>
-						</NavLink>
+						<HasPermission action='resources/read' resource='*'>
+							<NavLink {...navLinkBinding} to="/app/resources">
+								<i className="las la-photo-video"></i>
+								<span>Resources</span>
+							</NavLink>
+						</HasPermission>
 					</li>
 				</ul>
 			</div>
@@ -133,6 +136,12 @@ export const Menu = () => {
 						<NavLink {...navLinkBinding} to="/app/storage-repositories">
 							<i className="las la-server"></i>
 							<span>Storage</span>
+						</NavLink>
+					</li>
+					<li>
+						<NavLink {...navLinkBinding} to="/app/authentication-methods">
+							<i className="las la-server"></i>
+							<span>Authentication Methods</span>
 						</NavLink>
 					</li>
 					{/* <li>

@@ -16,6 +16,7 @@ export interface IIAMPolicy {
 	name: string;
 	createdAt: string;
 	updatedAt: string;
+	permissions: IPermission[];
 }
 
 export interface IRole {
