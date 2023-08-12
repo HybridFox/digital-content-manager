@@ -50,6 +50,19 @@ diesel::table! {
 }
 
 diesel::table! {
+    authentication_methods (id) {
+        id -> Uuid,
+        name -> Text,
+        kind -> Text,
+        configuration -> Nullable<Jsonb>,
+        weight -> Int4,
+        active -> Bool,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     content (id) {
         id -> Uuid,
         name -> Text,
@@ -303,7 +316,7 @@ diesel::table! {
 }
 
 diesel::table! {
-    sites_users_roles (site_id, user_id) {
+    sites_users_roles (site_id, user_id, role_id) {
         user_id -> Uuid,
         site_id -> Uuid,
         role_id -> Uuid,
@@ -423,6 +436,7 @@ diesel::joinable!(workflow_transitions -> workflows (workflow_id));
 diesel::allow_tables_to_appear_in_same_query!(
     asset_metadata,
     assets,
+    authentication_methods,
     content,
     content_components,
     content_fields,

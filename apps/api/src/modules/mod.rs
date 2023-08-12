@@ -11,3 +11,4 @@ pub mod sites;
 pub mod content;
 pub mod workflows;
 pub mod resources;
+pub mod authentication_methods;

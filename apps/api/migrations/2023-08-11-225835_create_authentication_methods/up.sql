@@ -1,0 +1,12 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE authentication_methods (
+	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+	name TEXT NOT NULL,
+	kind TEXT NOT NULL,
+	configuration JSONB,
+	weight INTEGER NOT NULL DEFAULT 0,
+	active BOOLEAN NOT NULL DEFAULT TRUE,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);

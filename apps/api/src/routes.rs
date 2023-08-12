@@ -144,6 +144,14 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 				web::scope("/iam-conditions")
 					.service(modules::iam_conditions::controllers::iam_conditions::find_all)
 					.service(modules::iam_conditions::controllers::iam_conditions::find_one),
-			),
+			)
+			.service(
+				web::scope("/authentication-methods")
+					.service(modules::authentication_methods::controllers::authentication_methods::create)
+					.service(modules::authentication_methods::controllers::authentication_methods::find_all)
+					.service(modules::authentication_methods::controllers::authentication_methods::find_one)
+					.service(modules::authentication_methods::controllers::authentication_methods::update)
+					.service(modules::authentication_methods::controllers::authentication_methods::remove)
+			)
 	);
 }
