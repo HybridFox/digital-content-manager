@@ -44,12 +44,12 @@ export const Menu = () => {
 						</NavLink>
 					</li>
 					<li>
-						<HasPermission action='resources/read' resource='*'>
+						{/* <HasPermission action='resources/read' resource='*'> */}
 							<NavLink {...navLinkBinding} to={generatePath(RESOURCE_PATHS.ROOT, { siteId })}>
 								<i className="las la-photo-video"></i>
 								<span>Resources</span>
 							</NavLink>
-						</HasPermission>
+						{/* </HasPermission> */}
 					</li>
 				</ul>
 			</div>

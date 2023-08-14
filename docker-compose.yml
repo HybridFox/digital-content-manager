@@ -39,6 +39,7 @@ services:
 
     postgres:
         image: postgres:15-alpine
+        container_name: ibs-postgres
         restart: always
         environment:
             POSTGRES_PASSWORD: ibs
@@ -50,8 +51,26 @@ services:
             - 5432:5432
         volumes:
             - ./data:/var/lib/postgresql/data
+
+    minio:
+        image: quay.io/minio/minio
+        container_name: ibs-minio
+        command: server /data --console-address ":9001"
+        restart: always
+        environment:
+            MINIO_ROOT_USER: ibs
+            MINIO_ROOT_PASSWORD: ibs-password
+        networks:
+            - ibs
+        ports:
+            - 9000:9000
+            - 9001:9001
+        volumes:
+            - ./minio:/data
+
     jaeger:
         image: jaegertracing/all-in-one:latest
+        container_name: ibs-jaeger
         ports:
           - 16686:16686
           - 4317:4317

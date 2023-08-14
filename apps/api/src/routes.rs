@@ -160,11 +160,11 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 			)
 			.service(
 				web::scope("/users")
-					// .service(modules::users::controllers::users::create)
+					.service(modules::users::controllers::users::create)
 					.service(modules::users::controllers::users::find_all)
 					.service(modules::users::controllers::users::find_one)
 					.service(modules::users::controllers::users::update)
-					// .service(modules::users::controllers::users::remove)
+					.service(modules::users::controllers::users::remove)
 			)
 			.service(
 				web::scope("/roles")

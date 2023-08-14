@@ -314,6 +314,15 @@ impl User {
 		Ok(user)
 	}
 
+	pub fn remove(
+		conn: &mut PgConnection,
+		user_id: Uuid
+	) -> Result<(), AppError> {
+		let target = users::table.find(user_id);
+		diesel::delete(target).execute(conn)?;
+		Ok(())
+	}
+
 	pub fn find_by_username(conn: &mut PgConnection, name: &str) -> Result<Self, AppError> {
 		let t = Self::by_name(name).limit(1);
 		let user = t.first::<User>(conn)?;

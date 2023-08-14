@@ -54,12 +54,24 @@ export const RESOURCE_COLUMNS = (
 	{
 		id: 'updatedAt',
 		label: 'Updated At',
-		format: (value) => dayjs.utc(value as string).fromNow(),
+		format: (value) => {
+			if (value) {
+				return dayjs.utc(value as string).fromNow();
+			}
+
+			return null;
+		},
 	},
 	{
 		id: 'createdAt',
 		label: 'Created At',
-		format: (value) => dayjs.utc(value as string).fromNow(),
+		format: (value) => {
+			if (value) {
+				return dayjs.utc(value as string).fromNow();
+			}
+
+			return null;
+		},
 	},
 	{
 		id: 'actions',

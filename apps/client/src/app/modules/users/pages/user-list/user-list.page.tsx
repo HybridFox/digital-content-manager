@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useHeaderStore } from '@ibs/shared';
-import { Header, Loading, Table } from '@ibs/components';
+import { ButtonLink, Header, Loading, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -34,12 +34,12 @@ export const UserListPage = () => {
 		<>
 			<Header
 				breadcrumbs={breadcrumbs}
-				title={t(`WORKFLOW_STATES.TITLES.LIST`)}
-				// action={
-				// 	<ButtonLink to="create">
-				// 		<span className="las la-plus"></span> {t(`WORKFLOW_STATES.ACTIONS.CREATE`)}
-				// 	</ButtonLink>
-				// }
+				title={t(`USERS.TITLES.LIST`)}
+				action={
+					<ButtonLink to="create">
+						<span className="las la-plus"></span> {t(`USERS.ACTIONS.CREATE`)}
+					</ButtonLink>
+				}
 			></Header>
 			<Loading loading={usersLoading} text={t(`GENERAL.LABELS.LOADING`)}>
 				<Table columns={USER_LIST_COLUMNS(t, handleRemove)} rows={users || []}></Table>

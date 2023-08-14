@@ -45,7 +45,7 @@ pub async fn read_directory(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
 
-	let (resources, total_elements) = engine.find_all(&query.path)?;
+	let (resources, total_elements) = engine.find_all(&query.path).await?;
 
 	let res = response::ResourcesDTO::from((
 		resources,
@@ -82,7 +82,7 @@ pub async fn create_directory(
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
-	engine.create_directory(&query.path, &form.name)?;
+	engine.create_directory(&query.path, &form.name).await?;
 
 	Ok(HttpResponse::NoContent().finish())
 }
@@ -106,7 +106,7 @@ pub async fn remove_directory(
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
-	engine.remove_directory(&query.path)?;
+	engine.remove_directory(&query.path).await?;
 
 	Ok(HttpResponse::NoContent().finish())
 }

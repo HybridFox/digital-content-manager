@@ -11,7 +11,7 @@ use uuid::Uuid;
 
 #[derive(Deserialize, IntoParams)]
 pub struct SharedParams {
-	_site_id: Uuid,
+	site_id: Uuid,
 	storage_repository_id: Uuid,
 }
 
@@ -40,7 +40,7 @@ pub async fn upload_file(
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
-	engine.upload_file(&query.path, form.file)?;
+	engine.upload_file(&query.path, form.file).await?;
 
 	Ok(HttpResponse::NoContent().finish())
 }
@@ -64,7 +64,7 @@ pub async fn read_file(
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
-	let file = engine.download_file(&query.path)?;
+	let file = engine.download_file(&query.path).await?;
 
 	Ok(HttpResponse::Ok().body(file))
 }
@@ -88,7 +88,7 @@ pub async fn remove_file(
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
-	engine.remove_file(&query.path)?;
+	engine.remove_file(&query.path).await?;
 
 	Ok(HttpResponse::NoContent().finish())
 }

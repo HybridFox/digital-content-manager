@@ -1,9 +1,9 @@
 use super::super::dto::users::{response, request};
 use crate::{errors::AppError, modules::users::models::user_role::UserRole};
-use crate::modules::users::models::user::User;
+use crate::modules::users::models::user::{User, UpdateUser};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
-use actix_web::{get, web, HttpResponse, put};
+use actix_web::{get, web, HttpResponse, put, delete, post};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;
@@ -17,6 +17,29 @@ pub struct FindPathParams {
 pub struct FindAllQueryParams {
 	page: Option<i64>,
 	pagesize: Option<i64>,
+}
+
+#[utoipa::path(
+	context_path = "/api/v1/users",
+    request_body = CreateUserDTO,
+	responses(
+		(status = 200, body = UserWithRolesDTO),
+		(status = 401, body = AppErrorValue, description = "Unauthorized")
+	),
+    security(
+        ("jwt_token" = [])
+    )
+)]
+#[post("")]
+pub async fn create(
+	state: web::Data<AppState>,
+	form: web::Json<request::CreateUserDTO>,
+) -> Result<HttpResponse, AppError> {
+	let conn = &mut state.get_conn()?;
+	
+	let (user, _token) = User::signup(conn, &form.email, &form.name, &form.password, None, Some("local"))?;
+	UserRole::upsert_many(conn, user.id, form.roles.clone())?;
+	Ok(HttpResponse::Ok().json(user))
 }
 
 #[utoipa::path(
@@ -99,26 +122,31 @@ pub async fn update(
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	
-	dbg!(&form.roles);
+	User::update(conn, params.user_id, UpdateUser {
+		email: Some(form.email.clone()),
+		name: Some(form.name.clone()),
+		avatar: None,
+		password: None,
+		bio: None,
+	})?;
 	UserRole::upsert_many(conn, params.user_id, form.roles.clone())?;
 	let user = User::find_one_with_roles(conn, params.user_id)?;
 	Ok(HttpResponse::Ok().json(user))
 }
 
-// #[utoipa::path(
-// 	context_path = "/api/v1/sites",
-// 	responses(
-// 		(status = 204),
-// 		(status = 401, body = AppErrorValue, description = "Unauthorized")
-// 	),
-//     security(
-//         ("jwt_token" = [])
-//     ),
-// 	params(FindPathParams)
-// )]
-// #[delete("/{site_id}")]
-// pub async fn remove(state: web::Data<AppState>, params: web::Path<FindPathParams>) -> ApiResponse {
-// 	let conn = &mut state.get_conn()?;
-// 	Site::remove(conn, params.site_id)?;
-// 	Ok(HttpResponse::NoContent().body(()))
-// }
+#[utoipa::path(
+	context_path = "/api/v1/users",
+	responses(
+		(status = 204),
+		(status = 401, body = AppErrorValue, description = "Unauthorized")
+	),
+    security(
+        ("jwt_token" = [])
+    )
+)]
+#[delete("/{user_id}")]
+pub async fn remove(state: web::Data<AppState>, params: web::Path<FindPathParams>) -> Result<HttpResponse, AppError>  {
+	let conn = &mut state.get_conn()?;
+	User::remove(conn, params.user_id)?;
+	Ok(HttpResponse::NoContent().body(()))
+}

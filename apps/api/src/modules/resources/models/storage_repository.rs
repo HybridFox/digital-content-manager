@@ -39,7 +39,7 @@ impl StorageRepository {
 
 	pub fn find(
 		conn: &mut PgConnection,
-		_site_id: Uuid,
+		site_id: Uuid,
 		page: i64,
 		pagesize: i64,
 	) -> Result<(Vec<Self>, i64), AppError> {

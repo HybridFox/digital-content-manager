@@ -28,7 +28,7 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: '/',
-				element: <Navigate to="/app/dashboard" />
+				element: <Navigate to="/sites" />
 			},
 			{
 				path: 'auth',

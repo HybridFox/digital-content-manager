@@ -7,6 +7,7 @@ const DETAIL_PATH = `${ROOT_PATH}/:userId`;
 
 export const USER_PATHS = {
 	ROOT: `${ROOT_PATH}`,
+	CREATE: `${ROOT_PATH}/create`,
 	DETAIL: `${DETAIL_PATH}`,
 }
 
@@ -18,5 +19,9 @@ export const USER_ROUTES: RouteObject[] = [
 	{
 		path: USER_PATHS.DETAIL,
 		lazy: async () => ({ Component: (await import('./pages/user-detail/user-detail.page')).UserDetailPage }),
+	},
+	{
+		path: USER_PATHS.CREATE,
+		lazy: async () => ({ Component: (await import('./pages/user-create/user-create.page')).UserCreatePage }),
 	},
 ];

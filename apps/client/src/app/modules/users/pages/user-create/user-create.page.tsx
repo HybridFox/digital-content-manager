@@ -1,6 +1,6 @@
 import { IAPIError, useHeaderStore, useRoleStore } from '@ibs/shared';
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { Trans, useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -10,37 +10,25 @@ import { CheckboxField, TextField, TextFieldTypes } from '@ibs/forms';
 import { useUserStore } from '../../stores/user';
 import { USER_PATHS } from '../../users.routes';
 
-import { editUserSchema } from './user-detail.const';
+import { editUserSchema } from './user-create.const';
 
-interface EditUserForm {
+interface CreateUserForm {
+	email: string;
+	name: string;
+	password: string;
 	roles: string[];
 }
 
-export const UserDetailPage = () => {
+export const UserCreatePage = () => {
 	const { t } = useTranslation();
-
-	const [user, userLoading, fetchUser] = useUserStore((state) => [
-		state.user,
-		state.userLoading,
-		state.fetchUser,
-	]);
-	const [updateUserLoading, updateUser] = useUserStore((state) => [
-		state.updateUserLoading,
-		state.updateUser,
-	]);
-	const [roles, rolesLoading, fetchRoles] = useRoleStore((state) => [
-		state.roles,
-		state.rolesLoading,
-		state.fetchRoles
-	]);
+	const navigate = useNavigate();
+	const [user, userLoading, fetchUser] = useUserStore((state) => [state.user, state.userLoading, state.fetchUser]);
+	const [createUserLoading, createUser] = useUserStore((state) => [state.createUserLoading, state.createUser]);
+	const [roles, rolesLoading, fetchRoles] = useRoleStore((state) => [state.roles, state.rolesLoading, state.fetchRoles]);
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 	const { userId } = useParams();
-	const formMethods = useForm<EditUserForm>({
+	const formMethods = useForm<CreateUserForm>({
 		resolver: yupResolver(editUserSchema),
-		values: {
-			...(user || {}),
-			roles: (user?.roles || []).map((role) => role.id)
-		},
 	});
 
 	const {
@@ -51,7 +39,7 @@ export const UserDetailPage = () => {
 
 	useEffect(() => {
 		fetchRoles({ pagesize: -1 });
-	}, [])
+	}, []);
 
 	useEffect(() => {
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.USERS`), to: USER_PATHS.ROOT }, { label: t(`BREADCRUMBS.EDIT`) }]);
@@ -65,26 +53,20 @@ export const UserDetailPage = () => {
 		fetchUser(userId);
 	}, [userId]);
 
-	const onSubmit = (values: EditUserForm) => {
-		if (!userId) {
-			return;
-		}
-
-		updateUser(userId, values).catch((error: IAPIError) => {
-			setError('root', {
-				message: error.code,
+	const onSubmit = (values: CreateUserForm) => {
+		console.log(values);
+		createUser(values)
+			.then((user) => navigate(generatePath(USER_PATHS.DETAIL, { userId: user.id })))
+			.catch((error: IAPIError) => {
+				setError('root', {
+					message: error.code,
+				});
 			});
-		});
 	};
 
 	return (
 		<>
-			<Header
-				breadcrumbs={breadcrumbs}
-				title={
-					<Trans t={t} i18nKey="WORKFLOW_STATES.TITLES.EDIT" values={{ userName: user?.name }} />
-				}
-			></Header>
+			<Header breadcrumbs={breadcrumbs} title={<Trans t={t} i18nKey="USERS.TITLES.CREATE" values={{ userName: user?.name }} />}></Header>
 			<div className="u-margin-top">
 				<Loading loading={userLoading || rolesLoading} text="Loading data...">
 					<FormProvider {...formMethods}>
@@ -102,10 +84,14 @@ export const UserDetailPage = () => {
 								<TextField name="password" label="Password" type={TextFieldTypes.PASSWORD} />
 							</div>
 							<div className="u-margin-bottom">
-								<CheckboxField name="roles" label="Roles" fieldConfiguration={{ options: roles.map((role) => ({ label: role.name, value: role.id })) }} />
+								<CheckboxField
+									name="roles"
+									label="Roles"
+									fieldConfiguration={{ options: roles.map((role) => ({ label: role.name, value: role.id })) }}
+								/>
 							</div>
 							<Button htmlType={HTMLButtonTypes.SUBMIT}>
-								{updateUserLoading && <i className="las la-redo-alt la-spin"></i>} Save
+								{createUserLoading && <i className="las la-redo-alt la-spin"></i>} Create
 							</Button>
 						</form>
 					</FormProvider>

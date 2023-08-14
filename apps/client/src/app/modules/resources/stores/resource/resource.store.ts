@@ -37,7 +37,7 @@ export const useResourceStore = create<IResourceStoreState>()(devtools(
 			}).json<void>());
 			
 			set(() => ({ createDirectoryLoading: false }));
-			fetchResources(set)(contentRepositoryId, { path });
+			fetchResources(set)(siteId, contentRepositoryId, { path });
 		},
 		createDirectoryLoading: false,
 
@@ -50,7 +50,7 @@ export const useResourceStore = create<IResourceStoreState>()(devtools(
 			}).json<void>());
 			
 			set(() => ({ removeDirectoryLoading: false }));
-			fetchResources(set)(contentRepositoryId, { path });
+			fetchResources(set)(siteId, contentRepositoryId, { path });
 		},
 		removeDirectoryLoading: false,
 
@@ -67,7 +67,7 @@ export const useResourceStore = create<IResourceStoreState>()(devtools(
 			}).json<void>());
 			
 			set(() => ({ uploadFileLoading: false }));
-			fetchResources(set)(contentRepositoryId, { path });
+			fetchResources(set)(siteId, contentRepositoryId, { path });
 		},
 		uploadFileLoading: false,
 	}), { name: 'resourcesStore' }

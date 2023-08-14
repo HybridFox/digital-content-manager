@@ -102,7 +102,7 @@ pub async fn find_one(
 pub async fn update(
 	state: web::Data<AppState>,
 	params: web::Path<FindPathParams>,
-	form: web::Json<request::UpdateUserDTO>,
+	form: web::Json<request::UpdateSiteUserDTO>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	

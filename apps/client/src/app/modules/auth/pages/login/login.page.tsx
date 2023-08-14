@@ -26,7 +26,7 @@ export const LoginPage = () => {
 
 	const onSubmit = ({ email, password }: ILoginForm) => {
 		authStore.login(email, password)
-			.then(() => navigate('/app/sites'))
+			.then(() => navigate('/'))
 			.catch((error: IAPIError) => {
 				setError('root', {
 					message: t(`API_MESSAGES.${error.code}`)
