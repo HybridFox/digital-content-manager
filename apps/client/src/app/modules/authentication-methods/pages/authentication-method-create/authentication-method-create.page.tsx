@@ -1,64 +1,59 @@
-import {
-	IAPIError,
-	IField,
-	STORAGE_KINDS,
-	useHeaderStore,
-	useStorageRepositoryStore,
-} from '@ibs/shared';
+import { IAPIError, useAuthenticationMethodStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
-import { RenderFields, SelectField, TextField } from '@ibs/forms';
-import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { Alert, AlertTypes, Button, HTMLButtonTypes, Header } from '@ibs/components';
+import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { NumberField, SelectField, TextField, ToggleField } from '@ibs/forms';
 
-import { STORAGE_PATHS } from '../../authentication-methods.routes';
-import { STORAGE_KIND_FIELDS, STORAGE_KIND_OPTIONS } from '../../authentication-methods.const';
+import { AUTHENTICATION_METHOD_OPTIONS } from '../../authentication-methods.const';
+import { AUTHENTICATION_METHOD_PATHS } from '../../authentication-methods.routes';
 
-import { createStorageRepositorySchema } from './storage-repository-create.const';
+import { editAuthenticationMethodSchema } from './authentication-method-create.const';
 
-interface CreateStorageRepositoryForm {
+interface CreateAuthenticationMethodForm {
 	name: string;
-	kind: STORAGE_KINDS;
-	configuration: any;
+	kind: string;
 }
 
-export const StorageRepositoryCreatePage = () => {
-	const [createStorageRepository, createStorageRepositoryLoading] = useStorageRepositoryStore((state) => [
-		state.createStorageRepository,
-		state.createStorageRepositoryLoading,
-	]);
-	const navigate = useNavigate();
+export const AuthenticationMethodCreatePage = () => {
 	const { t } = useTranslation();
+	const [createAuthenticationMethodLoading, createAuthenticationMethod] = useAuthenticationMethodStore((state) => [
+		state.createAuthenticationMethodLoading,
+		state.createAuthenticationMethod,
+	]);
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
-	const formMethods = useForm<CreateStorageRepositoryForm>({
-		resolver: yupResolver(createStorageRepositorySchema)
+	const { authenticationMethodId } = useParams();
+	const formMethods = useForm<CreateAuthenticationMethodForm>({
+		resolver: yupResolver(editAuthenticationMethodSchema),
 	});
 
 	const {
 		handleSubmit,
 		formState: { errors },
 		setError,
-		watch,
 	} = formMethods;
-	const kind = watch("kind");
 
 	useEffect(() => {
-		setBreadcrumbs([
-			{ label: t(`BREADCRUMBS.STORAGE_REPOSITORIES`), to: STORAGE_PATHS.ROOT },
-			{ label: t(`BREADCRUMBS.CREATE`) },
-		]);
+		setBreadcrumbs([{ label: t(`BREADCRUMBS.STORAGE_REPOSITORIES`), to: AUTHENTICATION_METHOD_PATHS.ROOT }, { label: t(`BREADCRUMBS.CREATE`) }]);
 	}, []);
 
-	const onSubmit = (values: CreateStorageRepositoryForm) => {
-		createStorageRepository(values)
-			.then((storageRepository) => navigate(generatePath(STORAGE_PATHS.DETAIL, { storageRepositoryId: storageRepository.id })))
-			.catch((error: IAPIError) => {
-				setError('root', {
-					message: error.code,
-				});
+	const onSubmit = (values: CreateAuthenticationMethodForm) => {
+		if (!authenticationMethodId) {
+			return;
+		}
+
+		createAuthenticationMethod({
+			...values,
+			configuration: {},
+			active: false,
+			weight: 0,
+		}).catch((error: IAPIError) => {
+			setError('root', {
+				message: error.code,
 			});
+		});
 	};
 
 	return (
@@ -67,28 +62,33 @@ export const StorageRepositoryCreatePage = () => {
 				breadcrumbs={breadcrumbs}
 				title={
 					<>
-						Create Storage Repository
+						Create authentication method
 					</>
 				}
 			></Header>
 			<div className="u-margin-top">
-				<FormProvider {...formMethods}>
-					<Alert className="u-margin-bottom" type={AlertTypes.DANGER}>
-						{errors?.root?.message}
-					</Alert>
-					<form onSubmit={handleSubmit(onSubmit)}>
-						<div className="u-margin-bottom">
-							<TextField name="name" label="Name" />
-						</div>
-						<div className="u-margin-bottom">
-							<SelectField name="kind" label="Kind" fieldConfiguration={{ options: STORAGE_KIND_OPTIONS }} />
-						</div>
-						{kind && <RenderFields fields={STORAGE_KIND_FIELDS[kind] || []} fieldPrefix='configuration.'></RenderFields>}
-						<Button htmlType={HTMLButtonTypes.SUBMIT}>
-							{createStorageRepositoryLoading && <i className="las la-redo-alt la-spin"></i>} Save
-						</Button>
-					</form>
-				</FormProvider>
+					<FormProvider {...formMethods}>
+						<Alert className="u-margin-bottom" type={AlertTypes.DANGER}>
+							{errors?.root?.message}
+						</Alert>
+						<form onSubmit={handleSubmit(onSubmit)}>
+							<div className="u-margin-bottom">
+								<TextField name="name" label="Name" />
+							</div>
+							<div className="u-margin-bottom">
+								<NumberField name="weight" label="Weight" />
+							</div>
+							<div className="u-margin-bottom">
+								<ToggleField name="active" label="Active" />
+							</div>
+							<div className="u-margin-bottom">
+								<SelectField name="kind" label="Kind" disabled fieldConfiguration={{ options: AUTHENTICATION_METHOD_OPTIONS }} />
+							</div>
+							<Button htmlType={HTMLButtonTypes.SUBMIT}>
+								{createAuthenticationMethodLoading && <i className="las la-redo-alt la-spin"></i>} Save
+							</Button>
+						</form>
+					</FormProvider>
 			</div>
 		</>
 	);

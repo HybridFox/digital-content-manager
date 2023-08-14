@@ -42,7 +42,7 @@ export const PolicyDetailPage = () => {
 		state.iamActionsLoading,
 		state.fetchIAMActions,
 	])
-	const { policyId } = useParams();
+	const { policyId, siteId } = useParams();
 	const navigate = useNavigate();
 	const { t } = useTranslation();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
@@ -62,7 +62,7 @@ export const PolicyDetailPage = () => {
 			return;
 		}
 
-		fetchPolicy(policyId);
+		fetchPolicy(siteId!, policyId);
 		fetchIAMActions();
 		setBreadcrumbs([
 			{ label: t(`BREADCRUMBS.STORAGE_REPOSITORIES`), to: POLICY_PATHS.ROOT },
@@ -75,8 +75,8 @@ export const PolicyDetailPage = () => {
 			return;
 		}
 	
-		updatePolicy(policyId, values)
-			.then((policy) => navigate(generatePath(POLICY_PATHS.DETAIL, { policyId: policy.id })))
+		updatePolicy(siteId!, policyId, values)
+			.then((policy) => navigate(generatePath(POLICY_PATHS.DETAIL, { siteId, policyId: policy.id })))
 			.catch((error: IAPIError) => {
 				setError('root', {
 					message: error.code,

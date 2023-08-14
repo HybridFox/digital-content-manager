@@ -23,6 +23,7 @@ export const ContentCreateDetailPage = () => {
 		state.contentTypeLoading,
 		state.fetchContentType,
 	]);
+	const { siteId } = useParams();
 	const [searchParams] = useSearchParams();
 	const [workflow, workflowLoading, fetchWorkflow] = useWorkflowStore((state) => [state.workflow, state.workflowLoading, state.fetchWorkflow]);
 	const navigate = useNavigate();
@@ -47,18 +48,21 @@ export const ContentCreateDetailPage = () => {
 	} = formMethods;
 
 	useEffect(() => {
-		if (!contentTypeId) {
+		if (!contentTypeId || !siteId) {
 			return;
 		}
 
-		fetchContentType(contentTypeId).then((contentType) => fetchWorkflow(contentType.workflowId));
-		fetchDefaultValues(searchParams.get('translationId')!);
-	}, [contentTypeId]);
+		fetchContentType(siteId!, contentTypeId).then((contentType) => fetchWorkflow(siteId!, contentType.workflowId));
+
+		if (searchParams.get('translationId')) {
+			fetchDefaultValues(siteId!, searchParams.get('translationId')!);
+		}
+	}, [contentTypeId, siteId]);
 
 	useEffect(() => {
 		setBreadcrumbs([
 			{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`), to: CONTENT_PATHS.ROOT },
-			{ label: t(`BREADCRUMBS.CREATE`), to: generatePath(CONTENT_PATHS.CREATE, { kind }) },
+			{ label: t(`BREADCRUMBS.CREATE`), to: generatePath(CONTENT_PATHS.CREATE, { kind, siteId }) },
 			{
 				label: contentType?.name,
 				badge: contentType && CONTENT_TYPE_KINDS_TRANSLATIONS[contentType.kind],
@@ -79,14 +83,14 @@ export const ContentCreateDetailPage = () => {
 			});
 		}
 
-		createContentItem({
+		createContentItem(siteId!, {
 			...values,
 			workflowStateId: workflow?.defaultWorkflowStateId,
 			contentTypeId: contentType?.id,
 			languageId: searchParams.get('languageId') || '',
 			translationId: searchParams.get('translationId') || undefined,
 		})
-			.then((contentItem) => navigate(generatePath(CONTENT_PATHS.DETAIL, { kind, contentId: contentItem.id })))
+			.then((contentItem) => navigate(generatePath(CONTENT_PATHS.DETAIL, { kind, contentId: contentItem.id, siteId })))
 			.catch((error: IAPIError) => {
 				setError('root', {
 					message: error.code,

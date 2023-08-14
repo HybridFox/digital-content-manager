@@ -11,6 +11,7 @@ export const editContentType = yup.object({
 });
 
 export const CONTENT_DETAIL_TABS = (
+	siteId: string,
 	kind?: string,
 	contentItem?: IContentItem,
 ): IHeaderTab[] => [
@@ -18,6 +19,7 @@ export const CONTENT_DETAIL_TABS = (
 		to: generatePath(CONTENT_PATHS.DETAIL_SETTINGS, {
 			contentId: contentItem?.id || '',
 			kind,
+			siteId,
 		}),
 		label: 'Settings',
 		disabled: true,
@@ -26,6 +28,7 @@ export const CONTENT_DETAIL_TABS = (
 		to: generatePath(CONTENT_PATHS.DETAIL_FIELDS, {
 			contentId: contentItem?.id || '',
 			kind,
+			siteId,
 		}),
 		label: 'Fields',
 	},
@@ -33,6 +36,7 @@ export const CONTENT_DETAIL_TABS = (
 		to: generatePath(CONTENT_PATHS.DETAIL_TRANSLATIONS, {
 			contentId: contentItem?.id || '',
 			kind,
+			siteId,
 		}),
 		label: 'Translations',
 	},

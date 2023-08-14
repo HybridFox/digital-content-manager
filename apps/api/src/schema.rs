@@ -192,7 +192,7 @@ diesel::table! {
     iam_policies (id) {
         id -> Uuid,
         name -> Text,
-        site_id -> Uuid,
+        site_id -> Nullable<Uuid>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -244,7 +244,7 @@ diesel::table! {
         name -> Text,
         slug -> Text,
         description -> Nullable<Text>,
-        site_id -> Uuid,
+        site_id -> Nullable<Uuid>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -306,16 +306,6 @@ diesel::table! {
 }
 
 diesel::table! {
-    sites_users_iam_policies (site_id, user_id, iam_policy_id) {
-        user_id -> Uuid,
-        site_id -> Uuid,
-        iam_policy_id -> Uuid,
-        created_at -> Timestamp,
-        updated_at -> Timestamp,
-    }
-}
-
-diesel::table! {
     sites_users_roles (site_id, user_id, role_id) {
         user_id -> Uuid,
         site_id -> Uuid,
@@ -345,6 +335,15 @@ diesel::table! {
         password -> Text,
         bio -> Nullable<Text>,
         avatar -> Nullable<Text>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
+    users_roles (user_id, role_id) {
+        user_id -> Uuid,
+        role_id -> Uuid,
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }
@@ -424,12 +423,11 @@ diesel::joinable!(sites_storage_repositories -> sites (site_id));
 diesel::joinable!(sites_storage_repositories -> storage_repositories (storage_repository_id));
 diesel::joinable!(sites_users -> sites (site_id));
 diesel::joinable!(sites_users -> users (user_id));
-diesel::joinable!(sites_users_iam_policies -> iam_policies (iam_policy_id));
-diesel::joinable!(sites_users_iam_policies -> sites (site_id));
-diesel::joinable!(sites_users_iam_policies -> users (user_id));
 diesel::joinable!(sites_users_roles -> roles (role_id));
 diesel::joinable!(sites_users_roles -> sites (site_id));
 diesel::joinable!(sites_users_roles -> users (user_id));
+diesel::joinable!(users_roles -> roles (role_id));
+diesel::joinable!(users_roles -> users (user_id));
 diesel::joinable!(workflow_transition_requirements -> workflow_transitions (workflow_transition_id));
 diesel::joinable!(workflow_transitions -> workflows (workflow_id));
 
@@ -457,10 +455,10 @@ diesel::allow_tables_to_appear_in_same_query!(
     sites_languages,
     sites_storage_repositories,
     sites_users,
-    sites_users_iam_policies,
     sites_users_roles,
     storage_repositories,
     users,
+    users_roles,
     workflow_states,
     workflow_transition_requirements,
     workflow_transitions,

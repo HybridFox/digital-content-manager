@@ -2,19 +2,17 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 import { kyInstance, wrapApi } from '../../services/ky.instance';
-import { useAuthStore } from '../auth';
 
 import { IContentComponent, IContentComponentStoreState, IContentComponentsResponse } from './content-component.types';
 
 export const useContentComponentStore = create<IContentComponentStoreState>()(
 	devtools(
 		(set) => ({
-			fetchContentComponents: async (options) => {
-				const { activeSite } = useAuthStore.getState();
+			fetchContentComponents: async (siteId, options) => {
 				const [result, error] = await wrapApi(
 					kyInstance
 						.get(
-							`/api/v1/sites/${activeSite?.id}/content-components`,
+							`/api/v1/sites/${siteId}/content-components`,
 							{
 								searchParams: {
 									...options,
@@ -34,10 +32,9 @@ export const useContentComponentStore = create<IContentComponentStoreState>()(
 			contentComponents: [],
 			contentComponentsLoading: false,
 
-			fetchContentComponent: async (contentComponentId) => {
+			fetchContentComponent: async (siteId, contentComponentId) => {
 				set(() => ({ contentComponentLoading: true }));
-				const { activeSite } = useAuthStore.getState();
-				const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/content-components/${contentComponentId}`).json<IContentComponent>());
+				const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content-components/${contentComponentId}`).json<IContentComponent>());
 	
 				if (error) {
 					set(() => ({ contentComponent: undefined, contentComponentLoading: false }));
@@ -50,10 +47,9 @@ export const useContentComponentStore = create<IContentComponentStoreState>()(
 			contentComponent: undefined,
 			contentComponentLoading: false,
 	
-			createContentComponent: async (contentComponent) => {
+			createContentComponent: async (siteId, contentComponent) => {
 				set(() => ({ createContentComponentLoading: true }));
-				const { activeSite } = useAuthStore.getState();
-				const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${activeSite?.id}/content-components`, {
+				const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/content-components`, {
 					json: {
 						...contentComponent,
 						fields: []
@@ -69,10 +65,9 @@ export const useContentComponentStore = create<IContentComponentStoreState>()(
 			},
 			createContentComponentLoading: false,
 	
-			updateContentComponent: async (contentComponentId, data) => {
+			updateContentComponent: async (siteId, contentComponentId, data) => {
 				set(() => ({ updateContentComponentLoading: true }));
-				const { activeSite } = useAuthStore.getState();
-				const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${activeSite?.id}/content-components/${contentComponentId}`, {
+				const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/content-components/${contentComponentId}`, {
 					json: data,
 				}).json<IContentComponent>());
 	

@@ -6,10 +6,9 @@ import { IWorkflowStateStoreState, IWorkflowStatesResponse } from './workflow-st
 
 export const useWorkflowStateStore = create<IWorkflowStateStoreState>()(devtools(
 	(set) => ({
-		fetchWorkflowStates: async (searchParams) => {
+		fetchWorkflowStates: async (siteId, searchParams) => {
 			set(() => ({ workflowStatesLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/workflow-states`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/workflow-states`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -25,10 +24,9 @@ export const useWorkflowStateStore = create<IWorkflowStateStoreState>()(devtools
 		workflowStates: [],
 		workflowStatesLoading: false,
 
-		fetchWorkflowState: async (workflowId) => {
+		fetchWorkflowState: async (siteId, workflowId) => {
 			set(() => ({ workflowStateLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/workflow-states/${workflowId}`).json<IWorkflowState>());
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/workflow-states/${workflowId}`).json<IWorkflowState>());
 
 			if (error) {
 				set(() => ({ workflowState: undefined, workflowStateLoading: false }));
@@ -40,10 +38,9 @@ export const useWorkflowStateStore = create<IWorkflowStateStoreState>()(devtools
 		workflowState: undefined,
 		workflowStateLoading: false,
 
-		createWorkflowState: async (workflowState) => {
+		createWorkflowState: async (siteId, workflowState) => {
 			set(() => ({ createWorkflowStateLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${activeSite?.id}/workflow-states`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/workflow-states`, {
 				json: workflowState,
 			}).json<IWorkflowState>());
 			set(() => ({ createWorkflowStateLoading: false }));
@@ -56,10 +53,9 @@ export const useWorkflowStateStore = create<IWorkflowStateStoreState>()(devtools
 		},
 		createWorkflowStateLoading: false,
 
-		updateWorkflowState: async (workflowStateId, data) => {
+		updateWorkflowState: async (siteId, workflowStateId, data) => {
 			set(() => ({ updateWorkflowStateLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${activeSite?.id}/workflow-states/${workflowStateId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/workflow-states/${workflowStateId}`, {
 				json: data,
 			}).json<IWorkflowState>());
 
@@ -73,10 +69,9 @@ export const useWorkflowStateStore = create<IWorkflowStateStoreState>()(devtools
 		},
 		updateWorkflowStateLoading: false,
 
-		removeWorkflowState: async (workflowStateId) => {
+		removeWorkflowState: async (siteId, workflowStateId) => {
 			set(() => ({ removeWorkflowStateLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.delete(`/api/v1/sites/${activeSite?.id}/workflow-states/${workflowStateId}`).json<void>());
+			const [result, error] = await wrapApi(kyInstance.delete(`/api/v1/sites/${siteId}/workflow-states/${workflowStateId}`).json<void>());
 
 			if (error) {
 				set(() => ({ removeWorkflowStateLoading: false }));

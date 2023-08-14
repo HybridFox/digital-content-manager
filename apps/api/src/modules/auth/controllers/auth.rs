@@ -21,7 +21,8 @@ pub async fn me(state: web::Data<AppState>, req: HttpRequest) -> ApiResponse {
 	let user = auth::get_current_user(&req)?;
 	let token = user.generate_token()?;
 	let sites = user.get_sites(conn)?;
-	let res = response::AuthDTO::from((user, sites, token));
+	let roles = user.get_roles(conn)?;
+	let res = response::AuthDTO::from((user, sites, roles, token));
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -55,8 +56,9 @@ pub async fn update(
 			bio: form.bio.clone(),
 		},
 	)?;
+	let token = user.generate_token()?;
 	let sites = user.get_sites(conn)?;
-	let token = &user.generate_token()?;
-	let res = response::AuthDTO::from((user, sites, token.to_string()));
+	let roles = user.get_roles(conn)?;
+	let res = response::AuthDTO::from((user, sites, roles, token));
 	Ok(HttpResponse::Ok().json(res))
 }

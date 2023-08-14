@@ -1,7 +1,6 @@
 import { FC, useState } from 'react';
 import { Controller, ControllerFieldState, ControllerRenderProps, FieldPath, FieldValues, UseFormStateReturn, useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
-import { useAuthStore } from '@ibs/shared';
 import classNames from 'classnames';
 
 import { FieldLabel } from '../../field-label/field-label.component';
@@ -12,15 +11,14 @@ import styles from './asset-field.module.scss';
 
 const cxBind = cx.bind(styles);
 
-export const AssetField: FC<IAssetFieldProps> = ({ name, label, placeholder, fieldOptions, fieldConfiguration, field }: IAssetFieldProps) => {
+export const AssetField: FC<IAssetFieldProps> = ({ name, label, siteId, fieldConfiguration, field }: IAssetFieldProps) => {
 	const { control } = useFormContext();
 	const [modalOpen, setModalOpen] = useState(false);
-	const [activeSite] = useAuthStore((state) => [state.activeSite]);
 
 	const renderImage = (storageRepositoryId: string, path: string) => (
 		<div className={classNames('u-margin-bottom-sm', cxBind('a-input__field'))} onClick={() => setModalOpen(true)} key={path}>
 			<div className={cxBind('a-input__image')}>
-				<img src={`/api/v1/sites/${activeSite?.id}/storage-repositories/${storageRepositoryId}/files?path=${path}`} alt="preview" />
+				<img src={`/api/v1/sites/${siteId}/storage-repositories/${storageRepositoryId}/files?path=${path}`} alt="preview" />
 				<div className={cxBind('a-input__image__overlay')}>
 					<span className="las la-pen"></span>
 				</div>
@@ -64,6 +62,7 @@ export const AssetField: FC<IAssetFieldProps> = ({ name, label, placeholder, fie
 					</div>
 				)}
 				<SelectAssetModal
+					siteId={siteId}
 					modalOpen={modalOpen}
 					onClose={() => setModalOpen(false)}
 					onSubmit={handleSubmit}

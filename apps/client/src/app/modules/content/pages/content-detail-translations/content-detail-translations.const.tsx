@@ -1,4 +1,4 @@
-import { Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
+import { ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
 import { TFunction } from 'i18next';
 import { generatePath } from 'react-router-dom';
 import * as yup from 'yup';
@@ -11,17 +11,17 @@ export const addContentComponentSchema = yup.object({
 	name: yup.string().required(),
 });
 
-export const CONTENT_LIST_COLUMNS = (contentType: IContentType, t: TFunction): ITableColumn[] => [
+export const CONTENT_LIST_COLUMNS = (siteId: string, contentType: IContentType, t: TFunction): ITableColumn[] => [
 	{
 		id: 'language.key',
 		label: 'Language',
 		// width: '150px',
-		format: (value) => (value as string).toUpperCase()
+		format: (value) => (value as string).toUpperCase(),
 	},
 	{
 		id: 'name',
 		label: 'Name',
-		format: (value) => value as string || <i className='u-text--light'>No content item</i>
+		format: (value) => (value as string) || <i className="u-text--light">No content item</i>,
 	},
 	// {
 	// 	id: 'published',
@@ -42,18 +42,36 @@ export const CONTENT_LIST_COLUMNS = (contentType: IContentType, t: TFunction): I
 		// width: '150px',
 		format: (value, key, item) => {
 			if (item.id) {
-				return <div className="u-display-flex">
-					<ButtonLink to={generatePath(CONTENT_PATHS.DETAIL, { contentId: item.id, kind: contentType.kind.toLowerCase() })} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className="u-margin-left-auto">
-						<i className="las la-pen"></i> Edit
-					</ButtonLink>
-				</div>
+				return (
+					<div className="u-display-flex">
+						<ButtonLink
+							to={generatePath(CONTENT_PATHS.DETAIL, { siteId, contentId: item.id, kind: contentType.kind.toLowerCase() })}
+							size={ButtonSizes.SMALL}
+							type={ButtonTypes.SECONDARY}
+							className="u-margin-left-auto"
+						>
+							<i className="las la-pen"></i> Edit
+						</ButtonLink>
+					</div>
+				);
 			}
 
-			return <div className="u-display-flex">
-				<ButtonLink to={`${generatePath(CONTENT_PATHS.CREATE_DETAIL, { contentTypeId: contentType.id, kind: contentType.kind.toLowerCase() })}?translationId=${item.translationId}&languageId=${(item.language as any).id}`} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className="u-margin-left-auto">
-					<i className="las la-plus"></i> Create
-				</ButtonLink>
-			</div>
-		}
+			return (
+				<div className="u-display-flex">
+					<ButtonLink
+						to={`${generatePath(CONTENT_PATHS.CREATE_DETAIL, {
+							siteId,
+							contentTypeId: contentType.id,
+							kind: contentType.kind.toLowerCase(),
+						})}?translationId=${item.translationId}&languageId=${(item.language as any).id}`}
+						size={ButtonSizes.SMALL}
+						type={ButtonTypes.SECONDARY}
+						className="u-margin-left-auto"
+					>
+						<i className="las la-plus"></i> Create
+					</ButtonLink>
+				</div>
+			);
+		},
 	},
 ];

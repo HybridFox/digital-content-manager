@@ -8,7 +8,7 @@ import {
 } from '@ibs/components';
 import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentTypeStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
-import { generatePath } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 import { TextField, TextareaField } from '@ibs/forms';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
@@ -31,6 +31,7 @@ export const CTSettingsPage = () => {
 			state.updateContentType,
 			state.updateContentTypeLoading,
 		]);
+	const { siteId } = useParams();
 	const formMethods = useForm<IEditContentTypeForm>({
 		resolver: yupResolver(editContentType),
 		defaultValues: contentType,
@@ -48,7 +49,7 @@ export const CTSettingsPage = () => {
 			return;
 		}
 
-		updateContentType(contentType.id, values).catch((error: IAPIError) => {
+		updateContentType(siteId!, contentType.id, values).catch((error: IAPIError) => {
 			setError('root', {
 				message: error.code,
 			});
@@ -63,6 +64,7 @@ export const CTSettingsPage = () => {
 				badge: contentType && CONTENT_TYPE_KINDS_TRANSLATIONS[contentType.kind],
 				to: generatePath(CONTENT_TYPES_PATHS.DETAIL, {
 					contentTypeId: contentType?.id || '',
+					siteId
 				}),
 			},
 			{ label: 'Settings' },

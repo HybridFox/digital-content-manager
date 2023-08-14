@@ -13,14 +13,12 @@ export const AuthenticationMethodListPage = () => {
 		state.fetchAuthenticationMethods,
 	]);
 	const { t } = useTranslation();
-	const { kind } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		console.log(kind);
 		fetchAuthenticationMethods();
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.AUTHENTICATION_METHODS`) }]);
-	}, [kind]);
+	}, []);
 
 	return (
 		<>

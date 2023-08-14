@@ -8,6 +8,7 @@ use uuid::Uuid;
 #[derive(Identifiable, Queryable, Selectable, Serialize, Deserialize, Debug, Clone)]
 #[diesel(table_name = languages)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
+#[diesel(primary_key(key))]
 pub struct Language {
 	pub id: Uuid,
 	pub key: String,
@@ -15,10 +16,10 @@ pub struct Language {
 }
 
 impl Language {
-	pub fn find_one(conn: &mut PgConnection, id: Uuid) -> Result<Self, AppError> {
-		let t = languages::table.find(id);
-		let site = t.first(conn)?;
-		Ok(site)
+	pub fn find_one(conn: &mut PgConnection, language_id: Uuid) -> Result<Self, AppError> {
+		let t = languages::table.find(language_id);
+		let language = t.first(conn)?;
+		Ok(language)
 	}
 
 	pub fn find(
@@ -26,12 +27,21 @@ impl Language {
 		page: i64,
 		pagesize: i64,
 	) -> Result<(Vec<Self>, i64), AppError> {
-		let languages = languages::table
-			.select(Language::as_select())
-			.offset((page - 1) * pagesize)
-			.limit(pagesize)
-			.load::<Language>(conn)?;
-		let total_elements = languages::table.count().get_result::<i64>(conn)?;
+		let query = {
+			let mut query = languages::table
+				.into_boxed();
+
+			if pagesize != -1 {
+				query = query.offset((page - 1) * pagesize).limit(pagesize);
+			};
+
+			query
+		};
+
+		let languages = query.select(Language::as_select()).load::<Language>(conn)?;
+		let total_elements = languages::table
+			.count()
+			.get_result::<i64>(conn)?;
 
 		Ok((languages, total_elements))
 	}

@@ -41,18 +41,18 @@ export interface IWorkflow {
 export type IWorkflowsResponse = IAPIHALResponse<'workflows', IWorkflow>
 
 export interface IWorkflowStoreState {
-	fetchWorkflows: (params?: IPageParameters) => Promise<void>;
+	fetchWorkflows: (siteId: string, params?: IPageParameters) => Promise<void>;
 	workflows: IWorkflow[];
 	workflowsLoading: boolean;
 
-	fetchWorkflow: (workflowId: string) => Promise<void>;
+	fetchWorkflow: (siteId: string, workflowId: string) => Promise<void>;
 	workflow?: IWorkflow,
 	workflowLoading: boolean;
 
-	createWorkflow: (workflow: IWorkflowCreateDTO) => Promise<IWorkflow>;
+	createWorkflow: (siteId: string, workflow: IWorkflowCreateDTO) => Promise<IWorkflow>;
 	createWorkflowLoading: boolean;
 
-	updateWorkflow: (workflowId: string, values: IWorkflowUpdateDTO) => Promise<IWorkflow>;
+	updateWorkflow: (siteId: string, workflowId: string, values: IWorkflowUpdateDTO) => Promise<IWorkflow>;
 	updateWorkflowLoading: boolean;
 }
 

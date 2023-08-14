@@ -44,7 +44,7 @@ export const FieldDetailPage = () => {
 		(state) => [state.updateField, state.updateFieldLoading]
 	);
 	const [breadcrumbs] = useHeaderStore((state) => [state.breadcrumbs]);
-	const params = useParams();
+	const { siteId, contentTypeId, fieldId } = useParams();
 	const navigate = useNavigate();
 	const formMethods = useForm<IEditFieldForm>({
 		resolver: yupResolver(editFieldSchema),
@@ -58,12 +58,12 @@ export const FieldDetailPage = () => {
 	} = formMethods;
 
 	useEffect(() => {
-		if (!params.contentTypeId || !params.fieldId) {
+		if (!contentTypeId || !fieldId) {
 			return navigate('/not-found');
 		}
 
-		fetchContentTypeField(params.contentTypeId, params.fieldId);
-		fetchContentType(params.contentTypeId);
+		fetchContentTypeField(siteId!, contentTypeId, fieldId);
+		fetchContentType(siteId!, contentTypeId);
 	}, []);
 
 	const onSubmit = (values: IEditFieldForm) => {
@@ -71,7 +71,7 @@ export const FieldDetailPage = () => {
 			return;
 		}
 
-		updateField(contentType.id, contentTypeField?.id, values).catch(
+		updateField(siteId!, contentType.id, contentTypeField?.id, values).catch(
 			(error: IAPIError) => {
 				setError('root', {
 					message: error.code,
@@ -88,7 +88,7 @@ export const FieldDetailPage = () => {
 						Editing field <i>"{contentTypeField?.name || '...'}"</i>
 					</>
 				}
-				tabs={FIELD_DETAIL_TABS(contentType, contentTypeField)}
+				tabs={FIELD_DETAIL_TABS(siteId!, contentType, contentTypeField)}
 				breadcrumbs={breadcrumbs}
 			></Header>
 			<Loading

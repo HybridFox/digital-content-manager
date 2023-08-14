@@ -2,11 +2,11 @@ import { FIELD_KEYS, IAPIError, useContentComponentStore, useHeaderStore, useWor
 import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { SelectField, TextField, TextareaField } from '@ibs/forms';
 
-import { CONTENT_COMPONENTS_PATHS } from '../../content-components.routes';
+import { CONTENT_COMPONENT_PATHS } from '../../content-components.routes';
 
 import { createContentComponentForm } from './cc-create.const';
 
@@ -26,6 +26,7 @@ export const CCCreatePage = () => {
 		state.workflowsLoading,
 		state.fetchWorkflows,
 	]);
+	const { siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 	const navigate = useNavigate();
 	const formMethods = useForm<ICreateContentComponent>({
@@ -39,16 +40,16 @@ export const CCCreatePage = () => {
 	} = formMethods;
 
 	useEffect(() => {
-		fetchWorkflows({ pagesize: -1 });
-		setBreadcrumbs([{ label: 'Content Components', to: CONTENT_COMPONENTS_PATHS.ROOT }, { label: 'Create' }]);
+		fetchWorkflows(siteId!, { pagesize: -1 });
+		setBreadcrumbs([{ label: 'Content Components', to: CONTENT_COMPONENT_PATHS.ROOT }, { label: 'Create' }]);
 	}, []);
 
 	const onSubmit = (values: ICreateContentComponent) => {
-		createContentComponent({
+		createContentComponent(siteId!, {
 			...values,
 			componentName: FIELD_KEYS.FIELD_GROUP
 		})
-			.then((contentComponent) => navigate(generatePath(CONTENT_COMPONENTS_PATHS.DETAIL, { contentComponentId: contentComponent.id })))
+			.then((contentComponent) => navigate(generatePath(CONTENT_COMPONENT_PATHS.DETAIL, { contentComponentId: contentComponent.id, siteId })))
 			.catch((error: IAPIError) => {
 				setError('root', {
 					message: error.code,

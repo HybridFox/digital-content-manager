@@ -18,7 +18,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { SelectField, TextField } from '@ibs/forms';
 
-import { CONTENT_COMPONENTS_PATHS } from '../../content-components.routes';
+import { CONTENT_COMPONENT_PATHS } from '../../content-components.routes';
 
 import {
 	CONTENT_TYPE_DETAIL_COLUMNS,
@@ -48,7 +48,7 @@ export const CCContentComponentsPage = () => {
 			state.createField,
 			state.deleteField,
 		]);
-	const params = useParams();
+	const { contentComponentId, siteId } = useParams();
 	const navigate = useNavigate();
 	const formMethods = useForm<IAddContentComponentForm>({
 		resolver: yupResolver(addContentComponentSchema),
@@ -62,10 +62,11 @@ export const CCContentComponentsPage = () => {
 
 	useEffect(() => {
 		setBreadcrumbs([
-			{ label: 'Content Components', to: CONTENT_COMPONENTS_PATHS.ROOT },
+			{ label: 'Content Components', to: CONTENT_COMPONENT_PATHS.ROOT },
 			{
 				label: contentComponent?.name,
-				to: generatePath(CONTENT_COMPONENTS_PATHS.DETAIL, {
+				to: generatePath(CONTENT_COMPONENT_PATHS.DETAIL, {
+					siteId,
 					contentComponentId: contentComponent?.id || '',
 				}),
 			},
@@ -74,11 +75,11 @@ export const CCContentComponentsPage = () => {
 	}, [contentComponent]);
 
 	useEffect(() => {
-		if (!params.contentComponentId) {
+		if (!contentComponentId) {
 			return navigate('/not-found');
 		}
 
-		fetchContentComponents({ pagesize: -1, includeInternal: true });
+		fetchContentComponents(siteId!, { pagesize: -1, includeInternal: true });
 	}, []);
 
 	const onCreateField = (values: IAddContentComponentForm) => {
@@ -86,12 +87,13 @@ export const CCContentComponentsPage = () => {
 			return;
 		}
 
-		createField(contentComponent.id, values)
+		createField(siteId!, contentComponent.id, values)
 			.then((field) =>
 				navigate(
-					generatePath(CONTENT_COMPONENTS_PATHS.FIELD_DETAIL, {
+					generatePath(CONTENT_COMPONENT_PATHS.FIELD_DETAIL, {
 						contentComponentId: contentComponent.id,
 						fieldId: field.id,
+						siteId
 					})
 				)
 			)
@@ -107,11 +109,11 @@ export const CCContentComponentsPage = () => {
 			return;
 		}
 
-		deleteField(contentComponent.id, fieldId)
+		deleteField(siteId!, contentComponent.id, fieldId)
 			.then(() => {
 				setDeleteError(null);
 				// TODO: fix this so that i dont have to reload the whole CT
-				fetchContentComponent(contentComponent.id)
+				fetchContentComponent(siteId!, contentComponent.id)
 
 			})
 			.catch((error: IAPIError) => setDeleteError(error.code));
@@ -142,7 +144,7 @@ export const CCContentComponentsPage = () => {
 								<SelectField
 									name="contentComponentId"
 									label="Content Component"
-									fieldConfiguration={{ options: contentComponents.filter((cc) => cc.id !== params.contentComponentId).map((cc) => ({
+									fieldConfiguration={{ options: contentComponents.filter((cc) => cc.id !== contentComponentId).map((cc) => ({
 										label: cc.name,
 										value: cc.id,
 									})) }}

@@ -30,7 +30,7 @@ export const StorageRepositoryDetailPage = () => {
 		state.updateStorageRepository,
 	]);
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
-	const { storageRepositoryId } = useParams();
+	const { storageRepositoryId, siteId } = useParams();
 	const formMethods = useForm<EditStorageRepositoryForm>({
 		resolver: yupResolver(editStorageRepositorySchema),
 		values: storageRepository,
@@ -51,7 +51,7 @@ export const StorageRepositoryDetailPage = () => {
 			return;
 		}
 
-		fetchStorageRepository(storageRepositoryId);
+		fetchStorageRepository(siteId!, storageRepositoryId);
 	}, [storageRepositoryId]);
 
 	const onSubmit = (values: EditStorageRepositoryForm) => {
@@ -59,7 +59,7 @@ export const StorageRepositoryDetailPage = () => {
 			return;
 		}
 
-		updateStorageRepository(storageRepositoryId, values).catch((error: IAPIError) => {
+		updateStorageRepository(siteId!, storageRepositoryId, values).catch((error: IAPIError) => {
 			setError('root', {
 				message: error.code,
 			});

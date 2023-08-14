@@ -16,19 +16,20 @@ export type IContentComponentsResponse = IAPIHALResponse<'contentComponents', IC
 
 export interface IContentComponentStoreState {
 	fetchContentComponents: (
+		siteId: string, 
 		props: IGenericPageOptions & { includeInternal?: boolean; includeHidden?: boolean }
 	) => Promise<void>;
 	contentComponents: IContentComponent[];
 	contentComponentsLoading: boolean;
 
-	fetchContentComponent: (contentComponentId: string) => Promise<IContentComponent>;
+	fetchContentComponent: (siteId: string, contentComponentId: string) => Promise<IContentComponent>;
 	contentComponent?: IContentComponent,
 	contentComponentLoading: boolean;
 
-	createContentComponent: (contentComponent: IContentComponentCreateDTO) => Promise<IContentComponent>;
+	createContentComponent: (siteId: string, contentComponent: IContentComponentCreateDTO) => Promise<IContentComponent>;
 	createContentComponentLoading: boolean;
 
-	updateContentComponent: (contentComponentId: string, values: IContentComponentUpdateDTO) => Promise<IContentComponent>;
+	updateContentComponent: (siteId: string, contentComponentId: string, values: IContentComponentUpdateDTO) => Promise<IContentComponent>;
 	updateContentComponentLoading: boolean;
 }
 

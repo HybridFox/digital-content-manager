@@ -8,7 +8,7 @@ use tracing::instrument;
 use crate::errors::AppError;
 use crate::modules::content::helpers::upsert_fields::upsert_fields;
 use crate::modules::content_types::models::content_type::{ContentType, ContentTypeKindEnum};
-use crate::modules::sites::models::language::Language;
+use crate::modules::languages::models::language::Language;
 use crate::modules::workflows::models::workflow_state::WorkflowState;
 use crate::schema::{content, content_fields, languages, content_types, workflow_states};
 

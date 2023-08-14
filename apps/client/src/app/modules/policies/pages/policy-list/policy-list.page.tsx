@@ -16,16 +16,16 @@ export const PolicyListPage = () => {
 		state.removePolicy,
 	]);
 	const { t } = useTranslation();
-	const { kind } = useParams();
+	const { kind, siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		fetchPolicies();
+		fetchPolicies(siteId!);
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.POLICIES`) }]);
 	}, [kind]);
 
 	const handleRemove = (policyId: string): void => {
-		removePolicy(policyId).then(() => fetchPolicies());
+		removePolicy(siteId!, policyId).then(() => fetchPolicies(siteId!));
 	}
 
 	return (

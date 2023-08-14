@@ -1,8 +1,8 @@
 import { RouteObject } from "react-router-dom";
 
-import { APP_ROOT_PATH } from "../core/routes.const"
+import { APP_SITE_ROOT_PATH } from "../core/routes.const"
 
-const ROOT_PATH = `${APP_ROOT_PATH}/policies`;
+const ROOT_PATH = `${APP_SITE_ROOT_PATH}/policies`;
 const DETAIL_PATH = `${ROOT_PATH}/:policyId`;
 
 export const POLICY_PATHS = {
@@ -11,7 +11,7 @@ export const POLICY_PATHS = {
 	DETAIL: `${DETAIL_PATH}`,
 }
 
-export const POLICIES_ROUTES: RouteObject[] = [
+export const POLICY_ROUTES: RouteObject[] = [
 	{
 		path: POLICY_PATHS.ROOT,
 		lazy: async () => ({ Component: (await import('./pages/policy-list/policy-list.page')).PolicyListPage }),

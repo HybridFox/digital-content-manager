@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { useContentTypeStore, useHeaderStore } from '@ibs/shared';
 import { ButtonLink, Header, Loading, Table } from '@ibs/components';
+import { useParams } from 'react-router-dom';
 
 import { CONTENT_TYPE_LIST_COLUMNS } from './ct-list.const';
 
 export const CTListPage = () => {
+	const { siteId } = useParams();
 	const [contentTypes, contentTypesLoading, fetchContentTypes] =
 		useContentTypeStore((state) => [
 			state.contentTypes,
@@ -18,7 +20,7 @@ export const CTListPage = () => {
 		]);
 
 	useEffect(() => {
-		fetchContentTypes();
+		fetchContentTypes(siteId!);
 		setBreadcrumbs([{ label: 'Content Types' }])
 	}, []);
 

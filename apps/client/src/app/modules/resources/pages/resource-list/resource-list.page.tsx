@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useHeaderStore } from '@ibs/shared';
 import { Button, ButtonTypes, Header, ResourceExplorer, ResourceExplorerAction } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { useResourceStore } from '../../stores/resource';
 import { CreateDirectoryModal } from '../../components/create-directory-modal/create-directory-modal.component';
@@ -15,6 +15,7 @@ export const ResourceListPage = () => {
 	const [createDirectoryLoading, createDirectory] = useResourceStore((state) => [state.createDirectoryLoading, state.createDirectory]);
 	const [uploadFileLoading, uploadFile] = useResourceStore((state) => [state.uploadFileLoading, state.uploadFile]);
 	const { t } = useTranslation();
+	const { siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
@@ -34,7 +35,7 @@ export const ResourceListPage = () => {
 			return;
 		}
 
-		await createDirectory(repositoryId, path, values.name);
+		await createDirectory(siteId!, repositoryId, path, values.name);
 		setCreateDirectoryModalOpen(false);
 	};
 
@@ -43,7 +44,7 @@ export const ResourceListPage = () => {
 			return;
 		}
 
-		await uploadFile(repositoryId, path, values.file[0]);
+		await uploadFile(siteId!, repositoryId, path, values.file[0]);
 		setUploadFileModalOpen(false);
 	};
 
@@ -68,6 +69,7 @@ export const ResourceListPage = () => {
 				}
 			></Header>
 			<ResourceExplorer
+				siteId={siteId!}
 				actions={[ResourceExplorerAction.EDIT, ResourceExplorerAction.REMOVE, ResourceExplorerAction.VIEW]}
 				onChangeConfiguration={setConfiguration}
 				repositoryId={repositoryId}

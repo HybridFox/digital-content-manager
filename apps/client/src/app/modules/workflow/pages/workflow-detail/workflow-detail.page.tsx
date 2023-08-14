@@ -15,14 +15,14 @@ export const WorkflowDetailPage = () => {
 		state.fetchWorkflow,
 	]);
 	const [breadcrumbs] = useHeaderStore((state) => [state.breadcrumbs]);
-	const { workflowId } = useParams();
+	const { workflowId, siteId } = useParams();
 
 	useEffect(() => {
 		if (!workflowId) {
 			return;
 		}
 
-		fetchWorkflow(workflowId);
+		fetchWorkflow(siteId!, workflowId);
 	}, [workflowId]);
 
 	return (
@@ -32,7 +32,7 @@ export const WorkflowDetailPage = () => {
 				title={
 					<Trans t={t} i18nKey="WORKFLOWS.TITLES.EDIT" values={{ workflowName: workflow?.name }} />
 				}
-				tabs={WORKFLOW_DETAIL_TABS(t, workflow)}
+				tabs={WORKFLOW_DETAIL_TABS(t, siteId!, workflow)}
 			></Header>
 			<div className="u-margin-top">
 				<Loading loading={workflowLoading} text="Loading data...">

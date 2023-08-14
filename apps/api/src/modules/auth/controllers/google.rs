@@ -111,7 +111,8 @@ pub async fn callback(
 	match existing_user {
 		Ok((user, token)) => {
 			let sites = user.get_sites(conn)?;
-			let res = response::AuthDTO::from((user, sites, token));
+			let roles = user.get_roles(conn)?;
+			let res = response::AuthDTO::from((user, sites, roles, token));
 			Ok(HttpResponse::Ok().json(res))
 		}
 		Err(_) => {
@@ -126,7 +127,8 @@ pub async fn callback(
 			.await?;
 
 			let sites = user.get_sites(conn)?;
-			let res = response::AuthDTO::from((user, sites, token));
+			let roles = user.get_roles(conn)?;
+			let res = response::AuthDTO::from((user, sites, roles, token));
 			Ok(HttpResponse::Ok().json(res))
 		}
 	}

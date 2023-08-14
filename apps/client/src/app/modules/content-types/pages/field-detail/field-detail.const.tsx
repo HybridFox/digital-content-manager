@@ -14,6 +14,7 @@ export const editFieldSchema = yup.object({
 });
 
 export const FIELD_DETAIL_TABS = (
+	siteId: string,
 	contentType?: IContentType,
 	field?: IContentTypeField
 ): IHeaderTab[] => [
@@ -21,6 +22,7 @@ export const FIELD_DETAIL_TABS = (
 		to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_SETTINGS, {
 			contentTypeId: contentType?.id || '',
 			fieldId: field?.id || '',
+			siteId,
 		}),
 		label: 'Settings',
 	},
@@ -28,6 +30,7 @@ export const FIELD_DETAIL_TABS = (
 		to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_CONFIGURATION, {
 			contentTypeId: contentType?.id || '',
 			fieldId: field?.id || '',
+			siteId,
 		}),
 		label: 'Configuration',
 	},
@@ -35,6 +38,7 @@ export const FIELD_DETAIL_TABS = (
 		to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_VALIDATION, {
 			contentTypeId: contentType?.id || '',
 			fieldId: field?.id || '',
+			siteId,
 		}),
 		label: 'Validation',
 		disabled: true,
@@ -43,6 +47,7 @@ export const FIELD_DETAIL_TABS = (
 		to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_DEFAULT_VALUE, {
 			contentTypeId: contentType?.id || '',
 			fieldId: field?.id || '',
+			siteId,
 		}),
 		label: 'Default Value',
 		disabled: true,

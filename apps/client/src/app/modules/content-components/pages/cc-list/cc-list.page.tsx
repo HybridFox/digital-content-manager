@@ -9,7 +9,7 @@ import { CONTENT_COMPONENTS_LIST_COLUMNS } from './cc-list.const';
 export const CCListPage = () => {
 	const [contentComponents, contentComponentsLoading, fetchContentComponents] = useContentComponentStore((state) => [state.contentComponents, state.contentComponentsLoading, state.fetchContentComponents]);
 	const { t } = useTranslation();
-	const { kind } = useParams();
+	const { kind, siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] =
 		useHeaderStore((state) => [
 			state.breadcrumbs,
@@ -17,7 +17,7 @@ export const CCListPage = () => {
 		]);
 
 	useEffect(() => {
-		fetchContentComponents({});
+		fetchContentComponents(siteId!, {});
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.CONTENT_COMPONENTS`) }])
 	}, [kind]);
 

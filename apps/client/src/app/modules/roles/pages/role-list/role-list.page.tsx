@@ -16,16 +16,16 @@ export const RoleListPage = () => {
 		state.removeRole
 	]);
 	const { t } = useTranslation();
-	const { kind } = useParams();
+	const { siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		fetchRoles();
+		fetchRoles(siteId!);
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.ROLES`) }]);
-	}, [kind]);
+	}, []);
 
 	const handleRemove = (roleId: string): void => {
-		removeRole(roleId).then(() => fetchRoles());
+		removeRole(siteId!, roleId).then(() => fetchRoles(siteId!));
 	}
 
 	return (

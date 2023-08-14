@@ -22,7 +22,8 @@ pub async fn login(
 	let conn = &mut state.get_conn()?;
 	let (user, token) = User::signin_local(conn, &form.email, &form.password)?;
 	let sites = user.get_sites(conn)?;
-	let res = response::AuthDTO::from((user, sites, token));
+	let roles = user.get_roles(conn)?;
+	let res = response::AuthDTO::from((user, sites, roles, token));
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -42,9 +43,9 @@ pub async fn register(
 	let conn = &mut state.get_conn()?;
 
 	let (user, token) =
-		register_user(conn, &form.email, &form.name, &form.password, None, None).await?;
+		register_user(conn, &form.email, &form.name, &form.password, None, Some("local")).await?;
 	let sites = user.get_sites(conn)?;
-
-	let res = response::AuthDTO::from((user, sites, token));
+	let roles = user.get_roles(conn)?;
+	let res = response::AuthDTO::from((user, sites, roles, token));
 	Ok(HttpResponse::Ok().json(res))
 }

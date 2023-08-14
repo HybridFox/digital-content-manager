@@ -16,14 +16,14 @@ use super::permission::Permission;
 pub struct IAMPolicy {
 	pub id: Uuid,
 	pub name: String,
-	pub site_id: Uuid,
+	pub site_id: Option<Uuid>,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 }
 
 impl IAMPolicy {
 	#[instrument(skip(conn))]
-	pub fn create(conn: &mut PgConnection, site_id: Uuid, name: &str) -> Result<Self, AppError> {
+	pub fn create(conn: &mut PgConnection, site_id: Option<Uuid>, name: &str) -> Result<Self, AppError> {
 		use diesel::prelude::*;
 
 		let record = CreateIAMPolicy { name, site_id };
@@ -130,18 +130,18 @@ impl IAMPolicy {
 
 	pub fn update(
 		conn: &mut PgConnection,
-		role_id: Uuid,
+		policy_id: Uuid,
 		changeset: UpdateIAMPolicy,
 	) -> Result<Self, AppError> {
-		let target = iam_policies::table.find(role_id);
+		let target = iam_policies::table.find(policy_id);
 		let user = diesel::update(target)
 			.set(changeset)
 			.get_result::<IAMPolicy>(conn)?;
 		Ok(user)
 	}
 
-	pub fn remove(conn: &mut PgConnection, role_id: Uuid) -> Result<(), AppError> {
-		let target = iam_policies::table.find(role_id);
+	pub fn remove(conn: &mut PgConnection, policy_id: Uuid) -> Result<(), AppError> {
+		let target = iam_policies::table.find(policy_id);
 		diesel::delete(target).get_result::<IAMPolicy>(conn)?;
 		Ok(())
 	}
@@ -151,7 +151,7 @@ impl IAMPolicy {
 #[diesel(table_name = iam_policies)]
 pub struct CreateIAMPolicy<'a> {
 	pub name: &'a str,
-	pub site_id: Uuid,
+	pub site_id: Option<Uuid>,
 }
 
 #[derive(AsChangeset, Debug, Deserialize)]

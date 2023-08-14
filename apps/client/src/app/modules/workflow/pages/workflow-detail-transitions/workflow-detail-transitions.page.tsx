@@ -4,6 +4,7 @@ import { Button, Card, HTMLButtonTypes, Loading, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { SelectField } from '@ibs/forms';
+import { useParams } from 'react-router-dom';
 
 import { WORKFLOW_PATHS } from '../../workflow.routes';
 import { useWorkflowStateStore } from '../../stores/workflow-state';
@@ -26,11 +27,12 @@ export const WorkflowDetailTransitionsPage = () => {
 		state.workflowStatesLoading,
 		state.fetchWorkflowStates,
 	]);
+	const { siteId } = useParams();
 	const [setBreadcrumbs] = useHeaderStore((state) => [state.setBreadcrumbs]);
 	const { handleSubmit, reset } = formMethods;
 
 	useEffect(() => {
-		fetchWorkflowStates();
+		fetchWorkflowStates(siteId!);
 	}, []);
 
 	useEffect(() => {
@@ -73,7 +75,7 @@ export const WorkflowDetailTransitionsPage = () => {
 			return;
 		}
 
-		updateWorkflow(workflow.id, {
+		updateWorkflow(siteId!, workflow.id, {
 			...workflow,
 			transitions: transitions.map((transition) => ({
 				fromWorkflowStateId: transition.fromState.id,

@@ -2,17 +2,15 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
 
 import { kyInstance, wrapApi } from '../../services/ky.instance';
-import { useAuthStore } from '../auth';
 import { DEFAULT_PAGINATION_OPTIONS } from '../../const';
 
 import { IWorkflow, IWorkflowStoreState, IWorkflowsResponse } from './workflow.types';
 
 export const useWorkflowStore = create<IWorkflowStoreState>()(devtools(
 	(set) => ({
-		fetchWorkflows: async (searchParams) => {
+		fetchWorkflows: async (siteId, searchParams) => {
 			set(() => ({ workflowsLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/workflows`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/workflows`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -28,10 +26,9 @@ export const useWorkflowStore = create<IWorkflowStoreState>()(devtools(
 		workflows: [],
 		workflowsLoading: false,
 
-		fetchWorkflow: async (workflowId) => {
+		fetchWorkflow: async (siteId, workflowId) => {
 			set(() => ({ workflowLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/workflows/${workflowId}`).json<IWorkflow>());
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/workflows/${workflowId}`).json<IWorkflow>());
 
 			if (error) {
 				set(() => ({ workflow: undefined, workflowLoading: false }));
@@ -43,10 +40,9 @@ export const useWorkflowStore = create<IWorkflowStoreState>()(devtools(
 		workflow: undefined,
 		workflowLoading: false,
 
-		createWorkflow: async (workflow) => {
+		createWorkflow: async (siteId, workflow) => {
 			set(() => ({ createWorkflowLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${activeSite?.id}/workflows`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/workflows`, {
 				json: {
 					...workflow,
 					fields: []
@@ -62,10 +58,9 @@ export const useWorkflowStore = create<IWorkflowStoreState>()(devtools(
 		},
 		createWorkflowLoading: false,
 
-		updateWorkflow: async (workflowId, data) => {
+		updateWorkflow: async (siteId, workflowId, data) => {
 			set(() => ({ updateWorkflowLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${activeSite?.id}/workflows/${workflowId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/workflows/${workflowId}`, {
 				json: data,
 			}).json<IWorkflow>());
 

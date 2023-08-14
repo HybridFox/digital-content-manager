@@ -13,14 +13,13 @@ export const StorageRepositoryListPage = () => {
 		state.fetchStorageRepositories,
 	]);
 	const { t } = useTranslation();
-	const { kind } = useParams();
+	const { siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		console.log(kind);
-		fetchStorageRepositories();
+		fetchStorageRepositories(siteId!);
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.STORAGE_REPOSITORIES`) }]);
-	}, [kind]);
+	}, [siteId]);
 
 	return (
 		<>

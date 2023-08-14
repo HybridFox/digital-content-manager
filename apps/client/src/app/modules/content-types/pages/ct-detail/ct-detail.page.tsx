@@ -8,15 +8,15 @@ import { CONTENT_TYPE_DETAIL_TABS } from './ct-detail.const';
 export const CTDetailPage = () => {
 	const [contentType, contentTypeLoading, fetchContentType] = useContentTypeStore((state) => [state.contentType, state.contentTypeLoading, state.fetchContentType]);
 	const [breadcrumbs] = useHeaderStore((state) => [state.breadcrumbs]);
-	const params = useParams();
+	const { siteId, contentTypeId, } = useParams();
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (!params.contentTypeId) {
+		if (!contentTypeId) {
 			return navigate('/not-found');
 		}
 
-		fetchContentType(params.contentTypeId);
+		fetchContentType(siteId!, contentTypeId);
 	}, []);
 
 	return (

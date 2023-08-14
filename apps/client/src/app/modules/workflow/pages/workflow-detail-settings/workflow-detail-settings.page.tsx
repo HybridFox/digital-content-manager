@@ -22,7 +22,7 @@ export const WorkflowDetailSettingsPage = () => {
 	const [workflow] = useWorkflowStore((state) => [state.workflow]);
 	const [updateWorkflowLoading, updateWorkflow] = useWorkflowStore((state) => [state.updateWorkflowLoading, state.updateWorkflow]);
 	const [setBreadcrumbs] = useHeaderStore((state) => [state.setBreadcrumbs]);
-	const { workflowId } = useParams();
+	const { workflowId, siteId } = useParams();
 	const formMethods = useForm<EditWorkflowForm>({
 		resolver: yupResolver(editWorkflowSchema),
 		values: workflow,
@@ -47,7 +47,7 @@ export const WorkflowDetailSettingsPage = () => {
 			return;
 		}
 
-		updateWorkflow(workflowId, {
+		updateWorkflow(siteId!, workflowId, {
 			...values,
 			transitions: (workflow.transitions || []).map((transition) => ({
 				fromWorkflowStateId: transition.fromState.id,

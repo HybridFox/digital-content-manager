@@ -11,14 +11,14 @@ export const AUTHENTICATION_METHOD_PATHS = {
 	DETAIL: `${DETAIL_PATH}`,
 }
 
-export const AUTHENTICATION_METHODS_ROUTES: RouteObject[] = [
+export const AUTHENTICATION_METHOD_ROUTES: RouteObject[] = [
 	{
 		path: AUTHENTICATION_METHOD_PATHS.ROOT,
 		lazy: async () => ({ Component: (await import('./pages/storage-repository-list/authentication-method-list.page')).AuthenticationMethodListPage }),
 	},
 	{
 		path: AUTHENTICATION_METHOD_PATHS.CREATE,
-		lazy: async () => ({ Component: (await import('./pages/authentication-method-create/authentication-method-create.page')).StorageRepositoryCreatePage }),
+		lazy: async () => ({ Component: (await import('./pages/authentication-method-create/authentication-method-create.page')).AuthenticationMethodCreatePage }),
 	},
 	{
 		path: AUTHENTICATION_METHOD_PATHS.DETAIL,

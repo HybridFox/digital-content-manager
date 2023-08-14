@@ -13,13 +13,13 @@ export const WorkflowListPage = () => {
 		state.fetchWorkflows,
 	]);
 	const { t } = useTranslation();
-	const { kind } = useParams();
+	const { siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		fetchWorkflows();
+		fetchWorkflows(siteId!);
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.WORKFLOWS`) }]);
-	}, [kind]);
+	}, [siteId]);
 
 	return (
 		<>

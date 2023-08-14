@@ -3,6 +3,7 @@ use super::super::dto::{request, response};
 use crate::errors::AppError;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
+use crate::modules::sites::models::site_language::SiteLanguage;
 use crate::utils::api::ApiResponse;
 use actix_web::{get, post, web, HttpResponse, put, delete};
 use serde::Deserialize;
@@ -38,7 +39,9 @@ pub async fn create(
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let site = Site::create(conn, &form.name)?;
-	let res = response::SiteDTO::from(site);
+	let languages = SiteLanguage::upsert(conn, site.id, form.languages.clone())?;
+
+	let res = response::SiteWithLanguagesDTO::from((site, languages));
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -96,7 +99,7 @@ pub async fn find_one(
 	let conn = &mut state.get_conn()?;
 	let site = Site::find_one(conn, params.site_id)?;
 
-	let res = response::SiteDTO::from(site);
+	let res = response::SiteWithLanguagesDTO::from(site);
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -126,7 +129,8 @@ pub async fn update(
 			name: form.name.clone(),
 		},
 	)?;
-	let res = response::SiteDTO::from(site);
+	let languages = SiteLanguage::upsert(conn, site.id, form.languages.clone())?;
+	let res = response::SiteWithLanguagesDTO::from((site, languages));
 	Ok(HttpResponse::Ok().json(res))
 }
 

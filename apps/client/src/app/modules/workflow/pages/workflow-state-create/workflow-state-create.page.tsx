@@ -4,7 +4,7 @@ import {
 	useHeaderStore,
 } from '@ibs/shared';
 import { useEffect } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { SelectField, TextField, TextareaField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
 import { Alert, AlertTypes, Button, HTMLButtonTypes, Header } from '@ibs/components';
@@ -29,6 +29,7 @@ export const WorkflowStateCreatePage = () => {
 		state.createWorkflowStateLoading,
 	]);
 	const navigate = useNavigate();
+	const { siteId } = useParams();
 	const { t } = useTranslation();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 	const formMethods = useForm<CreateWorkflowStateForm>({
@@ -49,8 +50,8 @@ export const WorkflowStateCreatePage = () => {
 	}, []);
 
 	const onSubmit = (values: CreateWorkflowStateForm) => {
-		createWorkflowState(values)
-			.then((storageRepository) => navigate(generatePath(WORKFLOW_PATHS.WORKFLOW_STATES_DETAIL, { storageRepositoryId: storageRepository.id })))
+		createWorkflowState(siteId!, values)
+			.then((storageRepository) => navigate(generatePath(WORKFLOW_PATHS.WORKFLOW_STATES_DETAIL, { siteId, storageRepositoryId: storageRepository.id })))
 			.catch((error: IAPIError) => {
 				setError('root', {
 					message: error.code,

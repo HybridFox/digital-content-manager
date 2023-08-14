@@ -1,8 +1,8 @@
 import { RouteObject } from "react-router-dom";
 
-import { APP_ROOT_PATH } from "../core/routes.const"
+import { APP_SITE_ROOT_PATH } from "../core/routes.const"
 
-const ROOT_PATH = `${APP_ROOT_PATH}/users`;
+const ROOT_PATH = `${APP_SITE_ROOT_PATH}/users`;
 const DETAIL_PATH = `${ROOT_PATH}/:userId`;
 
 export const USER_PATHS = {
@@ -10,7 +10,7 @@ export const USER_PATHS = {
 	DETAIL: `${DETAIL_PATH}`,
 }
 
-export const USERS_ROUTES: RouteObject[] = [
+export const USER_ROUTES: RouteObject[] = [
 	{
 		path: USER_PATHS.ROOT,
 		lazy: async () => ({ Component: (await import('./pages/user-list/user-list.page')).UserListPage }),

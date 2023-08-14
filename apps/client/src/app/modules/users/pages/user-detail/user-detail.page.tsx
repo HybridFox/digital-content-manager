@@ -34,7 +34,7 @@ export const UserDetailPage = () => {
 		state.fetchRoles
 	]);
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
-	const { userId } = useParams();
+	const { userId, siteId } = useParams();
 	const formMethods = useForm<EditUserForm>({
 		resolver: yupResolver(editUserSchema),
 		values: {
@@ -50,7 +50,7 @@ export const UserDetailPage = () => {
 	} = formMethods;
 
 	useEffect(() => {
-		fetchRoles({ pagesize: -1 });
+		fetchRoles(siteId!, { pagesize: -1 });
 	}, [])
 
 	useEffect(() => {
@@ -62,7 +62,7 @@ export const UserDetailPage = () => {
 			return;
 		}
 
-		fetchUser(userId);
+		fetchUser(siteId!, userId);
 	}, [userId]);
 
 	const onSubmit = (values: any) => {
@@ -70,7 +70,7 @@ export const UserDetailPage = () => {
 			return;
 		}
 
-		updateUser(userId, values).catch((error: IAPIError) => {
+		updateUser(siteId!, userId, values).catch((error: IAPIError) => {
 			setError('root', {
 				message: error.code,
 			});

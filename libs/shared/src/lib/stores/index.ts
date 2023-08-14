@@ -10,3 +10,4 @@ export * from './policy';
 export * from './role';
 export * from './storage-repository';
 export * from './authentication-method';
+export * from './language';

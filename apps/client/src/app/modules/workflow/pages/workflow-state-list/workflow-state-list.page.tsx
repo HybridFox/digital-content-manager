@@ -18,17 +18,16 @@ export const WorkflowStateListPage = () => {
 		state.removeWorkflowState
 	]);
 	const { t } = useTranslation();
-	const { kind } = useParams();
+	const { siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		console.log(kind);
-		fetchWorkflowStates();
+		fetchWorkflowStates(siteId!);
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.WORKFLOW_STATES`) }]);
-	}, [kind]);
+	}, [siteId]);
 
 	const handleRemove = (workflowStateId: string): void => {
-		removeWorkflowState(workflowStateId).then(() => fetchWorkflowStates());
+		removeWorkflowState(siteId!, workflowStateId).then(() => fetchWorkflowStates(siteId!));
 	}
 
 	return (

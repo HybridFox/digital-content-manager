@@ -3,21 +3,21 @@ import { IAPIHALResponse, IPageParameters, IWorkflowState } from "@ibs/shared";
 export type IWorkflowStatesResponse = IAPIHALResponse<'workflowStates', IWorkflowState>
 
 export interface IWorkflowStateStoreState {
-	fetchWorkflowStates: (params?: IPageParameters) => Promise<void>;
+	fetchWorkflowStates: (siteId: string, params?: IPageParameters) => Promise<void>;
 	workflowStates: IWorkflowState[];
 	workflowStatesLoading: boolean;
 
-	fetchWorkflowState: (workflowId: string) => Promise<void>;
+	fetchWorkflowState: (siteId: string, workflowId: string) => Promise<void>;
 	workflowState?: IWorkflowState,
 	workflowStateLoading: boolean;
 
-	createWorkflowState: (workflowState: IWorkflowStateCreateDTO) => Promise<IWorkflowState>;
+	createWorkflowState: (siteId: string, workflowState: IWorkflowStateCreateDTO) => Promise<IWorkflowState>;
 	createWorkflowStateLoading: boolean;
 
-	updateWorkflowState: (workflowStateId: string, values: IWorkflowStateUpdateDTO) => Promise<IWorkflowState>;
+	updateWorkflowState: (siteId: string, workflowStateId: string, values: IWorkflowStateUpdateDTO) => Promise<IWorkflowState>;
 	updateWorkflowStateLoading: boolean;
 
-	removeWorkflowState: (workflowStateId: string) => Promise<void>;
+	removeWorkflowState: (siteId: string, workflowStateId: string) => Promise<void>;
 	removeWorkflowStateLoading: boolean;
 }
 

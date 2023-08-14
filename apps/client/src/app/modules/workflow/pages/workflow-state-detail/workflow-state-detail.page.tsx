@@ -32,7 +32,7 @@ export const WorkflowStateDetailPage = () => {
 		state.updateWorkflowState,
 	]);
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
-	const { workflowStateId } = useParams();
+	const { workflowStateId, siteId } = useParams();
 	const formMethods = useForm<EditWorkflowStateForm>({
 		resolver: yupResolver(editWorkflowStateSchema),
 		values: workflowState,
@@ -55,7 +55,7 @@ export const WorkflowStateDetailPage = () => {
 			return;
 		}
 
-		fetchWorkflowState(workflowStateId);
+		fetchWorkflowState(siteId!, workflowStateId);
 	}, [workflowStateId]);
 
 	const onSubmit = (values: EditWorkflowStateForm) => {
@@ -63,7 +63,7 @@ export const WorkflowStateDetailPage = () => {
 			return;
 		}
 
-		updateWorkflowState(workflowStateId, values).catch((error: IAPIError) => {
+		updateWorkflowState(siteId!, workflowStateId, values).catch((error: IAPIError) => {
 			setError('root', {
 				message: error.code,
 			});

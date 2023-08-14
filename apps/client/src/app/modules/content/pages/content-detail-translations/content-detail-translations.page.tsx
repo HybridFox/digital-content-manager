@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { CONTENT_TYPE_KINDS_TRANSLATIONS, useAuthStore, useContentTypeStore, useHeaderStore } from '@ibs/shared';
 import { Loading, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { useContentStore } from '../../stores/content';
 import { CONTENT_PATHS } from '../../content.routes';
@@ -14,6 +15,7 @@ export const ContentDetailTranslationsPage = () => {
 	const [activeSite] = useAuthStore((state) => [state.activeSite])
 	const [contentType] = useContentTypeStore((state) => [state.contentType]);
 	const { t } = useTranslation();
+	const { siteId } = useParams();
 	const [setBreadcrumbs] = useHeaderStore((state) => [state.setBreadcrumbs]);
 
 	useEffect(() => {
@@ -30,7 +32,7 @@ export const ContentDetailTranslationsPage = () => {
 			return;
 		}
 
-		fetchContent({ translationId: contentItem.translationId });
+		fetchContent(siteId!, { translationId: contentItem.translationId });
 	}, [contentItem?.translationId]);
 
 	const rows = useMemo(() => {
@@ -58,7 +60,7 @@ export const ContentDetailTranslationsPage = () => {
 
 	return (
 		<Loading loading={contentLoading} text={t(`GENERAL.LOADING`)}>
-			<Table columns={CONTENT_LIST_COLUMNS(contentType, t)} rows={rows}></Table>
+			<Table columns={CONTENT_LIST_COLUMNS(siteId!, contentType, t)} rows={rows}></Table>
 		</Loading>
 	);
 };

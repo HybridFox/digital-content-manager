@@ -17,18 +17,18 @@ export interface IStorageRepository {
 export type IStorageRepositoriesResponse = IAPIHALResponse<'storageRepositories', IStorageRepository>;
 
 export interface IStorageRepositoryStoreState {
-	fetchStorageRepositories: (params?: IPageParameters) => Promise<IStorageRepository[]>;
+	fetchStorageRepositories: (siteId: string, params?: IPageParameters) => Promise<IStorageRepository[]>;
 	storageRepositories: IStorageRepository[];
 	storageRepositoriesLoading: boolean;
 
-	fetchStorageRepository: (storageRepositoryId: string) => Promise<IStorageRepository>;
+	fetchStorageRepository: (siteId: string, storageRepositoryId: string) => Promise<IStorageRepository>;
 	storageRepository?: IStorageRepository,
 	storageRepositoryLoading: boolean;
 
-	createStorageRepository: (storageRepository: IStorageRepositoryCreateDTO) => Promise<IStorageRepository>;
+	createStorageRepository: (siteId: string, storageRepository: IStorageRepositoryCreateDTO) => Promise<IStorageRepository>;
 	createStorageRepositoryLoading: boolean;
 
-	updateStorageRepository: (storageRepositoryId: string, values: IStorageRepositoryUpdateDTO) => Promise<IStorageRepository>;
+	updateStorageRepository: (siteId: string, storageRepositoryId: string, values: IStorageRepositoryUpdateDTO) => Promise<IStorageRepository>;
 	updateStorageRepositoryLoading: boolean;
 }
 

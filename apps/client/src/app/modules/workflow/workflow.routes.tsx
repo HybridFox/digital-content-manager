@@ -1,11 +1,11 @@
 import { Navigate, RouteObject } from "react-router-dom";
 
-import { APP_ROOT_PATH } from "../core/routes.const"
+import { APP_SITE_ROOT_PATH } from "../core/routes.const"
 
-const WORKFLOWS_ROOT_PATH = `${APP_ROOT_PATH}/workflows`;
+const WORKFLOWS_ROOT_PATH = `${APP_SITE_ROOT_PATH}/workflows`;
 const WORKFLOWS_DETAIL_PATH = `${WORKFLOWS_ROOT_PATH}/:workflowId`;
 
-const WORKFLOW_STATES_ROOT_PATH = `${APP_ROOT_PATH}/workflow-states`;
+const WORKFLOW_STATES_ROOT_PATH = `${APP_SITE_ROOT_PATH}/workflow-states`;
 const WORKFLOW_STATES_DETAIL_PATH = `${WORKFLOW_STATES_ROOT_PATH}/:workflowStateId`;
 
 export const WORKFLOW_PATHS = {

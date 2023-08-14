@@ -12,15 +12,15 @@ export const CCDetailPage = () => {
 		state.fetchContentComponent,
 	]);
 	const [breadcrumbs] = useHeaderStore((state) => [state.breadcrumbs]);
-	const params = useParams();
+	const { siteId, contentComponentId } = useParams();
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (!params.contentComponentId) {
+		if (!contentComponentId) {
 			return navigate('/not-found');
 		}
 
-		fetchContentComponent(params.contentComponentId);
+		fetchContentComponent(siteId!, contentComponentId);
 	}, []);
 
 	return (

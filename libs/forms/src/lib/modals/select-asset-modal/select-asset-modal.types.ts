@@ -7,4 +7,5 @@ export interface ISelectAssetModalProps {
 	min?: number;
 	max?: number;
 	defaultSelection?: IResourceExplorerSelection[];
+	siteId: string;
 }

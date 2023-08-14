@@ -5,7 +5,7 @@ import {
 	usePolicyStore,
 } from '@ibs/shared';
 import { useEffect } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
 import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
@@ -37,6 +37,7 @@ export const PolicyCreatePage = () => {
 		state.iamActionsLoading,
 		state.fetchIAMActions,
 	])
+	const { siteId } = useParams();
 	const navigate = useNavigate();
 	const { t } = useTranslation();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
@@ -59,9 +60,8 @@ export const PolicyCreatePage = () => {
 	}, []);
 
 	const onSubmit = (values: CreatePolicyForm) => {
-		console.log(values);
-		createPolicy(values)
-			.then((policy) => navigate(generatePath(POLICY_PATHS.DETAIL, { policyId: policy.id })))
+		createPolicy(siteId!, values)
+			.then((policy) => navigate(generatePath(POLICY_PATHS.DETAIL, { siteId, policyId: policy.id })))
 			.catch((error: IAPIError) => {
 				setError('root', {
 					message: error.code,

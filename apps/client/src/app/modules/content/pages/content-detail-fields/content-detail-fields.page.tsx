@@ -4,6 +4,7 @@ import { RenderFields, TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
 import { Alert, AlertTypes, Button, HTMLButtonTypes } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 
 import { CONTENT_PATHS } from '../../content.routes';
 import { IContentItem, useContentStore } from '../../stores/content';
@@ -13,6 +14,7 @@ export const ContentDetailFieldsPage = () => {
 	const [updateContentItem, updateContentItemLoading] = useContentStore((state) => [state.updateContentItem, state.updateContentItemLoading]);
 	const [contentItem] = useContentStore((state) => [state.contentItem]);
 	const { t } = useTranslation();
+	const { siteId } = useParams();
 	const [setBreadcrumbs] = useHeaderStore((state) => [state.setBreadcrumbs]);
 	const formMethods = useForm<IContentItem>({
 		// resolver: yupResolver(editFieldSchema),
@@ -41,7 +43,7 @@ export const ContentDetailFieldsPage = () => {
 			return;
 		}
 
-		updateContentItem(contentItem.id, values).catch((error: IAPIError) => {
+		updateContentItem(siteId!, contentItem.id, values).catch((error: IAPIError) => {
 			setError('root', {
 				message: error.code,
 			});

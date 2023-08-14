@@ -5,6 +5,11 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 	cfg.service(
 		web::scope("/api/v1")
 			.service(web::scope("/status").service(modules::core::controllers::status::ping))
+			.service(web::scope("/setup").service(modules::setup::controllers::setup::register))
+			.service(web::scope("/languages")
+				.service(modules::languages::controllers::languages::find_all)
+				.service(modules::languages::controllers::languages::find_one)
+			)
 			.service(
 				web::scope("/auth")
 					.service(modules::auth::controllers::auth::me)

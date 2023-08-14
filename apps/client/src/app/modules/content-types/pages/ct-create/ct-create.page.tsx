@@ -2,7 +2,7 @@ import { CONTENT_TYPE_KINDS_OPTIONS, IAPIError, useContentTypeStore, useHeaderSt
 import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { SelectField, TextField, TextareaField } from '@ibs/forms';
 
@@ -24,6 +24,7 @@ export const CTCreatePage = () => {
 		state.workflowsLoading,
 		state.fetchWorkflows,
 	]);
+	const { siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 	const navigate = useNavigate();
 	const formMethods = useForm<ICreateContentTypeForm>({
@@ -37,13 +38,13 @@ export const CTCreatePage = () => {
 	} = formMethods;
 
 	useEffect(() => {
-		fetchWorkflows({ pagesize: -1 });
+		fetchWorkflows(siteId!, { pagesize: -1 });
 		setBreadcrumbs([{ label: 'Content Types', to: CONTENT_TYPES_PATHS.ROOT }, { label: 'Create' }]);
 	}, []);
 
 	const onSubmit = (values: ICreateContentTypeForm) => {
-		createContentType(values)
-			.then((contentType) => navigate(generatePath(CONTENT_TYPES_PATHS.DETAIL, { contentTypeId: contentType.id })))
+		createContentType(siteId!, values)
+			.then((contentType) => navigate(generatePath(CONTENT_TYPES_PATHS.DETAIL, { contentTypeId: contentType.id, siteId })))
 			.catch((error: IAPIError) => {
 				setError('root', {
 					message: error.code,

@@ -3,7 +3,15 @@ import { Button, IResourceExplorerSelection, Modal, ModalFooter, ResourceExplore
 
 import { ISelectAssetModalProps } from './select-asset-modal.types';
 
-export const SelectAssetModal: FC<ISelectAssetModalProps> = ({ onSubmit, modalOpen, onClose, min = 1, max = 1, defaultSelection }: ISelectAssetModalProps) => {
+export const SelectAssetModal: FC<ISelectAssetModalProps> = ({
+	onSubmit,
+	modalOpen,
+	onClose,
+	min = 1,
+	max = 1,
+	defaultSelection,
+	siteId,
+}: ISelectAssetModalProps) => {
 	const [selection, setSelection] = useState<IResourceExplorerSelection[]>([]);
 	const [configuration, setConfiguration] = useState<{ repositoryId?: string; path: string }>({ path: '' });
 
@@ -11,7 +19,7 @@ export const SelectAssetModal: FC<ISelectAssetModalProps> = ({ onSubmit, modalOp
 		if (defaultSelection) {
 			setSelection(Array.isArray(defaultSelection) ? defaultSelection : [defaultSelection]);
 		}
-	}, [defaultSelection])
+	}, [defaultSelection]);
 
 	const handleSubmit = () => {
 		if (min === 1 && max === 1) {
@@ -19,11 +27,12 @@ export const SelectAssetModal: FC<ISelectAssetModalProps> = ({ onSubmit, modalOp
 		}
 
 		return onSubmit(selection);
-	}
+	};
 
 	return (
 		<Modal modalOpen={modalOpen} title="Select asset(s)" onClose={onClose} size="lg">
 			<ResourceExplorer
+				siteId={siteId}
 				selection={selection}
 				actions={[ResourceExplorerAction.SELECT, ResourceExplorerAction.VIEW]}
 				onChangeConfiguration={(repositoryId, path) => setConfiguration({ repositoryId, path })}
@@ -34,7 +43,9 @@ export const SelectAssetModal: FC<ISelectAssetModalProps> = ({ onSubmit, modalOp
 				maxSelection={max}
 			/>
 			<ModalFooter>
-				<Button onClick={handleSubmit} disabled={selection.length < min || selection.length > max}>Select ({selection.length}/{max})</Button>
+				<Button onClick={handleSubmit} disabled={selection.length < min || selection.length > max}>
+					Select ({selection.length}/{max})
+				</Button>
 			</ModalFooter>
 		</Modal>
 	);

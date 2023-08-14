@@ -71,18 +71,18 @@ export interface IFetchContentTypesParameters {
 export type IContentTypesResponse = IAPIHALResponse<'contentTypes', IContentType>
 
 export interface IContentTypeStoreState {
-	fetchContentTypes: (params?: IPageParameters & IFetchContentTypesParameters) => Promise<void>;
+	fetchContentTypes: (siteId: string, params?: IPageParameters & IFetchContentTypesParameters) => Promise<void>;
 	contentTypes: IContentType[];
 	contentTypesLoading: boolean;
 
-	fetchContentType: (contentTypeId: string) => Promise<IContentType>;
+	fetchContentType: (siteId: string, contentTypeId: string) => Promise<IContentType>;
 	contentType?: IContentType,
 	contentTypeLoading: boolean;
 
-	createContentType: (contentType: IContentTypeCreateDTO) => Promise<IContentType>;
+	createContentType: (siteId: string, contentType: IContentTypeCreateDTO) => Promise<IContentType>;
 	createContentTypeLoading: boolean;
 
-	updateContentType: (contentTypeId: string, values: IContentTypeUpdateDTO) => Promise<IContentType>;
+	updateContentType: (siteId: string, contentTypeId: string, values: IContentTypeUpdateDTO) => Promise<IContentType>;
 	updateContentTypeLoading: boolean;
 }
 

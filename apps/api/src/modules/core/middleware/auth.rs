@@ -190,7 +190,7 @@ impl SkipAuthRoute {
 }
 
 lazy_static! {
-	static ref SKIP_AUTH_ROUTES: [SkipAuthRoute; 6] = [
+	static ref SKIP_AUTH_ROUTES: [SkipAuthRoute; 7] = [
 		SkipAuthRoute {
 			path: Regex::new(r"/api/v1/auth/local/*").unwrap(),
 			method: Method::POST,
@@ -206,6 +206,10 @@ lazy_static! {
 		SkipAuthRoute {
 			path: Regex::new(r"/api/v1/auth/slack/*").unwrap(),
 			method: Method::GET,
+		},
+		SkipAuthRoute {
+			path: Regex::new(r"/api/v1/setup/*").unwrap(),
+			method: Method::POST,
 		},
 		SkipAuthRoute {
 			path: Regex::new(r"/api/v1/sites/(.*)/storage-repositories/(.*)/files").unwrap(),

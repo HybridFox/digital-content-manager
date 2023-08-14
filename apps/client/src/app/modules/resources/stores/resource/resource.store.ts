@@ -4,10 +4,9 @@ import { kyInstance, useAuthStore, wrapApi } from '@ibs/shared';
 
 import { IResourceStoreState, IResourcesResponse } from './resource.types';
 
-const fetchResources = (set: any) => async (contentRepositoryId: any, params?: any) => {
+const fetchResources = (set: any) => async (siteId: string, contentRepositoryId: any, params?: any) => {
 	set(() => ({ resourcesLoading: true }));
-	const { activeSite } = useAuthStore.getState();
-	const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/storage-repositories/${contentRepositoryId}/directories`, {
+	const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/storage-repositories/${contentRepositoryId}/directories`, {
 		searchParams: {
 			...(params || {})
 		}
@@ -26,10 +25,9 @@ export const useResourceStore = create<IResourceStoreState>()(devtools(
 		resources: [],
 		resourcesLoading: false,
 
-		createDirectory: async (contentRepositoryId, path, name) => {
+		createDirectory: async (siteId, contentRepositoryId, path, name) => {
 			set(() => ({ createDirectoryLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			await wrapApi(kyInstance.post(`/api/v1/sites/${activeSite?.id}/storage-repositories/${contentRepositoryId}/directories`, {
+			await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/storage-repositories/${contentRepositoryId}/directories`, {
 				json: {
 					name,
 				},
@@ -43,10 +41,9 @@ export const useResourceStore = create<IResourceStoreState>()(devtools(
 		},
 		createDirectoryLoading: false,
 
-		removeDirectory: async (contentRepositoryId, path, name) => {
+		removeDirectory: async (siteId, contentRepositoryId, path, name) => {
 			set(() => ({ removeDirectoryLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			await wrapApi(kyInstance.delete(`/api/v1/sites/${activeSite?.id}/storage-repositories/${contentRepositoryId}/directories`, {
+			await wrapApi(kyInstance.delete(`/api/v1/sites/${siteId}/storage-repositories/${contentRepositoryId}/directories`, {
 				searchParams: {
 					path: `${path}/${name}`
 				}
@@ -57,13 +54,12 @@ export const useResourceStore = create<IResourceStoreState>()(devtools(
 		},
 		removeDirectoryLoading: false,
 
-		uploadFile: async (contentRepositoryId, path, file) => {
+		uploadFile: async (siteId, contentRepositoryId, path, file) => {
 			set(() => ({ uploadFileLoading: true }));
 			const formData = new FormData();
 			formData.append('file', file);
 
-			const { activeSite } = useAuthStore.getState();
-			await wrapApi(kyInstance.post(`/api/v1/sites/${activeSite?.id}/storage-repositories/${contentRepositoryId}/files`, {
+			await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/storage-repositories/${contentRepositoryId}/files`, {
 				body: formData,
 				searchParams: {
 					path

@@ -1,5 +1,6 @@
-use crate::errors::AppError;
-use crate::schema::sites;
+use crate::modules::languages::models::language::Language;
+use crate::{errors::AppError, schema::sites_languages};
+use crate::schema::{sites, languages};
 use chrono::NaiveDateTime;
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
@@ -7,6 +8,8 @@ use serde::{Deserialize, Serialize};
 use slug::slugify;
 use tracing::instrument;
 use uuid::Uuid;
+
+use super::site_language::SiteLanguage;
 
 #[derive(Identifiable, Queryable, Selectable, Serialize, Deserialize, Debug, Clone)]
 #[diesel(table_name = sites)]
@@ -41,25 +44,56 @@ impl Site {
 		Ok(site)
 	}
 
-	pub fn find_one(conn: &mut PgConnection, id: Uuid) -> Result<Self, AppError> {
+	pub fn find_one(conn: &mut PgConnection, id: Uuid) -> Result<(Self, Vec<Language>), AppError> {
 		let t = sites::table.find(id);
-		let site = t.first(conn)?;
-		Ok(site)
+		let site = t.get_result::<Site>(conn)?;
+
+		let languages = SiteLanguage::belonging_to(&site)
+			.inner_join(languages::table.on(languages::id.eq(sites_languages::language_id)))
+			.select(Language::as_select())
+			.load::<Language>(conn)?;
+
+		Ok((site, languages))
 	}
 
 	pub fn find(
 		conn: &mut PgConnection,
 		page: i64,
 		pagesize: i64,
-	) -> Result<(Vec<Self>, i64), AppError> {
-		let sites = sites::table
-			.select(Site::as_select())
-			.offset((page - 1) * pagesize)
-			.limit(pagesize)
-			.load::<Site>(conn)?;
+	) -> Result<(Vec<(Self, Vec<Language>)>, i64), AppError> {
+		let query = {
+			let mut query = sites::table.into_boxed();
+
+			if pagesize != -1 {
+				query = query.offset((page - 1) * pagesize).limit(pagesize);
+			};
+
+			query
+		};
+
+		let sites = query.select(Site::as_select()).load::<Site>(conn)?;
+
+		let languages = SiteLanguage::belonging_to(&sites)
+			.inner_join(languages::table.on(languages::id.eq(sites_languages::language_id)))
+			.select((SiteLanguage::as_select(), Language::as_select()))
+			.load::<(SiteLanguage, Language)>(conn)?;
+		let grouped_languages = languages.grouped_by(&sites);
+
+		let result = sites
+			.into_iter()
+			.zip(grouped_languages)
+			.map(|(site, site_languages)| {
+				let languages = site_languages
+					.into_iter()
+					.map(|(_site_language, language)| language)
+					.collect::<Vec<Language>>();
+				(site, languages)
+			})
+			.collect::<Vec<(Self, Vec<Language>)>>();
+
 		let total_elements = sites::table.count().get_result::<i64>(conn)?;
 
-		Ok((sites, total_elements))
+		Ok((result, total_elements))
 	}
 
 	pub fn update(
@@ -68,10 +102,10 @@ impl Site {
 		changeset: UpdateSite,
 	) -> Result<Self, AppError> {
 		let target = sites::table.find(site_id);
-		let user = diesel::update(target)
+		let site = diesel::update(target)
 			.set(changeset)
 			.get_result::<Site>(conn)?;
-		Ok(user)
+		Ok(site)
 	}
 
 	pub fn remove(conn: &mut PgConnection, site_id: Uuid) -> Result<(), AppError> {

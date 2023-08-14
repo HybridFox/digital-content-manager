@@ -15,21 +15,21 @@ export interface IContentTypeField {
 export type IContentTypeFieldsResponse = IAPIHALResponse<'fields', IContentTypeField>
 
 export interface IContentTypeFieldStoreState {
-	fetchFields: (contentTypeId: string) => Promise<void>;
+	fetchFields: (siteId: string, contentTypeId: string) => Promise<void>;
 	fields: IContentTypeField[];
 	fieldsLoading: boolean;
 
-	fetchField: (contentTypeId: string, fieldId: string) => Promise<void>;
+	fetchField: (siteId: string, contentTypeId: string, fieldId: string) => Promise<void>;
 	field?: IContentTypeField,
 	fieldLoading: boolean;
 
-	createField: (contentTypeId: string, field: IContentTypeFieldCreateDTO) => Promise<IContentTypeField>;
+	createField: (siteId: string, contentTypeId: string, field: IContentTypeFieldCreateDTO) => Promise<IContentTypeField>;
 	createFieldLoading: boolean;
 
-	updateField: (contentTypeId: string, fieldId: string, field: IContentTypeFieldUpdateDTO) => Promise<IContentTypeField>;
+	updateField: (siteId: string, contentTypeId: string, fieldId: string, field: IContentTypeFieldUpdateDTO) => Promise<IContentTypeField>;
 	updateFieldLoading: boolean;
 
-	deleteField: (contentTypeId: string, fieldId: string) => Promise<void>;
+	deleteField: (siteId: string, contentTypeId: string, fieldId: string) => Promise<void>;
 	deleteFieldLoading: boolean;
 }
 

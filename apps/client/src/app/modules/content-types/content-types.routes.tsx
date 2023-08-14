@@ -1,8 +1,8 @@
 import { Navigate, RouteObject } from "react-router-dom";
 
-import { APP_ROOT_PATH } from "../core/routes.const"
+import { APP_SITE_ROOT_PATH } from "../core/routes.const"
 
-const ROOT_PATH = `${APP_ROOT_PATH}/content-types`;
+const ROOT_PATH = `${APP_SITE_ROOT_PATH}/content-types`;
 const DETAIL_PATH = `${ROOT_PATH}/:contentTypeId`;
 const FIELD_DETAIL_PATH = `${DETAIL_PATH}/fields/:fieldId`;
 
@@ -20,7 +20,7 @@ export const CONTENT_TYPES_PATHS = {
 	FIELD_DETAIL_DEFAULT_VALUE: `${FIELD_DETAIL_PATH}/default-value`,
 }
 
-export const CONTENT_TYPES_ROUTES: RouteObject[] = [
+export const CONTENT_TYPE_ROUTES: RouteObject[] = [
 	{
 		path: CONTENT_TYPES_PATHS.ROOT,
 		lazy: async () => ({ Component: (await import('./pages/ct-list/ct-list.page')).CTListPage }),

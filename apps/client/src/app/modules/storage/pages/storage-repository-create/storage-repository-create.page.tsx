@@ -1,12 +1,11 @@
 import {
 	IAPIError,
-	IField,
 	STORAGE_KINDS,
 	useHeaderStore,
 	useStorageRepositoryStore,
 } from '@ibs/shared';
 import { useEffect } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { RenderFields, SelectField, TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
 import { Alert, AlertTypes, Button, HTMLButtonTypes, Header } from '@ibs/components';
@@ -30,6 +29,7 @@ export const StorageRepositoryCreatePage = () => {
 		state.createStorageRepositoryLoading,
 	]);
 	const navigate = useNavigate();
+	const { siteId } = useParams();
 	const { t } = useTranslation();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 	const formMethods = useForm<CreateStorageRepositoryForm>({
@@ -52,8 +52,8 @@ export const StorageRepositoryCreatePage = () => {
 	}, []);
 
 	const onSubmit = (values: CreateStorageRepositoryForm) => {
-		createStorageRepository(values)
-			.then((storageRepository) => navigate(generatePath(STORAGE_PATHS.DETAIL, { storageRepositoryId: storageRepository.id })))
+		createStorageRepository(siteId!, values)
+			.then((storageRepository) => navigate(generatePath(STORAGE_PATHS.DETAIL, { siteId, storageRepositoryId: storageRepository.id })))
 			.catch((error: IAPIError) => {
 				setError('root', {
 					message: error.code,

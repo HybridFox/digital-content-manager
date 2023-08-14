@@ -19,17 +19,17 @@ export interface IFetchResourcesParams {
 export type IResourcesResponse = IAPIHALResponse<'resources', IResource>;
 
 export interface IResourceStoreState {
-	fetchResources: (contentRepositoryId: string, params: IPageParameters & IFetchResourcesParams) => Promise<void>;
+	fetchResources: (siteId: string, contentRepositoryId: string, params: IPageParameters & IFetchResourcesParams) => Promise<void>;
 	resources: IResource[];
 	resourcesLoading: boolean;
 
-	createDirectory: (contentRepositoryId: string, path: string, name: string) => Promise<void>;
+	createDirectory: (siteId: string, contentRepositoryId: string, path: string, name: string) => Promise<void>;
 	createDirectoryLoading: boolean;
 
-	removeDirectory: (contentRepositoryId: string, path: string, name: string) => Promise<void>;
+	removeDirectory: (siteId: string, contentRepositoryId: string, path: string, name: string) => Promise<void>;
 	removeDirectoryLoading: boolean;
 
-	uploadFile: (contentRepositoryId: string, path: string, file: File) => Promise<void>;
+	uploadFile: (siteId: string, contentRepositoryId: string, path: string, file: File) => Promise<void>;
 	uploadFileLoading: boolean;
 
 	// fetchResource: (contentId: string) => Promise<IResource>;

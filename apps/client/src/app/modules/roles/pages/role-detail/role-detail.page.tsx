@@ -36,7 +36,7 @@ export const RoleDetailPage = () => {
 		state.updateRoleLoading,
 		state.updateRole,
 	]);
-	const { roleId } = useParams();
+	const { roleId, siteId } = useParams();
 	const { t } = useTranslation();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 	const formMethods = useForm<UpdateRoleForm>({
@@ -58,8 +58,8 @@ export const RoleDetailPage = () => {
 			return;
 		}
 
-		fetchPolicies();
-		fetchRole(roleId);
+		fetchPolicies(siteId!);
+		fetchRole(siteId!, roleId);
 		setBreadcrumbs([
 			{ label: t(`BREADCRUMBS.ROLES`), to: ROLE_PATHS.ROOT },
 			{ label: t(`BREADCRUMBS.CREATE`) },
@@ -71,7 +71,7 @@ export const RoleDetailPage = () => {
 			return;
 		}
 	
-		updateRole(roleId, values)
+		updateRole(siteId!, roleId, values)
 			.catch((error: IAPIError) => {
 				setError('root', {
 					message: error.code,

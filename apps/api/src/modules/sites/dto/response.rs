@@ -1,8 +1,8 @@
 use crate::modules::{
-	sites::models::{site::Site, language::Language},
+	sites::models::{site::Site},
 	core::models::hal::{HALLinkList, HALPage},
 	roles::{dto::response::RoleWithPoliciesWithPermissionsDTO, models::role::Role},
-	iam_policies::models::{iam_policy::IAMPolicy, permission::Permission},
+	iam_policies::models::{iam_policy::IAMPolicy, permission::Permission}, languages::models::language::Language,
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
@@ -29,6 +29,32 @@ impl From<Site> for SiteDTO {
 			slug: site.slug,
 			created_at: site.created_at,
 			updated_at: site.updated_at,
+		}
+	}
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+pub struct SiteWithLanguagesDTO {
+	pub id: Uuid,
+	pub name: String,
+	pub slug: String,
+	pub created_at: NaiveDateTime,
+	pub updated_at: NaiveDateTime,
+	pub languages: Vec<LanguageDTO>
+}
+
+impl From<(Site, Vec<Language>)> for SiteWithLanguagesDTO {
+	fn from((site, languages): (Site, Vec<Language>)) -> Self {
+		Self {
+			id: site.id,
+			name: site.name,
+			slug: site.slug,
+			created_at: site.created_at,
+			updated_at: site.updated_at,
+			languages: languages
+				.into_iter()
+				.map(|language| LanguageDTO::from(language))
+				.collect(),
 		}
 	}
 }
@@ -77,7 +103,7 @@ impl
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct SitesEmbeddedDTO {
-	pub sites: Vec<SiteDTO>,
+	pub sites: Vec<SiteWithLanguagesDTO>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
@@ -87,14 +113,14 @@ pub struct SitesDTO {
 	pub _embedded: SitesEmbeddedDTO,
 }
 
-impl From<(Vec<Site>, HALPage)> for SitesDTO {
-	fn from((sites, page): (Vec<Site>, HALPage)) -> Self {
+impl From<(Vec<(Site, Vec<Language>)>, HALPage)> for SitesDTO {
+	fn from((sites, page): (Vec<(Site, Vec<Language>)>, HALPage)) -> Self {
 		Self {
 			_links: HALLinkList::from(("/api/v1/sites".to_owned(), &page)),
 			_embedded: SitesEmbeddedDTO {
 				sites: sites
 					.iter()
-					.map(|site| SiteDTO::from(site.clone()))
+					.map(|site| SiteWithLanguagesDTO::from(site.clone()))
 					.collect(),
 			},
 			_page: page,

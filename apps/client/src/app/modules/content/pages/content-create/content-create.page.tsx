@@ -23,6 +23,7 @@ export const ContentCreatePage = () => {
 		state.contentTypesLoading,
 		state.fetchContentTypes,
 	]);
+	const { siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 	const [activeSite] = useAuthStore((state) => [state.activeSite]);
 	const [modalOpen, setModalOpen] = useState(false);
@@ -38,7 +39,7 @@ export const ContentCreatePage = () => {
 			return;
 		}
 
-		fetchContentTypes({ pagesize: -1, kind: CONTENT_TYPE_KINDS_PARAMETER_MAP[kind] });
+		fetchContentTypes(siteId!, { pagesize: -1, kind: CONTENT_TYPE_KINDS_PARAMETER_MAP[kind] });
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`), to: CONTENT_PATHS.ROOT }, { label: t(`BREADCRUMBS.CREATE`) }]);
 	}, []);
 
@@ -49,7 +50,7 @@ export const ContentCreatePage = () => {
 
 	const onSubmit = ({ language }: ISelectLanguageForm) => {
 		setModalOpen(false);
-		navigate(generatePath(CONTENT_PATHS.CREATE_DETAIL, { contentTypeId: selectedContentTypeId, kind }) + `?languageId=${language}`)
+		navigate(generatePath(CONTENT_PATHS.CREATE_DETAIL, { contentTypeId: selectedContentTypeId, kind, siteId }) + `?languageId=${language}`)
 	}
 
 	return (

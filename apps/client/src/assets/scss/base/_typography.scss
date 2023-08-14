@@ -1,10 +1,10 @@
 @use '../tools' as tools;
 
 :root {
-	--font-size-h1: #{tools.rem(60px)};
-	--font-size-h2: #{tools.rem(40px)};
-	--font-size-h3: #{tools.rem(30px)};
-	--font-size-h4: #{tools.rem(25px)};
+	--font-size-h1: #{tools.rem(40px)};
+	--font-size-h2: #{tools.rem(32px)};
+	--font-size-h3: #{tools.rem(25px)};
+	--font-size-h4: #{tools.rem(22px)};
 	--font-size-h5: #{tools.rem(20px)};
 	--font-size-h6: #{tools.rem(16px)};
 	--font-size-p: #{tools.rem(16px)};

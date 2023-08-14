@@ -143,6 +143,7 @@ async fn main() -> std::io::Result<()> {
 			}))
 			// .wrap(modules::core::middleware::cors::cors())
 			.wrap(modules::core::middleware::auth::Authentication)
+			.wrap(modules::core::middleware::installation::Installation)
 			.service(SwaggerUi::new("/docs/{_:.*}").url("/docs/openapi.json", ApiDoc::openapi()))
 			.configure(routes::api)
 			.default_service(web::route().to(not_found))

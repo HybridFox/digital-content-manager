@@ -1,6 +1,7 @@
 import { FC, useEffect } from 'react';
 import { IResource, ResourceKind, useAuthStore, useResourceStore, useStorageRepositoryStore } from '@ibs/shared';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { Loading } from '../loading';
 import { Table } from '../table';
@@ -18,7 +19,8 @@ export const ResourceExplorer: FC<IResourceExplorerProps> = ({
 	onSelection,
 	selection = [],
 	minSelection,
-	maxSelection
+	maxSelection,
+	siteId,
 }: IResourceExplorerProps) => {
 	const [site] = useAuthStore((state) => [state.activeSite]);
 	const [resources, resourcesLoading, fetchResources] = useResourceStore((state) => [
@@ -46,7 +48,7 @@ export const ResourceExplorer: FC<IResourceExplorerProps> = ({
 	} 
 
 	useEffect(() => {
-		fetchStorageRepositories().then(([repository]) => {
+		fetchStorageRepositories(siteId).then(([repository]) => {
 			if (repositoryId) {
 				return;
 			}
@@ -60,7 +62,7 @@ export const ResourceExplorer: FC<IResourceExplorerProps> = ({
 			return;
 		}
 
-		fetchResources(repositoryId, { path: path });
+		fetchResources(siteId, repositoryId, { path: path });
 	}, [path, repositoryId]);
 
 	const evaluatePath = (path: string) => {
@@ -89,7 +91,7 @@ export const ResourceExplorer: FC<IResourceExplorerProps> = ({
 			return;
 		}
 
-		await removeDirectory(repositoryId, path, name);
+		await removeDirectory(siteId!, repositoryId, path, name);
 	};
 
 	const handleRemoveFile = async (name: string) => {
@@ -97,7 +99,7 @@ export const ResourceExplorer: FC<IResourceExplorerProps> = ({
 			return;
 		}
 
-		await removeDirectory(repositoryId, path, name);
+		await removeDirectory(siteId!, repositoryId, path, name);
 	};
 
 	const mapResource = (resource: IResource) => ({

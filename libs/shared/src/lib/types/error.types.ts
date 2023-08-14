@@ -1,6 +1,6 @@
 export interface IAPIError {
 	message: string;
-	ststus: number;
+	status: number;
 	identifier: string;
 	code: string;
 }

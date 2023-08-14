@@ -47,7 +47,7 @@ pub async fn create(
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let policy = IAMPolicy::create(conn, params.site_id, &form.name)?;
+	let policy = IAMPolicy::create(conn, Some(params.site_id), &form.name)?;
 
 	form.permissions.iter().try_for_each(|permission| {
 		let created_permission = Permission::create(

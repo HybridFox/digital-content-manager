@@ -11,7 +11,7 @@ import { CONTENT_LIST_COLUMNS } from './content-list.const';
 export const ContentListPage = () => {
 	const [content, contentLoading, fetchContent] = useContentStore((state) => [state.content, state.contentLoading, state.fetchContent]);
 	const { t } = useTranslation();
-	const { kind } = useParams();
+	const { kind, siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] =
 		useHeaderStore((state) => [
 			state.breadcrumbs,
@@ -20,7 +20,7 @@ export const ContentListPage = () => {
 
 	useEffect(() => {
 		console.log(kind);
-		fetchContent({ kind: kind?.toUpperCase().replace('-', '_') });
+		fetchContent(siteId!, { kind: kind?.toUpperCase().replace('-', '_') });
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`) }])
 	}, [kind]);
 

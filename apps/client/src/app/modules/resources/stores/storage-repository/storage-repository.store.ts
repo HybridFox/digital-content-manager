@@ -1,15 +1,14 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
-import { kyInstance, useAuthStore, wrapApi } from '@ibs/shared';
+import { kyInstance, wrapApi } from '@ibs/shared';
 
 import { IStorageRepository, IStorageRepositoryStoreState, IStorageRepositoriesResponse } from './storage-repository.types';
 
 export const useStorageRepositoryStore = create<IStorageRepositoryStoreState>()(devtools(
 	(set) => ({
-		fetchStorageRepositories: async (params) => {
+		fetchStorageRepositories: async (siteId, params) => {
 			set(() => ({ storageRepositoriesLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/storage-repositories`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/storage-repositories`, {
 				searchParams: {
 					...(params || {})
 				}
@@ -26,10 +25,9 @@ export const useStorageRepositoryStore = create<IStorageRepositoryStoreState>()(
 		storageRepositories: [],
 		storageRepositoriesLoading: false,
 
-		fetchStorageRepository: async (storageRepositoryId) => {
+		fetchStorageRepository: async (siteId, storageRepositoryId) => {
 			set(() => ({ storageRepositoryLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/storageRepository/${storageRepositoryId}`).json<IStorageRepository>());
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/storageRepository/${storageRepositoryId}`).json<IStorageRepository>());
 
 			if (error) {
 				set(() => ({ storageRepository: undefined, storageRepositoryLoading: false }));
@@ -42,10 +40,9 @@ export const useStorageRepositoryStore = create<IStorageRepositoryStoreState>()(
 		storageRepository: undefined,
 		storageRepositoryLoading: false,
 
-		createStorageRepository: async (storageRepository) => {
+		createStorageRepository: async (siteId, storageRepository) => {
 			set(() => ({ createStorageRepositoryLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${activeSite?.id}/storageRepositories`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/storageRepositories`, {
 				json: storageRepository,
 			}).json<IStorageRepository>());
 			set(() => ({ createStorageRepositoryLoading: false }));
@@ -58,10 +55,9 @@ export const useStorageRepositoryStore = create<IStorageRepositoryStoreState>()(
 		},
 		createStorageRepositoryLoading: false,
 
-		updateStorageRepository: async (storageRepositoryId, data) => {
+		updateStorageRepository: async (siteId, storageRepositoryId, data) => {
 			set(() => ({ updateStorageRepositoryLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${activeSite?.id}/content/${storageRepositoryId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/content/${storageRepositoryId}`, {
 				json: data,
 			}).json<IStorageRepository>());
 

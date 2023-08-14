@@ -18,11 +18,11 @@ export const UserListPage = () => {
 	// 	state.removeWorkflowState
 	// ]);
 	const { t } = useTranslation();
-	const { kind } = useParams();
+	const { kind, siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		fetchWorkflowStates();
+		fetchWorkflowStates(siteId!);
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.USERS`) }]);
 	}, [kind]);
 

@@ -44,6 +44,7 @@ export const CTContentComponentsPage = () => {
 		state.contentType,
 		state.fetchContentType,
 	]);
+	const { siteId } = useParams();
 	const [createFieldLoading, createField, deleteField] =
 		useContentTypeFieldStore((state) => [
 			state.createFieldLoading,
@@ -70,6 +71,7 @@ export const CTContentComponentsPage = () => {
 				badge: contentType && CONTENT_TYPE_KINDS_TRANSLATIONS[contentType.kind],
 				to: generatePath(CONTENT_TYPES_PATHS.DETAIL, {
 					contentTypeId: contentType?.id || '',
+					siteId,
 				}),
 			},
 			{ label: 'Content Components' },
@@ -81,7 +83,7 @@ export const CTContentComponentsPage = () => {
 			return navigate('/not-found');
 		}
 
-		fetchContentComponents({ pagesize: -1, includeInternal: true });
+		fetchContentComponents(siteId!, { pagesize: -1, includeInternal: true });
 	}, []);
 
 	const onCreateField = (values: IAddContentComponentForm) => {
@@ -89,12 +91,13 @@ export const CTContentComponentsPage = () => {
 			return;
 		}
 
-		createField(contentType.id, values)
+		createField(siteId!, contentType.id, values)
 			.then((field) =>
 				navigate(
 					generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL, {
 						contentTypeId: contentType.id,
 						fieldId: field.id,
+						siteId,
 					})
 				)
 			)
@@ -110,11 +113,11 @@ export const CTContentComponentsPage = () => {
 			return;
 		}
 
-		deleteField(contentType.id, fieldId)
+		deleteField(siteId!, contentType.id, fieldId)
 			.then(() => {
 				setDeleteError(null);
 				// TODO: fix this so that i dont have to reload the whole CT
-				fetchContentType(contentType.id)
+				fetchContentType(siteId!, contentType.id)
 
 			})
 			.catch((error: IAPIError) => setDeleteError(error.code));

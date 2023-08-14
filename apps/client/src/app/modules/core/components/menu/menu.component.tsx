@@ -1,7 +1,19 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, generatePath, useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
 import { useAuthStore } from '@ibs/shared';
 import { HasPermission } from '@ibs/components';
+
+import { DASHBOARD_PATHS } from '../../../dashboard';
+import { RESOURCE_PATHS } from '../../../resources';
+import { CONTENT_PATHS } from '../../../content/content.routes';
+import { CONTENT_TYPES_PATHS } from '../../../content-types';
+import { CONTENT_COMPONENT_PATHS } from '../../../content-components';
+import { WORKFLOW_PATHS } from '../../../workflow';
+import { USER_PATHS } from '../../../users';
+import { ROLE_PATHS } from '../../../roles';
+import { POLICY_PATHS } from '../../../policies';
+import { STORAGE_PATHS } from '../../../storage';
+import { AUTHENTICATION_METHOD_PATHS } from '../../../authentication-methods';
 
 import styles from './menu.module.scss';
 const cxBind = cx.bind(styles);
@@ -17,6 +29,7 @@ const navLinkBinding = {
 
 export const Menu = () => {
 	const { user } = useAuthStore();
+	const { siteId } = useParams();
 
 	return (
 		<div className={cxBind('o-menu')}>
@@ -26,14 +39,14 @@ export const Menu = () => {
 			<div className={cxBind('o-menu__links')}>
 				<ul>
 					<li>
-						<NavLink {...navLinkBinding} to="/app/dashboard">
+						<NavLink {...navLinkBinding} to={generatePath(DASHBOARD_PATHS.ROOT, { siteId })}>
 							<i className="las la-chart-line"></i>
 							<span>Dashboard</span>
 						</NavLink>
 					</li>
 					<li>
 						<HasPermission action='resources/read' resource='*'>
-							<NavLink {...navLinkBinding} to="/app/resources">
+							<NavLink {...navLinkBinding} to={generatePath(RESOURCE_PATHS.ROOT, { siteId })}>
 								<i className="las la-photo-video"></i>
 								<span>Resources</span>
 							</NavLink>
@@ -47,19 +60,19 @@ export const Menu = () => {
 				</p>
 				<ul>
 					<li>
-						<NavLink {...navLinkBinding} to="/app/content/content">
+						<NavLink {...navLinkBinding} to={generatePath(CONTENT_PATHS.ROOT, { siteId, kind: 'content' })}>
 							<i className="las la-th-list"></i>
 							<span>Content</span>
 						</NavLink>
 					</li>
 					<li>
-						<NavLink {...navLinkBinding} to="/app/content/page">
+						<NavLink {...navLinkBinding} to={generatePath(CONTENT_PATHS.ROOT, { siteId, kind: 'page' })}>
 							<i className="las la-file"></i>
 							<span>Pages</span>
 						</NavLink>
 					</li>
 					<li>
-						<NavLink {...navLinkBinding} to="/app/content/content-block">
+						<NavLink {...navLinkBinding} to={generatePath(CONTENT_PATHS.ROOT, { siteId, kind: 'content-block' })}>
 							<i className="las la-cubes"></i>
 							<span>Blocks</span>
 						</NavLink>
@@ -75,25 +88,25 @@ export const Menu = () => {
 					<NavLink {...navLinkBinding} to="/app/page-types"><i className="las la-file-invoice"></i> Page Types</NavLink>
 				</li> */}
 					<li>
-						<NavLink {...navLinkBinding} to="/app/content-types">
+						<NavLink {...navLinkBinding} to={generatePath(CONTENT_TYPES_PATHS.ROOT, { siteId })}>
 							<i className="las la-book"></i>
 							<span>Content Types</span>
 						</NavLink>
 					</li>
 					<li>
-						<NavLink {...navLinkBinding} to="/app/content-components">
+						<NavLink {...navLinkBinding} to={generatePath(CONTENT_COMPONENT_PATHS.ROOT, { siteId })}>
 							<i className="las la-puzzle-piece"></i>
 							<span>Content Components</span>
 						</NavLink>
 					</li>
 					<li>
-						<NavLink {...navLinkBinding} to="/app/workflows">
+						<NavLink {...navLinkBinding} to={generatePath(WORKFLOW_PATHS.WORKFLOWS_ROOT, { siteId })}>
 							<i className="las la-sitemap"></i>
 							<span>Workflows</span>
 						</NavLink>
 					</li>
 					<li>
-						<NavLink {...navLinkBinding} to="/app/workflow-states">
+						<NavLink {...navLinkBinding} to={generatePath(WORKFLOW_PATHS.WORKFLOW_STATES_ROOT, { siteId })}>
 							<i className="las la-sliders-h"></i>
 							<span>Workflow States</span>
 						</NavLink>
@@ -112,7 +125,7 @@ export const Menu = () => {
 				</p>
 				<ul>
 					<li>
-						<NavLink {...navLinkBinding} to="/app/users">
+						<NavLink {...navLinkBinding} to={generatePath(USER_PATHS.ROOT, { siteId })}>
 							<i className="las la-user"></i>
 							<span>Users</span>
 						</NavLink>
@@ -121,27 +134,21 @@ export const Menu = () => {
 					<NavLink {...navLinkBinding} to="/auth"><i className="las la-list-alt"></i>Permissions</NavLink>
 				</li> */}
 					<li>
-						<NavLink {...navLinkBinding} to="/app/roles">
+						<NavLink {...navLinkBinding} to={generatePath(ROLE_PATHS.ROOT, { siteId })}>
 							<i className="las la-list-alt"></i>
 							<span>Roles</span>
 						</NavLink>
 					</li>
 					<li>
-						<NavLink {...navLinkBinding} to="/app/policies">
+						<NavLink {...navLinkBinding} to={generatePath(POLICY_PATHS.ROOT, { siteId })}>
 							<i className="las la-key"></i>
 							<span>Policies</span>
 						</NavLink>
 					</li>
 					<li>
-						<NavLink {...navLinkBinding} to="/app/storage-repositories">
+						<NavLink {...navLinkBinding} to={generatePath(STORAGE_PATHS.ROOT, { siteId })}>
 							<i className="las la-server"></i>
 							<span>Storage</span>
-						</NavLink>
-					</li>
-					<li>
-						<NavLink {...navLinkBinding} to="/app/authentication-methods">
-							<i className="las la-server"></i>
-							<span>Authentication Methods</span>
 						</NavLink>
 					</li>
 					{/* <li>

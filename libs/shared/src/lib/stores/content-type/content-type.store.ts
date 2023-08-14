@@ -2,17 +2,15 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
 
 import { kyInstance, wrapApi } from '../../services/ky.instance';
-import { useAuthStore } from '../auth';
 import { DEFAULT_PAGINATION_OPTIONS } from '../../const';
 
 import { IContentType, IContentTypeStoreState, IContentTypesResponse } from './content-type.types';
 
 export const useContentTypeStore = create<IContentTypeStoreState>()(devtools(
 	(set) => ({
-		fetchContentTypes: async (searchParams) => {
+		fetchContentTypes: async (siteId, searchParams) => {
 			set(() => ({ contentTypesLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/content-types`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content-types`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -28,10 +26,9 @@ export const useContentTypeStore = create<IContentTypeStoreState>()(devtools(
 		contentTypes: [],
 		contentTypesLoading: false,
 
-		fetchContentType: async (contentTypeId) => {
+		fetchContentType: async (siteId, contentTypeId) => {
 			set(() => ({ contentTypeLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/content-types/${contentTypeId}`).json<IContentType>());
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content-types/${contentTypeId}`).json<IContentType>());
 
 			if (error) {
 				set(() => ({ contentType: undefined, contentTypeLoading: false }));
@@ -44,10 +41,9 @@ export const useContentTypeStore = create<IContentTypeStoreState>()(devtools(
 		contentType: undefined,
 		contentTypeLoading: false,
 
-		createContentType: async (contentType) => {
+		createContentType: async (siteId, contentType) => {
 			set(() => ({ createContentTypeLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${activeSite?.id}/content-types`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/content-types`, {
 				json: {
 					...contentType,
 					fields: []
@@ -63,10 +59,9 @@ export const useContentTypeStore = create<IContentTypeStoreState>()(devtools(
 		},
 		createContentTypeLoading: false,
 
-		updateContentType: async (contentTypeId, data) => {
+		updateContentType: async (siteId, contentTypeId, data) => {
 			set(() => ({ updateContentTypeLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${activeSite?.id}/content-types/${contentTypeId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/content-types/${contentTypeId}`, {
 				json: data,
 			}).json<IContentType>());
 

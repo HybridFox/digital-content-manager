@@ -6,10 +6,9 @@ import { IUserStoreState, IUsersResponse } from './user.types';
 
 export const useUserStore = create<IUserStoreState>()(devtools(
 	(set) => ({
-		fetchUsers: async (searchParams) => {
+		fetchUsers: async (siteId, searchParams) => {
 			set(() => ({ usersLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/users`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/users`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -25,10 +24,9 @@ export const useUserStore = create<IUserStoreState>()(devtools(
 		users: [],
 		usersLoading: false,
 
-		fetchUser: async (workflowId) => {
+		fetchUser: async (siteId, workflowId) => {
 			set(() => ({ userLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/users/${workflowId}`).json<IUser>());
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/users/${workflowId}`).json<IUser>());
 
 			if (error) {
 				set(() => ({ user: undefined, userLoading: false }));
@@ -40,10 +38,9 @@ export const useUserStore = create<IUserStoreState>()(devtools(
 		user: undefined,
 		userLoading: false,
 
-		createUser: async (user) => {
+		createUser: async (siteId, user) => {
 			set(() => ({ createUserLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${activeSite?.id}/users`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/users`, {
 				json: user,
 			}).json<IUser>());
 			set(() => ({ createUserLoading: false }));
@@ -56,10 +53,9 @@ export const useUserStore = create<IUserStoreState>()(devtools(
 		},
 		createUserLoading: false,
 
-		updateUser: async (userId, data) => {
+		updateUser: async (siteId, userId, data) => {
 			set(() => ({ updateUserLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${activeSite?.id}/users/${userId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/users/${userId}`, {
 				json: data,
 			}).json<IUser>());
 
@@ -73,10 +69,9 @@ export const useUserStore = create<IUserStoreState>()(devtools(
 		},
 		updateUserLoading: false,
 
-		removeUser: async (userId) => {
+		removeUser: async (siteId, userId) => {
 			set(() => ({ removeUserLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.delete(`/api/v1/sites/${activeSite?.id}/users/${userId}`).json<void>());
+			const [result, error] = await wrapApi(kyInstance.delete(`/api/v1/sites/${siteId}/users/${userId}`).json<void>());
 
 			if (error) {
 				set(() => ({ removeUserLoading: false }));

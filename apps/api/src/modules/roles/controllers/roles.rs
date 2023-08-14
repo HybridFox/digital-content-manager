@@ -46,7 +46,7 @@ pub async fn create(
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let (role, policies) =
-		Role::create(conn, params.site_id, form.name.clone(), form.policies.clone())?;
+		Role::create(conn, Some(params.site_id), form.name.clone(), form.policies.clone())?;
 	let res = response::RoleWithPoliciesDTO::from((role, policies));
 	Ok(HttpResponse::Ok().json(res))
 }

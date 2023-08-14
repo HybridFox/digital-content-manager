@@ -23,21 +23,21 @@ export interface IFetchContentParams {
 export type IContentResponse = IAPIHALResponse<'content', IContentItem>;
 
 export interface IContentStoreState {
-	fetchContent: (params?: IPageParameters & IFetchContentParams) => Promise<void>;
+	fetchContent: (siteId: string, params?: IPageParameters & IFetchContentParams) => Promise<void>;
 	content: IContentItem[];
 	contentLoading: boolean;
 
-	fetchContentItem: (contentId: string) => Promise<IContentItem>;
+	fetchContentItem: (siteId: string, contentId: string) => Promise<IContentItem>;
 	contentItem?: IContentItem,
 	contentItemLoading: boolean;
 
-	createContentItem: (content: IContentCreateDTO) => Promise<IContentItem>;
+	createContentItem: (siteId: string, content: IContentCreateDTO) => Promise<IContentItem>;
 	createContentItemLoading: boolean;
 
-	updateContentItem: (contentId: string, values: IContentUpdateDTO) => Promise<IContentItem>;
+	updateContentItem: (siteId: string, contentId: string, values: IContentUpdateDTO) => Promise<IContentItem>;
 	updateContentItemLoading: boolean;
 
-	fetchDefaultValues: (translationId: string) => Promise<IContentItem>;
+	fetchDefaultValues: (siteId: string, translationId: string) => Promise<IContentItem>;
 	defaultValues?: IContentItem,
 	defaultValuesLoading: boolean;
 }

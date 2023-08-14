@@ -1,15 +1,14 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
-import { kyInstance, useAuthStore, wrapApi } from '@ibs/shared';
+import { kyInstance, wrapApi } from '@ibs/shared';
 
 import { IContentItem, IContentStoreState, IContentResponse } from './content.types';
 
 export const useContentStore = create<IContentStoreState>()(devtools(
 	(set) => ({
-		fetchContent: async (params) => {
+		fetchContent: async (siteId, params) => {
 			set(() => ({ contentLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/content`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content`, {
 				searchParams: {
 					...(params || {})
 				}
@@ -24,10 +23,9 @@ export const useContentStore = create<IContentStoreState>()(devtools(
 		content: [],
 		contentLoading: false,
 
-		fetchContentItem: async (contentId) => {
+		fetchContentItem: async (siteId, contentId) => {
 			set(() => ({ contentLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/content/${contentId}`).json<IContentItem>());
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content/${contentId}`).json<IContentItem>());
 
 			if (error) {
 				set(() => ({ content: undefined, contentLoading: false }));
@@ -40,10 +38,9 @@ export const useContentStore = create<IContentStoreState>()(devtools(
 		contentItem: undefined,
 		contentItemLoading: false,
 
-		createContentItem: async (content) => {
+		createContentItem: async (siteId, content) => {
 			set(() => ({ createContentItemLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${activeSite?.id}/content`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/content`, {
 				json: content,
 			}).json<IContentItem>());
 			set(() => ({ createContentItemLoading: false }));
@@ -56,10 +53,9 @@ export const useContentStore = create<IContentStoreState>()(devtools(
 		},
 		createContentItemLoading: false,
 
-		updateContentItem: async (contentId, data) => {
+		updateContentItem: async (siteId, contentId, data) => {
 			set(() => ({ updateContentItemLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${activeSite?.id}/content/${contentId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/content/${contentId}`, {
 				json: data,
 			}).json<IContentItem>());
 
@@ -73,10 +69,9 @@ export const useContentStore = create<IContentStoreState>()(devtools(
 		},
 		updateContentItemLoading: false,
 
-		fetchDefaultValues: async (translationId) => {
+		fetchDefaultValues: async (siteId, translationId) => {
 			set(() => ({ defaultValuesLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/content/${translationId}/default-values`).json<IContentItem>());
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content/${translationId}/default-values`).json<IContentItem>());
 
 			if (error) {
 				set(() => ({ defaultValues: undefined, defaultValuesLoading: false }));

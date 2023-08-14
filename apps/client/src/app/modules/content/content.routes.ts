@@ -1,6 +1,6 @@
-import { APP_ROOT_PATH } from "../core/routes.const"
+import { APP_SITE_ROOT_PATH } from "../core/routes.const"
 
-const ROOT_PATH = `${APP_ROOT_PATH}/content/:kind`;
+const ROOT_PATH = `${APP_SITE_ROOT_PATH}/content/:kind`;
 const DETAIL_PATH = `${ROOT_PATH}/:contentId`;
 
 export const CONTENT_PATHS = {

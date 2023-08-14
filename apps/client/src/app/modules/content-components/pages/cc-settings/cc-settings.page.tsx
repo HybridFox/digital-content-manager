@@ -8,10 +8,10 @@ import {
 } from '@ibs/components';
 import { IAPIError, useContentComponentStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
-import { generatePath } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 import { TextField, TextareaField } from '@ibs/forms';
 
-import { CONTENT_COMPONENTS_PATHS } from '../../content-components.routes';
+import { CONTENT_COMPONENT_PATHS } from '../../content-components.routes';
 
 import { editContentComponent } from './cc-settings.const';
 
@@ -31,6 +31,7 @@ export const CCSettingsPage = () => {
 		resolver: yupResolver(editContentComponent),
 		defaultValues: contentComponent,
 	});
+	const { siteId } = useParams();
 	const [setBreadcrumbs] = useHeaderStore((state) => [state.setBreadcrumbs]);
 
 	const {
@@ -44,7 +45,7 @@ export const CCSettingsPage = () => {
 			return;
 		}
 
-		updateContentComponent(contentComponent.id, values).catch((error: IAPIError) => {
+		updateContentComponent(siteId!, contentComponent.id, values).catch((error: IAPIError) => {
 			setError('root', {
 				message: error.code,
 			});
@@ -53,11 +54,12 @@ export const CCSettingsPage = () => {
 
 	useEffect(() => {
 		setBreadcrumbs([
-			{ label: 'Content Components', to: CONTENT_COMPONENTS_PATHS.ROOT },
+			{ label: 'Content Components', to: CONTENT_COMPONENT_PATHS.ROOT },
 			{
 				label: contentComponent?.name,
-				to: generatePath(CONTENT_COMPONENTS_PATHS.DETAIL, {
+				to: generatePath(CONTENT_COMPONENT_PATHS.DETAIL, {
 					contentComponentId: contentComponent?.id || '',
+					siteId,
 				}),
 			},
 			{ label: 'Settings' },

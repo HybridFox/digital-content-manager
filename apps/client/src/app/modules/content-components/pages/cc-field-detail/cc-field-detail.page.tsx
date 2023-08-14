@@ -44,7 +44,7 @@ export const CCFieldDetailPage = () => {
 		(state) => [state.updateField, state.updateFieldLoading]
 	);
 	const [breadcrumbs] = useHeaderStore((state) => [state.breadcrumbs]);
-	const params = useParams();
+	const { contentComponentId, siteId, fieldId } = useParams();
 	const navigate = useNavigate();
 	const formMethods = useForm<IEditFieldForm>({
 		resolver: yupResolver(editFieldSchema),
@@ -58,12 +58,12 @@ export const CCFieldDetailPage = () => {
 	} = formMethods;
 
 	useEffect(() => {
-		if (!params.contentComponentId || !params.fieldId) {
+		if (!contentComponentId || !fieldId) {
 			return navigate('/not-found');
 		}
 
-		fetchContentComponentField(params.contentComponentId, params.fieldId);
-		fetchContentComponent(params.contentComponentId);
+		fetchContentComponentField(siteId!, contentComponentId, fieldId);
+		fetchContentComponent(siteId!, contentComponentId);
 	}, []);
 
 	const onSubmit = (values: IEditFieldForm) => {
@@ -71,7 +71,7 @@ export const CCFieldDetailPage = () => {
 			return;
 		}
 
-		updateField(contentComponent.id, contentComponentField?.id, values).catch(
+		updateField(siteId!, contentComponent.id, contentComponentField?.id, values).catch(
 			(error: IAPIError) => {
 				setError('root', {
 					message: error.code,
@@ -88,7 +88,7 @@ export const CCFieldDetailPage = () => {
 						Editing field <i>"{contentComponentField?.name || '...'}"</i>
 					</>
 				}
-				tabs={FIELD_DETAIL_TABS(contentComponent, contentComponentField)}
+				tabs={FIELD_DETAIL_TABS(siteId!, contentComponent, contentComponentField)}
 				breadcrumbs={breadcrumbs}
 			></Header>
 			<Loading

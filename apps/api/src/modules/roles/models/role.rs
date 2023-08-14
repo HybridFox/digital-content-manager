@@ -17,7 +17,7 @@ pub struct Role {
 	pub name: String,
 	pub slug: String,
 	pub description: Option<String>,
-	pub site_id: Uuid,
+	pub site_id: Option<Uuid>,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 }
@@ -25,7 +25,7 @@ pub struct Role {
 impl Role {
 	pub fn create(
 		conn: &mut PgConnection,
-		site_id: Uuid,
+		site_id: Option<Uuid>,
 		name: String,
 		policy_ids: Vec<Uuid>,
 	) -> Result<(Self, Vec<IAMPolicy>), AppError> {
@@ -134,7 +134,7 @@ impl Role {
 pub struct CreateRole<'a> {
 	pub name: &'a str,
 	pub slug: &'a str,
-	pub site_id: Uuid,
+	pub site_id: Option<Uuid>,
 }
 
 #[derive(AsChangeset, Debug, Deserialize)]

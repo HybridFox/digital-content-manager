@@ -4,6 +4,7 @@ import { Alert, AlertTypes, Button, HTMLButtonTypes } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { RadioField } from '@ibs/forms';
+import { useParams } from 'react-router-dom';
 
 import { IContentItem, useContentStore } from '../../stores/content';
 import { CONTENT_PATHS } from '../../content.routes';
@@ -14,6 +15,7 @@ export const ContentDetailStatusPage = () => {
 	const [workflow] = useWorkflowStore((state) => [state.workflow]);
 	const [contentType] = useContentTypeStore((state) => [state.contentType]);
 	const { t } = useTranslation();
+	const { siteId } = useParams();
 	const [setBreadcrumbs] = useHeaderStore((state) => [state.setBreadcrumbs]);
 	const formMethods = useForm<IContentItem>({
 		values: contentItem
@@ -52,7 +54,7 @@ export const ContentDetailStatusPage = () => {
 			return;
 		}
 
-		updateContentItem(contentItem.id, values).catch((error: IAPIError) => {
+		updateContentItem(siteId!, contentItem.id, values).catch((error: IAPIError) => {
 			setError('root', {
 				message: error.code,
 			});

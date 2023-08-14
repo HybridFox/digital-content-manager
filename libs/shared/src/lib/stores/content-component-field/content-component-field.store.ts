@@ -2,16 +2,14 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
 
 import { kyInstance, wrapApi } from '../../services/ky.instance';
-import { useAuthStore } from '../auth';
 
 import { IContentComponentField, IContentComponentFieldStoreState, IContentComponentFieldsResponse } from './content-component-field.types';
 
 export const useContentComponentFieldStore = create<IContentComponentFieldStoreState>()(devtools(
 	(set) => ({
-		fetchFields: async (contentComponentId) => {
+		fetchFields: async (siteId, contentComponentId) => {
 			set(() => ({ fieldsLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/content-components/${contentComponentId}/fields`).json<IContentComponentFieldsResponse>());
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content-components/${contentComponentId}/fields`).json<IContentComponentFieldsResponse>());
 
 			if (error) {
 				return set(() => ({ fields: [], fieldsLoading: false }))
@@ -22,10 +20,9 @@ export const useContentComponentFieldStore = create<IContentComponentFieldStoreS
 		fields: [],
 		fieldsLoading: false,
 
-		fetchField: async (contentComponentId, fieldId) => {
+		fetchField: async (siteId, contentComponentId, fieldId) => {
 			set(() => ({ fieldLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${activeSite?.id}/content-components/${contentComponentId}/fields/${fieldId}`).json<IContentComponentField>());
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content-components/${contentComponentId}/fields/${fieldId}`).json<IContentComponentField>());
 
 			if (error) {
 				set(() => ({ field: undefined, fieldLoading: false }));
@@ -37,10 +34,9 @@ export const useContentComponentFieldStore = create<IContentComponentFieldStoreS
 		field: undefined,
 		fieldLoading: false,
 
-		createField: async (contentComponentId, field) => {
+		createField: async (siteId, contentComponentId, field) => {
 			set(() => ({ createFieldLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${activeSite?.id}/content-components/${contentComponentId}/fields`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/content-components/${contentComponentId}/fields`, {
 				json: field,
 			}).json<IContentComponentField>());
 			set(() => ({ createFieldLoading: false }));
@@ -53,10 +49,9 @@ export const useContentComponentFieldStore = create<IContentComponentFieldStoreS
 		},
 		createFieldLoading: false,
 
-		updateField: async (contentComponentId, fieldId, field) => {
+		updateField: async (siteId, contentComponentId, fieldId, field) => {
 			set(() => ({ createFieldLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${activeSite?.id}/content-components/${contentComponentId}/fields/${fieldId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/content-components/${contentComponentId}/fields/${fieldId}`, {
 				json: field,
 			}).json<IContentComponentField>());
 
@@ -70,10 +65,9 @@ export const useContentComponentFieldStore = create<IContentComponentFieldStoreS
 		},
 		updateFieldLoading: false,
 
-		deleteField: async (contentComponentId, fieldId) => {
+		deleteField: async (siteId, contentComponentId, fieldId) => {
 			set(() => ({ deleteFieldLoading: true }));
-			const { activeSite } = useAuthStore.getState();
-			const [, error] = await wrapApi(kyInstance.delete(`/api/v1/sites/${activeSite?.id}/content-components/${contentComponentId}/fields/${fieldId}`));
+			const [, error] = await wrapApi(kyInstance.delete(`/api/v1/sites/${siteId}/content-components/${contentComponentId}/fields/${fieldId}`));
 
 			if (error) {
 				set(() => ({ deleteFieldLoading: false }));

@@ -18,17 +18,16 @@ export const ContentDetailPage = () => {
 	]);
 	const [contentItem, contentItemLoading, fetchContentItem] = useContentStore((state) => [state.contentItem, state.contentItemLoading, state.fetchContentItem]);
 	const [breadcrumbs,] = useHeaderStore((state) => [state.breadcrumbs]);
-	const { contentId } = useParams();
-	const { kind } = useParams();
+	const { kind, siteId, contentId } = useParams();
 
 	useEffect(() => {
 		if (!contentId) {
 			return;
 		}
 
-		fetchContentItem(contentId)
-			.then((contentItem) => fetchContentType(contentItem.contentTypeId))
-			.then((contentType) => fetchWorkflow(contentType.workflowId))
+		fetchContentItem(siteId!, contentId)
+			.then((contentItem) => fetchContentType(siteId!, contentItem.contentTypeId))
+			.then((contentType) => fetchWorkflow(siteId!, contentType.workflowId))
 	}, [contentId]);
 
 	return (
@@ -40,7 +39,7 @@ export const ContentDetailPage = () => {
 						Edit content <i>"{contentItem?.name || '...'}"</i>
 					</>
 				}
-				tabs={CONTENT_DETAIL_TABS(kind, contentItem)}
+				tabs={CONTENT_DETAIL_TABS(siteId!, kind, contentItem)}
 				metaInfo={contentItem?.language.key.toUpperCase()}
 			></Header>
 			<div className="u-margin-top">

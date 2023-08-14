@@ -19,4 +19,5 @@ export interface IResourceExplorerProps {
 	selection?: IResourceExplorerSelection[];
 	minSelection?: number;
 	maxSelection?: number;
+	siteId: string;
 }

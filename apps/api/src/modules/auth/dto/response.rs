@@ -1,8 +1,8 @@
 use crate::modules::{
 	auth::models::user::User,
-	sites::{dto::response::SiteWithRolesDTO, models::{site::Site, language::Language}},
-	roles::models::role::Role,
-	iam_policies::models::{iam_policy::IAMPolicy, permission::Permission},
+	sites::{dto::response::SiteWithRolesDTO, models::site::Site},
+	roles::{models::role::Role, dto::response::RoleWithPoliciesWithPermissionsDTO},
+	iam_policies::models::{iam_policy::IAMPolicy, permission::Permission}, languages::models::language::Language,
 };
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
@@ -30,6 +30,7 @@ impl From<User> for UserDTO {
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct AuthDTO {
 	pub sites: Vec<SiteWithRolesDTO>,
+	pub roles: Vec<RoleWithPoliciesWithPermissionsDTO>,
 	pub user: UserDTO,
 	pub token: String,
 }
@@ -42,17 +43,19 @@ impl
 			Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
 			Vec<Language>
 		)>,
+		Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
 		String,
 	)> for AuthDTO
 {
 	fn from(
-		(user, sites, token): (
+		(user, sites, roles, token): (
 			User,
 			Vec<(
 				Site,
 				Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
 				Vec<Language>
 			)>,
+			Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
 			String,
 		),
 	) -> Self {
@@ -62,6 +65,10 @@ impl
 			sites: sites
 				.into_iter()
 				.map(|site| SiteWithRolesDTO::from(site))
+				.collect(),
+			roles: roles
+				.into_iter()
+				.map(|role| RoleWithPoliciesWithPermissionsDTO::from(role))
 				.collect(),
 		}
 	}
