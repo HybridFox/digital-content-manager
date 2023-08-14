@@ -1,4 +1,4 @@
-use crate::modules::auth::models::user::User;
+use crate::modules::users::models::user::User;
 use crate::constants;
 use crate::errors::{AppError, AppErrorValue};
 use crate::modules::core::middleware::state::AppState;

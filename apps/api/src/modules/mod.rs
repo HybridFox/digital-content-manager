@@ -14,3 +14,4 @@ pub mod resources;
 pub mod authentication_methods;
 pub mod setup;
 pub mod languages;
+pub mod users;

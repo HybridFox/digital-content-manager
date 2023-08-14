@@ -1,5 +1,5 @@
 use crate::modules::{
-	auth::models::user::User,
+	users::models::user::User,
 	sites::{dto::response::SiteWithRolesDTO, models::site::Site},
 	roles::{models::role::Role, dto::response::RoleWithPoliciesWithPermissionsDTO},
 	iam_policies::models::{iam_policy::IAMPolicy, permission::Permission}, languages::models::language::Language,

@@ -1,8 +1,8 @@
 import { RouteObject } from "react-router-dom";
 
-import { APP_SITE_ROOT_PATH } from "../core/routes.const"
+import { APP_ROOT_PATH } from "../core/routes.const"
 
-const ROOT_PATH = `${APP_SITE_ROOT_PATH}/users`;
+const ROOT_PATH = `${APP_ROOT_PATH}/users`;
 const DETAIL_PATH = `${ROOT_PATH}/:userId`;
 
 export const USER_PATHS = {

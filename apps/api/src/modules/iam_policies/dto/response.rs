@@ -72,6 +72,48 @@ impl From<(IAMPolicy, Vec<(Permission, Vec<String>)>)> for IAMPolicyWithPermissi
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+pub struct SiteIAMPoliciesEmbeddedDTO {
+	pub site_policies: Vec<IAMPolicyWithPermissionsDTO>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+pub struct SiteIAMPoliciesDTO {
+	pub _links: HALLinkList,
+	pub _page: HALPage,
+	pub _embedded: SiteIAMPoliciesEmbeddedDTO,
+}
+
+impl
+	From<(
+		Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>,
+		HALPage,
+		Uuid,
+	)> for SiteIAMPoliciesDTO
+{
+	fn from(
+		(policies, page, site_id): (
+			Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>,
+			HALPage,
+			Uuid,
+		),
+	) -> Self {
+		Self {
+			_links: HALLinkList::from((format!("/api/v1/sites/{}/policies", site_id), &page)),
+			_embedded: SiteIAMPoliciesEmbeddedDTO {
+				site_policies: policies
+					.into_iter()
+					.map(|(policy, permissions)| {
+						IAMPolicyWithPermissionsDTO::from((policy, permissions))
+					})
+					.collect(),
+			},
+			_page: page,
+		}
+	}
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct IAMPoliciesEmbeddedDTO {
 	pub policies: Vec<IAMPolicyWithPermissionsDTO>,
 }
@@ -83,22 +125,10 @@ pub struct IAMPoliciesDTO {
 	pub _embedded: IAMPoliciesEmbeddedDTO,
 }
 
-impl
-	From<(
-		Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>,
-		HALPage,
-		Uuid,
-	)> for IAMPoliciesDTO
-{
-	fn from(
-		(policies, page, site_id): (
-			Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>,
-			HALPage,
-			Uuid,
-		),
-	) -> Self {
+impl From<(Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>, HALPage)> for IAMPoliciesDTO {
+	fn from((policies, page): (Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>, HALPage)) -> Self {
 		Self {
-			_links: HALLinkList::from((format!("/api/v1/sites/{}/policies", site_id), &page)),
+			_links: HALLinkList::from((format!("/api/v1/policies"), &page)),
 			_embedded: IAMPoliciesEmbeddedDTO {
 				policies: policies
 					.into_iter()

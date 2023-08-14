@@ -9,7 +9,7 @@ use crate::modules::sites::models::site::Site;
 use crate::modules::sites::models::site_language::SiteLanguage;
 use crate::modules::sites::models::site_user::SiteUser;
 use crate::modules::sites::models::site_user_role::SiteUserRole;
-use crate::modules::sites::models::user_role::UserRole;
+use crate::modules::users::models::user_role::UserRole;
 use crate::schema::{
 	users, sites, sites_users, roles, sites_users_roles, roles_iam_policies, iam_policies,
 	sites_languages, languages, users_roles,
@@ -179,7 +179,7 @@ impl User {
 		Ok(count)
 	}
 
-	pub fn find_one_with_roles(
+	pub fn find_one_with_roles_in_site(
 		conn: &mut PgConnection,
 		site_id: Uuid,
 		id: Uuid,
@@ -196,7 +196,21 @@ impl User {
 		Ok((users.first().unwrap().to_owned(), roles))
 	}
 
-	pub fn find(
+	pub fn find_one_with_roles(
+		conn: &mut PgConnection,
+		id: Uuid,
+	) -> Result<(Self, Vec<Role>), AppError> {
+		let user: Self = users::table.find(id).get_result::<Self>(conn)?;
+
+		let roles = UserRole::belonging_to(&user)
+			.inner_join(roles::table.on(roles::id.eq(users_roles::role_id)))
+			.select(Role::as_select())
+			.load::<Role>(conn)?;
+
+		Ok((user, roles))
+	}
+
+	pub fn find_in_site(
 		conn: &mut PgConnection,
 		site_id: Uuid,
 		page: i64,
@@ -239,6 +253,49 @@ impl User {
 		let total_elements = users::table
 			.inner_join(sites_users::table.on(sites_users::user_id.eq(users::id)))
 			.filter(sites_users::site_id.eq(site_id))
+			.count()
+			.get_result::<i64>(conn)?;
+
+		Ok((users_with_roles, total_elements))
+	}
+
+	pub fn find(
+		conn: &mut PgConnection,
+		page: i64,
+		pagesize: i64,
+	) -> Result<(Vec<(Self, Vec<Role>)>, i64), AppError> {
+		let query = {
+			let mut query = users::table
+				.into_boxed();
+
+			if pagesize != -1 {
+				query = query.offset((page - 1) * pagesize).limit(pagesize);
+			};
+
+			query
+		};
+
+		let users = query.select(Self::as_select()).load::<Self>(conn)?;
+
+		let roles: Vec<(UserRole, Role)> = UserRole::belonging_to(&users)
+			.inner_join(roles::table.on(roles::id.eq(users_roles::role_id)))
+			.select((UserRole::as_select(), Role::as_select()))
+			.load::<(UserRole, Role)>(conn)?;
+		let grouped_roles = roles.grouped_by(&users);
+		let users_with_roles = users
+			.into_iter()
+			.zip(grouped_roles)
+			.map(|(user, roles)| {
+				let only_roles = roles
+					.into_iter()
+					.map(|(_site_user_role, role)| role)
+					.collect::<Vec<Role>>();
+
+				(user, only_roles)
+			})
+			.collect::<Vec<(Self, Vec<Role>)>>();
+
+		let total_elements = users::table
 			.count()
 			.get_result::<i64>(conn)?;
 

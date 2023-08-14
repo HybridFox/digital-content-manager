@@ -1,5 +1,5 @@
-use super::super::models::user::User;
 use super::super::dto::{request, response};
+use crate::modules::users::models::user::User;
 use crate::errors::AppError;
 use crate::modules::auth::services::register::register_user;
 use crate::modules::core::middleware::state::AppState;

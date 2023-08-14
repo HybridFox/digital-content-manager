@@ -115,6 +115,35 @@ impl From<(Vec<Role>, HALPage, Uuid)> for RolesDTO {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct SiteRolesWithPoliciesEmbeddedDTO {
+	pub site_roles: Vec<RoleWithPoliciesDTO>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+pub struct SiteRolesWithPoliciesDTO {
+	pub _links: HALLinkList,
+	pub _page: HALPage,
+	pub _embedded: SiteRolesWithPoliciesEmbeddedDTO,
+}
+
+impl From<(Vec<(Role, Vec<IAMPolicy>)>, HALPage, Uuid)> for SiteRolesWithPoliciesDTO {
+	fn from((roles, page, site_id): (Vec<(Role, Vec<IAMPolicy>)>, HALPage, Uuid)) -> Self {
+		Self {
+			_links: HALLinkList::from((format!("/api/v1/sites/{}/roles", site_id), &page)),
+			_embedded: SiteRolesWithPoliciesEmbeddedDTO {
+				site_roles: roles
+					.into_iter()
+					.map(RoleWithPoliciesDTO::from)
+					.collect(),
+			},
+			_page: page,
+		}
+	}
+}
+
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct RolesWithPoliciesEmbeddedDTO {
 	pub roles: Vec<RoleWithPoliciesDTO>,
 }
@@ -126,10 +155,10 @@ pub struct RolesWithPoliciesDTO {
 	pub _embedded: RolesWithPoliciesEmbeddedDTO,
 }
 
-impl From<(Vec<(Role, Vec<IAMPolicy>)>, HALPage, Uuid)> for RolesWithPoliciesDTO {
-	fn from((roles, page, site_id): (Vec<(Role, Vec<IAMPolicy>)>, HALPage, Uuid)) -> Self {
+impl From<(Vec<(Role, Vec<IAMPolicy>)>, HALPage)> for RolesWithPoliciesDTO {
+	fn from((roles, page): (Vec<(Role, Vec<IAMPolicy>)>, HALPage)) -> Self {
 		Self {
-			_links: HALLinkList::from((format!("/api/v1/sites/{}/roles", site_id), &page)),
+			_links: HALLinkList::from((format!("/api/v1/roles"), &page)),
 			_embedded: RolesWithPoliciesEmbeddedDTO {
 				roles: roles
 					.into_iter()

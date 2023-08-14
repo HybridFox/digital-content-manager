@@ -47,7 +47,7 @@ export const WorkflowStateDetailPage = () => {
 	console.log(errors);
 
 	useEffect(() => {
-		setBreadcrumbs([{ label: t(`BREADCRUMBS.WORKFLOW_REPOSITORIES`), to: WORKFLOW_PATHS.WORKFLOW_STATES_ROOT }, { label: t(`BREADCRUMBS.EDIT`) }]);
+		setBreadcrumbs([{ label: t(`BREADCRUMBS.WORKFLOWS`), to: WORKFLOW_PATHS.WORKFLOW_STATES_ROOT }, { label: t(`BREADCRUMBS.EDIT`) }]);
 	}, [workflowState]);
 
 	useEffect(() => {

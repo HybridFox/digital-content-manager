@@ -11,12 +11,15 @@ import { CONTENT_COMPONENT_ROUTES } from './modules/content-components';
 import { RESOURCE_ROUTES } from './modules/resources';
 import { STORAGE_ROUTES } from './modules/storage';
 import { WORKFLOW_ROUTES } from './modules/workflow';
-import { USER_ROUTES } from './modules/users';
+import { SITE_USER_ROUTES } from './modules/site-users';
 import { ROLE_ROUTES } from './modules/roles';
-import { POLICY_ROUTES } from './modules/policies';
+import { SITE_POLICY_ROUTES } from './modules/site-policies';
 import { AUTHENTICATION_METHOD_ROUTES } from './modules/authentication-methods';
 import { SETUP_ROUTES } from './modules/setup/setup.routes';
 import { SITE_ROUTES } from './modules/sites';
+import { USER_ROUTES } from './modules/users';
+import { POLICY_ROUTES } from './modules/policies';
+import { SITE_ROLE_ROUTES } from './modules/site-roles';
 
 const router = createBrowserRouter([
 	{
@@ -34,7 +37,7 @@ const router = createBrowserRouter([
 			},
 			...SETUP_ROUTES,
 			{
-				path: 'app',
+				path: '',
 				element: <AuthenticatedView />,
 				children: [
 					...SITE_ROUTES,
@@ -45,9 +48,12 @@ const router = createBrowserRouter([
 					...RESOURCE_ROUTES,
 					...STORAGE_ROUTES,
 					...WORKFLOW_ROUTES,
+					...POLICY_ROUTES,
+					...SITE_USER_ROUTES,
 					...USER_ROUTES,
 					...ROLE_ROUTES,
-					...POLICY_ROUTES,
+					...SITE_ROLE_ROUTES,
+					...SITE_POLICY_ROUTES,
 					...AUTHENTICATION_METHOD_ROUTES
 				]
 			}

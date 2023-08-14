@@ -1,5 +1,5 @@
 use crate::modules::auth::dto::request;
-use crate::modules::auth::models::user::{User, UpdateUser};
+use crate::modules::users::models::user::{User, UpdateUser};
 use crate::modules::{core::middleware::auth, auth::dto::response};
 use crate::modules::core::middleware::state::AppState;
 use crate::utils::api::ApiResponse;

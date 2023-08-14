@@ -12,21 +12,21 @@ export interface IPolicy {
 export type IPoliciesResponse = IAPIHALResponse<'policies', IPolicy>
 
 export interface IPolicyStoreState {
-	fetchPolicies: (siteId: string, params?: IPageParameters) => Promise<void>;
+	fetchPolicies: (params?: IPageParameters) => Promise<void>;
 	policies: IPolicy[];
 	policiesLoading: boolean;
 
-	fetchPolicy: (siteId: string, workflowId: string) => Promise<void>;
+	fetchPolicy: (policyId: string) => Promise<void>;
 	policy?: IPolicy,
 	policyLoading: boolean;
 
-	createPolicy: (siteId: string, policy: IPolicyCreateDTO) => Promise<IPolicy>;
+	createPolicy: (policy: IPolicyCreateDTO) => Promise<IPolicy>;
 	createPolicyLoading: boolean;
 
-	updatePolicy: (siteId: string, policyId: string, values: IPolicyUpdateDTO) => Promise<IPolicy>;
+	updatePolicy: (policyId: string, values: IPolicyUpdateDTO) => Promise<IPolicy>;
 	updatePolicyLoading: boolean;
 
-	removePolicy: (siteId: string, policyId: string) => Promise<void>;
+	removePolicy: (policyId: string) => Promise<void>;
 	removePolicyLoading: boolean;
 }
 

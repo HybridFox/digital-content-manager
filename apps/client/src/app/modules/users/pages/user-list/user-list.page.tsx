@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useHeaderStore } from '@ibs/shared';
-import { ButtonLink, Header, Loading, Table } from '@ibs/components';
+import { Header, Loading, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ import { useUserStore } from '../../stores/user';
 import { USER_LIST_COLUMNS } from './user-list.const';
 
 export const UserListPage = () => {
-	const [users, usersLoading, fetchWorkflowStates] = useUserStore((state) => [
+	const [users, usersLoading, fetchUsers] = useUserStore((state) => [
 		state.users,
 		state.usersLoading,
 		state.fetchUsers,
@@ -18,16 +18,16 @@ export const UserListPage = () => {
 	// 	state.removeWorkflowState
 	// ]);
 	const { t } = useTranslation();
-	const { kind, siteId } = useParams();
+	const { kind } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		fetchWorkflowStates(siteId!);
+		fetchUsers();
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.USERS`) }]);
 	}, [kind]);
 
 	const handleRemove = (workflowStateId: string): void => {
-		// removeWorkflowState(workflowStateId).then(() => fetchWorkflowStates());
+		// removeWorkflowState(workflowStateId).then(() => fetchUsers());
 	}
 
 	return (

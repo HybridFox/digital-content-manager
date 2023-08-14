@@ -1,7 +1,7 @@
 use super::super::dto::users::{response, request};
 use crate::modules::sites::models::site_user_role::SiteUserRole;
 use crate::errors::AppError;
-use crate::modules::auth::models::user::User;
+use crate::modules::users::models::user::User;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use actix_web::{get, web, HttpResponse, put};
@@ -47,7 +47,7 @@ pub async fn find_all(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
 
-	let (users, total_elements) = User::find(conn,params.site_id, page, pagesize)?;
+	let (users, total_elements) = User::find_in_site(conn, params.site_id, page, pagesize)?;
 
 	let res = response::UsersDTO::from((
 		users,
@@ -80,7 +80,7 @@ pub async fn find_one(
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let user = User::find_one_with_roles(conn, params.site_id, params.user_id)?;
+	let user = User::find_one_with_roles_in_site(conn, params.site_id, params.user_id)?;
 
 	let res = response::UserWithRolesDTO::from(user);
 	Ok(HttpResponse::Ok().json(res))
@@ -108,7 +108,7 @@ pub async fn update(
 	
 	dbg!(&form.roles);
 	SiteUserRole::upsert_many(conn, params.site_id, params.user_id, form.roles.clone())?;
-	let user = User::find_one_with_roles(conn, params.site_id, params.user_id)?;
+	let user = User::find_one_with_roles_in_site(conn, params.site_id, params.user_id)?;
 	Ok(HttpResponse::Ok().json(user))
 }
 

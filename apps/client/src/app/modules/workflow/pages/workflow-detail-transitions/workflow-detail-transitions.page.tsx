@@ -38,7 +38,7 @@ export const WorkflowDetailTransitionsPage = () => {
 	useEffect(() => {
 		setTransitions(workflow?.transitions || []);
 		setBreadcrumbs([
-			{ label: t(`BREADCRUMBS.WORKFLOW_REPOSITORIES`), to: WORKFLOW_PATHS.WORKFLOWS_ROOT },
+			{ label: t(`BREADCRUMBS.WORKFLOWS`), to: WORKFLOW_PATHS.WORKFLOWS_ROOT },
 			{ label: workflow?.name },
 			{ label: t('BREADCRUMBS.TRANSITIONS') },
 		]);

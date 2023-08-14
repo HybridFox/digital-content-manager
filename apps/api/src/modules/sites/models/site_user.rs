@@ -3,7 +3,7 @@ use diesel::prelude::*;
 use serde::Deserialize;
 use uuid::Uuid;
 
-use crate::modules::auth::models::user::User;
+use crate::modules::users::models::user::User;
 use crate::modules::sites::models::site::Site;
 
 use crate::errors::AppError;

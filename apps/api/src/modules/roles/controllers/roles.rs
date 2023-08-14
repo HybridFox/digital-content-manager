@@ -10,13 +10,7 @@ use utoipa::IntoParams;
 use uuid::Uuid;
 
 #[derive(Deserialize, IntoParams)]
-pub struct FindPathParams {
-	site_id: Uuid,
-}
-
-#[derive(Deserialize, IntoParams)]
 pub struct FindOnePathParams {
-	site_id: Uuid,
 	role_id: Uuid,
 }
 
@@ -27,7 +21,7 @@ pub struct FindAllQueryParams {
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/sites/{site_id}/roles",
+	context_path = "/api/v1/roles",
     request_body = CreateRoleDTO,
 	responses(
 		(status = 200, body = RoleDTO),
@@ -35,24 +29,22 @@ pub struct FindAllQueryParams {
 	),
     security(
         ("jwt_token" = [])
-    ),
-	params(FindPathParams)
+    )
 )]
 #[post("")]
 pub async fn create(
 	state: web::Data<AppState>,
-	form: web::Json<request::CreateRoleDTO>,
-	params: web::Path<FindPathParams>,
+	form: web::Json<request::CreateRoleDTO>
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let (role, policies) =
-		Role::create(conn, Some(params.site_id), form.name.clone(), form.policies.clone())?;
+		Role::create(conn, None, form.name.clone(), form.policies.clone())?;
 	let res = response::RoleWithPoliciesDTO::from((role, policies));
 	Ok(HttpResponse::Ok().json(res))
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/sites/{site_id}/roles",
+	context_path = "/api/v1/roles",
 	responses(
 		(status = 200, body = RolesDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
@@ -60,19 +52,18 @@ pub async fn create(
     security(
         ("jwt_token" = [])
     ),
-	params(FindPathParams, FindAllQueryParams)
+	params(FindAllQueryParams)
 )]
 #[get("")]
 pub async fn find_all(
 	state: web::Data<AppState>,
-	query: web::Query<FindAllQueryParams>,
-	params: web::Path<FindPathParams>,
+	query: web::Query<FindAllQueryParams>
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
 
-	let (roles, total_elements) = Role::find(conn, params.site_id, page, pagesize)?;
+	let (roles, total_elements) = Role::find(conn, None, page, pagesize)?;
 
 	let res = response::RolesWithPoliciesDTO::from((
 		roles,
@@ -81,23 +72,21 @@ pub async fn find_all(
 			size: pagesize,
 			total_elements,
 			total_pages: (total_elements / pagesize + (total_elements % pagesize).signum()).max(1),
-		},
-		params.site_id,
+		}
 	));
 
 	Ok(HttpResponse::Ok().json(res))
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/sites/{site_id}/roles",
+	context_path = "/api/v1/roles",
 	responses(
 		(status = 200, body = RoleWithPoliciesDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
 	),
     security(
         ("jwt_token" = [])
-    ),
-	params(FindPathParams)
+    )
 )]
 #[get("/{role_id}")]
 pub async fn find_one(
@@ -105,7 +94,7 @@ pub async fn find_one(
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let role = Role::find_one(conn, params.site_id, params.role_id)?;
+	let role = Role::find_one(conn, None, params.role_id)?;
 	let policies = Role::find_policies(conn, &role)?;
 
 	let res = response::RoleWithPoliciesDTO::from((role, policies));
@@ -113,7 +102,7 @@ pub async fn find_one(
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/sites/{site_id}/roles",
+	context_path = "/api/v1/roles",
     request_body = UpdateRoleDTO,
 	responses(
 		(status = 200, body = RoleDTO),
@@ -122,7 +111,6 @@ pub async fn find_one(
     security(
         ("jwt_token" = [])
     ),
-	params(FindPathParams)
 )]
 #[put("/{role_id}")]
 pub async fn update(
@@ -144,7 +132,7 @@ pub async fn update(
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/sites/{site_id}/roles",
+	context_path = "/api/v1/roles",
 	responses(
 		(status = 204),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")

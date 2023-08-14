@@ -2,7 +2,7 @@ use crate::{
 	errors::AppError,
 	modules::core::middleware::state::AppConn,
 };
-use crate::modules::auth::models::user::User;
+use crate::modules::users::models::user::User;
 use tracing::instrument;
 
 #[instrument(skip(conn, password))]

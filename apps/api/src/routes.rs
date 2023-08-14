@@ -34,27 +34,27 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 					.service(modules::sites::controllers::sites::remove)
 					.service(
 						web::scope("/{site_id}/roles")
-							.service(modules::roles::controllers::roles::create)
-							.service(modules::roles::controllers::roles::find_all)
-							.service(modules::roles::controllers::roles::find_one)
-							.service(modules::roles::controllers::roles::update)
-							.service(modules::roles::controllers::roles::remove),
+							.service(modules::roles::controllers::site_roles::create)
+							.service(modules::roles::controllers::site_roles::find_all)
+							.service(modules::roles::controllers::site_roles::find_one)
+							.service(modules::roles::controllers::site_roles::update)
+							.service(modules::roles::controllers::site_roles::remove),
 					)
 					.service(
 						web::scope("/{site_id}/users")
 							// .service(modules::roles::controllers::roles::create)
-							.service(modules::sites::controllers::site_users::find_all)
-							.service(modules::sites::controllers::site_users::find_one)
-							.service(modules::sites::controllers::site_users::update)
+							.service(modules::users::controllers::site_users::find_all)
+							.service(modules::users::controllers::site_users::find_one)
+							.service(modules::users::controllers::site_users::update)
 							// .service(modules::roles::controllers::roles::remove),
 					)
 					.service(
 						web::scope("/{site_id}/iam-policies")
-							.service(modules::iam_policies::controllers::iam_policies::create)
-							.service(modules::iam_policies::controllers::iam_policies::find_all)
-							.service(modules::iam_policies::controllers::iam_policies::find_one)
-							.service(modules::iam_policies::controllers::iam_policies::update)
-							.service(modules::iam_policies::controllers::iam_policies::remove),
+							.service(modules::iam_policies::controllers::site_iam_policies::create)
+							.service(modules::iam_policies::controllers::site_iam_policies::find_all)
+							.service(modules::iam_policies::controllers::site_iam_policies::find_one)
+							.service(modules::iam_policies::controllers::site_iam_policies::update)
+							.service(modules::iam_policies::controllers::site_iam_policies::remove),
 					)
 					.service(
 						web::scope("/{site_id}/content-types")
@@ -157,6 +157,30 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 					.service(modules::authentication_methods::controllers::authentication_methods::find_one)
 					.service(modules::authentication_methods::controllers::authentication_methods::update)
 					.service(modules::authentication_methods::controllers::authentication_methods::remove)
+			)
+			.service(
+				web::scope("/users")
+					// .service(modules::users::controllers::users::create)
+					.service(modules::users::controllers::users::find_all)
+					.service(modules::users::controllers::users::find_one)
+					.service(modules::users::controllers::users::update)
+					// .service(modules::users::controllers::users::remove)
+			)
+			.service(
+				web::scope("/roles")
+					.service(modules::roles::controllers::roles::create)
+					.service(modules::roles::controllers::roles::find_all)
+					.service(modules::roles::controllers::roles::find_one)
+					.service(modules::roles::controllers::roles::update)
+					.service(modules::roles::controllers::roles::remove),
+			)
+			.service(
+				web::scope("/iam-policies")
+					.service(modules::iam_policies::controllers::iam_policies::create)
+					.service(modules::iam_policies::controllers::iam_policies::find_all)
+					.service(modules::iam_policies::controllers::iam_policies::find_one)
+					.service(modules::iam_policies::controllers::iam_policies::update)
+					.service(modules::iam_policies::controllers::iam_policies::remove),
 			)
 	);
 }

@@ -1,12 +1,12 @@
 use crate::{
 	errors::AppError,
-	modules::{core::middleware::state::AppConn, sites::models::user_role::UserRole},
+	modules::{core::middleware::state::AppConn, users::models::user_role::UserRole},
 };
 use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
 use crate::modules::iam_policies::models::permission::Permission;
 use crate::modules::iam_policies::models::permission_iam_action::PermissionIAMAction;
 use crate::modules::roles::models::role::Role;
-use crate::modules::auth::models::user::User;
+use crate::modules::users::models::user::User;
 use tracing::instrument;
 
 #[instrument(skip(conn, password))]

@@ -9,9 +9,9 @@ import { IRoleStoreState, IRolesResponse } from './role.types';
 
 export const useRoleStore = create<IRoleStoreState>()(devtools(
 	(set) => ({
-		fetchRoles: async (siteId, searchParams) => {
+		fetchRoles: async (searchParams) => {
 			set(() => ({ rolesLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/roles`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/roles`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -27,9 +27,9 @@ export const useRoleStore = create<IRoleStoreState>()(devtools(
 		roles: [],
 		rolesLoading: false,
 
-		fetchRole: async (siteId, workflowId) => {
+		fetchRole: async (roleId) => {
 			set(() => ({ roleLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/roles/${workflowId}`).json<IRole>());
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/roles/${roleId}`).json<IRole>());
 
 			if (error) {
 				set(() => ({ role: undefined, roleLoading: false }));
@@ -41,9 +41,9 @@ export const useRoleStore = create<IRoleStoreState>()(devtools(
 		role: undefined,
 		roleLoading: false,
 
-		createRole: async (siteId, role) => {
+		createRole: async (role) => {
 			set(() => ({ createRoleLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/roles`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/roles`, {
 				json: role,
 			}).json<IRole>());
 			set(() => ({ createRoleLoading: false }));
@@ -56,9 +56,9 @@ export const useRoleStore = create<IRoleStoreState>()(devtools(
 		},
 		createRoleLoading: false,
 
-		updateRole: async (siteId, roleId, data) => {
+		updateRole: async (roleId, data) => {
 			set(() => ({ updateRoleLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/roles/${roleId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/roles/${roleId}`, {
 				json: data,
 			}).json<IRole>());
 
@@ -72,9 +72,9 @@ export const useRoleStore = create<IRoleStoreState>()(devtools(
 		},
 		updateRoleLoading: false,
 
-		removeRole: async (siteId, roleId) => {
+		removeRole: async (roleId) => {
 			set(() => ({ removeRoleLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.delete(`/api/v1/sites/${siteId}/roles/${roleId}`).json<void>());
+			const [result, error] = await wrapApi(kyInstance.delete(`/api/v1/roles/${roleId}`).json<void>());
 
 			if (error) {
 				set(() => ({ removeRoleLoading: false }));

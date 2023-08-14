@@ -2,7 +2,7 @@ use serde::{Serialize, Deserialize};
 use utoipa::ToSchema;
 use uuid::Uuid;
 
-use crate::modules::{auth::models::user::User, core::models::hal::{HALLinkList, HALPage}, roles::{models::role::Role, dto::response::RoleDTO}};
+use crate::modules::{users::models::user::User, core::models::hal::{HALLinkList, HALPage}, roles::{models::role::Role, dto::response::RoleDTO}};
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct UserDTO {

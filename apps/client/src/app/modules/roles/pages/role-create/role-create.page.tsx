@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 import { ROLE_PATHS } from '../../roles.routes';
 
@@ -32,7 +32,6 @@ export const RoleCreatePage = () => {
 		state.createRoleLoading,
 		state.createRole,
 	]);
-	const { siteId } = useParams();
 	const { t } = useTranslation();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 	const formMethods = useForm<CreateRoleForm>({
@@ -46,7 +45,7 @@ export const RoleCreatePage = () => {
 	} = formMethods;
 
 	useEffect(() => {
-		fetchPolicies(siteId!);
+		fetchPolicies();
 		setBreadcrumbs([
 			{ label: t(`BREADCRUMBS.ROLES`), to: ROLE_PATHS.ROOT },
 			{ label: t(`BREADCRUMBS.CREATE`) },
@@ -54,8 +53,8 @@ export const RoleCreatePage = () => {
 	}, []);
 
 	const onSubmit = (values: CreateRoleForm) => {
-		createRole(siteId!, values)
-			.then((role) => navigate(generatePath(ROLE_PATHS.DETAIL, { siteId, roleId: role.id })))
+		createRole(values)
+			.then((role) => navigate(generatePath(ROLE_PATHS.DETAIL, { roleId: role.id })))
 			.catch((error: IAPIError) => {
 				setError('root', {
 					message: error.code,

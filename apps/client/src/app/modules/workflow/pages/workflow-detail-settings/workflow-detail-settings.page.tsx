@@ -36,7 +36,7 @@ export const WorkflowDetailSettingsPage = () => {
 
 	useEffect(() => {
 		setBreadcrumbs([
-			{ label: t(`BREADCRUMBS.WORKFLOW_REPOSITORIES`), to: WORKFLOW_PATHS.WORKFLOWS_ROOT },
+			{ label: t(`BREADCRUMBS.WORKFLOWS`), to: WORKFLOW_PATHS.WORKFLOWS_ROOT },
 			{ label: workflow?.name },
 			{ label: t('BREADCRUMBS.SETTINGS') },
 		]);

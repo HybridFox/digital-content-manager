@@ -4,7 +4,7 @@ use std::env;
 use crate::constants::{env_key, self};
 use crate::errors::AppError;
 use crate::modules::auth::dto::response;
-use crate::modules::auth::models::user::User;
+use crate::modules::users::models::user::User;
 use crate::modules::auth::services::register::register_user;
 use crate::modules::core::middleware::state::AppState;
 use crate::utils::string::generate_random_string;

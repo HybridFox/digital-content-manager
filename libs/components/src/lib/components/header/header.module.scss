@@ -80,7 +80,7 @@
 				cursor: not-allowed;
 			}
 
-			&:not(:first-of-type)::before {
+			&::after {
 				content: '';
 				font-weight: 900;
 				font-size: 0.9rem;

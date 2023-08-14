@@ -4,21 +4,21 @@ import { IRole } from "../auth";
 export type IRolesResponse = IAPIHALResponse<'roles', IRole>
 
 export interface IRoleStoreState {
-	fetchRoles: (siteId: string, params?: IPageParameters) => Promise<void>;
+	fetchRoles: (params?: IPageParameters) => Promise<void>;
 	roles: IRole[];
 	rolesLoading: boolean;
 
-	fetchRole: (siteId: string, roleId: string) => Promise<void>;
+	fetchRole: (roleId: string) => Promise<void>;
 	role?: IRole,
 	roleLoading: boolean;
 
-	createRole: (siteId: string, role: IRoleCreateDTO) => Promise<IRole>;
+	createRole: (role: IRoleCreateDTO) => Promise<IRole>;
 	createRoleLoading: boolean;
 
-	updateRole: (siteId: string, roleId: string, values: IRoleUpdateDTO) => Promise<IRole>;
+	updateRole: (roleId: string, values: IRoleUpdateDTO) => Promise<IRole>;
 	updateRoleLoading: boolean;
 
-	removeRole: (siteId: string, roleId: string) => Promise<void>;
+	removeRole: (roleId: string) => Promise<void>;
 	removeRoleLoading: boolean;
 }
 

@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useHeaderStore, useRoleStore } from '@ibs/shared';
 import { ButtonLink, Header, Loading, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
 import { ROLE_LIST_COLUMNS } from './role-list.const';
 
@@ -16,16 +15,15 @@ export const RoleListPage = () => {
 		state.removeRole
 	]);
 	const { t } = useTranslation();
-	const { siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		fetchRoles(siteId!);
+		fetchRoles();
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.ROLES`) }]);
 	}, []);
 
 	const handleRemove = (roleId: string): void => {
-		removeRole(siteId!, roleId).then(() => fetchRoles(siteId!));
+		removeRole(roleId).then(() => fetchRoles());
 	}
 
 	return (

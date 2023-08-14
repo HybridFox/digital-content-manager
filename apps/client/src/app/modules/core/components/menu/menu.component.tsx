@@ -9,11 +9,10 @@ import { CONTENT_PATHS } from '../../../content/content.routes';
 import { CONTENT_TYPES_PATHS } from '../../../content-types';
 import { CONTENT_COMPONENT_PATHS } from '../../../content-components';
 import { WORKFLOW_PATHS } from '../../../workflow';
-import { USER_PATHS } from '../../../users';
-import { ROLE_PATHS } from '../../../roles';
-import { POLICY_PATHS } from '../../../policies';
+import { SITE_USER_PATHS } from '../../../site-users';
+import { SITE_ROLE_PATHS } from '../../../site-roles';
+import { SITE_POLICY_PATHS } from '../../../site-policies';
 import { STORAGE_PATHS } from '../../../storage';
-import { AUTHENTICATION_METHOD_PATHS } from '../../../authentication-methods';
 
 import styles from './menu.module.scss';
 const cxBind = cx.bind(styles);
@@ -125,7 +124,7 @@ export const Menu = () => {
 				</p>
 				<ul>
 					<li>
-						<NavLink {...navLinkBinding} to={generatePath(USER_PATHS.ROOT, { siteId })}>
+						<NavLink {...navLinkBinding} to={generatePath(SITE_USER_PATHS.ROOT, { siteId })}>
 							<i className="las la-user"></i>
 							<span>Users</span>
 						</NavLink>
@@ -134,13 +133,13 @@ export const Menu = () => {
 					<NavLink {...navLinkBinding} to="/auth"><i className="las la-list-alt"></i>Permissions</NavLink>
 				</li> */}
 					<li>
-						<NavLink {...navLinkBinding} to={generatePath(ROLE_PATHS.ROOT, { siteId })}>
+						<NavLink {...navLinkBinding} to={generatePath(SITE_ROLE_PATHS.ROOT, { siteId })}>
 							<i className="las la-list-alt"></i>
 							<span>Roles</span>
 						</NavLink>
 					</li>
 					<li>
-						<NavLink {...navLinkBinding} to={generatePath(POLICY_PATHS.ROOT, { siteId })}>
+						<NavLink {...navLinkBinding} to={generatePath(SITE_POLICY_PATHS.ROOT, { siteId })}>
 							<i className="las la-key"></i>
 							<span>Policies</span>
 						</NavLink>

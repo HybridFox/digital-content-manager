@@ -38,12 +38,24 @@ impl IAMPolicy {
 
 	pub fn find_one(
 		conn: &mut PgConnection,
-		site_id: Uuid,
+		site_id: Option<Uuid>,
 		id: Uuid,
 	) -> Result<(Self, Vec<(Permission, Vec<String>)>), AppError> {
-		let iam_policy = iam_policies::table
-			.filter(iam_policies::site_id.eq(site_id))
-			.find(id)
+		let query = {
+			let mut query = iam_policies::table
+				.filter(iam_policies::id.eq(id))
+				.into_boxed();
+
+			if site_id.is_some() {
+				query = query.filter(iam_policies::site_id.eq(site_id))
+			} else {
+				query = query.filter(iam_policies::site_id.is_null())
+			}
+
+			query
+		};
+
+		let iam_policy = query
 			.select(IAMPolicy::as_select())
 			.get_result(conn)?;
 
@@ -78,15 +90,29 @@ impl IAMPolicy {
 
 	pub fn find(
 		conn: &mut PgConnection,
-		site_id: Uuid,
+		site_id: Option<Uuid>,
 		page: i64,
 		pagesize: i64,
 	) -> Result<(Vec<(Self, Vec<(Permission, Vec<String>)>)>, i64), AppError> {
-		let iam_policies = iam_policies::table
-			.select(IAMPolicy::as_select())
-			.filter(iam_policies::site_id.eq(site_id))
-			.offset((page - 1) * pagesize)
-			.limit(pagesize)
+		let query = {
+			let mut query = iam_policies::table
+				.select(IAMPolicy::as_select())
+				.into_boxed();
+
+			if site_id.is_some() {
+				query = query.filter(iam_policies::site_id.eq(site_id))
+			} else {
+				query = query.filter(iam_policies::site_id.is_null())
+			}
+
+			if pagesize != -1 {
+				query = query.offset((page - 1) * pagesize).limit(pagesize);
+			};
+
+			query
+		};
+
+		let iam_policies = query
 			.load::<IAMPolicy>(conn)?;
 
 		let permissions = Permission::belonging_to(&iam_policies)
