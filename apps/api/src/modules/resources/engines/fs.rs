@@ -87,7 +87,8 @@ impl StorageEngine for FsStorageEngine {
 			.join(config.base_path)
 			.join(clean_path(path))
 			.join(file.file_name.unwrap());
-		fs::rename(&file.file.path(), &location)?;
+		fs::copy(&file.file.path(), &location)?;
+		fs::remove_file(&location)?;
 
 		Ok(())
 	}
