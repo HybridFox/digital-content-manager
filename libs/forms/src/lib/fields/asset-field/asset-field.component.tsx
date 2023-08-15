@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { Controller, ControllerFieldState, ControllerRenderProps, FieldPath, FieldValues, UseFormStateReturn, useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
 import classNames from 'classnames';
+import { useParams } from 'react-router-dom';
 
 import { FieldLabel } from '../../field-label/field-label.component';
 import { SelectAssetModal } from '../../modals';
@@ -11,9 +12,10 @@ import styles from './asset-field.module.scss';
 
 const cxBind = cx.bind(styles);
 
-export const AssetField: FC<IAssetFieldProps> = ({ name, label, siteId, fieldConfiguration, field }: IAssetFieldProps) => {
+export const AssetField: FC<IAssetFieldProps> = ({ name, label, fieldConfiguration, field }: IAssetFieldProps) => {
 	const { control } = useFormContext();
 	const [modalOpen, setModalOpen] = useState(false);
+	const { siteId } = useParams();
 
 	const renderImage = (storageRepositoryId: string, path: string) => (
 		<div className={classNames('u-margin-bottom-sm', cxBind('a-input__field'))} onClick={() => setModalOpen(true)} key={path}>
@@ -51,10 +53,12 @@ export const AssetField: FC<IAssetFieldProps> = ({ name, label, siteId, fieldCon
 				})}
 			>
 				<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} name={name} />
-				<div className={cxBind('a-input__images')}>
-					{value && !Array.isArray(value) && renderImage(value.storageRepositoryId, value.path)}
-					{value && Array.isArray(value) && value.map((item) => renderImage(item.storageRepositoryId, item.path))}
-				</div>
+				{value && (
+					<div className={cxBind('a-input__images')}>
+						{value && !Array.isArray(value) && renderImage(value.storageRepositoryId, value.path)}
+						{value && Array.isArray(value) && value.map((item) => renderImage(item.storageRepositoryId, item.path))}
+					</div>
+				)}
 				{!value && (
 					<div className={cxBind('a-input__add')} onClick={() => setModalOpen(true)}>
 						<span className="las la-plus"></span>
@@ -62,7 +66,7 @@ export const AssetField: FC<IAssetFieldProps> = ({ name, label, siteId, fieldCon
 					</div>
 				)}
 				<SelectAssetModal
-					siteId={siteId}
+					siteId={siteId!}
 					modalOpen={modalOpen}
 					onClose={() => setModalOpen(false)}
 					onSubmit={handleSubmit}

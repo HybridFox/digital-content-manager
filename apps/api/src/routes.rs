@@ -6,6 +6,7 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 		web::scope("")
 			.service(web::scope("/api/v1")
 				.service(web::scope("/sites/{site_id}/content").service(modules::content::controllers::public_content::find_one))
+				.service(web::scope("/sites/{site_id}/files").service(modules::resources::controllers::public_files::read_file))
 			)
 			.service(web::scope("/admin-api/v1")
 				.service(web::scope("/status").service(modules::core::controllers::status::ping))

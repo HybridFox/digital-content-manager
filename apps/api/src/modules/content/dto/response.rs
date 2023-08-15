@@ -142,18 +142,16 @@ impl From<(Content, Vec<ContentField>, Language, WorkflowState)> for ContentWith
 #[serde(rename_all = "camelCase")]
 pub struct PublicContentTranslationsDTO {
 	pub id: Uuid,
-	pub name: String,
 	pub slug: String,
-	pub language: LanguageDTO,
+	pub language: String,
 }
 
 impl From<(Content, Language)> for PublicContentTranslationsDTO {
 	fn from((content, language): (Content, Language)) -> Self {
 		Self {
 			id: content.id,
-			name: content.name,
 			slug: content.slug,
-			language: LanguageDTO::from(language),
+			language: language.key,
 		}
 	}
 }
@@ -167,7 +165,7 @@ pub struct PublicContentDTO {
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 	pub fields: HashMap<String, Option<Value>>,
-	pub language: LanguageDTO,
+	pub language: String,
 	pub translations: Vec<PublicContentTranslationsDTO>,
 }
 
@@ -194,7 +192,7 @@ impl
 			created_at: content.created_at,
 			updated_at: content.updated_at,
 			fields: parse_object_fields(content.translation_id, None, fields),
-			language: LanguageDTO::from(language),
+			language: language.key,
 			translations: translations
 				.into_iter()
 				.map(PublicContentTranslationsDTO::from)

@@ -91,9 +91,8 @@ async fn main() -> std::io::Result<()> {
 	println!("start server...");
 	let state: modules::core::middleware::state::AppState = {
 		let pool = utils::db::establish_connection();
-		let s3 = utils::s3::get_client();
 
-		modules::core::middleware::state::AppState { pool, s3 }
+		modules::core::middleware::state::AppState { pool }
 	};
 	println!("Database connected");
 

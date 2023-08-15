@@ -3,7 +3,6 @@ use crate::modules::resources::engines::lib::get_storage_engine;
 use crate::errors::AppError;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
-use super::super::engines::lib::StorageEngine;
 use actix_web::{get, post, web, delete, HttpResponse};
 use serde::Deserialize;
 use utoipa::IntoParams;

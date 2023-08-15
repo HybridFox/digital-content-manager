@@ -95,12 +95,6 @@ impl Modify for SecurityAddon {
 		super::modules::workflows::controllers::workflow_states::update,
 		super::modules::workflows::controllers::workflow_states::remove,
 
-		super::modules::assets::controllers::assets::upload,
-		super::modules::assets::controllers::assets::find_all,
-		super::modules::assets::controllers::assets::find_one,
-		// super::modules::assets::controllers::assets::update,
-		// super::modules::assets::controllers::assets::remove,
-
 		super::modules::iam_actions::controllers::iam_actions::find_all,
 		super::modules::iam_actions::controllers::iam_actions::find_one,
 
@@ -194,12 +188,6 @@ impl Modify for SecurityAddon {
 			super::modules::workflows::dto::workflow_states::response::WorkflowStatesEmbeddedDTO,
 			super::modules::workflows::dto::workflow_states::request::CreateWorkflowStateDTO,
 			super::modules::workflows::dto::workflow_states::request::UpdateWorkflowStateDTO,
-
-			// Assets
-			super::modules::assets::dto::response::AssetDTO,
-			super::modules::assets::dto::response::AssetsDTO,
-			super::modules::assets::dto::response::AssetsEmbeddedDTO,
-			super::modules::assets::dto::request::CreateAssetDTO,
 
 			// IAM Actions
 			super::modules::iam_actions::dto::response::IAMActionDTO,

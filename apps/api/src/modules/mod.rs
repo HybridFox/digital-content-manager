@@ -1,4 +1,3 @@
-pub mod assets;
 pub mod auth;
 pub mod authentication_methods;
 pub mod content;
