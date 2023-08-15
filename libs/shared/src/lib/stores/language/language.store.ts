@@ -11,7 +11,7 @@ export const useLanguageStore = create<ILanguageStoreState>()(devtools(
 	(set) => ({
 		fetchLanguages: async (searchParams) => {
 			set(() => ({ languagesLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/languages`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/languages`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -29,7 +29,7 @@ export const useLanguageStore = create<ILanguageStoreState>()(devtools(
 
 		fetchLanguage: async (languageId) => {
 			set(() => ({ languageLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/languages/${languageId}`).json<ILanguage>());
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/languages/${languageId}`).json<ILanguage>());
 
 			if (error) {
 				set(() => ({ language: undefined, languageLoading: false }));

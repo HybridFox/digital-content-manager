@@ -8,7 +8,7 @@ export const useStorageRepositoryStore = create<IStorageRepositoryStoreState>()(
 	(set) => ({
 		fetchStorageRepositories: async (siteId, params) => {
 			set(() => ({ storageRepositoriesLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/storage-repositories`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/storage-repositories`, {
 				searchParams: {
 					...(params || {})
 				}
@@ -27,7 +27,7 @@ export const useStorageRepositoryStore = create<IStorageRepositoryStoreState>()(
 
 		fetchStorageRepository: async (siteId, storageRepositoryId) => {
 			set(() => ({ storageRepositoryLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/storageRepository/${storageRepositoryId}`).json<IStorageRepository>());
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/storageRepository/${storageRepositoryId}`).json<IStorageRepository>());
 
 			if (error) {
 				set(() => ({ storageRepository: undefined, storageRepositoryLoading: false }));
@@ -42,7 +42,7 @@ export const useStorageRepositoryStore = create<IStorageRepositoryStoreState>()(
 
 		createStorageRepository: async (siteId, storageRepository) => {
 			set(() => ({ createStorageRepositoryLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/storageRepositories`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/admin-api/v1/sites/${siteId}/storageRepositories`, {
 				json: storageRepository,
 			}).json<IStorageRepository>());
 			set(() => ({ createStorageRepositoryLoading: false }));
@@ -57,7 +57,7 @@ export const useStorageRepositoryStore = create<IStorageRepositoryStoreState>()(
 
 		updateStorageRepository: async (siteId, storageRepositoryId, data) => {
 			set(() => ({ updateStorageRepositoryLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/content/${storageRepositoryId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/admin-api/v1/sites/${siteId}/content/${storageRepositoryId}`, {
 				json: data,
 			}).json<IStorageRepository>());
 

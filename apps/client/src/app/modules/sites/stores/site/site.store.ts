@@ -8,7 +8,7 @@ export const useSiteStore = create<ISiteStoreState>()(devtools(
 	(set) => ({
 		fetchSites: async (searchParams) => {
 			set(() => ({ sitesLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -26,7 +26,7 @@ export const useSiteStore = create<ISiteStoreState>()(devtools(
 
 		fetchSite: async (siteId) => {
 			set(() => ({ siteLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}`).json<ISite>());
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}`).json<ISite>());
 
 			if (error) {
 				set(() => ({ site: undefined, siteLoading: false }));
@@ -40,7 +40,7 @@ export const useSiteStore = create<ISiteStoreState>()(devtools(
 
 		createSite: async (site) => {
 			set(() => ({ createSiteLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/admin-api/v1/sites`, {
 				json: site,
 			}).json<ISite>());
 			set(() => ({ createSiteLoading: false }));
@@ -55,7 +55,7 @@ export const useSiteStore = create<ISiteStoreState>()(devtools(
 
 		updateSite: async (siteId, data) => {
 			set(() => ({ updateSiteLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/admin-api/v1/sites/${siteId}`, {
 				json: data,
 			}).json<ISite>());
 
@@ -71,7 +71,7 @@ export const useSiteStore = create<ISiteStoreState>()(devtools(
 
 		removeSite: async (siteId) => {
 			set(() => ({ removeSiteLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.delete(`/api/v1/sites/${siteId}`).json<void>());
+			const [result, error] = await wrapApi(kyInstance.delete(`/admin-api/v1/sites/${siteId}`).json<void>());
 
 			if (error) {
 				set(() => ({ removeSiteLoading: false }));

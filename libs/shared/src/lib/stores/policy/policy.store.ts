@@ -10,7 +10,7 @@ export const usePolicyStore = create<IPolicyStoreState>()(devtools(
 	(set) => ({
 		fetchPolicies: async (searchParams) => {
 			set(() => ({ policiesLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/iam-policies`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/iam-policies`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -28,7 +28,7 @@ export const usePolicyStore = create<IPolicyStoreState>()(devtools(
 
 		fetchPolicy: async (policyId) => {
 			set(() => ({ policyLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/iam-policies/${policyId}`).json<IPolicy>());
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/iam-policies/${policyId}`).json<IPolicy>());
 
 			if (error) {
 				set(() => ({ policy: undefined, policyLoading: false }));
@@ -42,7 +42,7 @@ export const usePolicyStore = create<IPolicyStoreState>()(devtools(
 
 		createPolicy: async (policy) => {
 			set(() => ({ createPolicyLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/iam-policies`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/admin-api/v1/iam-policies`, {
 				json: policy,
 			}).json<IPolicy>());
 			set(() => ({ createPolicyLoading: false }));
@@ -57,7 +57,7 @@ export const usePolicyStore = create<IPolicyStoreState>()(devtools(
 
 		updatePolicy: async (policyId, data) => {
 			set(() => ({ updatePolicyLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/iam-policies/${policyId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/admin-api/v1/iam-policies/${policyId}`, {
 				json: data,
 			}).json<IPolicy>());
 
@@ -73,7 +73,7 @@ export const usePolicyStore = create<IPolicyStoreState>()(devtools(
 
 		removePolicy: async (policyId) => {
 			set(() => ({ removePolicyLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.delete(`/api/v1/iam-policies/${policyId}`).json<void>());
+			const [result, error] = await wrapApi(kyInstance.delete(`/admin-api/v1/iam-policies/${policyId}`).json<void>());
 
 			if (error) {
 				set(() => ({ removePolicyLoading: false }));

@@ -24,7 +24,7 @@ export const useAuthStore = create<IAuthStoreState>()(devtools(
 			sites: [],
 			roles: [],
 			fetchUser: async () => {
-				const [result, error] = await wrapApi(kyInstance.get('/api/v1/auth/me').json<IMeReponse>());
+				const [result, error] = await wrapApi(kyInstance.get('/admin-api/v1/auth/me').json<IMeReponse>());
 
 				if (error) {
 					set(() => ({ user: undefined, token: undefined, sites: [] }));
@@ -34,7 +34,7 @@ export const useAuthStore = create<IAuthStoreState>()(devtools(
 				set(() => ({ ...result, activeSite: result.sites?.[0] }));
 			},
 			login: async (email, password) => {
-				const [result, error] = await wrapApi(kyAuthInstance.post('/api/v1/auth/local/login', {
+				const [result, error] = await wrapApi(kyAuthInstance.post('/admin-api/v1/auth/local/login', {
 					json: { email, password }
 				}).json<IMeReponse>());
 
@@ -45,7 +45,7 @@ export const useAuthStore = create<IAuthStoreState>()(devtools(
 				set(() => ({ ...result, activeSite: result.sites?.[0] }));
 			},
 			setup: async (values) => {
-				const [result, error] = await wrapApi(kyInstance.post('/api/v1/setup/register', {
+				const [result, error] = await wrapApi(kyInstance.post('/admin-api/v1/setup/register', {
 					json: values
 				}).json<IMeReponse>());
 	

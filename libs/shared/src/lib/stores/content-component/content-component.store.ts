@@ -12,7 +12,7 @@ export const useContentComponentStore = create<IContentComponentStoreState>()(
 				const [result, error] = await wrapApi(
 					kyInstance
 						.get(
-							`/api/v1/sites/${siteId}/content-components`,
+							`/admin-api/v1/sites/${siteId}/content-components`,
 							{
 								searchParams: {
 									...options,
@@ -34,7 +34,7 @@ export const useContentComponentStore = create<IContentComponentStoreState>()(
 
 			fetchContentComponent: async (siteId, contentComponentId) => {
 				set(() => ({ contentComponentLoading: true }));
-				const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content-components/${contentComponentId}`).json<IContentComponent>());
+				const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/content-components/${contentComponentId}`).json<IContentComponent>());
 	
 				if (error) {
 					set(() => ({ contentComponent: undefined, contentComponentLoading: false }));
@@ -49,7 +49,7 @@ export const useContentComponentStore = create<IContentComponentStoreState>()(
 	
 			createContentComponent: async (siteId, contentComponent) => {
 				set(() => ({ createContentComponentLoading: true }));
-				const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/content-components`, {
+				const [result, error] = await wrapApi(kyInstance.post(`/admin-api/v1/sites/${siteId}/content-components`, {
 					json: {
 						...contentComponent,
 						fields: []
@@ -67,7 +67,7 @@ export const useContentComponentStore = create<IContentComponentStoreState>()(
 	
 			updateContentComponent: async (siteId, contentComponentId, data) => {
 				set(() => ({ updateContentComponentLoading: true }));
-				const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/content-components/${contentComponentId}`, {
+				const [result, error] = await wrapApi(kyInstance.put(`/admin-api/v1/sites/${siteId}/content-components/${contentComponentId}`, {
 					json: data,
 				}).json<IContentComponent>());
 	

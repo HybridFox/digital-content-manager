@@ -11,10 +11,8 @@ export default defineConfig({
 		port: 3000,
 		host: '0.0.0.0',
 		proxy: {
-			'/api': {
-				target: 'http://host.docker.internal:8000/admin-api',
-				rewrite: (path) => path.replace(/^\/api/, ''),
-			},
+			'/api': 'http://host.docker.internal:8000',
+			'/admin-api': 'http://host.docker.internal:8000',
 		},
 	},
 

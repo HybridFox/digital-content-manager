@@ -8,7 +8,7 @@ export const useContentStore = create<IContentStoreState>()(devtools(
 	(set) => ({
 		fetchContent: async (siteId, params) => {
 			set(() => ({ contentLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/content`, {
 				searchParams: {
 					...(params || {})
 				}
@@ -25,7 +25,7 @@ export const useContentStore = create<IContentStoreState>()(devtools(
 
 		fetchContentItem: async (siteId, contentId) => {
 			set(() => ({ contentLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content/${contentId}`).json<IContentItem>());
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/content/${contentId}`).json<IContentItem>());
 
 			if (error) {
 				set(() => ({ content: undefined, contentLoading: false }));
@@ -40,7 +40,7 @@ export const useContentStore = create<IContentStoreState>()(devtools(
 
 		createContentItem: async (siteId, content) => {
 			set(() => ({ createContentItemLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/content`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/admin-api/v1/sites/${siteId}/content`, {
 				json: content,
 			}).json<IContentItem>());
 			set(() => ({ createContentItemLoading: false }));
@@ -55,7 +55,7 @@ export const useContentStore = create<IContentStoreState>()(devtools(
 
 		updateContentItem: async (siteId, contentId, data) => {
 			set(() => ({ updateContentItemLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/content/${contentId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/admin-api/v1/sites/${siteId}/content/${contentId}`, {
 				json: data,
 			}).json<IContentItem>());
 
@@ -71,7 +71,7 @@ export const useContentStore = create<IContentStoreState>()(devtools(
 
 		removeContentItem: async (siteId, contentId) => {
 			set(() => ({ removeContentItemLoading: true }));
-			const [_, error] = await wrapApi(kyInstance.delete(`/api/v1/sites/${siteId}/content/${contentId}`).json<IContentItem>());
+			const [_, error] = await wrapApi(kyInstance.delete(`/admin-api/v1/sites/${siteId}/content/${contentId}`).json<IContentItem>());
 
 			if (error) {
 				set(() => ({ removeContentItemLoading: false }));
@@ -84,7 +84,7 @@ export const useContentStore = create<IContentStoreState>()(devtools(
 
 		fetchDefaultValues: async (siteId, translationId) => {
 			set(() => ({ defaultValuesLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content/${translationId}/default-values`).json<IContentItem>());
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/content/${translationId}/default-values`).json<IContentItem>());
 
 			if (error) {
 				set(() => ({ defaultValues: undefined, defaultValuesLoading: false }));

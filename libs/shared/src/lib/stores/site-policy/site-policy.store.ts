@@ -11,7 +11,7 @@ export const useSitePolicyStore = create<ISitePolicyStoreState>()(devtools(
 	(set) => ({
 		fetchPolicies: async (siteId, searchParams) => {
 			set(() => ({ policiesLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/iam-policies`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/iam-policies`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -29,7 +29,7 @@ export const useSitePolicyStore = create<ISitePolicyStoreState>()(devtools(
 
 		fetchPolicy: async (siteId, workflowId) => {
 			set(() => ({ policyLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/iam-policies/${workflowId}`).json<IPolicy>());
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/iam-policies/${workflowId}`).json<IPolicy>());
 
 			if (error) {
 				set(() => ({ policy: undefined, policyLoading: false }));
@@ -43,7 +43,7 @@ export const useSitePolicyStore = create<ISitePolicyStoreState>()(devtools(
 
 		createPolicy: async (siteId, policy) => {
 			set(() => ({ createPolicyLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/iam-policies`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/admin-api/v1/sites/${siteId}/iam-policies`, {
 				json: policy,
 			}).json<IPolicy>());
 			set(() => ({ createPolicyLoading: false }));
@@ -58,7 +58,7 @@ export const useSitePolicyStore = create<ISitePolicyStoreState>()(devtools(
 
 		updatePolicy: async (siteId, policyId, data) => {
 			set(() => ({ updatePolicyLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/iam-policies/${policyId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/admin-api/v1/sites/${siteId}/iam-policies/${policyId}`, {
 				json: data,
 			}).json<IPolicy>());
 
@@ -74,7 +74,7 @@ export const useSitePolicyStore = create<ISitePolicyStoreState>()(devtools(
 
 		removePolicy: async (siteId, policyId) => {
 			set(() => ({ removePolicyLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.delete(`/api/v1/sites/${siteId}/iam-policies/${policyId}`).json<void>());
+			const [result, error] = await wrapApi(kyInstance.delete(`/admin-api/v1/sites/${siteId}/iam-policies/${policyId}`).json<void>());
 
 			if (error) {
 				set(() => ({ removePolicyLoading: false }));

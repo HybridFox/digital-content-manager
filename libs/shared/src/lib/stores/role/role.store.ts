@@ -11,7 +11,7 @@ export const useRoleStore = create<IRoleStoreState>()(devtools(
 	(set) => ({
 		fetchRoles: async (searchParams) => {
 			set(() => ({ rolesLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/roles`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/roles`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -29,7 +29,7 @@ export const useRoleStore = create<IRoleStoreState>()(devtools(
 
 		fetchRole: async (roleId) => {
 			set(() => ({ roleLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/roles/${roleId}`).json<IRole>());
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/roles/${roleId}`).json<IRole>());
 
 			if (error) {
 				set(() => ({ role: undefined, roleLoading: false }));
@@ -43,7 +43,7 @@ export const useRoleStore = create<IRoleStoreState>()(devtools(
 
 		createRole: async (role) => {
 			set(() => ({ createRoleLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/roles`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/admin-api/v1/roles`, {
 				json: role,
 			}).json<IRole>());
 			set(() => ({ createRoleLoading: false }));
@@ -58,7 +58,7 @@ export const useRoleStore = create<IRoleStoreState>()(devtools(
 
 		updateRole: async (roleId, data) => {
 			set(() => ({ updateRoleLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/roles/${roleId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/admin-api/v1/roles/${roleId}`, {
 				json: data,
 			}).json<IRole>());
 
@@ -74,7 +74,7 @@ export const useRoleStore = create<IRoleStoreState>()(devtools(
 
 		removeRole: async (roleId) => {
 			set(() => ({ removeRoleLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.delete(`/api/v1/roles/${roleId}`).json<void>());
+			const [result, error] = await wrapApi(kyInstance.delete(`/admin-api/v1/roles/${roleId}`).json<void>());
 
 			if (error) {
 				set(() => ({ removeRoleLoading: false }));

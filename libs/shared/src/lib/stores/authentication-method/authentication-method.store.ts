@@ -9,7 +9,7 @@ export const useAuthenticationMethodStore = create<IAuthenticationMethodStoreSta
 	(set) => ({
 		fetchAuthenticationMethods: async (params) => {
 			set(() => ({ authenticationMethodsLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/authentication-methods`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/authentication-methods`, {
 				searchParams: {
 					...(params || {})
 				}
@@ -28,7 +28,7 @@ export const useAuthenticationMethodStore = create<IAuthenticationMethodStoreSta
 
 		fetchAuthenticationMethod: async (authenticationMethodId) => {
 			set(() => ({ authenticationMethodLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/authentication-methods/${authenticationMethodId}`).json<IAuthenticationMethod>());
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/authentication-methods/${authenticationMethodId}`).json<IAuthenticationMethod>());
 
 			if (error) {
 				set(() => ({ authenticationMethod: undefined, authenticationMethodLoading: false }));
@@ -43,7 +43,7 @@ export const useAuthenticationMethodStore = create<IAuthenticationMethodStoreSta
 
 		createAuthenticationMethod: async (authenticationMethod) => {
 			set(() => ({ createAuthenticationMethodLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/authentication-methods`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/admin-api/v1/authentication-methods`, {
 				json: authenticationMethod,
 			}).json<IAuthenticationMethod>());
 			set(() => ({ createAuthenticationMethodLoading: false }));
@@ -58,7 +58,7 @@ export const useAuthenticationMethodStore = create<IAuthenticationMethodStoreSta
 
 		updateAuthenticationMethod: async (authenticationMethodId, data) => {
 			set(() => ({ updateAuthenticationMethodLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/authentication-methods/${authenticationMethodId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/admin-api/v1/authentication-methods/${authenticationMethodId}`, {
 				json: data,
 			}).json<IAuthenticationMethod>());
 

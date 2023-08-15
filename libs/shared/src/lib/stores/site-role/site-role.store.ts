@@ -11,7 +11,7 @@ export const useSiteRoleStore = create<ISiteRoleStoreState>()(devtools(
 	(set) => ({
 		fetchRoles: async (siteId, searchParams) => {
 			set(() => ({ rolesLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/roles`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/roles`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -29,7 +29,7 @@ export const useSiteRoleStore = create<ISiteRoleStoreState>()(devtools(
 
 		fetchRole: async (siteId, workflowId) => {
 			set(() => ({ roleLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/roles/${workflowId}`).json<IRole>());
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/roles/${workflowId}`).json<IRole>());
 
 			if (error) {
 				set(() => ({ role: undefined, roleLoading: false }));
@@ -43,7 +43,7 @@ export const useSiteRoleStore = create<ISiteRoleStoreState>()(devtools(
 
 		createRole: async (siteId, role) => {
 			set(() => ({ createRoleLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/roles`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/admin-api/v1/sites/${siteId}/roles`, {
 				json: role,
 			}).json<IRole>());
 			set(() => ({ createRoleLoading: false }));
@@ -58,7 +58,7 @@ export const useSiteRoleStore = create<ISiteRoleStoreState>()(devtools(
 
 		updateRole: async (siteId, roleId, data) => {
 			set(() => ({ updateRoleLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/roles/${roleId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/admin-api/v1/sites/${siteId}/roles/${roleId}`, {
 				json: data,
 			}).json<IRole>());
 
@@ -74,7 +74,7 @@ export const useSiteRoleStore = create<ISiteRoleStoreState>()(devtools(
 
 		removeRole: async (siteId, roleId) => {
 			set(() => ({ removeRoleLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.delete(`/api/v1/sites/${siteId}/roles/${roleId}`).json<void>());
+			const [result, error] = await wrapApi(kyInstance.delete(`/admin-api/v1/sites/${siteId}/roles/${roleId}`).json<void>());
 
 			if (error) {
 				set(() => ({ removeRoleLoading: false }));

@@ -8,7 +8,7 @@ export const useSiteUserStore = create<ISiteUserStoreState>()(devtools(
 	(set) => ({
 		fetchUsers: async (siteId, searchParams) => {
 			set(() => ({ usersLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/users`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/users`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -26,7 +26,7 @@ export const useSiteUserStore = create<ISiteUserStoreState>()(devtools(
 
 		fetchUser: async (siteId, workflowId) => {
 			set(() => ({ userLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/users/${workflowId}`).json<IUser>());
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/users/${workflowId}`).json<IUser>());
 
 			if (error) {
 				set(() => ({ user: undefined, userLoading: false }));
@@ -40,7 +40,7 @@ export const useSiteUserStore = create<ISiteUserStoreState>()(devtools(
 
 		createUser: async (siteId, user) => {
 			set(() => ({ createUserLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/users`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/admin-api/v1/sites/${siteId}/users`, {
 				json: user,
 			}).json<IUser>());
 			set(() => ({ createUserLoading: false }));
@@ -55,7 +55,7 @@ export const useSiteUserStore = create<ISiteUserStoreState>()(devtools(
 
 		updateUser: async (siteId, userId, data) => {
 			set(() => ({ updateUserLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/users/${userId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/admin-api/v1/sites/${siteId}/users/${userId}`, {
 				json: data,
 			}).json<IUser>());
 
@@ -71,7 +71,7 @@ export const useSiteUserStore = create<ISiteUserStoreState>()(devtools(
 
 		removeUser: async (siteId, userId) => {
 			set(() => ({ removeUserLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.delete(`/api/v1/sites/${siteId}/users/${userId}`).json<void>());
+			const [result, error] = await wrapApi(kyInstance.delete(`/admin-api/v1/sites/${siteId}/users/${userId}`).json<void>());
 
 			if (error) {
 				set(() => ({ removeUserLoading: false }));

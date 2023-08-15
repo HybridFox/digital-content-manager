@@ -14,7 +14,7 @@ export const useContentTypeFieldStore = create<IContentTypeFieldStoreState>()(
 			// 	const [result, error] = await wrapApi(
 			// 		kyInstance
 			// 			.get(
-			// 				`/api/v1/sites/${selectedSiteId}/content-components`,
+			// 				`/admin-api/v1/sites/${selectedSiteId}/content-components`,
 			// 				{
 			// 					searchParams: {
 			// 						...options,

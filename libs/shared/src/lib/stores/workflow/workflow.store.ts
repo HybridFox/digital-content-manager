@@ -10,7 +10,7 @@ export const useWorkflowStore = create<IWorkflowStoreState>()(devtools(
 	(set) => ({
 		fetchWorkflows: async (siteId, searchParams) => {
 			set(() => ({ workflowsLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/workflows`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/workflows`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -28,7 +28,7 @@ export const useWorkflowStore = create<IWorkflowStoreState>()(devtools(
 
 		fetchWorkflow: async (siteId, workflowId) => {
 			set(() => ({ workflowLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/workflows/${workflowId}`).json<IWorkflow>());
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/workflows/${workflowId}`).json<IWorkflow>());
 
 			if (error) {
 				set(() => ({ workflow: undefined, workflowLoading: false }));
@@ -42,7 +42,7 @@ export const useWorkflowStore = create<IWorkflowStoreState>()(devtools(
 
 		createWorkflow: async (siteId, workflow) => {
 			set(() => ({ createWorkflowLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/workflows`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/admin-api/v1/sites/${siteId}/workflows`, {
 				json: {
 					...workflow,
 					fields: []
@@ -60,7 +60,7 @@ export const useWorkflowStore = create<IWorkflowStoreState>()(devtools(
 
 		updateWorkflow: async (siteId, workflowId, data) => {
 			set(() => ({ updateWorkflowLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/workflows/${workflowId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/admin-api/v1/sites/${siteId}/workflows/${workflowId}`, {
 				json: data,
 			}).json<IWorkflow>());
 

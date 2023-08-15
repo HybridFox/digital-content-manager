@@ -33,7 +33,7 @@ export const RESOURCE_COLUMNS = (
 		width: '50px',
 		format: (value, key, item) => {
 			if ((item.mimeType as null | string)?.startsWith('image')) {
-				return <TableImagePreview url={`/api/v1/sites/${siteId}/storage-repositories/${item.storageRepositoryId}/files?path=${path.join('/')}/${item.name}`} />;
+				return <TableImagePreview url={`/admin-api/v1/sites/${siteId}/storage-repositories/${item.storageRepositoryId}/files?path=${path.join('/')}/${item.name}`} />;
 			}
 
 			if (value === ResourceKind.DIRECTORY) {

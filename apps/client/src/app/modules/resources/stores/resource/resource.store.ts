@@ -6,7 +6,7 @@ import { IResourceStoreState, IResourcesResponse } from './resource.types';
 
 const fetchResources = (set: any) => async (siteId: string, contentRepositoryId: any, params?: any) => {
 	set(() => ({ resourcesLoading: true }));
-	const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/storage-repositories/${contentRepositoryId}/directories`, {
+	const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/storage-repositories/${contentRepositoryId}/directories`, {
 		searchParams: {
 			...(params || {})
 		}
@@ -27,7 +27,7 @@ export const useResourceStore = create<IResourceStoreState>()(devtools(
 
 		createDirectory: async (siteId, contentRepositoryId, path, name) => {
 			set(() => ({ createDirectoryLoading: true }));
-			await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/storage-repositories/${contentRepositoryId}/directories`, {
+			await wrapApi(kyInstance.post(`/admin-api/v1/sites/${siteId}/storage-repositories/${contentRepositoryId}/directories`, {
 				json: {
 					name,
 				},
@@ -43,7 +43,7 @@ export const useResourceStore = create<IResourceStoreState>()(devtools(
 
 		removeDirectory: async (siteId, contentRepositoryId, path, name) => {
 			set(() => ({ removeDirectoryLoading: true }));
-			await wrapApi(kyInstance.delete(`/api/v1/sites/${siteId}/storage-repositories/${contentRepositoryId}/directories`, {
+			await wrapApi(kyInstance.delete(`/admin-api/v1/sites/${siteId}/storage-repositories/${contentRepositoryId}/directories`, {
 				searchParams: {
 					path: `${path}/${name}`
 				}
@@ -59,7 +59,7 @@ export const useResourceStore = create<IResourceStoreState>()(devtools(
 			const formData = new FormData();
 			formData.append('file', file);
 
-			await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/storage-repositories/${contentRepositoryId}/files`, {
+			await wrapApi(kyInstance.post(`/admin-api/v1/sites/${siteId}/storage-repositories/${contentRepositoryId}/files`, {
 				body: formData,
 				searchParams: {
 					path

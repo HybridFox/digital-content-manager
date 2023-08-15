@@ -20,7 +20,7 @@ export const AssetField: FC<IAssetFieldProps> = ({ name, label, fieldConfigurati
 	const renderImage = (storageRepositoryId: string, path: string) => (
 		<div className={classNames('u-margin-bottom-sm', cxBind('a-input__field'))} onClick={() => setModalOpen(true)} key={path}>
 			<div className={cxBind('a-input__image')}>
-				<img src={`/api/v1/sites/${siteId}/storage-repositories/${storageRepositoryId}/files?path=${path}`} alt="preview" />
+				<img src={`/admin-api/v1/sites/${siteId}/storage-repositories/${storageRepositoryId}/files?path=${path}`} alt="preview" />
 				<div className={cxBind('a-input__image__overlay')}>
 					<span className="las la-pen"></span>
 				</div>

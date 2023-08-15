@@ -10,7 +10,7 @@ export const useIAMActionStore = create<IIAMActionStoreState>()(devtools(
 	(set) => ({
 		fetchIAMActions: async (searchParams) => {
 			set(() => ({ iamActionsLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/iam-actions`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/iam-actions`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -28,7 +28,7 @@ export const useIAMActionStore = create<IIAMActionStoreState>()(devtools(
 
 		fetchIAMAction: async (iamAction) => {
 			set(() => ({ iamActionLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/iam-actions/${iamAction}`).json<IIAMAction>());
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/iam-actions/${iamAction}`).json<IIAMAction>());
 
 			if (error) {
 				set(() => ({ iamAction: undefined, iamActionLoading: false }));

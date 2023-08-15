@@ -10,7 +10,7 @@ export const useContentTypeStore = create<IContentTypeStoreState>()(devtools(
 	(set) => ({
 		fetchContentTypes: async (siteId, searchParams) => {
 			set(() => ({ contentTypesLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content-types`, {
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/content-types`, {
 				searchParams: {
 					...DEFAULT_PAGINATION_OPTIONS,
 					...searchParams,
@@ -28,7 +28,7 @@ export const useContentTypeStore = create<IContentTypeStoreState>()(devtools(
 
 		fetchContentType: async (siteId, contentTypeId) => {
 			set(() => ({ contentTypeLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content-types/${contentTypeId}`).json<IContentType>());
+			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/content-types/${contentTypeId}`).json<IContentType>());
 
 			if (error) {
 				set(() => ({ contentType: undefined, contentTypeLoading: false }));
@@ -43,7 +43,7 @@ export const useContentTypeStore = create<IContentTypeStoreState>()(devtools(
 
 		createContentType: async (siteId, contentType) => {
 			set(() => ({ createContentTypeLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.post(`/api/v1/sites/${siteId}/content-types`, {
+			const [result, error] = await wrapApi(kyInstance.post(`/admin-api/v1/sites/${siteId}/content-types`, {
 				json: {
 					...contentType,
 					fields: []
@@ -61,7 +61,7 @@ export const useContentTypeStore = create<IContentTypeStoreState>()(devtools(
 
 		updateContentType: async (siteId, contentTypeId, data) => {
 			set(() => ({ updateContentTypeLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.put(`/api/v1/sites/${siteId}/content-types/${contentTypeId}`, {
+			const [result, error] = await wrapApi(kyInstance.put(`/admin-api/v1/sites/${siteId}/content-types/${contentTypeId}`, {
 				json: data,
 			}).json<IContentType>());
 
