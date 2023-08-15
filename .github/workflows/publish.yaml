@@ -17,7 +17,7 @@ jobs:
                   dockerUsername: ${{ secrets.DOCKER_USERNAME }}
                   dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
                   imageName: hybridfox/ibs-api
-                  context: apps/api/.
+                  context: ./apps/api/.
                   file: ./Dockerfile
 
     push_client_to_registry:
