@@ -41,9 +41,9 @@ export const TopBar = () => {
 					<p className={cxBind('o-top-bar__profile__name')}>{user?.name}</p>
 					<p className={cxBind('o-top-bar__profile__email')}>{user?.email}</p>
 				</div>
-				<NavLink {...navLinkBinding} to="/" className={cxBind('o-top-bar__profile__settings')}>
+				{/* <NavLink {...navLinkBinding} to="/" className={cxBind('o-top-bar__profile__settings')}>
 					<i className="las la-ellipsis-h"></i>
-				</NavLink>
+				</NavLink> */}
 			</div>
 		</div>
 	);

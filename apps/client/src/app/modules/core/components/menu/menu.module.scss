@@ -15,11 +15,19 @@
 		font-weight: 700;
 		font-size: 1.5rem;
 		margin: var(--spacer-lg) var(--spacer-lg) var(--spacer) var(--spacer-lg);
-		padding: var(--spacer-xs) 0 calc(#{var(--spacer-lg)} + 6px) 0;
+		padding: var(--spacer-xxxs) 0 var(--spacer-lg) 0;
 		border-bottom: 2px solid var(--color-secondary);
 
+		a {
+			text-decoration: none;
+		}
+
+		span {
+			color: var(--color-gray-darkest);
+		}
+
 		@include tools.to('md') {
-			padding: var(--spacer-xs) 0 calc(#{var(--spacer-lg)} + 2px) 0;
+			padding: var(--spacer-xs) 0 var(--spacer-lg) 0;
 
 			span {
 				display: none;

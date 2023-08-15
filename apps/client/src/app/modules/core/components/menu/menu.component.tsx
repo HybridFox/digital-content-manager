@@ -33,7 +33,9 @@ export const Menu = () => {
 	return (
 		<div className={cxBind('o-menu')}>
 			<div className={cxBind('o-menu__logo')}>
-				<i className="las la-sms"></i> <span>Inhoud Beheer Systeem</span>
+				<NavLink to="/">
+					<i className="las la-sms"></i> <span>Inhoud Beheer Systeem</span>
+				</NavLink>
 			</div>
 			<div className={cxBind('o-menu__links')}>
 				<ul>

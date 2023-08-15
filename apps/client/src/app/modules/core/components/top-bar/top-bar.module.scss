@@ -33,10 +33,10 @@
 		// padding: var(--spacer-xs);
 		display: flex;
 		align-items: center;
-		width: 300px;
+		margin-left: var(--spacer);
 
 		&__info {
-			margin-left: var(--spacer)
+			margin-left: var(--spacer);
 		}
 
 		&__name {
