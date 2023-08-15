@@ -168,11 +168,25 @@ pub struct PublicContentDTO {
 	pub updated_at: NaiveDateTime,
 	pub fields: HashMap<String, Option<Value>>,
 	pub language: LanguageDTO,
-	pub translations: Vec<PublicContentTranslationsDTO>
+	pub translations: Vec<PublicContentTranslationsDTO>,
 }
 
-impl From<(Content, Vec<ContentField>, Language, Vec<(Content, Language)>)> for PublicContentDTO {
-	fn from((content, fields, language, translations): (Content, Vec<ContentField>, Language, Vec<(Content, Language)>)) -> Self {
+impl
+	From<(
+		Content,
+		Vec<ContentField>,
+		Language,
+		Vec<(Content, Language)>,
+	)> for PublicContentDTO
+{
+	fn from(
+		(content, fields, language, translations): (
+			Content,
+			Vec<ContentField>,
+			Language,
+			Vec<(Content, Language)>,
+		),
+	) -> Self {
 		Self {
 			id: content.id,
 			name: content.name,
@@ -181,7 +195,10 @@ impl From<(Content, Vec<ContentField>, Language, Vec<(Content, Language)>)> for 
 			updated_at: content.updated_at,
 			fields: parse_object_fields(content.translation_id, None, fields),
 			language: LanguageDTO::from(language),
-			translations: translations.into_iter().map(PublicContentTranslationsDTO::from).collect()
+			translations: translations
+				.into_iter()
+				.map(PublicContentTranslationsDTO::from)
+				.collect(),
 		}
 	}
 }

@@ -83,7 +83,8 @@ impl Content {
 	) -> Result<(Self, Vec<ContentField>, Language, WorkflowState), AppError> {
 		let content_item = content::table
 			.filter(content::site_id.eq(site_id))
-			.find(id).first::<Self>(conn)?;
+			.find(id)
+			.first::<Self>(conn)?;
 
 		let fields = content_fields::table
 			.filter(
@@ -298,9 +299,7 @@ impl Content {
 			query
 		};
 
-		let content_count = query
-			.count()
-			.get_result::<i64>(conn)?;
+		let content_count = query.count().get_result::<i64>(conn)?;
 
 		Ok(content_count > 0)
 	}

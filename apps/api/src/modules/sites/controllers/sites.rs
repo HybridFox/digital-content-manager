@@ -45,8 +45,12 @@ pub async fn create(
 	let conn = &mut state.get_conn()?;
 	let site = Site::create(conn, &form.name)?;
 	let policy = IAMPolicy::create(conn, Some(site.id), "Default Admin Policy")?;
-	let permission =
-		Permission::create(conn, policy.id, vec!["urn:ibs::*".to_string()], "grant".to_owned())?;
+	let permission = Permission::create(
+		conn,
+		policy.id,
+		vec!["urn:ibs::*".to_string()],
+		"grant".to_owned(),
+	)?;
 	PermissionIAMAction::create(conn, permission.id, vec!["sites::*".to_string()])?;
 
 	// Asign policy to role

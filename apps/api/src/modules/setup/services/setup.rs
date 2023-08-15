@@ -27,8 +27,12 @@ pub async fn setup_initial_user(
 
 	// Create policies for the role
 	let policy = IAMPolicy::create(conn, None, "Default Admin Policy")?;
-	let permission =
-		Permission::create(conn, policy.id, vec!["urn:ibs::*".to_string()], "grant".to_owned())?;
+	let permission = Permission::create(
+		conn,
+		policy.id,
+		vec!["urn:ibs::*".to_string()],
+		"grant".to_owned(),
+	)?;
 	PermissionIAMAction::create(conn, permission.id, vec!["root::*".to_string()])?;
 
 	// Asign policy to role

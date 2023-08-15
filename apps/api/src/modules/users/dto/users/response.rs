@@ -5,7 +5,10 @@ use uuid::Uuid;
 use crate::modules::{
 	users::models::user::User,
 	core::models::hal::{HALLinkList, HALPage},
-	roles::{models::role::Role, dto::response::RoleDTO}, sites::{dto::response::SiteWithRolesDTO, models::site::Site}, iam_policies::models::{permission::Permission, iam_policy::IAMPolicy}, languages::models::language::Language,
+	roles::{models::role::Role, dto::response::RoleDTO},
+	sites::{dto::response::SiteWithRolesDTO, models::site::Site},
+	iam_policies::models::{permission::Permission, iam_policy::IAMPolicy},
+	languages::models::language::Language,
 };
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
@@ -83,8 +86,28 @@ pub struct SitesWithRolesDTO {
 	pub _embedded: SitesWithRolesEmbeddedDTO,
 }
 
-impl From<(Vec<(Site, Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>, Vec<Language>)>, HALPage, Uuid)> for SitesWithRolesDTO {
-	fn from((sites, page, user_id): (Vec<(Site, Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>, Vec<Language>)>, HALPage, Uuid)) -> Self {
+impl
+	From<(
+		Vec<(
+			Site,
+			Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
+			Vec<Language>,
+		)>,
+		HALPage,
+		Uuid,
+	)> for SitesWithRolesDTO
+{
+	fn from(
+		(sites, page, user_id): (
+			Vec<(
+				Site,
+				Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
+				Vec<Language>,
+			)>,
+			HALPage,
+			Uuid,
+		),
+	) -> Self {
 		Self {
 			_links: HALLinkList::from((format!("/api/v1/users/{user_id}/sites"), &page)),
 			_embedded: SitesWithRolesEmbeddedDTO {

@@ -11,7 +11,7 @@ use actix_web::{get, post, web, HttpResponse, delete, put};
 use chrono::Utc;
 use reqwest::StatusCode;
 use serde::Deserialize;
-use slug::slugify;
+
 use utoipa::IntoParams;
 use uuid::Uuid;
 
@@ -75,7 +75,7 @@ pub async fn create(
 			status: StatusCode::UNPROCESSABLE_ENTITY.as_u16(),
 			code: "SLUG_UNIQUE_VIOLATION".to_owned(),
 			..Default::default()
-		}))
+		}));
 	}
 
 	let content = Content::create(
@@ -191,16 +191,21 @@ pub async fn update(
 	} else {
 		false
 	};
-	
+
 	if form.slug.is_some() {
-		let slug_in_use = Content::slug_in_use(conn, params.site_id, Some(form.translation_id), &form.slug.clone().unwrap())?;
+		let slug_in_use = Content::slug_in_use(
+			conn,
+			params.site_id,
+			Some(form.translation_id),
+			&form.slug.clone().unwrap(),
+		)?;
 		if slug_in_use {
 			return Err(AppError::UnprocessableEntity(AppErrorValue {
 				message: "Slug is not unique".to_string(),
 				status: StatusCode::UNPROCESSABLE_ENTITY.as_u16(),
 				code: "SLUG_UNIQUE_VIOLATION".to_owned(),
 				..Default::default()
-			}))
+			}));
 		}
 	};
 

@@ -1,5 +1,5 @@
 use super::super::dto::users::{response, request};
-use crate::modules::sites::dto::response::SiteWithRolesDTO;
+
 use crate::{errors::AppError, modules::users::models::user_role::UserRole};
 use crate::modules::users::models::user::{User, UpdateUser};
 use crate::modules::core::middleware::state::AppState;
@@ -195,7 +195,7 @@ pub async fn find_sites(
 			total_elements: total_elements as i64,
 			total_pages: 1,
 		},
-		params.user_id
+		params.user_id,
 	));
 	Ok(HttpResponse::Ok().json(res))
 }

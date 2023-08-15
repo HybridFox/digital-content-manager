@@ -32,7 +32,7 @@ impl IAMAction {
 		conn: &mut PgConnection,
 		page: i64,
 		pagesize: i64,
-		kind: &Option<String>
+		kind: &Option<String>,
 	) -> Result<(Vec<Self>, i64), AppError> {
 		let query = {
 			let mut query = iam_actions::table

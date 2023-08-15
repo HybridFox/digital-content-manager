@@ -87,8 +87,14 @@ pub async fn find_all(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
 
-	let (content_types, total_elements) =
-		ContentType::find(conn, params.site_id, page, pagesize, query.kind, query.include_occurrences)?;
+	let (content_types, total_elements) = ContentType::find(
+		conn,
+		params.site_id,
+		page,
+		pagesize,
+		query.kind,
+		query.include_occurrences,
+	)?;
 
 	let res = response::ContentTypesDTO::from((
 		content_types,

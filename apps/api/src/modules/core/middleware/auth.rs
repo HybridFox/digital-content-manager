@@ -1,9 +1,9 @@
 use crate::modules::core::helpers::auth::get_user_id_from_header;
 use crate::modules::users::models::user::User;
-use crate::constants;
+
 use crate::errors::{AppError, AppErrorValue};
 use crate::modules::core::middleware::state::AppState;
-use crate::utils::token;
+
 use actix_web::HttpMessage;
 use actix_web::http::StatusCode;
 use actix_web::{

@@ -1,11 +1,6 @@
 use actix_multipart::form::tempfile::TempFile;
 use aws_credential_types::Credentials;
-use aws_sdk_s3::{
-	Config,
-	config::Region,
-	Client,
-	types::{Delete, ObjectIdentifier},
-};
+use aws_sdk_s3::{Config, config::Region, Client};
 use chrono::NaiveDateTime;
 use serde_json::Value;
 
@@ -205,14 +200,14 @@ impl StorageEngine for S3StorageEngine {
 	}
 
 	async fn create_directory(&self, path: &str, name: &str) -> Result<(), AppError> {
-		let location = Path::new(".").join(".").join(clean_path(path)).join(name);
+		let _location = Path::new(".").join(".").join(clean_path(path)).join(name);
 		// fs::create_dir_all(&location)?;
 
 		Ok(())
 	}
 
 	async fn remove_directory(&self, path: &str) -> Result<(), AppError> {
-		let location = Path::new(".").join(".").join(clean_path(path));
+		let _location = Path::new(".").join(".").join(clean_path(path));
 		// fs::remove_dir_all(&location)?;
 
 		Ok(())

@@ -34,12 +34,8 @@ impl SiteUser {
 
 		Ok(permissions_iam_actions)
 	}
-	
-	pub fn upsert(
-		conn: &mut PgConnection,
-		site_id: Uuid,
-		user_id: Uuid,
-	) -> Result<(), AppError> {
+
+	pub fn upsert(conn: &mut PgConnection, site_id: Uuid, user_id: Uuid) -> Result<(), AppError> {
 		diesel::insert_into(sites_users::table)
 			.values(CreateSiteUser { user_id, site_id })
 			.on_conflict((sites_users::user_id, sites_users::site_id))
@@ -49,15 +45,11 @@ impl SiteUser {
 
 		Ok(())
 	}
-	
-	pub fn remove(
-		conn: &mut PgConnection,
-		site_id: Uuid,
-		user_id: Uuid,
-	) -> Result<(), AppError> {
+
+	pub fn remove(conn: &mut PgConnection, site_id: Uuid, user_id: Uuid) -> Result<(), AppError> {
 		let target = sites_users::table
-		.filter(sites_users::user_id.eq(user_id))
-		.filter(sites_users::site_id.eq(site_id));
+			.filter(sites_users::user_id.eq(user_id))
+			.filter(sites_users::site_id.eq(site_id));
 		diesel::delete(target).execute(conn)?;
 
 		Ok(())
