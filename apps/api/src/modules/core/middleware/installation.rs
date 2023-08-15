@@ -141,7 +141,7 @@ impl SkipCheckRoute {
 
 lazy_static! {
 	static ref SKIP_CHECK_ROUTES: [SkipCheckRoute; 1] = [SkipCheckRoute {
-		path: Regex::new(r"/api/v1/setup/*").unwrap(),
+		path: Regex::new(r"/admin-api/v1/setup/*").unwrap(),
 		method: Method::POST,
 	},];
 }
