@@ -1,8 +1,8 @@
-import { FC } from "react";
+import { FC, Suspense } from "react";
 import { FIELD_KEYS, IField } from "@ibs/shared";
 import classNames from "classnames";
 import cx from "classnames/bind";
-import { Alert } from "@ibs/components";
+import { Alert, Loading } from "@ibs/components";
 
 import { FIELD_COMPONENTS } from "../../fields";
 import { RenderMultiple } from "../render-multiple";
@@ -42,7 +42,9 @@ export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix = '' 
 	return <>
 		{fields.map((field) => (
 			<div className={classNames(cxBind('o-fields__field'), field.config?.wrapperClassName)} key={field.name}>
-				{renderContentComponent(field)}
+				<Suspense fallback={<Loading loading={true} />}>
+					{renderContentComponent(field)}
+				</Suspense>
 			</div>
 		))}
 	</>

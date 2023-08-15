@@ -2,6 +2,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
+import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
 	cacheDir: '../../node_modules/.vite/client',
@@ -26,6 +27,10 @@ export default defineConfig({
 		react(),
 		viteTsConfigPaths({
 			root: '../../',
+		}),
+		visualizer({
+			gzipSize: true,
+			brotliSize: true,
 		}),
 	],
 

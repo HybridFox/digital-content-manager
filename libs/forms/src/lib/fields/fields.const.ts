@@ -1,12 +1,24 @@
-import { FC } from "react";
+import { FC, lazy } from "react";
 import { FIELD_KEYS } from "@ibs/shared";
 
-import { TextField } from "./text-field";
-import { TextareaField } from "./textarea-field";
-import { SelectField } from "./select-field";
-import { FieldGroupField } from "./field-group-field/field-group-field.component";
-import { AssetField } from "./asset-field";
-import { RichtextField } from "./richtext-field";
+const TextField = lazy(async () => ({
+	default: (await import('./text-field')).TextField
+}));
+const TextareaField = lazy(async () => ({
+	default: (await import('./textarea-field')).TextareaField
+}));
+const SelectField = lazy(async () => ({
+	default: (await import('./select-field')).SelectField
+}));
+const FieldGroupField = lazy(async () => ({
+	default: (await import('./field-group-field')).FieldGroupField
+}));
+const RichtextField = lazy(async () => ({
+	default: (await import('./richtext-field')).RichtextField
+}));
+const AssetField = lazy(async () => ({
+	default: (await import('./asset-field')).AssetField
+}));
 
 export const FIELD_COMPONENTS: Record<FIELD_KEYS, FC<any>> = {
 	[FIELD_KEYS.FIELD_GROUP]: FieldGroupField,

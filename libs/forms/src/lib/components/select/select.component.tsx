@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import { FC, lazy } from 'react';
 import cx from 'classnames/bind';
-import ReactSelect from 'react-select';
 
 import { ISelectProps } from './select.types';
 import styles from './select.module.scss';
+const ReactSelect = lazy(() => import('react-select'));
 
 const cxBind = cx.bind(styles);
 
@@ -47,7 +47,7 @@ export const Select: FC<ISelectProps> = ({
 				menu: () => cxBind('a-select__menu'),
 				menuList: () => cxBind('a-select__menu-list'),
 				option: (props) => cxBind('a-select__option', {
-					'a-select__option--active': !!props.data.active || props.isSelected,
+					'a-select__option--active': !!(props.data as Record<string, string>).active || props.isSelected,
 					'a-select__option--focus': props.isFocused,
 				}),
 				placeholder: () => cxBind('a-select__placeholder'),

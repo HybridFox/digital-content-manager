@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, lazy } from 'react';
 import { Controller, ControllerFieldState, ControllerRenderProps, FieldPath, FieldValues, UseFormStateReturn, useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
 import { $generateHtmlFromNodes } from '@lexical/html';
@@ -16,9 +16,11 @@ import { FieldLabel } from '../../field-label/field-label.component';
 
 import styles from './richtext-field.module.scss';
 import { IRichtextFieldProps } from './richtext-field.types';
-import ToolbarPlugin from './plugins/toolbar/toolbar.plugin';
 import { RICHTEXT_NODES } from './nodes';
 
+const ToolbarPlugin = lazy(async () => ({
+	default: (await import('./plugins/toolbar/toolbar.plugin')).ToolbarPlugin
+}));
 const cxBind = cx.bind(styles);
 
 const InitializeDataPlugin = ({ value }: { value: any }) => {

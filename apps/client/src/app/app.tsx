@@ -1,4 +1,6 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { Suspense } from 'react';
+import { Loading } from '@ibs/components';
 
 import { Root } from './modules/core/components/root/root.component';
 import { AUTH_ROUTES } from './modules/auth';
@@ -63,7 +65,9 @@ const router = createBrowserRouter([
 
 export const App = () => {
 	return (
-		<RouterProvider router={router} />
+		<Suspense fallback={<Loading loading={true} />}>
+			<RouterProvider router={router} />
+		</Suspense>
 	);
 }
 
