@@ -5,7 +5,7 @@ FROM rust:1.70.0 as builder
 WORKDIR /app
 
 # copy over your manifests
-COPY . /app
+COPY apps/client/. /app
 
 # build for release
 RUN cargo build --bins --release
