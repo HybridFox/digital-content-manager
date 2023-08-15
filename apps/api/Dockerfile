@@ -16,7 +16,7 @@ RUN ldd /app/target/release/chatwall-api
 FROM debian:bullseye-slim
 
 RUN apt-get update && apt-get install libpq5 libssl-dev ca-certificates -y
-COPY --from=builder /app/target/release/chatwall-api /
+COPY --from=builder /app/target/release/ibs /
 
 # set the startup command to run your binary
-CMD ["./chatwall-api"]
+CMD ["./ibs"]
