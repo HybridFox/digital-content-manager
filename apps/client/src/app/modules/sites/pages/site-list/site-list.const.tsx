@@ -19,7 +19,7 @@ export const ROLE_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: 
 			<div className="u-display-flex u-justify-content-end">
 				{item?.hasPermission && (
 					<ButtonLink to={`${item.id}/dashboard`} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY}>
-						<i className="las la-eye"></i> {t(`GENERAL.LABELS.VISIT`)}
+						<i className="las la-eye"></i> {t(`GENERAL.LABELS.VIEW`)}
 					</ButtonLink>
 				)}
 				<HasPermission resource={`urn:ibs:sites::${item.id}`} action='root::sites:update'>
