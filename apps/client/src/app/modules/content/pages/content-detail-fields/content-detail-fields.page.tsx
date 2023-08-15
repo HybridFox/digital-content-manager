@@ -2,7 +2,7 @@ import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentTypeStore, useHea
 import { useEffect } from 'react';
 import { RenderFields, TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, HTMLButtonTypes } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
@@ -57,12 +57,9 @@ export const ContentDetailFieldsPage = () => {
 			</Alert>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<div className="u-margin-bottom">
-					<TextField name="name" label="Administrative Name" />
-				</div>
-				<div className="u-margin-bottom">
 					<RenderFields fieldPrefix="fields." fields={contentType?.fields || []} />
 				</div>
-				<Button htmlType={HTMLButtonTypes.SUBMIT}>{updateContentItemLoading && <i className="las la-redo-alt la-spin"></i>} Save</Button>
+				<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>{updateContentItemLoading && <i className="las la-redo-alt la-spin"></i>} Save</Button>
 			</form>
 		</FormProvider>
 	);

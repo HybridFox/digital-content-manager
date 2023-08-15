@@ -28,8 +28,12 @@
 		overflow: visible !important;
 	}
 
+	&__placeholder {
+		color: var(--color-gray)
+	}
+
 	&__menu {
-		background-color: var(--color-gray-lightest);
+		background-color: var(--color-gray-accent);
 		padding: var(--spacer-xs) 0;
 		border-radius: var(--border-radius-sm);
 		margin-top: var(--spacer-xs)
@@ -65,11 +69,19 @@
 		}
 		
 		&--focus {
-			background-color: var(--color-gray-light);
+			background-color: var(--color-gray-lighter);
 		}
 
 		&:hover {
-			background-color: var(--color-gray-light);
+			background-color: var(--color-gray-lighter);
+		}
+	}
+
+	&__group {
+		&__heading {
+			padding: var(--spacer-sm) var(--spacer) var(--spacer-xxxs);
+			color: var(--color-gray);
+			font-size: 0.8rem;
 		}
 	}
 

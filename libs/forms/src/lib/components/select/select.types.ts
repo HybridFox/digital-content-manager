@@ -3,6 +3,7 @@ import { Options } from "react-select";
 export interface ISelectOptions {
 	label: string;
 	value: string;
+	options?: ISelectOptions[];
 	onClick?: () => void;
 }
 

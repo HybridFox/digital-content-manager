@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Button, HTMLButtonTypes, Modal, ModalFooter } from '@ibs/components';
+import { Button, ButtonTypes, HTMLButtonTypes, Modal, ModalFooter } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { FileField } from '@ibs/forms';
 
@@ -22,7 +22,7 @@ export const UploadFileModal: FC<IUploadFileModalProps> = ({
 						label="File"
 					></FileField>
 					<ModalFooter>
-						<Button htmlType={HTMLButtonTypes.SUBMIT}>Upload</Button>
+						<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>Upload</Button>
 					</ModalFooter>
 				</form>
 			</FormProvider>

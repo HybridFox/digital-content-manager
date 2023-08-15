@@ -1,6 +1,11 @@
 .o-permission-manager {
 	margin-bottom: var(--spacer);
 
+	input {
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 0.9rem;
+	}
+
 	&__permission {
 		display: flex;
 		align-items: flex-end;

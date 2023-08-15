@@ -1,9 +1,11 @@
-use crate::{errors::AppError, modules::iam_actions::seeds::actions::IAM_ACTION_SEEDS};
+use crate::modules::iam_actions::seeds::site_actions::SITE_IAM_ACTION_SEEDS;
+use crate::{errors::AppError, modules::iam_actions::seeds::root_actions::ROOT_IAM_ACTION_SEEDS};
 use crate::schema::iam_actions;
 use chrono::NaiveDateTime;
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 #[derive(Identifiable, Queryable, Selectable, Serialize, Deserialize, Debug, Clone)]
 #[diesel(table_name = iam_actions)]
@@ -12,6 +14,7 @@ use serde::{Deserialize, Serialize};
 pub struct IAMAction {
 	pub key: String,
 	pub description: Option<String>,
+	pub derived_actions: Option<Value>,
 	pub active: bool,
 	pub deprecated: bool,
 	pub created_at: NaiveDateTime,
@@ -29,6 +32,7 @@ impl IAMAction {
 		conn: &mut PgConnection,
 		page: i64,
 		pagesize: i64,
+		kind: &Option<String>
 	) -> Result<(Vec<Self>, i64), AppError> {
 		let query = {
 			let mut query = iam_actions::table
@@ -38,6 +42,16 @@ impl IAMAction {
 			if pagesize != -1 {
 				query = query.offset((page - 1) * pagesize).limit(pagesize);
 			};
+
+			if let Some(kind) = kind {
+				if kind == "root" {
+					query = query.filter(iam_actions::key.like("root::%"));
+				}
+
+				if kind == "site" {
+					query = query.filter(iam_actions::key.like("sites::%"));
+				}
+			}
 
 			query
 		};
@@ -49,7 +63,16 @@ impl IAMAction {
 	}
 
 	pub fn upsert(conn: &mut PgConnection) -> () {
-		IAM_ACTION_SEEDS.into_iter().for_each(|item| {
+		ROOT_IAM_ACTION_SEEDS.into_iter().for_each(|item| {
+			let _ = diesel::insert_into(iam_actions::table)
+				.values(&item)
+				.on_conflict(iam_actions::key)
+				.do_update()
+				.set(&item)
+				.execute(conn);
+		});
+
+		SITE_IAM_ACTION_SEEDS.into_iter().for_each(|item| {
 			let _ = diesel::insert_into(iam_actions::table)
 				.values(&item)
 				.on_conflict(iam_actions::key)

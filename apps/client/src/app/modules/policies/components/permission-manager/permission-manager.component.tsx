@@ -1,9 +1,10 @@
 import { FC } from 'react';
 import { useFieldArray } from 'react-hook-form';
 import cx from 'classnames/bind';
-import { Button, ButtonSizes, ButtonTypes } from '@ibs/components';
+import { Button, ButtonSizes } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { SelectField, TextField } from '@ibs/forms';
+import classNames from 'classnames';
 
 import { IPermissionManagerProps } from './permission-manager.types';
 import styles from './permission-manager.module.scss';
@@ -21,8 +22,25 @@ export const PermissionManager: FC<IPermissionManagerProps> = ({ name, iamAction
 		append(indexValues);
 	}
 
+	const fieldOptions = iamActions.reduce((acc, action) => {
+		const [_, actionKey] = action.key.split('::');
+		const [group] = actionKey.split(':');
+
+		const existingFieldGroup = acc.find(({ label }) => group === label);
+		return [
+			...acc.filter(({ label }) => label !== group),
+			{
+				label: group,
+				options: [...existingFieldGroup?.options || [], {
+					label: action.key,
+					value: action.key,
+				}]
+			}
+		]
+	}, [] as any[]);
+
 	return (
-		<div className={cxBind('o-permission-manager')}>
+		<div className={classNames(cxBind('o-permission-manager'), 'o-permission-manager')}>
 			<div className={cxBind('o-permission-manager__permissions')}>
 				{fields.map((_, index) => (
 					<div className={cxBind('o-permission-manager__permission')} key={index}>
@@ -35,22 +53,22 @@ export const PermissionManager: FC<IPermissionManagerProps> = ({ name, iamAction
 									<TextField name={`permissions.${index}.resources.0`} label='Resource' />
 								</div>
 								<div className="u-col-md-4">
-									<SelectField name={`permissions.${index}.actions.0`} fieldConfiguration={{ options: iamActions.map((action) => ({ value: action.key, label: action.key })) }} label='Action' />
+									<SelectField name={`permissions.${index}.actions.0`} fieldConfiguration={{ options: fieldOptions }} label='Action' />
 								</div>
 							</div>
 						</div>
 						<div className={cxBind('o-permission-manager__permission__actions')}>
-							<Button size={ButtonSizes.NORMAL} type={ButtonTypes.SECONDARY} onClick={() => handleCopy(index)}>
+							<Button size={ButtonSizes.NORMAL} onClick={() => handleCopy(index)}>
 								<i className="las la-copy"></i>
 							</Button>
-							<Button size={ButtonSizes.NORMAL} className='u-margin-left-xs' type={ButtonTypes.SECONDARY} onClick={() => remove(index)}>
+							<Button size={ButtonSizes.NORMAL} className='u-margin-left-xs' onClick={() => remove(index)}>
 								<i className="las la-trash"></i>
 							</Button>
 						</div>
 					</div>
 				))}
 			</div>
-			<button type='button' className={cxBind('o-permission-manager__add')} onClick={() => append(null)}>
+			<button type='button' className={cxBind('o-permission-manager__add')} onClick={() => append({ effect: 'grant', resources: ['urn:ibs::*'] })}>
 				<i className="las la-plus"></i>
 				<p>
 					{t('PERMISSIONS.ADD')}

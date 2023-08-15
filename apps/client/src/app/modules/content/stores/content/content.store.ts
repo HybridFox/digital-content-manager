@@ -69,6 +69,19 @@ export const useContentStore = create<IContentStoreState>()(devtools(
 		},
 		updateContentItemLoading: false,
 
+		removeContentItem: async (siteId, contentId) => {
+			set(() => ({ removeContentItemLoading: true }));
+			const [_, error] = await wrapApi(kyInstance.delete(`/api/v1/sites/${siteId}/content/${contentId}`).json<IContentItem>());
+
+			if (error) {
+				set(() => ({ removeContentItemLoading: false }));
+				throw error;
+			}
+			
+			set(() => ({ removeContentItemLoading: false }));
+		},
+		removeContentItemLoading: false,
+
 		fetchDefaultValues: async (siteId, translationId) => {
 			set(() => ({ defaultValuesLoading: true }));
 			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/sites/${siteId}/content/${translationId}/default-values`).json<IContentItem>());

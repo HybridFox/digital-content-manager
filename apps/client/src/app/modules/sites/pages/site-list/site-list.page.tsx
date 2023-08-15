@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useHeaderStore } from '@ibs/shared';
-import { ButtonLink, Header, Loading, Table } from '@ibs/components';
+import { ButtonLink, ButtonTypes, HasPermission, Header, Loading, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -36,9 +36,11 @@ export const SiteListPage = () => {
 				breadcrumbs={breadcrumbs}
 				title={t(`SITES.TITLES.LIST`)}
 				action={
-					<ButtonLink to="create">
-						<span className="las la-plus"></span> {t(`SITES.ACTIONS.CREATE`)}
-					</ButtonLink>
+					<HasPermission action='root::sites:create' resource='*'>
+						<ButtonLink to="create" type={ButtonTypes.PRIMARY}>
+							<span className="las la-plus"></span> {t(`SITES.ACTIONS.CREATE`)}
+						</ButtonLink>
+					</HasPermission>
 				}
 			></Header>
 			<Loading loading={sitesLoading} text={t(`GENERAL.LABELS.LOADING`)}>

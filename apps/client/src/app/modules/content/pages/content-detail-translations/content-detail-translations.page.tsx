@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import { useContentStore } from '../../stores/content';
 import { CONTENT_PATHS } from '../../content.routes';
 
-import { CONTENT_LIST_COLUMNS } from './content-detail-translations.const';
+import { CONTENT_TRANSLATIONS_LIST_COLUMNS } from './content-detail-translations.const';
 
 export const ContentDetailTranslationsPage = () => {
 	const [contentItem] = useContentStore((state) => [state.contentItem]);
@@ -15,7 +15,7 @@ export const ContentDetailTranslationsPage = () => {
 	const [activeSite] = useAuthStore((state) => [state.activeSite])
 	const [contentType] = useContentTypeStore((state) => [state.contentType]);
 	const { t } = useTranslation();
-	const { siteId } = useParams();
+	const { siteId, kind } = useParams();
 	const [setBreadcrumbs] = useHeaderStore((state) => [state.setBreadcrumbs]);
 
 	useEffect(() => {
@@ -60,7 +60,7 @@ export const ContentDetailTranslationsPage = () => {
 
 	return (
 		<Loading loading={contentLoading} text={t(`GENERAL.LOADING`)}>
-			<Table columns={CONTENT_LIST_COLUMNS(siteId!, contentType, t)} rows={rows}></Table>
+			<Table columns={CONTENT_TRANSLATIONS_LIST_COLUMNS(siteId!, kind!, contentType, t)} rows={rows}></Table>
 		</Loading>
 	);
 };

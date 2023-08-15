@@ -8,8 +8,6 @@ import { IAPIError, useAuthStore } from "@ibs/shared";
 import { TextField, TextFieldTypes } from "@ibs/forms";
 import { useTranslation } from "react-i18next";
 
-import { useSetupStore } from "../../stores/setup";
-
 import styles from './setup.module.scss';
 import { setupSchema } from "./setup.const";
 const cxBind = cx.bind(styles);
@@ -21,15 +19,15 @@ interface ISetupForm {
 }
 
 export const SetupPage = () => {
-	const setupStore = useSetupStore();
+	const [setup] = useAuthStore((state) => [state.setup]);
 	const navigate = useNavigate();
 	const formMethods = useForm<ISetupForm>({ resolver: yupResolver(setupSchema) });
 	const { handleSubmit, setError, formState: { errors } } = formMethods;
 	const { t } = useTranslation();
 
 	const onSubmit = (values: ISetupForm) => {
-		setupStore.setup(values)
-			.then(() => navigate('/app/sites'))
+		setup(values)
+			.then(() => navigate('/'))
 			.catch((error: IAPIError) => {
 				setError('root', {
 					message: t(`API_MESSAGES.${error.code}`)
@@ -58,7 +56,7 @@ export const SetupPage = () => {
 								<TextField name="password" label="Password" type={TextFieldTypes.PASSWORD} fieldOptions={{ required: true }} />
 							</div>
 							<div>
-								<Button className="u-margin-right-sm" htmlType={HTMLButtonTypes.SUBMIT}>Setup</Button>
+								<Button type={ButtonTypes.PRIMARY} className="u-margin-right-sm" htmlType={HTMLButtonTypes.SUBMIT}>Setup</Button>
 							</div>
 						</form>
 					</FormProvider>

@@ -1,6 +1,6 @@
 import { IWorkflowTransition, generateUuid, useHeaderStore, useWorkflowStore } from '@ibs/shared';
 import { useEffect, useState } from 'react';
-import { Button, Card, HTMLButtonTypes, Loading, Table } from '@ibs/components';
+import { Button, ButtonTypes, Card, HTMLButtonTypes, Loading, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { SelectField } from '@ibs/forms';
@@ -120,7 +120,7 @@ export const WorkflowDetailTransitionsPage = () => {
 									></SelectField>
 								</div>
 								<div className="u-col-md-2 u-col--align-end">
-									<Button htmlType={HTMLButtonTypes.SUBMIT} block>
+									<Button block>
 										<span className="las la-plus"></span> Add
 									</Button>
 								</div>
@@ -130,7 +130,7 @@ export const WorkflowDetailTransitionsPage = () => {
 				</Card>
 			</Loading>
 			<div className="u-margin-top">
-				<Button htmlType={HTMLButtonTypes.SUBMIT} onClick={handleUpdateWorkflow}>
+				<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT} onClick={handleUpdateWorkflow}>
 					{updateWorkflowLoading && <i className="las la-redo-alt la-spin"></i>} Save
 				</Button>
 			</div>

@@ -1,5 +1,5 @@
 import { CONTENT_TYPE_KINDS_OPTIONS, IAPIError, useContentTypeStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
-import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
@@ -12,7 +12,7 @@ import { createContentTypeForm } from './ct-create.const';
 
 interface ICreateContentTypeForm {
 	name: string;
-	description: string;
+	description: string | undefined;
 	workflowId: string;
 	kind: string;
 }
@@ -76,7 +76,7 @@ export const CTCreatePage = () => {
 							<SelectField name="kind" label="Content Type Kind" fieldConfiguration={{ options: CONTENT_TYPE_KINDS_OPTIONS }} />
 						</div>
 						<div className="u-margin-top">
-							<Button htmlType={HTMLButtonTypes.SUBMIT}>Create</Button>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>Create</Button>
 						</div>
 					</form>
 				</Loading>

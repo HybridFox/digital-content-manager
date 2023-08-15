@@ -1,7 +1,7 @@
 import { IAPIError, useAuthenticationMethodStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, HTMLButtonTypes, Header } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -84,7 +84,7 @@ export const AuthenticationMethodCreatePage = () => {
 							<div className="u-margin-bottom">
 								<SelectField name="kind" label="Kind" disabled fieldConfiguration={{ options: AUTHENTICATION_METHOD_OPTIONS }} />
 							</div>
-							<Button htmlType={HTMLButtonTypes.SUBMIT}>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{createAuthenticationMethodLoading && <i className="las la-redo-alt la-spin"></i>} Save
 							</Button>
 						</form>

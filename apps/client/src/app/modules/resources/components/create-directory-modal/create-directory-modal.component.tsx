@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Button, HTMLButtonTypes, Modal, ModalFooter } from '@ibs/components';
+import { Button, ButtonTypes, HTMLButtonTypes, Modal, ModalFooter } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { TextField } from '@ibs/forms';
 
@@ -22,7 +22,7 @@ export const CreateDirectoryModal: FC<ICreateDirectoryModalProps> = ({
 						label="Directory Name"
 					></TextField>
 					<ModalFooter>
-						<Button htmlType={HTMLButtonTypes.SUBMIT}>Create</Button>
+						<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>Create</Button>
 					</ModalFooter>
 				</form>
 			</FormProvider>

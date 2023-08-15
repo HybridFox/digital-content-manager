@@ -12,7 +12,7 @@ const cxBind = cx.bind(styles);
 export const ButtonLink: FC<IButtonLinkProps> = ({
 	children,
 	className,
-	type = ButtonTypes.PRIMARY,
+	type = ButtonTypes.DEFAULT,
 	size = ButtonSizes.NORMAL,
 	to,
 }: IButtonLinkProps) => {

@@ -16,6 +16,7 @@ pub struct FindPathParams {
 pub struct FindAllQueryParams {
 	page: Option<i64>,
 	pagesize: Option<i64>,
+	kind: Option<String>,
 }
 
 #[utoipa::path(
@@ -38,7 +39,7 @@ pub async fn find_all(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
 
-	let (iam_actions, total_elements) = IAMAction::find(conn, page, pagesize)?;
+	let (iam_actions, total_elements) = IAMAction::find(conn, page, pagesize, &query.kind)?;
 
 	let res = response::IAMActionsDTO::from((
 		iam_actions,

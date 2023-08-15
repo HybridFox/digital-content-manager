@@ -22,7 +22,6 @@ export const CONTENT_DETAIL_TABS = (
 			siteId,
 		}),
 		label: 'Settings',
-		disabled: true,
 	},
 	{
 		to: generatePath(CONTENT_PATHS.DETAIL_FIELDS, {

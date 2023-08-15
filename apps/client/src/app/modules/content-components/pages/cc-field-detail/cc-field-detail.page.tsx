@@ -9,6 +9,7 @@ import {
 	Alert,
 	AlertTypes,
 	Button,
+	ButtonTypes,
 	HTMLButtonTypes,
 	Header,
 	Loading,
@@ -105,7 +106,7 @@ export const CCFieldDetailPage = () => {
 						</Alert>
 						<Outlet />
 						<div className="u-margin-top">
-							<Button htmlType={HTMLButtonTypes.SUBMIT}>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{updateFieldLoading && (
 									<i className="las la-redo-alt la-spin"></i>
 								)}{' '}

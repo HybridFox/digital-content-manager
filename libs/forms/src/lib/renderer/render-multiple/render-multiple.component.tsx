@@ -49,7 +49,7 @@ export const RenderMultiple: FC<IRenderMultipleProps> = ({ field, children, fiel
 						</div>
 						<div className={cxBind('o-render-multiple__field__content')}>{children(index)}</div>
 						<div className={cxBind('o-render-multiple__field__actions')}>
-							<Button size={ButtonSizes.NORMAL} type={ButtonTypes.SECONDARY} onClick={() => remove(index)}>
+							<Button size={ButtonSizes.NORMAL} onClick={() => remove(index)}>
 								<i className="las la-trash"></i>
 							</Button>
 						</div>

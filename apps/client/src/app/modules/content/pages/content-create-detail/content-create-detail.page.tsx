@@ -3,9 +3,10 @@ import { useEffect } from 'react';
 import { generatePath, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { RenderFields, TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, Card, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import slugify from 'slugify';
 
 import { CONTENT_PATHS } from '../../content.routes';
 import { useContentStore } from '../../stores/content';
@@ -14,6 +15,7 @@ import { createContentItemSchema } from './content-create-detail.const';
 
 interface CreateContentForm {
 	name: string;
+	slug: string;
 	fields: Record<string, unknown>;
 }
 
@@ -45,7 +47,15 @@ export const ContentCreateDetailPage = () => {
 		handleSubmit,
 		formState: { errors },
 		setError,
+		watch,
+		setValue
 	} = formMethods;
+
+	const name = watch('name');
+
+	useEffect(() => {
+		setValue('slug', slugify((name || '').toLowerCase()))
+	}, [name])
 
 	useEffect(() => {
 		if (!contentTypeId || !siteId) {
@@ -93,7 +103,7 @@ export const ContentCreateDetailPage = () => {
 			.then((contentItem) => navigate(generatePath(CONTENT_PATHS.DETAIL, { kind, contentId: contentItem.id, siteId })))
 			.catch((error: IAPIError) => {
 				setError('root', {
-					message: error.code,
+					message: t(`API_MESSAGES.${error.code}`)
 				});
 			});
 	};
@@ -115,13 +125,20 @@ export const ContentCreateDetailPage = () => {
 							{errors?.root?.message}
 						</Alert>
 						<form onSubmit={handleSubmit(onSubmit)}>
-							<div className="u-margin-bottom">
-								<TextField name="name" label="Administrative Name" />
-							</div>
+							<Card className='u-margin-bottom' title='Metadata'>
+								<div className="u-row">
+									<div className="u-col-md-8">
+										<TextField name="name" label="Administrative Name" />
+									</div>
+									<div className="u-col-md-4">
+										<TextField name="slug" label="Slug" />
+									</div>
+								</div>
+							</Card>
 							<div className="u-margin-bottom">
 								<RenderFields fieldPrefix="fields." fields={contentType?.fields || []} />
 							</div>
-							<Button htmlType={HTMLButtonTypes.SUBMIT}>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{createContentItemLoading && <i className="las la-redo-alt la-spin"></i>} Save
 							</Button>
 						</form>

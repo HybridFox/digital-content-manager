@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAuthenticationMethodStore, useHeaderStore } from '@ibs/shared';
-import { ButtonLink, Header, Loading, Table } from '@ibs/components';
+import { ButtonLink, ButtonTypes, Header, Loading, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -26,7 +26,7 @@ export const AuthenticationMethodListPage = () => {
 				breadcrumbs={breadcrumbs}
 				title={t(`AUTHENTICATION_METHODS.TITLES.LIST`)}
 				action={
-					<ButtonLink to="create">
+					<ButtonLink to="create" type={ButtonTypes.PRIMARY}>
 						<span className="las la-plus"></span> {t(`AUTHENTICATION_METHODS.ACTIONS.CREATE`)}
 					</ButtonLink>
 				}

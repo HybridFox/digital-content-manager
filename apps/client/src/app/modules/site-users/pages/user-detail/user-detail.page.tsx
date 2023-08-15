@@ -1,7 +1,7 @@
 import { IAPIError, useHeaderStore, useSiteRoleStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { Trans, useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -101,7 +101,7 @@ export const UserDetailPage = () => {
 							<div className="u-margin-bottom">
 								<CheckboxField name="roles" label="Roles" fieldConfiguration={{ options: roles.map((role) => ({ label: role.name, value: role.id })) }} />
 							</div>
-							<Button htmlType={HTMLButtonTypes.SUBMIT}>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{updateUserLoading && <i className="las la-redo-alt la-spin"></i>} Save
 							</Button>
 						</form>

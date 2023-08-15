@@ -1,7 +1,7 @@
 import { IAPIError, WORKFLOW_TECHNICAL_STATES, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { Trans, useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -43,8 +43,6 @@ export const WorkflowStateDetailPage = () => {
 		formState: { errors },
 		setError,
 	} = formMethods;
-
-	console.log(errors);
 
 	useEffect(() => {
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.WORKFLOWS`), to: WORKFLOW_PATHS.WORKFLOW_STATES_ROOT }, { label: t(`BREADCRUMBS.EDIT`) }]);
@@ -94,7 +92,7 @@ export const WorkflowStateDetailPage = () => {
 							<div className="u-margin-bottom">
 								<SelectField name="technicalState" label="Technical State" fieldConfiguration={{ options: WORKFLOW_STATE_TECHNICAL_STATE_OPTIONS }} />
 							</div>
-							<Button htmlType={HTMLButtonTypes.SUBMIT}>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{updateWorkflowStateLoading && <i className="las la-redo-alt la-spin"></i>} Save
 							</Button>
 						</form>

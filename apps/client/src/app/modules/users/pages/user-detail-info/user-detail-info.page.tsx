@@ -1,6 +1,6 @@
 import { IAPIError } from '@ibs/shared';
 import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, HTMLButtonTypes } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextField, TextFieldTypes } from '@ibs/forms';
@@ -65,7 +65,7 @@ export const UserDetailInfoPage = () => {
 				<div className="u-margin-bottom">
 					<TextField name="password" label="Password" type={TextFieldTypes.PASSWORD} />
 				</div>
-				<Button htmlType={HTMLButtonTypes.SUBMIT}>{updateUserLoading && <i className="las la-redo-alt la-spin"></i>} Save</Button>
+				<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>{updateUserLoading && <i className="las la-redo-alt la-spin"></i>} Save</Button>
 			</form>
 		</FormProvider>
 	);

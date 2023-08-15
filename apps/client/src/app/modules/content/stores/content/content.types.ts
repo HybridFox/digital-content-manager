@@ -37,6 +37,9 @@ export interface IContentStoreState {
 	updateContentItem: (siteId: string, contentId: string, values: IContentUpdateDTO) => Promise<IContentItem>;
 	updateContentItemLoading: boolean;
 
+	removeContentItem: (siteId: string, contentId: string) => Promise<void>;
+	removeContentItemLoading: boolean;
+
 	fetchDefaultValues: (siteId: string, translationId: string) => Promise<IContentItem>;
 	defaultValues?: IContentItem,
 	defaultValuesLoading: boolean;

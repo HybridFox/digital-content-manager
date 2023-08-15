@@ -17,10 +17,10 @@ export const USER_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: 
 		label: '',
 		format: (value, key, item) => (
 			<div className="u-display-flex">
-				<ButtonLink to={`${item.id}`} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className="u-margin-left-auto">
+				<ButtonLink to={`${item.id}`} size={ButtonSizes.SMALL} className="u-margin-left-auto">
 					<i className="las la-pen"></i> {t(`GENERAL.LABELS.EDIT`)}
 				</ButtonLink>
-				<Button size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className="u-margin-left-sm" onClick={() => handleRemove(item.id as string)}>
+				<Button size={ButtonSizes.SMALL} className="u-margin-left-sm" onClick={() => handleRemove(item.id as string)}>
 					<i className="las la-trash"></i>
 				</Button>
 			</div>

@@ -1,7 +1,7 @@
 import { IAPIError, useHeaderStore, useRoleStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { Trans, useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -54,7 +54,6 @@ export const UserCreatePage = () => {
 	}, [userId]);
 
 	const onSubmit = (values: CreateUserForm) => {
-		console.log(values);
 		createUser(values)
 			.then((user) => navigate(generatePath(USER_PATHS.DETAIL, { userId: user.id })))
 			.catch((error: IAPIError) => {
@@ -90,7 +89,7 @@ export const UserCreatePage = () => {
 									fieldConfiguration={{ options: roles.map((role) => ({ label: role.name, value: role.id })) }}
 								/>
 							</div>
-							<Button htmlType={HTMLButtonTypes.SUBMIT}>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{createUserLoading && <i className="las la-redo-alt la-spin"></i>} Create
 							</Button>
 						</form>

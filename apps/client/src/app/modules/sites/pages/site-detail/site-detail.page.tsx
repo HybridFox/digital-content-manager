@@ -4,12 +4,12 @@ import {
 	useLanguageStore
 } from '@ibs/shared';
 import { useEffect } from 'react';
-import { CheckboxField, SelectField, TextField } from '@ibs/forms';
+import { SelectField, TextField } from '@ibs/forms';
 import { Trans, useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { SITE_PATHS } from '../../sites.routes';
 import { useSiteStore } from '../../stores/site';
@@ -22,7 +22,6 @@ interface UpdateSiteForm {
 }
 
 export const SiteDetailPage = () => {
-	const navigate = useNavigate();
 	const [languages, languagesLoading, fetchLanguages] = useLanguageStore((state) => [
 		state.languages,
 		state.languagesLoading,
@@ -100,7 +99,7 @@ export const SiteDetailPage = () => {
 									label="Languages"
 								/>
 							</div>
-							<Button htmlType={HTMLButtonTypes.SUBMIT} disabled={!!Object.keys(errors).length}>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT} disabled={!!Object.keys(errors).length}>
 								{updateSiteLoading && <i className="las la-redo-alt la-spin"></i>} Save
 							</Button>
 						</form>

@@ -10,17 +10,22 @@ export const POLICY_LIST_COLUMNS = (t: TFunction, handleRemove: (policyId: strin
 	{
 		id: 'permissions',
 		label: 'Permissions',
-		format: (permissions: IPermission[]) => permissions.map((permission, i) => <Badge className='u-margin-right-xs u-margin-top-xxxs u-margin-bottom-xxxs' key={i}>{permission.effect}: {permission.resources.join(', ')} / {permission.actions.join(', ')}</Badge>)
+		format: (permissions: IPermission[]) =>
+			permissions.map((permission, i) => (
+				<Badge className="u-margin-right-xs u-margin-top-xxxs u-margin-bottom-xxxs" key={i}>
+					{permission.effect === 'grant' ? <span className='las la-check' /> : <span className='las la-times' />} {permission.resources.join(', ')} / {permission.actions.join(', ')}
+				</Badge>
+			)),
 	},
 	{
 		id: 'actions',
 		label: '',
 		format: (value, key, item) => (
 			<div className="u-display-flex">
-				<ButtonLink to={`${item.id}`} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className="u-margin-left-auto">
+				<ButtonLink to={`${item.id}`} size={ButtonSizes.SMALL} className="u-margin-left-auto">
 					<i className="las la-pen"></i> {t(`GENERAL.LABELS.EDIT`)}
 				</ButtonLink>
-				<Button size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className="u-margin-left-sm" onClick={() => handleRemove(item.id)}>
+				<Button size={ButtonSizes.SMALL} className="u-margin-left-sm" onClick={() => handleRemove(item.id)}>
 					<i className="las la-trash"></i>
 				</Button>
 			</div>

@@ -12,9 +12,11 @@ use diesel::deserialize::{self, FromSql};
 use diesel::serialize::{self, IsNull, Output, ToSql};
 
 use crate::errors::AppError;
+use crate::modules::content::models::content::Content;
 use crate::modules::content_components::models::content_component::{
 	ContentComponent, PopulatedContentComponent,
 };
+use crate::schema::content;
 use crate::schema::{
 	content_types, sites_content_types, content_components, sql_types::ContentTypeKinds,
 };
@@ -113,7 +115,8 @@ impl ContentType {
 		page: i64,
 		pagesize: i64,
 		kind: Option<ContentTypeKindEnum>,
-	) -> Result<(Vec<Self>, i64), AppError> {
+		include_occurrences: Option<bool>,
+	) -> Result<(Vec<(Self, i64)>, i64), AppError> {
 		let query = {
 			let mut query = sites_content_types::table
 				.filter(sites_content_types::site_id.eq(site_id))
@@ -138,12 +141,24 @@ impl ContentType {
 			.select(ContentType::as_select())
 			.load::<ContentType>(conn)?;
 
+		let content = Content::belonging_to(&content_types)
+			.distinct_on(content::translation_id)
+			.select(Content::as_select())
+			.load::<Content>(conn)?;
+		let grouped_content = content.grouped_by(&content_types);
+
+		let content_types_with_occurences = content_types
+			.into_iter()
+			.zip(grouped_content)
+			.map(|(content_type, content_items)| (content_type, content_items.len() as i64))
+			.collect::<Vec<(ContentType, i64)>>();
+
 		let total_elements = sites_content_types::table
 			.filter(sites_content_types::site_id.eq(site_id))
 			.count()
 			.get_result::<i64>(conn)?;
 
-		Ok((content_types, total_elements))
+		Ok((content_types_with_occurences, total_elements))
 	}
 
 	#[instrument(skip(conn))]

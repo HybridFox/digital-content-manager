@@ -1,4 +1,5 @@
 use chrono::NaiveDateTime;
+use diesel::dsl::*;
 use diesel::prelude::*;
 use serde::Deserialize;
 use serde_json::Value;
@@ -14,8 +15,9 @@ use crate::schema::{content, content_fields, languages, content_types, workflow_
 
 use super::content_field::ContentField;
 
-#[derive(Identifiable, Selectable, Queryable, Debug, Clone)]
+#[derive(Identifiable, Selectable, Queryable, Debug, Associations, Clone)]
 #[diesel(table_name = content)]
+#[diesel(belongs_to(ContentType))]
 #[diesel(primary_key(id))]
 pub struct Content {
 	pub id: Uuid,
@@ -76,10 +78,12 @@ impl Content {
 	#[instrument(skip(conn))]
 	pub fn find_one(
 		conn: &mut PgConnection,
-		_site_id: Uuid,
+		site_id: Uuid,
 		id: Uuid,
 	) -> Result<(Self, Vec<ContentField>, Language, WorkflowState), AppError> {
-		let content_item = content::table.find(id).first::<Self>(conn)?;
+		let content_item = content::table
+			.filter(content::site_id.eq(site_id))
+			.find(id).first::<Self>(conn)?;
 
 		let fields = content_fields::table
 			.filter(
@@ -97,6 +101,69 @@ impl Content {
 			.first(conn)?;
 
 		Ok((content_item, fields, language, workflow_state))
+	}
+
+	// TODO: dedupe next 2 pls
+	#[instrument(skip(conn))]
+	pub fn find_one_public_by_slug<'a>(
+		conn: &mut PgConnection,
+		site_id: Uuid,
+		slug: &'a str,
+		lang: &'a str,
+	) -> Result<(Self, Vec<ContentField>, Language, Vec<(Self, Language)>), AppError> {
+		let (content_item, language) = content::table
+			.filter(content::slug.eq(slug))
+			.filter(content::published.eq(true))
+			.inner_join(languages::table.on(languages::id.eq(content::language_id)))
+			.filter(languages::key.eq(lang))
+			.get_result::<(Self, Language)>(conn)?;
+
+		let fields = content_fields::table
+			.filter(
+				content_fields::source_id
+					.eq_any(vec![content_item.id, content_item.translation_id]),
+			)
+			.select(ContentField::as_select())
+			.load::<ContentField>(conn)?;
+
+		let translations = content::table
+			.filter(content::translation_id.eq(&content_item.translation_id))
+			.filter(content::published.eq(true))
+			.inner_join(languages::table.on(languages::id.eq(content::language_id)))
+			.get_results::<(Self, Language)>(conn)?;
+
+		Ok((content_item, fields, language, translations))
+	}
+
+	#[instrument(skip(conn))]
+	pub fn find_one_public_by_uuid<'a>(
+		conn: &mut PgConnection,
+		site_id: Uuid,
+		content_item_id: &'a Uuid,
+		lang: &'a str,
+	) -> Result<(Self, Vec<ContentField>, Language, Vec<(Self, Language)>), AppError> {
+		let (content_item, language) = content::table
+			.filter(content::id.eq(content_item_id))
+			.filter(content::published.eq(true))
+			.inner_join(languages::table.on(languages::id.eq(content::language_id)))
+			.filter(languages::key.eq(lang))
+			.get_result::<(Self, Language)>(conn)?;
+
+		let fields = content_fields::table
+			.filter(
+				content_fields::source_id
+					.eq_any(vec![content_item.id, content_item.translation_id]),
+			)
+			.select(ContentField::as_select())
+			.load::<ContentField>(conn)?;
+
+		let translations = content::table
+			.filter(content::translation_id.eq(&content_item.translation_id))
+			.filter(content::published.eq(true))
+			.inner_join(languages::table.on(languages::id.eq(content::language_id)))
+			.get_results::<(Self, Language)>(conn)?;
+
+		Ok((content_item, fields, language, translations))
 	}
 
 	#[instrument(skip(conn))]
@@ -210,13 +277,40 @@ impl Content {
 
 		Ok(())
 	}
+
+	#[instrument(skip(conn))]
+	pub fn slug_in_use<'a>(
+		conn: &mut PgConnection,
+		site_id: Uuid,
+		translation_id: Option<Uuid>,
+		slug: &'a str,
+	) -> Result<bool, AppError> {
+		let query = {
+			let mut query = content::table
+				.filter(content::site_id.eq(site_id))
+				.filter(content::slug.eq(slug))
+				.into_boxed();
+
+			if let Some(translation_id) = translation_id {
+				query = query.filter(not(content::translation_id.eq(translation_id)));
+			}
+
+			query
+		};
+
+		let content_count = query
+			.count()
+			.get_result::<i64>(conn)?;
+
+		Ok(content_count > 0)
+	}
 }
 
 #[derive(Insertable, Debug, Deserialize)]
 #[diesel(table_name = content)]
-pub struct CreateContent {
-	pub name: String,
-	pub slug: String,
+pub struct CreateContent<'a> {
+	pub name: &'a str,
+	pub slug: &'a str,
 	pub workflow_state_id: Uuid,
 	pub translation_id: Uuid,
 	pub content_type_id: Uuid,
@@ -228,6 +322,7 @@ pub struct CreateContent {
 #[diesel(table_name = content)]
 pub struct UpdateContent {
 	pub name: Option<String>,
+	pub slug: Option<String>,
 	pub published: bool,
 	pub workflow_state_id: Uuid,
 	pub updated_at: NaiveDateTime,

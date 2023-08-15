@@ -1,7 +1,7 @@
 import { IAPIError, useHeaderStore, useWorkflowStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, HTMLButtonTypes } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -69,7 +69,7 @@ export const WorkflowDetailSettingsPage = () => {
 				<div className="u-margin-bottom">
 					<TextField name="name" label="Name" />
 				</div>
-				<Button htmlType={HTMLButtonTypes.SUBMIT}>{updateWorkflowLoading && <i className="las la-redo-alt la-spin"></i>} Save</Button>
+				<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>{updateWorkflowLoading && <i className="las la-redo-alt la-spin"></i>} Save</Button>
 			</form>
 		</FormProvider>
 	);

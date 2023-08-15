@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { CONTENT_TYPE_KINDS_PARAMETER_MAP, useAuthStore, useContentTypeStore, useHeaderStore } from '@ibs/shared';
-import { Button, HTMLButtonTypes, Header, Loading, Modal, ModalFooter, Table } from '@ibs/components';
+import { CONTENT_TYPE_KINDS_PARAMETER_MAP, ContentTypeKinds, useAuthStore, useContentTypeStore, useHeaderStore } from '@ibs/shared';
+import { Button, ButtonTypes, HTMLButtonTypes, Header, Loading, Modal, ModalFooter, Table } from '@ibs/components';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { RadioField } from '@ibs/forms';
@@ -39,7 +39,7 @@ export const ContentCreatePage = () => {
 			return;
 		}
 
-		fetchContentTypes(siteId!, { pagesize: -1, kind: CONTENT_TYPE_KINDS_PARAMETER_MAP[kind] });
+		fetchContentTypes(siteId!, { pagesize: -1, kind: CONTENT_TYPE_KINDS_PARAMETER_MAP[kind], inludeOccurrences: true });
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`), to: CONTENT_PATHS.ROOT }, { label: t(`BREADCRUMBS.CREATE`) }]);
 	}, []);
 
@@ -57,7 +57,7 @@ export const ContentCreatePage = () => {
 		<>
 			<Header breadcrumbs={breadcrumbs} title="Select Content Type"></Header>
 			<Loading loading={contentTypesLoading} text="Loading content types...">
-				<Table columns={CONTENT_CREATE_COLUMNS(onSelectContentType)} rows={contentTypes}></Table>
+				<Table columns={CONTENT_CREATE_COLUMNS(onSelectContentType, kind === 'pages')} rows={contentTypes}></Table>
 			</Loading>
 			<Modal modalOpen={modalOpen} title="Select language">
 				<FormProvider {...formMethods}>
@@ -73,7 +73,7 @@ export const ContentCreatePage = () => {
 							}}
 						></RadioField>
 						<ModalFooter>
-							<Button htmlType={HTMLButtonTypes.SUBMIT}>Create</Button>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>Create</Button>
 						</ModalFooter>
 					</form>
 				</FormProvider>

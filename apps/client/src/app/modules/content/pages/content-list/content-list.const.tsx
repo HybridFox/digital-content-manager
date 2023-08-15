@@ -1,4 +1,4 @@
-import { Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
+import { Button, ButtonLink, ButtonSizes, ITableColumn } from '@ibs/components';
 import { TFunction } from 'i18next';
 import * as yup from 'yup';
 import dayjs from 'dayjs';
@@ -8,7 +8,7 @@ export const addContentComponentSchema = yup.object({
 	name: yup.string().required(),
 });
 
-export const CONTENT_LIST_COLUMNS = (t: TFunction): ITableColumn[] => [
+export const CONTENT_LIST_COLUMNS = (t: TFunction, handleDelete: (contentItemId: string) => void): ITableColumn[] => [
 	{
 		id: 'name',
 		label: 'Name',
@@ -43,10 +43,10 @@ export const CONTENT_LIST_COLUMNS = (t: TFunction): ITableColumn[] => [
 		label: '',
 		format: (value, key, item) => (
 			<div className="u-display-flex">
-				<ButtonLink to={`${item.id}`} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className="u-margin-left-auto">
+				<ButtonLink to={`${item.id}`} size={ButtonSizes.SMALL} className="u-margin-left-auto">
 					<i className="las la-pen"></i> Edit
 				</ButtonLink>
-				<Button size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} className="u-margin-left-sm">
+				<Button onClick={() => handleDelete(item.id as string)} size={ButtonSizes.SMALL} className="u-margin-left-sm">
 					<i className="las la-trash"></i>
 				</Button>
 			</div>

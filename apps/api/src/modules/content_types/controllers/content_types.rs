@@ -24,10 +24,12 @@ pub struct FindOnePathParams {
 }
 
 #[derive(Deserialize, IntoParams)]
+#[serde(rename_all = "camelCase")]
 pub struct FindAllQueryParams {
 	page: Option<i64>,
 	pagesize: Option<i64>,
 	kind: Option<ContentTypeKindEnum>,
+	include_occurrences: Option<bool>,
 }
 
 #[utoipa::path(
@@ -86,7 +88,7 @@ pub async fn find_all(
 	let pagesize = query.pagesize.unwrap_or(20);
 
 	let (content_types, total_elements) =
-		ContentType::find(conn, params.site_id, page, pagesize, query.kind)?;
+		ContentType::find(conn, params.site_id, page, pagesize, query.kind, query.include_occurrences)?;
 
 	let res = response::ContentTypesDTO::from((
 		content_types,

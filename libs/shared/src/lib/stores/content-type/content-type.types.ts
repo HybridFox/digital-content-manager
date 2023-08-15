@@ -64,14 +64,15 @@ export const CONTENT_TYPE_KINDS_OPTIONS: { value: string; label: string }[] = Ob
 	})
 );
 
-export interface IFetchContentTypesParameters {
+export interface IFetchContentTypesParameters extends IPageParameters {
 	kind?: ContentTypeKinds
+	inludeOccurrences?: boolean;
 };
 
 export type IContentTypesResponse = IAPIHALResponse<'contentTypes', IContentType>
 
 export interface IContentTypeStoreState {
-	fetchContentTypes: (siteId: string, params?: IPageParameters & IFetchContentTypesParameters) => Promise<void>;
+	fetchContentTypes: (siteId: string, params?: IFetchContentTypesParameters) => Promise<void>;
 	contentTypes: IContentType[];
 	contentTypesLoading: boolean;
 

@@ -7,10 +7,14 @@ export interface IIAMAction {
 	deprecated: boolean;
 };
 
-export type IIAMActionsResponse = IAPIHALResponse<'iamActions', IIAMAction>
+export type IIAMActionsResponse = IAPIHALResponse<'iamActions', IIAMAction>;
+
+interface IFetchIAMActionsParams extends IPageParameters {
+	kind?: string;
+}
 
 export interface IIAMActionStoreState {
-	fetchIAMActions: (params?: IPageParameters) => Promise<void>;
+	fetchIAMActions: (params?: IFetchIAMActionsParams) => Promise<void>;
 	iamActions: IIAMAction[];
 	iamActionsLoading: boolean;
 

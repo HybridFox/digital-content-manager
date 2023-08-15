@@ -1,6 +1,5 @@
-import { NavLink, generatePath, useParams } from 'react-router-dom';
+import { NavLink, generatePath } from 'react-router-dom';
 import cx from 'classnames/bind';
-import { useAuthStore } from '@ibs/shared';
 import { HasPermission } from '@ibs/components';
 
 import { AUTHENTICATION_METHOD_PATHS } from '../../../authentication-methods';
@@ -22,8 +21,6 @@ const navLinkBinding = {
 };
 
 export const RootMenu = () => {
-	const { user } = useAuthStore();
-
 	return (
 		<div className={cxBind('o-menu')}>
 			<div className={cxBind('o-menu__logo')}>
@@ -39,38 +36,40 @@ export const RootMenu = () => {
 					</li>
 				</ul>
 			</div>
-			<div className={cxBind('o-menu__links')}>
-				<p className={cxBind('o-menu__links__name')}>
-					<span>User Management</span>
-				</p>
-				<ul>
-					<HasPermission resource='*' action='users:*'>
-						<li>
-							<NavLink {...navLinkBinding} to={generatePath(USER_PATHS.ROOT)}>
-								<i className="las la-user"></i>
-								<span>Users</span>
-							</NavLink>
-						</li>
-					</HasPermission>
-					<HasPermission resource='*' action='roles:*'>
-						<li>
-							<NavLink {...navLinkBinding} to={generatePath(ROLE_PATHS.ROOT)}>
-								<i className="las la-list-alt"></i>
-								<span>Roles</span>
-							</NavLink>
-						</li>
-					</HasPermission>
-					<HasPermission resource='*' action='policies:*'>
-						<li>
-							<NavLink {...navLinkBinding} to={generatePath(POLICY_PATHS.ROOT)}>
-								<i className="las la-key"></i>
-								<span>Policies</span>
-							</NavLink>
-						</li>
-					</HasPermission>
-				</ul>
-			</div>
-			<HasPermission resource='*' action='authentication-methods:*'>
+			<HasPermission resource='*' action='root::users:*'>
+				<div className={cxBind('o-menu__links')}>
+					<p className={cxBind('o-menu__links__name')}>
+						<span>User Management</span>
+					</p>
+					<ul>
+						<HasPermission resource='*' action='root::users:read'>
+							<li>
+								<NavLink {...navLinkBinding} to={generatePath(USER_PATHS.ROOT)}>
+									<i className="las la-user"></i>
+									<span>Users</span>
+								</NavLink>
+							</li>
+						</HasPermission>
+						<HasPermission resource='*' action='root::roles:read'>
+							<li>
+								<NavLink {...navLinkBinding} to={generatePath(ROLE_PATHS.ROOT)}>
+									<i className="las la-list-alt"></i>
+									<span>Roles</span>
+								</NavLink>
+							</li>
+						</HasPermission>
+						<HasPermission resource='*' action='root::policies:read'>
+							<li>
+								<NavLink {...navLinkBinding} to={generatePath(POLICY_PATHS.ROOT)}>
+									<i className="las la-key"></i>
+									<span>Policies</span>
+								</NavLink>
+							</li>
+						</HasPermission>
+					</ul>
+				</div>
+			</HasPermission>
+			<HasPermission resource='*' action={['root::authentication-methods:read']}>
 				<div className={cxBind('o-menu__links')}>
 					<p className={cxBind('o-menu__links__name')}>
 						<span>Administration</span>

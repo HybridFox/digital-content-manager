@@ -10,6 +10,7 @@ pub struct CreateContentDTO {
 	pub workflow_state_id: Uuid,
 	pub content_type_id: Uuid,
 	pub language_id: Uuid,
+	pub slug: String,
 	pub translation_id: Option<Uuid>,
 	pub fields: Value,
 }
@@ -18,7 +19,9 @@ pub struct CreateContentDTO {
 #[serde(rename_all = "camelCase")]
 pub struct UpdateContentDTO {
 	pub name: Option<String>,
+	pub slug: Option<String>,
 	pub content_type_id: Uuid,
 	pub workflow_state_id: Uuid,
+	pub translation_id: Uuid,
 	pub fields: Value,
 }

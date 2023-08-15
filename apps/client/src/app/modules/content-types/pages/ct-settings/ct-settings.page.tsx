@@ -4,6 +4,7 @@ import {
 	Alert,
 	AlertTypes,
 	Button,
+	ButtonTypes,
 	HTMLButtonTypes,
 } from '@ibs/components';
 import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentTypeStore, useHeaderStore } from '@ibs/shared';
@@ -18,10 +19,6 @@ import { editContentType } from './ct-settings.const';
 interface IEditContentTypeForm {
 	name: string;
 	description: string | undefined;
-	min: number;
-	max: number;
-	multiLanguage: boolean;
-	hidden: boolean;
 }
 
 export const CTSettingsPage = () => {
@@ -85,7 +82,7 @@ export const CTSettingsPage = () => {
 					></TextareaField>
 				</div>
 				<div className="u-margin-top">
-					<Button htmlType={HTMLButtonTypes.SUBMIT}>
+					<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 						{updateContentTypeLoading && (
 							<i className="las la-redo-alt la-spin"></i>
 						)}{' '}

@@ -2,13 +2,17 @@
 
 .o-top-bar {
 	display: flex;
-	justify-content: flex-end;
 	align-items: center;
 	border-bottom: 2px solid var(--color-secondary);
 	padding-bottom: var(--spacer);
 	margin-bottom: var(--spacer);
 
+	&__site {
+		color: var(--color-gray);
+	}
+
 	&__links {
+		margin-left: auto;
 		margin-right: var(--spacer-sm);
 	
 		ul {

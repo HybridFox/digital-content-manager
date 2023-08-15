@@ -38,7 +38,7 @@ export const USER_SITES_COLUMNS = (
 			if (!userSite) {
 				return (
 					<div className="u-display-flex u-justify-content-end">
-						<Button onClick={() => handleSelectRoles(site.id)} size={ButtonSizes.SMALL} type={ButtonTypes.PRIMARY}>
+						<Button onClick={() => handleSelectRoles(site.id)} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY}>
 							<i className="las la-plus"></i> {t(`GENERAL.LABELS.SELECT_ROLES`)}
 						</Button>
 					</div>
@@ -47,12 +47,11 @@ export const USER_SITES_COLUMNS = (
 
 			return (
 				<div className="u-display-flex u-justify-content-end">
-					<Button onClick={() => handleSelectRoles(site.id)} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY}>
+					<Button onClick={() => handleSelectRoles(site.id)} size={ButtonSizes.SMALL}>
 						<i className="las la-pen"></i> {t(`GENERAL.LABELS.SELECT_ROLES`)}
 					</Button>
 					<Button
 						size={ButtonSizes.SMALL}
-						type={ButtonTypes.SECONDARY}
 						className="u-margin-left-sm"
 						onClick={() => handleRemove(site.id)}
 					>

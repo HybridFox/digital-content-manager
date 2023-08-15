@@ -11,7 +11,7 @@ const cxBind = cx.bind(styles);
 export const Button: FC<IButtonProps> = ({
 	children,
 	htmlType = HTMLButtonTypes.BUTTON,
-	type = ButtonTypes.PRIMARY,
+	type = ButtonTypes.DEFAULT,
 	size = ButtonSizes.NORMAL,
 	block,
 	className,

@@ -1,5 +1,5 @@
 import { FIELD_KEYS, IAPIError, useContentComponentStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
-import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
@@ -78,7 +78,7 @@ export const CCCreatePage = () => {
 							/>
 						</div>
 						<div className="u-margin-top">
-							<Button htmlType={HTMLButtonTypes.SUBMIT}>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{createContentComponentLoading && <i className="las la-redo-alt la-spin"></i>} Create
 							</Button>
 						</div>

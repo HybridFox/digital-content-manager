@@ -11,7 +11,7 @@ export const addContentComponentSchema = yup.object({
 	name: yup.string().required(),
 });
 
-export const CONTENT_LIST_COLUMNS = (siteId: string, contentType: IContentType, t: TFunction): ITableColumn[] => [
+export const CONTENT_TRANSLATIONS_LIST_COLUMNS = (siteId: string, kind: string, contentType: IContentType, t: TFunction): ITableColumn[] => [
 	{
 		id: 'language.key',
 		label: 'Language',
@@ -37,6 +37,17 @@ export const CONTENT_LIST_COLUMNS = (siteId: string, contentType: IContentType, 
 	// 	},
 	// },
 	{
+		id: 'published',
+		label: 'Published',
+		format(value, key, item, index) {
+			if (value) {
+				return <span className='las la-check u-text--success'></span>
+			}
+
+			return <span className='las la-times u-text--danger'></span>;
+		},
+	},
+	{
 		id: 'actions',
 		label: '',
 		// width: '150px',
@@ -45,9 +56,8 @@ export const CONTENT_LIST_COLUMNS = (siteId: string, contentType: IContentType, 
 				return (
 					<div className="u-display-flex">
 						<ButtonLink
-							to={generatePath(CONTENT_PATHS.DETAIL, { siteId, contentId: item.id, kind: contentType.kind.toLowerCase() })}
+							to={generatePath(CONTENT_PATHS.DETAIL, { siteId, contentId: item.id, kind })}
 							size={ButtonSizes.SMALL}
-							type={ButtonTypes.SECONDARY}
 							className="u-margin-left-auto"
 						>
 							<i className="las la-pen"></i> Edit
@@ -62,7 +72,7 @@ export const CONTENT_LIST_COLUMNS = (siteId: string, contentType: IContentType, 
 						to={`${generatePath(CONTENT_PATHS.CREATE_DETAIL, {
 							siteId,
 							contentTypeId: contentType.id,
-							kind: contentType.kind.toLowerCase(),
+							kind
 						})}?translationId=${item.translationId}&languageId=${(item.language as any).id}`}
 						size={ButtonSizes.SMALL}
 						type={ButtonTypes.SECONDARY}

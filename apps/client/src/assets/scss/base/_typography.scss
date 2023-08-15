@@ -71,3 +71,8 @@ body, html {
 .u-text--italic {
 	font-style: italic;
 }
+
+.o-permission-manager .a-input__field-wrapper * {
+	font-family: 'IBM Plex Mono', monospace;
+	font-size: 0.9rem;
+}

@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -52,7 +52,7 @@ export const SitePolicyCreatePage = () => {
 	} = formMethods;
 
 	useEffect(() => {
-		fetchIAMActions({ pagesize: -1 });
+		fetchIAMActions({ pagesize: -1, kind: 'site' });
 		setBreadcrumbs([
 			{ label: t(`BREADCRUMBS.SITE_POLICIES`), to: SITE_POLICY_PATHS.ROOT },
 			{ label: t(`BREADCRUMBS.CREATE`) },
@@ -86,7 +86,7 @@ export const SitePolicyCreatePage = () => {
 								<TextField name="name" label="Name" />
 							</div>
 							<PermissionManager name="permissions" iamActions={iamActions} />
-							<Button htmlType={HTMLButtonTypes.SUBMIT}>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{createPolicyLoading && <i className="las la-redo-alt la-spin"></i>} Save
 							</Button>
 						</form>

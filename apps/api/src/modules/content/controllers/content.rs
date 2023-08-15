@@ -1,4 +1,5 @@
 use super::super::dto::{request, response};
+use crate::errors::AppErrorValue;
 use crate::modules::content::models::content::{CreateContent, UpdateContent};
 use crate::modules::content_types::models::content_type::ContentTypeKindEnum;
 use crate::modules::workflows::models::workflow_state::{WorkflowState, WorkflowTechnicalStateEnum};
@@ -8,6 +9,7 @@ use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
 use actix_web::{get, post, web, HttpResponse, delete, put};
 use chrono::Utc;
+use reqwest::StatusCode;
 use serde::Deserialize;
 use slug::slugify;
 use utoipa::IntoParams;
@@ -59,20 +61,32 @@ pub async fn create(
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
+
 	let translation_id = match form.translation_id {
 		Some(id) => id,
 		None => Uuid::new_v4(),
 	};
 
+	// Check if the slug already exists
+	let slug_in_use = Content::slug_in_use(conn, params.site_id, Some(translation_id), &form.slug)?;
+	if slug_in_use {
+		return Err(AppError::UnprocessableEntity(AppErrorValue {
+			message: "Slug is not unique".to_string(),
+			status: StatusCode::UNPROCESSABLE_ENTITY.as_u16(),
+			code: "SLUG_UNIQUE_VIOLATION".to_owned(),
+			..Default::default()
+		}))
+	}
+
 	let content = Content::create(
 		conn,
 		params.site_id,
 		CreateContent {
-			name: form.name.clone(),
-			content_type_id: form.content_type_id.clone(),
-			slug: slugify(&form.name),
-			workflow_state_id: form.workflow_state_id.clone(),
-			language_id: form.language_id.clone(),
+			name: &form.name,
+			content_type_id: form.content_type_id,
+			slug: &form.slug,
+			workflow_state_id: form.workflow_state_id,
+			language_id: form.language_id,
 			translation_id,
 			site_id: params.site_id,
 		},
@@ -177,6 +191,18 @@ pub async fn update(
 	} else {
 		false
 	};
+	
+	if form.slug.is_some() {
+		let slug_in_use = Content::slug_in_use(conn, params.site_id, Some(form.translation_id), &form.slug.clone().unwrap())?;
+		if slug_in_use {
+			return Err(AppError::UnprocessableEntity(AppErrorValue {
+				message: "Slug is not unique".to_string(),
+				status: StatusCode::UNPROCESSABLE_ENTITY.as_u16(),
+				code: "SLUG_UNIQUE_VIOLATION".to_owned(),
+				..Default::default()
+			}))
+		}
+	};
 
 	let content = Content::update(
 		conn,
@@ -185,6 +211,7 @@ pub async fn update(
 		params.content_id,
 		UpdateContent {
 			name: form.name.clone(),
+			slug: form.slug.clone(),
 			workflow_state_id: form.workflow_state_id.clone(),
 			updated_at: Utc::now().naive_utc(),
 			published,

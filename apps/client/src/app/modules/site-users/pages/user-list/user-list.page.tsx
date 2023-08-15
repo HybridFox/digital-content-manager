@@ -33,7 +33,7 @@ export const UserListPage = () => {
 				breadcrumbs={breadcrumbs}
 				title={t(`SITE_USERS.TITLES.LIST`)}
 				// action={
-				// 	<ButtonLink to="create">
+				// 	<ButtonLink to="create" type={ButtonTypes.PRIMARY}>
 				// 		<span className="las la-plus"></span> {t(`WORKFLOW_STATES.ACTIONS.CREATE`)}
 				// 	</ButtonLink>
 				// }

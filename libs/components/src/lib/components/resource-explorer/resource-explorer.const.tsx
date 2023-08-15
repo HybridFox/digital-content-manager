@@ -83,7 +83,6 @@ export const RESOURCE_COLUMNS = (
 						{actions.includes(ResourceExplorerAction.VIEW) && (<Button
 							onClick={() => onNavigate(item.name as string)}
 							size={ButtonSizes.SMALL}
-							type={ButtonTypes.SECONDARY}
 							className="u-margin-left-auto"
 						>
 							<i className="las la-eye"></i> View
@@ -91,7 +90,6 @@ export const RESOURCE_COLUMNS = (
 						{actions.includes(ResourceExplorerAction.REMOVE) && (<Button
 							onClick={() => handleRemoveDirectory(item.name as string)}
 							size={ButtonSizes.SMALL}
-							type={ButtonTypes.SECONDARY}
 							className="u-margin-left-sm"
 						>
 							<i className="las la-trash"></i>
@@ -107,7 +105,6 @@ export const RESOURCE_COLUMNS = (
 							<Button
 								onClick={() => handleRemoveFile(item.name as string)}
 								size={ButtonSizes.SMALL}
-								type={ButtonTypes.SECONDARY}
 								className="u-margin-left-auto"
 							>
 								<i className="las la-trash"></i>

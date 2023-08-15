@@ -4,6 +4,7 @@ import {
 	Alert,
 	AlertTypes,
 	Button,
+	ButtonTypes,
 	HTMLButtonTypes,
 } from '@ibs/components';
 import { IAPIError, useContentComponentStore, useHeaderStore } from '@ibs/shared';
@@ -80,7 +81,7 @@ export const CCSettingsPage = () => {
 					></TextareaField>
 				</div>
 				<div className="u-margin-top">
-					<Button htmlType={HTMLButtonTypes.SUBMIT}>
+					<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 						{updateContentComponentLoading && (
 							<i className="las la-redo-alt la-spin"></i>
 						)}{' '}

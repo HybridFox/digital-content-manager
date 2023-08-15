@@ -51,7 +51,7 @@ export const LoginPage = () => {
 								<TextField name="password" label="Password" type={TextFieldTypes.PASSWORD} fieldOptions={{ required: true }} />
 							</div>
 							<div>
-								<Button className="u-margin-right-sm" htmlType={HTMLButtonTypes.SUBMIT}>Login</Button>
+								<Button className="u-margin-right-sm" type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>Login</Button>
 								<Button type={ButtonTypes.OUTLINE}>Forgot password</Button>
 							</div>
 						</form>

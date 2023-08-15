@@ -168,33 +168,37 @@ impl SkipAuthRoute {
 }
 
 lazy_static! {
-	static ref SKIP_AUTH_ROUTES: [SkipAuthRoute; 7] = [
+	static ref SKIP_AUTH_ROUTES: [SkipAuthRoute; 8] = [
 		SkipAuthRoute {
-			path: Regex::new(r"/api/v1/auth/local/*").unwrap(),
+			path: Regex::new(r"/admin-api/v1/auth/local/*").unwrap(),
 			method: Method::POST,
 		},
 		SkipAuthRoute {
-			path: Regex::new(r"/api/v1/auth/local/*").unwrap(),
+			path: Regex::new(r"/admin-api/v1/auth/local/*").unwrap(),
 			method: Method::POST,
 		},
 		SkipAuthRoute {
-			path: Regex::new(r"/api/v1/auth/google/*").unwrap(),
+			path: Regex::new(r"/admin-api/v1/auth/google/*").unwrap(),
 			method: Method::GET,
 		},
 		SkipAuthRoute {
-			path: Regex::new(r"/api/v1/auth/slack/*").unwrap(),
+			path: Regex::new(r"/admin-api/v1/auth/slack/*").unwrap(),
 			method: Method::GET,
 		},
 		SkipAuthRoute {
-			path: Regex::new(r"/api/v1/setup/*").unwrap(),
+			path: Regex::new(r"/admin-api/v1/setup/*").unwrap(),
 			method: Method::POST,
 		},
 		SkipAuthRoute {
-			path: Regex::new(r"/api/v1/sites/(.*)/storage-repositories/(.*)/files").unwrap(),
+			path: Regex::new(r"/admin-api/v1/sites/(.*)/storage-repositories/(.*)/files").unwrap(),
 			method: Method::GET,
 		},
 		SkipAuthRoute {
 			path: Regex::new(r"/docs/?(.*)").unwrap(),
+			method: Method::GET
+		},
+		SkipAuthRoute {
+			path: Regex::new(r"/api/?(.*)").unwrap(),
 			method: Method::GET
 		}
 	];

@@ -7,7 +7,7 @@ import {
 import { useEffect } from 'react';
 import { CheckboxField, TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
@@ -67,7 +67,7 @@ export const SiteRoleCreatePage = () => {
 		<>
 			<Header
 				breadcrumbs={breadcrumbs}
-				title={t('SITE_ROLES.TITLES.EDIT')}
+				title={t('SITE_ROLES.TITLES.CREATE')}
 			></Header>
 			<div className="u-margin-top">
 				<Loading loading={policiesLoading}>
@@ -80,9 +80,9 @@ export const SiteRoleCreatePage = () => {
 								<TextField name="name" label="Name" />
 							</div>
 							<div className="u-margin-bottom">
-								<CheckboxField name='policies' fieldConfiguration={{ options: policies.map((policy) => ({ label: policy.name, value: policy.id })) }} label='Roles' />
+								<CheckboxField name='policies' fieldConfiguration={{ options: (policies || []).map((policy) => ({ label: policy.name, value: policy.id })) }} label='Policies' />
 							</div>
-							<Button htmlType={HTMLButtonTypes.SUBMIT} disabled={!!Object.keys(errors).length}>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT} disabled={!!Object.keys(errors).length}>
 								{createRoleLoading && <i className="las la-redo-alt la-spin"></i>} Save
 							</Button>
 						</form>

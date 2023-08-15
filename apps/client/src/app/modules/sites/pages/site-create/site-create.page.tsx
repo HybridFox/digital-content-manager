@@ -1,8 +1,8 @@
 import { IAPIError, useHeaderStore, useLanguageStore } from '@ibs/shared';
 import { useEffect } from 'react';
-import { CheckboxField, SelectField, TextField } from '@ibs/forms';
+import { SelectField, TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { generatePath, useNavigate } from 'react-router-dom';
@@ -73,7 +73,7 @@ export const SiteCreatePage = () => {
 									label="Languages"
 								/>
 							</div>
-							<Button htmlType={HTMLButtonTypes.SUBMIT} disabled={!!Object.keys(errors).length}>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT} disabled={!!Object.keys(errors).length}>
 								{createSiteLoading && <i className="las la-redo-alt la-spin"></i>} Save
 							</Button>
 						</form>

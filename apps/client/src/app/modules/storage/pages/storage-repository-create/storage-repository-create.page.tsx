@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { RenderFields, SelectField, TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, HTMLButtonTypes, Header } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -84,7 +84,7 @@ export const StorageRepositoryCreatePage = () => {
 							<SelectField name="kind" label="Kind" fieldConfiguration={{ options: STORAGE_KIND_OPTIONS }} />
 						</div>
 						{kind && <RenderFields fields={STORAGE_KIND_FIELDS[kind] || []} fieldPrefix='configuration.'></RenderFields>}
-						<Button htmlType={HTMLButtonTypes.SUBMIT}>
+						<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 							{createStorageRepositoryLoading && <i className="las la-redo-alt la-spin"></i>} Save
 						</Button>
 					</form>

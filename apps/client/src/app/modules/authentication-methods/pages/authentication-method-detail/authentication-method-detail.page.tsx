@@ -1,7 +1,7 @@
 import { IAPIError, useAuthenticationMethodStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -100,7 +100,7 @@ export const AuthenticationMethodDetailPage = () => {
 							{authenticationMethod?.kind && (
 								<RenderFields fields={AUTHENTICATION_METHOD_FIELDS[authenticationMethod?.kind] || []} fieldPrefix="configuration."></RenderFields>
 							)}
-							<Button htmlType={HTMLButtonTypes.SUBMIT}>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{updateAuthenticationMethodLoading && <i className="las la-redo-alt la-spin"></i>} Save
 							</Button>
 						</form>

@@ -24,6 +24,10 @@ export const CONTENT_ROUTES: RouteObject[] = [
 				element: <Navigate to="fields" />,
 			},
 			{
+				path: CONTENT_PATHS.DETAIL_SETTINGS,
+				lazy: async () => ({ Component: (await import('./pages/content-detail-settings/content-detail-settings.page')).ContentDetailSettingsPage }),
+			},
+			{
 				path: CONTENT_PATHS.DETAIL_FIELDS,
 				lazy: async () => ({ Component: (await import('./pages/content-detail-fields/content-detail-fields.page')).ContentDetailFieldsPage }),
 			},

@@ -6,6 +6,7 @@ export enum HTMLButtonTypes {
 export enum ButtonTypes {
 	PRIMARY = 'primary',
 	SECONDARY = 'secondary',
+	DEFAULT = 'default',
 	TRANSPARENT = 'transparent',
 	OUTLINE = 'outline',
 }

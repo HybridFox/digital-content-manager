@@ -72,6 +72,7 @@ impl From<(IAMPolicy, Vec<(Permission, Vec<String>)>)> for IAMPolicyWithPermissi
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct SiteIAMPoliciesEmbeddedDTO {
 	pub site_policies: Vec<IAMPolicyWithPermissionsDTO>,
 }

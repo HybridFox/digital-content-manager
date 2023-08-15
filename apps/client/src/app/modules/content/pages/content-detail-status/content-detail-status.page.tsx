@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentTypeStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
-import { Alert, AlertTypes, Button, HTMLButtonTypes } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { RadioField } from '@ibs/forms';
@@ -69,7 +69,7 @@ export const ContentDetailStatusPage = () => {
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<RadioField name="workflowStateId" fieldConfiguration={{ options }}></RadioField>
 				<div className="u-margin-top">
-					<Button htmlType={HTMLButtonTypes.SUBMIT}>{updateContentItemLoading && <i className="las la-redo-alt la-spin"></i>} Save</Button>
+					<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>{updateContentItemLoading && <i className="las la-redo-alt la-spin"></i>} Save</Button>
 				</div>
 			</form>
 		</FormProvider>

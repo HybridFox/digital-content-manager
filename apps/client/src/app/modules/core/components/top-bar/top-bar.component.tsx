@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
 import { useAuthStore } from '@ibs/shared';
 
@@ -17,10 +17,14 @@ const navLinkBinding = {
 };
 
 export const TopBar = () => {
-	const { user } = useAuthStore();
+	const { user, sites } = useAuthStore();
+	const { siteId } = useParams();
+
+	const activeSite = sites.find(({ id }) => id === siteId);
 
 	return (
 		<div className={cxBind('o-top-bar')}>
+			{activeSite && <div className={cxBind('o-top-bar__site')}>{activeSite?.name}</div>}
 			<div className={cxBind('o-top-bar__links')}>
 				<ul>
 					<li>
@@ -31,6 +35,11 @@ export const TopBar = () => {
 					<li>
 						<NavLink {...navLinkBinding} to=''>
 							<i className="las la-bell"></i>
+						</NavLink>
+					</li>
+					<li>
+						<NavLink {...navLinkBinding} to=''>
+							<i className="las la-user"></i>
 						</NavLink>
 					</li>
 				</ul>

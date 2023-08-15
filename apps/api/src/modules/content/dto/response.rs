@@ -140,6 +140,54 @@ impl From<(Content, Vec<ContentField>, Language, WorkflowState)> for ContentWith
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
+pub struct PublicContentTranslationsDTO {
+	pub id: Uuid,
+	pub name: String,
+	pub slug: String,
+	pub language: LanguageDTO,
+}
+
+impl From<(Content, Language)> for PublicContentTranslationsDTO {
+	fn from((content, language): (Content, Language)) -> Self {
+		Self {
+			id: content.id,
+			name: content.name,
+			slug: content.slug,
+			language: LanguageDTO::from(language),
+		}
+	}
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct PublicContentDTO {
+	pub id: Uuid,
+	pub name: String,
+	pub slug: String,
+	pub created_at: NaiveDateTime,
+	pub updated_at: NaiveDateTime,
+	pub fields: HashMap<String, Option<Value>>,
+	pub language: LanguageDTO,
+	pub translations: Vec<PublicContentTranslationsDTO>
+}
+
+impl From<(Content, Vec<ContentField>, Language, Vec<(Content, Language)>)> for PublicContentDTO {
+	fn from((content, fields, language, translations): (Content, Vec<ContentField>, Language, Vec<(Content, Language)>)) -> Self {
+		Self {
+			id: content.id,
+			name: content.name,
+			slug: content.slug,
+			created_at: content.created_at,
+			updated_at: content.updated_at,
+			fields: parse_object_fields(content.translation_id, None, fields),
+			language: LanguageDTO::from(language),
+			translations: translations.into_iter().map(PublicContentTranslationsDTO::from).collect()
+		}
+	}
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct ContentDefaultValuesDTO {
 	pub fields: HashMap<String, Option<Value>>,
 }

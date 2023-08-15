@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
 import { Tooltip } from 'react-tooltip';
+import classNames from 'classnames';
 
 import { Select } from '../../components/select';
 import { IRenderControllerField } from '../fields.types';
@@ -15,11 +16,18 @@ export const SelectField: FC<ISelectFieldProps> = ({ name, label, placeholder, f
 	const { control } = useFormContext();
 
 	const getMappedValue = (value: string | string[]): ISelectOptions | ISelectOptions[] | undefined => {
+		const flattenedFields = ((fieldConfiguration?.options as ISelectOptions[]) || []).reduce((acc, option: ISelectOptions) => {
+			if (option.options) {
+				return [...acc, ...option.options]
+			}
+
+			return [...acc, option];
+		}, [] as ISelectOptions[])
 		if (Array.isArray(value)) {
-			return ((fieldConfiguration?.options as ISelectOptions[]) || []).filter(({ value: optionValue }) => value.includes(optionValue));
+			return flattenedFields.filter(({ value: optionValue }) => value.includes(optionValue));
 		}
 
-		return ((fieldConfiguration?.options as ISelectOptions[]) || []).find(({ value: optionValue }) => optionValue === value);
+		return flattenedFields.find(({ value: optionValue }) => optionValue === value);
 	}
 
 	const renderField = ({ field: { onChange, value }, formState: { errors } }: IRenderControllerField) => {
@@ -36,7 +44,7 @@ export const SelectField: FC<ISelectFieldProps> = ({ name, label, placeholder, f
 						{label}
 					</label>
 				)}
-				<div className={cxBind('a-input__field-wrapper')}>
+				<div className={classNames(cxBind('a-input__field-wrapper'), 'a-input__field-wrapper')}>
 					<Select
 						min={field?.min ?? 1}
 						max={field?.max ?? 1} 

@@ -1,7 +1,4 @@
-import { IField } from "@ibs/shared";
-import { ReactNode } from "react";
-
-import { IIAMAction } from "../../stores/iam-action";
+import { IIAMAction } from "@ibs/shared";
 
 export interface IPermissionManagerProps {
 	// field: IField;

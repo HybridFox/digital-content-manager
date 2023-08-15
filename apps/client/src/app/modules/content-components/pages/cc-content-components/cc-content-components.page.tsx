@@ -9,6 +9,7 @@ import {
 	Alert,
 	AlertTypes,
 	Button,
+	ButtonTypes,
 	Card,
 	HTMLButtonTypes,
 	Table,
@@ -154,7 +155,7 @@ export const CCContentComponentsPage = () => {
 								<TextField name="name" label="Name"></TextField>
 							</div>
 							<div className="u-col-md-2 u-col--align-end">
-								<Button htmlType={HTMLButtonTypes.SUBMIT} block>
+								<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT} block>
 									{createFieldLoading && (
 										<i className="las la-redo-alt la-spin"></i>
 									)}{' '}

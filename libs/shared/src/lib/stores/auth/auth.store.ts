@@ -14,6 +14,7 @@ interface IAuthStoreState {
 	token?: string;
 	// TODO: Move this to another store perhaps?
 	fetchUser: () => Promise<void>;
+	setup: (values: any) => Promise<void>;
 	login: (email: string, password: string) => Promise<void>;
 }
 
@@ -41,6 +42,17 @@ export const useAuthStore = create<IAuthStoreState>()(devtools(
 					throw error;
 				}
 
+				set(() => ({ ...result, activeSite: result.sites?.[0] }));
+			},
+			setup: async (values) => {
+				const [result, error] = await wrapApi(kyInstance.post('/api/v1/setup/register', {
+					json: values
+				}).json<IMeReponse>());
+	
+				if (error) {
+					throw error;
+				}
+	
 				set(() => ({ ...result, activeSite: result.sites?.[0] }));
 			} 
 		}), { name: 'authStore' }
