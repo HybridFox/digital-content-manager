@@ -10,7 +10,7 @@ COPY . /app
 # build for release
 RUN cargo build --bins --release
 
-RUN ldd /app/target/release/chatwall-api
+RUN ldd /app/target/release/ibs
 
 # our final base
 FROM debian:bullseye-slim
