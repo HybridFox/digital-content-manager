@@ -16,8 +16,8 @@ jobs:
               with:
                   dockerUsername: ${{ secrets.DOCKER_USERNAME }}
                   dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
-                  imageName: hybridfox/chatwall-api
-                  context: api/.
+                  imageName: hybridfox/ibs-api
+                  context: apps/api/.
 
     push_client_to_registry:
         name: build client
@@ -30,13 +30,13 @@ jobs:
               with:
                   dockerUsername: ${{ secrets.DOCKER_USERNAME }}
                   dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
-                  imageName: hybridfox/chatwall-client
-                  context: client/.
-    deploy:
-        needs: [push_api_to_registry, push_client_to_registry]
-        runs-on: ubuntu-latest
-        steps:
-            - name: curl
-              uses: wei/curl@v1
-              with:
-                  args: -X POST ${{ secrets.RANCHER_DEPLOY_URL }}
+                  imageName: hybridfox/ibs-client
+                  context: apps/client/.
+    # deploy:
+    #     needs: [push_api_to_registry, push_client_to_registry]
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - name: curl
+    #           uses: wei/curl@v1
+    #           with:
+    #               args: -X POST ${{ secrets.RANCHER_DEPLOY_URL }}
