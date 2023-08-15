@@ -5,7 +5,7 @@ FROM rust:1.70.0 as builder
 WORKDIR /app
 
 # copy over your manifests
-COPY apps/client/. /app/
+COPY apps/api/. /app/
 
 RUN ls -al
 # build for release
