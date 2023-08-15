@@ -18,7 +18,7 @@ jobs:
                   dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
                   imageName: hybridfox/ibs-api
                   context: apps/api/.
-                  file: Dockerfile
+                  file: ./Dockerfile
 
     push_client_to_registry:
         name: build client
