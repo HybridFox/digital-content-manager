@@ -7,6 +7,8 @@ inputs:
         required: true
     imageName:
         required: true
+    file:
+        required: true
     context:
         required: true
 
@@ -36,6 +38,7 @@ runs:
           with:
               push: true
               context: ${{ inputs.context }}
+              file: ${{ inputs.file }}
               platforms: linux/amd64
               tags: ${{ steps.meta.outputs.tags }}
               labels: ${{ steps.meta.outputs.labels }}

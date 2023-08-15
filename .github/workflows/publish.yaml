@@ -18,6 +18,7 @@ jobs:
                   dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
                   imageName: hybridfox/ibs-api
                   context: apps/api/.
+                  file: Dockerfile
 
     push_client_to_registry:
         name: build client
@@ -31,7 +32,8 @@ jobs:
                   dockerUsername: ${{ secrets.DOCKER_USERNAME }}
                   dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
                   imageName: hybridfox/ibs-client
-                  context: apps/client/.
+                  context: .
+                  file: ./apps/client/Dockerfile
     # deploy:
     #     needs: [push_api_to_registry, push_client_to_registry]
     #     runs-on: ubuntu-latest

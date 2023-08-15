@@ -4,7 +4,7 @@ FROM node:hydrogen-alpine AS build
 RUN apk add --no-cache python3 build-base
 
 WORKDIR /usr/build
-COPY ./package.json ./package-lock.json* ./
+COPY package.json package-lock.json* ./
 RUN npm ci
 COPY . .
 RUN npm run nx run client:build
@@ -13,8 +13,8 @@ RUN npm run nx run client:build
 FROM nginx:1.25.0-alpine
 
 COPY --from=build /usr/build/dist/apps/client/. /usr/share/nginx/html
-COPY ./nginx.conf /etc/nginx/nginx.template
-COPY ./docker-entrypoint.sh /
+COPY apps/client/nginx.conf /etc/nginx/nginx.template
+COPY apps/client/docker-entrypoint.sh /
 RUN chmod +x docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
