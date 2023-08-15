@@ -1,7 +1,4 @@
-use crate::{
-	errors::AppError,
-	modules::core::middleware::state::AppConn,
-};
+use crate::{errors::AppError, modules::core::middleware::state::AppConn};
 use crate::modules::users::models::user::User;
 use tracing::instrument;
 

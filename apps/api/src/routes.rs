@@ -165,6 +165,7 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 					.service(modules::users::controllers::users::find_one)
 					.service(modules::users::controllers::users::update)
 					.service(modules::users::controllers::users::remove)
+					.service(modules::users::controllers::users::find_sites)
 			)
 			.service(
 				web::scope("/roles")

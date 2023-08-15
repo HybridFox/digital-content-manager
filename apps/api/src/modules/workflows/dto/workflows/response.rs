@@ -65,13 +65,11 @@ impl
 			updated_at: workflow.updated_at,
 			transitions: transitions
 				.into_iter()
-				.map(
-					|(transition, from_state, to_state)| WorkflowTransitionDTO {
-						id: transition.id,
-						from_state: WorkflowStateDTO::from(from_state),
-						to_state: WorkflowStateDTO::from(to_state),
-					},
-				)
+				.map(|(transition, from_state, to_state)| WorkflowTransitionDTO {
+					id: transition.id,
+					from_state: WorkflowStateDTO::from(from_state),
+					to_state: WorkflowStateDTO::from(to_state),
+				})
 				.collect(),
 		}
 	}

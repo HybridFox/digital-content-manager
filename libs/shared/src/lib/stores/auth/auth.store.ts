@@ -4,11 +4,12 @@ import { devtools, persist } from 'zustand/middleware'
 import { kyAuthInstance, kyInstance, wrapApi } from '../../services';
 import { ISite } from '../../types';
 
-import { IMeReponse, IUser } from './auth.types';
+import { IMeReponse, IRole, IUser } from './auth.types';
 
 interface IAuthStoreState {
 	user?: IUser;
 	sites: ISite[];
+	roles: IRole[];
 	activeSite?: ISite;
 	token?: string;
 	// TODO: Move this to another store perhaps?
@@ -20,6 +21,7 @@ export const useAuthStore = create<IAuthStoreState>()(devtools(
 	persist(
 		(set) => ({
 			sites: [],
+			roles: [],
 			fetchUser: async () => {
 				const [result, error] = await wrapApi(kyInstance.get('/api/v1/auth/me').json<IMeReponse>());
 

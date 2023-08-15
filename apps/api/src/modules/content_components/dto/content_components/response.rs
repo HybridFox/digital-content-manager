@@ -83,7 +83,10 @@ impl
 						FieldConfigContent::Json(json) => (key, json),
 						FieldConfigContent::Fields(fields) => {
 							// TODO: clean this up somehow 🤮
-							let mapped_fields = fields.into_iter().map(FieldDTO::from).collect::<Vec<FieldDTO>>();
+							let mapped_fields = fields
+								.into_iter()
+								.map(FieldDTO::from)
+								.collect::<Vec<FieldDTO>>();
 							let json = serde_json::to_string(&mapped_fields).unwrap();
 
 							(key, serde_json::from_str(&json).unwrap())
@@ -142,7 +145,10 @@ impl
 						FieldConfigContent::Json(json) => (key, json),
 						FieldConfigContent::Fields(fields) => {
 							// TODO: clean this up somehow 🤮
-							let mapped_fields = fields.into_iter().map(FieldDTO::from).collect::<Vec<FieldDTO>>();
+							let mapped_fields = fields
+								.into_iter()
+								.map(FieldDTO::from)
+								.collect::<Vec<FieldDTO>>();
 							let json = serde_json::to_string(&mapped_fields).unwrap();
 
 							(key, serde_json::from_str(&json).unwrap())
@@ -168,12 +174,8 @@ pub struct ContentComponentWithFieldsDTO {
 	pub fields: Vec<FieldWithContentComponentDTO>,
 }
 
-impl
-	From<PopulatedContentComponent> for ContentComponentWithFieldsDTO
-{
-	fn from(
-		cc: PopulatedContentComponent,
-	) -> Self {
+impl From<PopulatedContentComponent> for ContentComponentWithFieldsDTO {
+	fn from(cc: PopulatedContentComponent) -> Self {
 		Self {
 			id: cc.content_component.id,
 			name: cc.content_component.name,
@@ -182,11 +184,16 @@ impl
 			component_name: cc.content_component.component_name,
 			created_at: cc.content_component.created_at,
 			updated_at: cc.content_component.updated_at,
-			configuration_fields: cc.configuration_fields
+			configuration_fields: cc
+				.configuration_fields
 				.into_iter()
 				.map(FieldWithContentComponentDTO::from)
 				.collect(),
-			fields: cc.fields.into_iter().map(FieldWithContentComponentDTO::from).collect(),
+			fields: cc
+				.fields
+				.into_iter()
+				.map(FieldWithContentComponentDTO::from)
+				.collect(),
 		}
 	}
 }
@@ -204,20 +211,8 @@ pub struct ContentComponentsDTO {
 	pub _embedded: ContentComponentsEmbeddedDTO,
 }
 
-impl
-	From<(
-		Vec<ContentComponent>,
-		HALPage,
-		Uuid,
-	)> for ContentComponentsDTO
-{
-	fn from(
-		(content_components, page, site_id): (
-			Vec<ContentComponent>,
-			HALPage,
-			Uuid,
-		),
-	) -> Self {
+impl From<(Vec<ContentComponent>, HALPage, Uuid)> for ContentComponentsDTO {
+	fn from((content_components, page, site_id): (Vec<ContentComponent>, HALPage, Uuid)) -> Self {
 		Self {
 			_links: HALLinkList::from((
 				format!("/api/v1/sites/{}/content-components", site_id),

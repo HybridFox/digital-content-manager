@@ -10,7 +10,7 @@ export const USER_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: 
 	{
 		id: 'roles',
 		label: 'Roles',
-		format: (roles: IRole[]) => roles.map((role) => <Badge className='u-margin-right-xs' key={role.id}>{role.name}</Badge>)
+		format: (roles: IRole[]) => roles.map((role) => <Badge className='u-margin-right-xs u-margin-top-xxxs u-margin-bottom-xxxs' key={role.id}>{role.name}</Badge>)
 	},
 	{
 		id: 'actions',

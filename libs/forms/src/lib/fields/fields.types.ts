@@ -6,7 +6,7 @@ export interface IGenericFieldProps {
 	label?: string;
 	fieldConfiguration?: Record<string, unknown>;
 	fieldOptions?: RegisterOptions<FieldValues, string>;
-	field?: IField;
+	field?: Partial<IField>;
 	disabled?: boolean;
 }
 

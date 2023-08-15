@@ -11,7 +11,7 @@ pub struct CreateContentComponentDTO {
 	pub name: String,
 	pub description: Option<String>,
 	pub component_name: String,
-	pub workflow_id: Uuid
+	pub workflow_id: Uuid,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
@@ -37,5 +37,5 @@ pub struct UpdateCCFieldDTO {
 	pub max: Option<i32>,
 	pub hidden: Option<bool>,
 	pub multi_language: Option<bool>,
-	pub config: HashMap<String, Value>
+	pub config: HashMap<String, Value>,
 }

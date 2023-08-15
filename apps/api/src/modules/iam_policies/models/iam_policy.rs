@@ -23,7 +23,11 @@ pub struct IAMPolicy {
 
 impl IAMPolicy {
 	#[instrument(skip(conn))]
-	pub fn create(conn: &mut PgConnection, site_id: Option<Uuid>, name: &str) -> Result<Self, AppError> {
+	pub fn create(
+		conn: &mut PgConnection,
+		site_id: Option<Uuid>,
+		name: &str,
+	) -> Result<Self, AppError> {
 		use diesel::prelude::*;
 
 		let record = CreateIAMPolicy { name, site_id };
@@ -55,9 +59,7 @@ impl IAMPolicy {
 			query
 		};
 
-		let iam_policy = query
-			.select(IAMPolicy::as_select())
-			.get_result(conn)?;
+		let iam_policy = query.select(IAMPolicy::as_select()).get_result(conn)?;
 
 		let permissions = Permission::belonging_to(&iam_policy)
 			.select(Permission::as_select())
@@ -112,8 +114,7 @@ impl IAMPolicy {
 			query
 		};
 
-		let iam_policies = query
-			.load::<IAMPolicy>(conn)?;
+		let iam_policies = query.load::<IAMPolicy>(conn)?;
 
 		let permissions = Permission::belonging_to(&iam_policies)
 			.select(Permission::as_select())

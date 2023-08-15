@@ -1,4 +1,5 @@
 import { IRole, PERMISSION_EFFECT } from "../stores";
+import { ISite } from "../types";
 
 interface IAggregatedPermission {
 	resource: string;
@@ -32,10 +33,19 @@ const aggregatePermissions = (roles: IRole[]): [IAggregatedPermission[], IAggreg
 	return [denyList, grantList];
 }
 
-export const hasPermission = (roles: IRole[], resource: string, action: string): boolean => {
-	const [denyList, grantList] = aggregatePermissions(roles);
+export const hasPermission = (siteId: string | undefined, sites: ISite[], roles: IRole[], resource: string, action: string): boolean => {
+	let rolesToCheck = [];
+	if (siteId) {
+		const site = sites.find((site) => site.id === siteId);
+		rolesToCheck = site?.roles || [];
+	} else {
+		rolesToCheck = roles;
+	}
 
-	const inGrantList = !!grantList.find((permission) => true)
+	const [denyList, grantList] = aggregatePermissions(rolesToCheck);
 
-	return inGrantList;
+	return !!grantList.find((item) => {
+		return (new RegExp(item.action.replaceAll('*', "(\\w*)")).test(action) || new RegExp(action.replaceAll('*', "(\\w*)")).test(item.action)) 
+			&& (new RegExp(item.resource.replaceAll('*', "(\\w*)")).test(resource) || new RegExp(resource.replaceAll('*', "(\\w*)")).test(item.resource));
+	});
 }

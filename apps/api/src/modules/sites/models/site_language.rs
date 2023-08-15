@@ -14,7 +14,7 @@ use crate::schema::{sites_languages, languages};
 #[diesel(primary_key(language_id, site_id))]
 pub struct SiteLanguage {
 	pub language_id: Uuid,
-	pub site_id: Uuid
+	pub site_id: Uuid,
 }
 
 impl SiteLanguage {
@@ -25,17 +25,23 @@ impl SiteLanguage {
 	) -> Result<Vec<Language>, AppError> {
 		let target = sites_languages::table.filter(sites_languages::site_id.eq(site_id));
 		diesel::delete(target).execute(conn)?;
-		
+
 		let insertables = language_ids
 			.into_iter()
-			.map(|language_id| CreateSiteLanguage { language_id, site_id })
+			.map(|language_id| CreateSiteLanguage {
+				language_id,
+				site_id,
+			})
 			.collect::<Vec<CreateSiteLanguage>>();
 
 		let site_languages = diesel::insert_into(sites_languages::table)
 			.values(insertables)
 			.returning(SiteLanguage::as_returning())
 			.get_results(conn)?;
-		let id_indices: Vec<Uuid> = site_languages.into_iter().map(|site_language| site_language.language_id).collect();
+		let id_indices: Vec<Uuid> = site_languages
+			.into_iter()
+			.map(|site_language| site_language.language_id)
+			.collect();
 
 		let languages = languages::table
 			.filter(languages::id.eq_any(id_indices))

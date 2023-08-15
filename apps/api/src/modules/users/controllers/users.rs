@@ -1,4 +1,5 @@
 use super::super::dto::users::{response, request};
+use crate::modules::sites::dto::response::SiteWithRolesDTO;
 use crate::{errors::AppError, modules::users::models::user_role::UserRole};
 use crate::modules::users::models::user::{User, UpdateUser};
 use crate::modules::core::middleware::state::AppState;
@@ -36,8 +37,15 @@ pub async fn create(
 	form: web::Json<request::CreateUserDTO>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	
-	let (user, _token) = User::signup(conn, &form.email, &form.name, &form.password, None, Some("local"))?;
+
+	let (user, _token) = User::signup(
+		conn,
+		&form.email,
+		&form.name,
+		&form.password,
+		None,
+		Some("local"),
+	)?;
 	UserRole::upsert_many(conn, user.id, form.roles.clone())?;
 	Ok(HttpResponse::Ok().json(user))
 }
@@ -73,7 +81,7 @@ pub async fn find_all(
 			total_pages: (total_elements / pagesize + (total_elements % pagesize).signum()).max(1),
 		},
 		// TODO: Fix
-		Uuid::new_v4()
+		Uuid::new_v4(),
 	));
 
 	Ok(HttpResponse::Ok().json(res))
@@ -121,14 +129,18 @@ pub async fn update(
 	form: web::Json<request::UpdateUserDTO>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	
-	User::update(conn, params.user_id, UpdateUser {
-		email: Some(form.email.clone()),
-		name: Some(form.name.clone()),
-		avatar: None,
-		password: None,
-		bio: None,
-	})?;
+
+	User::update(
+		conn,
+		params.user_id,
+		UpdateUser {
+			email: Some(form.email.clone()),
+			name: Some(form.name.clone()),
+			avatar: None,
+			password: None,
+			bio: None,
+		},
+	)?;
 	UserRole::upsert_many(conn, params.user_id, form.roles.clone())?;
 	let user = User::find_one_with_roles(conn, params.user_id)?;
 	Ok(HttpResponse::Ok().json(user))
@@ -145,8 +157,45 @@ pub async fn update(
     )
 )]
 #[delete("/{user_id}")]
-pub async fn remove(state: web::Data<AppState>, params: web::Path<FindPathParams>) -> Result<HttpResponse, AppError>  {
+pub async fn remove(
+	state: web::Data<AppState>,
+	params: web::Path<FindPathParams>,
+) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	User::remove(conn, params.user_id)?;
 	Ok(HttpResponse::NoContent().body(()))
+}
+
+#[utoipa::path(
+	context_path = "/api/v1/users",
+	responses(
+		(status = 200, body = UserWithRolesDTO),
+		(status = 401, body = AppErrorValue, description = "Unauthorized")
+	),
+    security(
+        ("jwt_token" = [])
+    ),
+	params(FindPathParams)
+)]
+#[get("/{user_id}/sites")]
+pub async fn find_sites(
+	state: web::Data<AppState>,
+	params: web::Path<FindPathParams>,
+) -> Result<HttpResponse, AppError> {
+	let conn = &mut state.get_conn()?;
+	let user = User::find_one(conn, params.user_id)?;
+	let sites = user.get_sites(conn)?;
+	let total_elements = sites.len().to_owned();
+
+	let res = response::SitesWithRolesDTO::from((
+		sites,
+		HALPage {
+			number: 1,
+			size: 1,
+			total_elements: total_elements as i64,
+			total_pages: 1,
+		},
+		params.user_id
+	));
+	Ok(HttpResponse::Ok().json(res))
 }

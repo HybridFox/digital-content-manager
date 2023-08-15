@@ -16,7 +16,7 @@ pub struct ContentField {
 	pub parent_id: Option<Uuid>,
 	pub source_id: Uuid,
 	pub sequence_number: Option<i32>,
-	pub data_type: DataTypeEnum
+	pub data_type: DataTypeEnum,
 }
 
 #[derive(Insertable, Debug, Deserialize, Clone)]
@@ -29,5 +29,5 @@ pub struct CreateContentField {
 	pub parent_id: Option<Uuid>,
 	pub source_id: Uuid,
 	pub sequence_number: Option<i32>,
-	pub data_type: DataTypeEnum
+	pub data_type: DataTypeEnum,
 }

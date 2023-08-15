@@ -1,3 +1,4 @@
+use crate::modules::core::helpers::auth::get_user_id_from_header;
 use crate::modules::users::models::user::User;
 use crate::constants;
 use crate::errors::{AppError, AppErrorValue};
@@ -107,8 +108,6 @@ fn should_skip_auth(req: &ServiceRequest) -> bool {
 		.any(|route| route.matches_path_and_method(req.path(), req.method()))
 }
 
-const TOKEN_IDENTIFIER: &str = "Bearer";
-
 fn set_auth_user(req: &mut ServiceRequest) -> bool {
 	match fetch_user(req) {
 		Ok(user) => {
@@ -131,27 +130,6 @@ fn fetch_user(req: &ServiceRequest) -> Result<User, &str> {
 		.and_then(|state| state.get_conn().map_err(|_err| "Cannot get db connection."))?;
 
 	find_auth_user(conn, user_id).map_err(|_err| "Cannot find user")
-}
-
-fn get_user_id_from_header(req: &ServiceRequest) -> Result<Uuid, &str> {
-	req.headers()
-		.get(constants::AUTHORIZATION)
-		.ok_or("Cannot find authorization value in headers")
-		.and_then(|auth_header| {
-			auth_header
-				.to_str()
-				.map_err(|_err| "Cannot stringify header")
-		})
-		.and_then(|auth_str| {
-			if auth_str.starts_with(TOKEN_IDENTIFIER) {
-				Ok(auth_str)
-			} else {
-				Err("Invalid token convention")
-			}
-		})
-		.map(|auth_str| auth_str[6..auth_str.len()].trim())
-		.and_then(|token| token::decode(token).map_err(|_err| "Cannot decode token."))
-		.map(|token| token.claims.sub)
 }
 
 pub fn get_current_user(req: &HttpRequest) -> Result<User, AppError> {

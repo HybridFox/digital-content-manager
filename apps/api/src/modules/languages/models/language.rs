@@ -28,8 +28,7 @@ impl Language {
 		pagesize: i64,
 	) -> Result<(Vec<Self>, i64), AppError> {
 		let query = {
-			let mut query = languages::table
-				.into_boxed();
+			let mut query = languages::table.into_boxed();
 
 			if pagesize != -1 {
 				query = query.offset((page - 1) * pagesize).limit(pagesize);
@@ -39,9 +38,7 @@ impl Language {
 		};
 
 		let languages = query.select(Language::as_select()).load::<Language>(conn)?;
-		let total_elements = languages::table
-			.count()
-			.get_result::<i64>(conn)?;
+		let total_elements = languages::table.count().get_result::<i64>(conn)?;
 
 		Ok((languages, total_elements))
 	}

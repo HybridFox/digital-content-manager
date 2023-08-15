@@ -44,39 +44,47 @@ export const RootMenu = () => {
 					<span>User Management</span>
 				</p>
 				<ul>
-					<li>
-						<NavLink {...navLinkBinding} to={generatePath(USER_PATHS.ROOT)}>
-							<i className="las la-user"></i>
-							<span>Users</span>
-						</NavLink>
-					</li>
-					<li>
-						<NavLink {...navLinkBinding} to={generatePath(ROLE_PATHS.ROOT)}>
-							<i className="las la-list-alt"></i>
-							<span>Roles</span>
-						</NavLink>
-					</li>
-					<li>
-						<NavLink {...navLinkBinding} to={generatePath(POLICY_PATHS.ROOT)}>
-							<i className="las la-key"></i>
-							<span>Policies</span>
-						</NavLink>
-					</li>
+					<HasPermission resource='*' action='users:*'>
+						<li>
+							<NavLink {...navLinkBinding} to={generatePath(USER_PATHS.ROOT)}>
+								<i className="las la-user"></i>
+								<span>Users</span>
+							</NavLink>
+						</li>
+					</HasPermission>
+					<HasPermission resource='*' action='roles:*'>
+						<li>
+							<NavLink {...navLinkBinding} to={generatePath(ROLE_PATHS.ROOT)}>
+								<i className="las la-list-alt"></i>
+								<span>Roles</span>
+							</NavLink>
+						</li>
+					</HasPermission>
+					<HasPermission resource='*' action='policies:*'>
+						<li>
+							<NavLink {...navLinkBinding} to={generatePath(POLICY_PATHS.ROOT)}>
+								<i className="las la-key"></i>
+								<span>Policies</span>
+							</NavLink>
+						</li>
+					</HasPermission>
 				</ul>
 			</div>
-			<div className={cxBind('o-menu__links')}>
-				<p className={cxBind('o-menu__links__name')}>
-					<span>Administration</span>
-				</p>
-				<ul>
-					<li>
-						<NavLink {...navLinkBinding} to={generatePath(AUTHENTICATION_METHOD_PATHS.ROOT)}>
-							<i className="las la-server"></i>
-							<span>Authentication Methods</span>
-						</NavLink>
-					</li>
-				</ul>
-			</div>
+			<HasPermission resource='*' action='authentication-methods:*'>
+				<div className={cxBind('o-menu__links')}>
+					<p className={cxBind('o-menu__links__name')}>
+						<span>Administration</span>
+					</p>
+					<ul>
+							<li>
+								<NavLink {...navLinkBinding} to={generatePath(AUTHENTICATION_METHOD_PATHS.ROOT)}>
+									<i className="las la-server"></i>
+									<span>Authentication Methods</span>
+								</NavLink>
+							</li>
+					</ul>
+				</div>
+			</HasPermission>
 		</div>
 	);
 };

@@ -1,4 +1,4 @@
-use crate::errors::AppError;
+use crate::{errors::AppError, modules::iam_actions::seeds::actions::IAM_ACTION_SEEDS};
 use crate::schema::iam_actions;
 use chrono::NaiveDateTime;
 use diesel::pg::PgConnection;
@@ -30,13 +30,39 @@ impl IAMAction {
 		page: i64,
 		pagesize: i64,
 	) -> Result<(Vec<Self>, i64), AppError> {
-		let iam_actions = iam_actions::table
-			.select(IAMAction::as_select())
-			.offset((page - 1) * pagesize)
-			.limit(pagesize)
-			.load::<IAMAction>(conn)?;
+		let query = {
+			let mut query = iam_actions::table
+				.select(IAMAction::as_select())
+				.into_boxed();
+
+			if pagesize != -1 {
+				query = query.offset((page - 1) * pagesize).limit(pagesize);
+			};
+
+			query
+		};
+
+		let iam_actions = query.load::<IAMAction>(conn)?;
 		let total_elements = iam_actions::table.count().get_result::<i64>(conn)?;
 
 		Ok((iam_actions, total_elements))
 	}
+
+	pub fn upsert(conn: &mut PgConnection) -> () {
+		IAM_ACTION_SEEDS.into_iter().for_each(|item| {
+			let _ = diesel::insert_into(iam_actions::table)
+				.values(&item)
+				.on_conflict(iam_actions::key)
+				.do_update()
+				.set(&item)
+				.execute(conn);
+		})
+	}
+}
+
+#[derive(Insertable, Debug, Deserialize, AsChangeset)]
+#[diesel(table_name = iam_actions)]
+pub struct CreateIAMAction<'a> {
+	pub key: &'a str,
+	pub description: Option<String>,
 }

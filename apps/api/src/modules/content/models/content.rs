@@ -47,10 +47,20 @@ impl Content {
 
 		let (_content_type, fields) =
 			ContentType::find_one(conn, site_id, content_item.content_type_id)?;
-		upsert_fields(conn, content_item.id, content_item.translation_id, fields, values, &vec![])?;
+		upsert_fields(
+			conn,
+			content_item.id,
+			content_item.translation_id,
+			fields,
+			values,
+			&vec![],
+		)?;
 
 		let fields = content_fields::table
-			.filter(content_fields::source_id.eq_any(vec![content_item.id, content_item.translation_id]))
+			.filter(
+				content_fields::source_id
+					.eq_any(vec![content_item.id, content_item.translation_id]),
+			)
 			.select(ContentField::as_select())
 			.load::<ContentField>(conn)?;
 		let language = languages::table
@@ -72,7 +82,10 @@ impl Content {
 		let content_item = content::table.find(id).first::<Self>(conn)?;
 
 		let fields = content_fields::table
-			.filter(content_fields::source_id.eq_any(vec![content_item.id, content_item.translation_id]))
+			.filter(
+				content_fields::source_id
+					.eq_any(vec![content_item.id, content_item.translation_id]),
+			)
 			.select(ContentField::as_select())
 			.load::<ContentField>(conn)?;
 
@@ -108,28 +121,30 @@ impl Content {
 		pagesize: i64,
 		kind: Option<ContentTypeKindEnum>,
 		language_id: Option<Uuid>,
-		translation_id: Option<Uuid>
+		translation_id: Option<Uuid>,
 	) -> Result<(Vec<(Self, Language, ContentType, WorkflowState)>, i64), AppError> {
 		let query = {
 			let mut query = content::table
 				.filter(content::site_id.eq(site_id))
 				.inner_join(languages::table.on(languages::id.eq(content::language_id)))
 				.inner_join(content_types::table.on(content_types::id.eq(content::content_type_id)))
-				.inner_join(workflow_states::table.on(workflow_states::id.eq(content::workflow_state_id)))
+				.inner_join(
+					workflow_states::table.on(workflow_states::id.eq(content::workflow_state_id)),
+				)
 				.into_boxed();
 
 			if pagesize != -1 {
 				query = query.offset((page - 1) * pagesize).limit(pagesize);
 			};
-			
+
 			if let Some(kind) = kind {
 				query = query.filter(content_types::kind.eq(kind));
 			}
-			
+
 			if let Some(translation_id) = translation_id {
 				query = query.filter(content::translation_id.eq(translation_id));
 			}
-			
+
 			if let Some(language_id) = language_id {
 				query = query.filter(content::language_id.eq(language_id));
 			}
@@ -138,7 +153,12 @@ impl Content {
 		};
 
 		let content = query
-			.select((Content::as_select(), Language::as_select(), ContentType::as_select(), WorkflowState::as_select()))
+			.select((
+				Content::as_select(),
+				Language::as_select(),
+				ContentType::as_select(),
+				WorkflowState::as_select(),
+			))
 			.load::<(Content, Language, ContentType, WorkflowState)>(conn)?;
 
 		let total_elements = content::table
@@ -156,7 +176,7 @@ impl Content {
 		content_type_id: Uuid,
 		id: Uuid,
 		changeset: UpdateContent,
-		values: Value
+		values: Value,
 	) -> Result<(Self, Vec<ContentField>, Language, WorkflowState), AppError> {
 		let target = content::table.find(id);
 		let updated_content_iten = diesel::update(target)
@@ -169,7 +189,14 @@ impl Content {
 			.filter(content_fields::source_id.eq_any(vec![id, updated_content_iten.translation_id]))
 			.select(ContentField::as_select())
 			.load::<ContentField>(conn)?;
-		upsert_fields(conn, id, updated_content_iten.translation_id, fields, values, &content_fields)?;
+		upsert_fields(
+			conn,
+			id,
+			updated_content_iten.translation_id,
+			fields,
+			values,
+			&content_fields,
+		)?;
 
 		let content_item = Self::find_one(conn, site_id, id)?;
 
@@ -183,7 +210,6 @@ impl Content {
 
 		Ok(())
 	}
-
 }
 
 #[derive(Insertable, Debug, Deserialize)]

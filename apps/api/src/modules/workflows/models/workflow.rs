@@ -110,9 +110,7 @@ impl Workflow {
 		let workflows = query.select(Workflow::as_select()).load::<Workflow>(conn)?;
 		let populated_workflows = WorkflowTransition::populate_workflows(conn, workflows)?;
 
-		let total_elements = workflows::table
-			.count()
-			.get_result::<i64>(conn)?;
+		let total_elements = workflows::table.count().get_result::<i64>(conn)?;
 
 		Ok((populated_workflows, total_elements))
 	}

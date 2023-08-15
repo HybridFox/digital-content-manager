@@ -6,6 +6,7 @@ const eol = require('eol');
 const VirtualFile = require('vinyl');
 const flattenObjectKeys = require('i18next-scanner/lib/flatten-object-keys').default;
 const omitEmptyObject = require('i18next-scanner/lib/omit-empty-object').default;
+const typescriptTransform = require('i18next-scanner-typescript');
 
 function getFileJSON(resPath) {
 	try {
@@ -35,7 +36,7 @@ function flush(done) {
 			// if not defaultLng then Get, Merge & removeUnusedKeys of old JSON content
 			if (lng !== options.defaultLng) {
 				let resContent = getFileJSON(resPath);
-				console.log(resContent)
+				console.log(resContent);
 
 				if (options.removeUnusedKeys) {
 					const namespaceKeys = flattenObjectKeys(obj);
@@ -94,20 +95,15 @@ module.exports = {
 		sort: true,
 		func: {
 			list: ['i18next.t', 'i18n.t', 't'],
-			extensions: ['.ts', '.tsx'],
+			extensions: ['.js', '.jsx'],
 		},
 		trans: {
 			component: 'Trans',
 			i18nKey: 'i18nKey',
 			defaultsKey: 'defaults',
-			extensions: ['.ts', '.tsx'],
+			extensions: ['.js', '.jsx'],
 			fallbackKey: function (ns, value) {
 				return value;
-			},
-			acorn: {
-				ecmaVersion: 2020,
-				sourceType: 'module', // defaults to 'module'
-				// Check out https://github.com/acornjs/acorn/tree/master/acorn#interface for additional options
 			},
 		},
 		lngs: ['en_GB'],
@@ -127,5 +123,13 @@ module.exports = {
 			suffix: '}}',
 		},
 	},
+	transform: typescriptTransform({
+		// default value for extensions
+		extensions: ['.ts', '.tsx'],
+		// optional ts configuration
+		tsOptions: {
+			target: 'es2017',
+		},
+	}),
 	flush,
 };

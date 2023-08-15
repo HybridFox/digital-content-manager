@@ -133,7 +133,6 @@ pub async fn find_one(
     ),
 	params(FindPathParams)
 )]
-
 #[put("/{storage_repository_id}")]
 pub async fn update(
 	state: web::Data<AppState>,
@@ -147,8 +146,8 @@ pub async fn update(
 		UpdateStorageRepository {
 			name: form.name.clone(),
 			configuration: form.configuration.clone(),
-			updated_at: Utc::now().naive_utc()
-		}
+			updated_at: Utc::now().naive_utc(),
+		},
 	)?;
 	let res = response::StorageRepositoryDTO::from(storage_repository);
 	Ok(HttpResponse::Ok().json(res))

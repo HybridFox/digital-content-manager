@@ -119,7 +119,8 @@ pub async fn find_one(
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let (policy, permissions) = IAMPolicy::find_one(conn, Some(params.site_id), params.iam_policy_id)?;
+	let (policy, permissions) =
+		IAMPolicy::find_one(conn, Some(params.site_id), params.iam_policy_id)?;
 
 	let res = response::IAMPolicyWithPermissionsDTO::from((policy, permissions));
 	Ok(HttpResponse::Ok().json(res))

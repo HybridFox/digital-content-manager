@@ -21,6 +21,7 @@ use opentelemetry::{global, runtime::TokioCurrentThread, sdk::propagation::Trace
 use opentelemetry::sdk::{trace, Resource};
 use dotenv::dotenv;
 
+use crate::modules::iam_actions::models::iam_action::IAMAction;
 use crate::openapi::{ApiDoc};
 
 pub mod constants;
@@ -98,6 +99,7 @@ async fn main() -> std::io::Result<()> {
 
 	let conn = &mut state.get_conn().unwrap();
 	let _ = run_migrations(conn).await;
+	let _ = IAMAction::upsert(conn);
 	println!("Migrations ok");
 
 	HttpServer::new(move || {

@@ -222,6 +222,17 @@ impl From<oauth2::url::ParseError> for AppError {
 	}
 }
 
+impl From<&str> for AppError {
+	fn from(err: &str) -> Self {
+		AppError::InternalServerError(AppErrorValue {
+			message: err.to_owned(),
+			status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+			code: "GENERIC_ERROR".to_owned(),
+			..Default::default()
+		})
+	}
+}
+
 impl<T> From<SdkError<T>> for AppError {
 	fn from(err: SdkError<T>) -> Self {
 		AppError::InternalServerError(AppErrorValue {

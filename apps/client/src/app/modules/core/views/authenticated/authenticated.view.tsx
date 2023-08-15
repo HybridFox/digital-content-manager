@@ -5,6 +5,7 @@ import { IAPIError, useAuthStore } from "@ibs/shared";
 
 import { Menu } from "../../components/menu/menu.component";
 import { RootMenu } from "../../components/menu/root-menu.component";
+import { TopBar } from "../../components/top-bar/top-bar.component";
 
 import styles from './authenticated.module.scss';
 const cxBind = cx.bind(styles);
@@ -33,6 +34,7 @@ export const AuthenticatedView = () => {
 			{!siteId && <RootMenu />}
 		</div>
 		<div className={cxBind('o-authenticated-view__content')}>
+			<TopBar />
 			<Outlet />
 		</div>
 	</div>

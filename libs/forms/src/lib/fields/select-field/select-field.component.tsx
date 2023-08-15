@@ -11,37 +11,43 @@ import styles from './select-field.module.scss';
 
 const cxBind = cx.bind(styles);
 
-export const SelectField: FC<ISelectFieldProps> = ({
-	name,
-	label,
-	placeholder,
-	fieldConfiguration,
-	fieldOptions,
-}: ISelectFieldProps) => {
+export const SelectField: FC<ISelectFieldProps> = ({ name, label, placeholder, fieldConfiguration, field }: ISelectFieldProps) => {
 	const { control } = useFormContext();
 
-	const renderField = ({
-		field: { onChange, value },
-		formState: { errors },
-	}: IRenderControllerField) => {
-		const mappedValue = (fieldConfiguration?.options as ISelectOptions[] || []).find(({ value: optionValue }) => optionValue === value)
+	const getMappedValue = (value: string | string[]): ISelectOptions | ISelectOptions[] | undefined => {
+		if (Array.isArray(value)) {
+			return ((fieldConfiguration?.options as ISelectOptions[]) || []).filter(({ value: optionValue }) => value.includes(optionValue));
+		}
+
+		return ((fieldConfiguration?.options as ISelectOptions[]) || []).find(({ value: optionValue }) => optionValue === value);
+	}
+
+	const renderField = ({ field: { onChange, value }, formState: { errors } }: IRenderControllerField) => {
+		const mappedValue = getMappedValue(value);
 
 		return (
-			<div className={cxBind('a-input', {
-				'a-input--has-error': !!errors?.[name]
-			})}>
+			<div
+				className={cxBind('a-input', {
+					'a-input--has-error': !!errors?.[name],
+				})}
+			>
 				{label && (
 					<label htmlFor={name} className={cxBind('a-input__label')}>
 						{label}
 					</label>
 				)}
 				<div className={cxBind('a-input__field-wrapper')}>
-					<Select hasError={!!errors?.[name]} onChange={onChange} value={mappedValue} options={(fieldConfiguration?.options as ISelectOptions[] || [])} />
+					<Select
+						min={field?.min ?? 1}
+						max={field?.max ?? 1} 
+						hasError={!!errors?.[name]}
+						onChange={onChange}
+						value={mappedValue}
+						options={(fieldConfiguration?.options as ISelectOptions[]) || []}
+					/>
 					{errors?.[name] && (
 						<>
-							<Tooltip anchorSelect={`#${name}-err-tooltip`}>
-								{errors?.[name]?.message?.toString()}
-							</Tooltip>
+							<Tooltip anchorSelect={`#${name}-err-tooltip`}>{errors?.[name]?.message?.toString()}</Tooltip>
 							<div className={cxBind('a-input__error')} id={`${name}-err-tooltip`}>
 								<i className="las la-exclamation-triangle"></i>
 							</div>
@@ -49,8 +55,8 @@ export const SelectField: FC<ISelectFieldProps> = ({
 					)}
 				</div>
 			</div>
-		)
+		);
 	};
 
-	return <Controller control={control} name={name} render={renderField} />
+	return <Controller control={control} name={name} render={renderField} />;
 };

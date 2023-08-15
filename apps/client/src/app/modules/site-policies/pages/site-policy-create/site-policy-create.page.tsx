@@ -52,7 +52,7 @@ export const SitePolicyCreatePage = () => {
 	} = formMethods;
 
 	useEffect(() => {
-		fetchIAMActions();
+		fetchIAMActions({ pagesize: -1 });
 		setBreadcrumbs([
 			{ label: t(`BREADCRUMBS.SITE_POLICIES`), to: SITE_POLICY_PATHS.ROOT },
 			{ label: t(`BREADCRUMBS.CREATE`) },

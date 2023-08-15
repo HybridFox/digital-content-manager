@@ -24,7 +24,7 @@ pub struct FindOnePathParams {
 #[derive(Deserialize, IntoParams)]
 pub struct FindAllQueryParams {
 	page: Option<i64>,
-	pagesize: Option<i64>
+	pagesize: Option<i64>,
 }
 
 #[utoipa::path(
@@ -46,12 +46,16 @@ pub async fn create(
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let workflow = WorkflowState::create(conn, params.site_id, CreateWorkflowState {
-		name: form.name.clone(),
-		slug: slugify(&form.name),
-		description: form.description.clone(),
-		technical_state: form.technical_state.clone()
-	})?;
+	let workflow = WorkflowState::create(
+		conn,
+		params.site_id,
+		CreateWorkflowState {
+			name: form.name.clone(),
+			slug: slugify(&form.name),
+			description: form.description.clone(),
+			technical_state: form.technical_state.clone(),
+		},
+	)?;
 	let res = response::WorkflowStateDTO::from(workflow);
 	Ok(HttpResponse::Ok().json(res))
 }

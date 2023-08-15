@@ -44,12 +44,12 @@ export const Menu = () => {
 						</NavLink>
 					</li>
 					<li>
-						{/* <HasPermission action='resources/read' resource='*'> */}
+						<HasPermission action='resources/read' resource='*'>
 							<NavLink {...navLinkBinding} to={generatePath(RESOURCE_PATHS.ROOT, { siteId })}>
 								<i className="las la-photo-video"></i>
 								<span>Resources</span>
 							</NavLink>
-						{/* </HasPermission> */}
+						</HasPermission>
 					</li>
 				</ul>
 			</div>
@@ -157,16 +157,6 @@ export const Menu = () => {
 					<NavLink {...navLinkBinding} to="/auth"><i className="las la-invoice"></i>Workflows</NavLink>
 				</li> */}
 				</ul>
-			</div>
-			<div className={cxBind('o-menu__profile')}>
-				<img src={user?.avatar} alt="avatar" className={cxBind('o-menu__profile__avatar')} />
-				<div className={cxBind('o-menu__profile__info')}>
-					<p className={cxBind('o-menu__profile__name')}>{user?.name}</p>
-					<p className={cxBind('o-menu__profile__email')}>{user?.email}</p>
-				</div>
-				<NavLink {...navLinkBinding} to="/" className={cxBind('o-menu__profile__settings')}>
-					<i className="las la-ellipsis-h"></i>
-				</NavLink>
 			</div>
 		</div>
 	);

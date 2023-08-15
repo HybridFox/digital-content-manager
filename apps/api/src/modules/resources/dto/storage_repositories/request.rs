@@ -7,12 +7,12 @@ use utoipa::ToSchema;
 pub struct CreateStorageRepositoryDTO {
 	pub name: String,
 	pub kind: String,
-	pub configuration: Value
+	pub configuration: Value,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct UpdateStorageRepositoryDTO {
 	pub name: Option<String>,
-	pub configuration: Option<Value>
+	pub configuration: Option<Value>,
 }

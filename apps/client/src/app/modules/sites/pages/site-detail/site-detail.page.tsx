@@ -4,8 +4,8 @@ import {
 	useLanguageStore
 } from '@ibs/shared';
 import { useEffect } from 'react';
-import { CheckboxField, TextField } from '@ibs/forms';
-import { useTranslation } from 'react-i18next';
+import { CheckboxField, SelectField, TextField } from '@ibs/forms';
+import { Trans, useTranslation } from 'react-i18next';
 import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -55,7 +55,7 @@ export const SiteDetailPage = () => {
 		fetchLanguages({ pagesize: -1 });
 		setBreadcrumbs([
 			{ label: t(`BREADCRUMBS.SITES`), to: SITE_PATHS.ROOT },
-			{ label: t(`BREADCRUMBS.CREATE`) },
+			{ label: t(`BREADCRUMBS.EDIT`) },
 		]);
 	}, []);
 
@@ -80,7 +80,7 @@ export const SiteDetailPage = () => {
 		<>
 			<Header
 				breadcrumbs={breadcrumbs}
-				title={t('SITES.TITLES.CREATE')}
+				title={<Trans t={t} i18nKey="SITES.TITLES.EDIT" values={{ siteName: site?.name || '...' }} />}
 			></Header>
 			<div className="u-margin-top">
 				<Loading loading={languagesLoading || siteLoading}>
@@ -93,7 +93,12 @@ export const SiteDetailPage = () => {
 								<TextField name="name" label="Name" />
 							</div>
 							<div className="u-margin-bottom">
-								<CheckboxField name='languages' fieldConfiguration={{ options: languages.map((language) => ({ label: language.name, value: language.id })) }} label='Languages' />
+								<SelectField
+									name="languages"
+									field={{ min: 1, max: 0 }}
+									fieldConfiguration={{ options: languages.map((language) => ({ label: language.name, value: language.id })) }}
+									label="Languages"
+								/>
 							</div>
 							<Button htmlType={HTMLButtonTypes.SUBMIT} disabled={!!Object.keys(errors).length}>
 								{updateSiteLoading && <i className="las la-redo-alt la-spin"></i>} Save

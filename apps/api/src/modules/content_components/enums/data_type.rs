@@ -16,7 +16,7 @@ pub enum DataTypeEnum {
 	OBJECT,
 	NUMBER,
 	BOOLEAN,
-	REFERENCE
+	REFERENCE,
 }
 
 impl ToSql<DataTypes, Pg> for DataTypeEnum {

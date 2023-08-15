@@ -24,8 +24,8 @@ pub struct SiteUser {
 impl SiteUser {
 	pub fn create(
 		conn: &mut PgConnection,
-		user_id: Uuid,
 		site_id: Uuid,
+		user_id: Uuid,
 	) -> Result<Vec<Self>, AppError> {
 		let permissions_iam_actions = diesel::insert_into(sites_users::table)
 			.values(CreateSiteUser { user_id, site_id })
@@ -33,6 +33,34 @@ impl SiteUser {
 			.get_results(conn)?;
 
 		Ok(permissions_iam_actions)
+	}
+	
+	pub fn upsert(
+		conn: &mut PgConnection,
+		site_id: Uuid,
+		user_id: Uuid,
+	) -> Result<(), AppError> {
+		diesel::insert_into(sites_users::table)
+			.values(CreateSiteUser { user_id, site_id })
+			.on_conflict((sites_users::user_id, sites_users::site_id))
+			.do_nothing()
+			.returning(SiteUser::as_returning())
+			.get_results(conn)?;
+
+		Ok(())
+	}
+	
+	pub fn remove(
+		conn: &mut PgConnection,
+		site_id: Uuid,
+		user_id: Uuid,
+	) -> Result<(), AppError> {
+		let target = sites_users::table
+		.filter(sites_users::user_id.eq(user_id))
+		.filter(sites_users::site_id.eq(site_id));
+		diesel::delete(target).execute(conn)?;
+
+		Ok(())
 	}
 }
 

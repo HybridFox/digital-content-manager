@@ -9,12 +9,12 @@ use super::lib::{StorageEngine, ResourceItem, ResourceItemKind};
 
 #[derive(Debug, Clone)]
 pub struct FsStorageEngine {
-	pub config: Value
+	pub config: Value,
 }
 
 #[derive(Debug, Clone)]
 pub struct FsStorageEngineConfig {
-	pub base_path: String
+	pub base_path: String,
 }
 
 fn clean_path(path: &str) -> &str {
@@ -32,7 +32,9 @@ impl StorageEngine for FsStorageEngine {
 	async fn find_all(&self, path: &str) -> Result<(Vec<ResourceItem>, i64), AppError> {
 		let config = get_config(&self.config);
 		let current_dir = current_dir()?;
-		let location = Path::new(&current_dir).join(config.base_path).join(clean_path(path));
+		let location = Path::new(&current_dir)
+			.join(config.base_path)
+			.join(clean_path(path));
 		let dir_result = fs::read_dir(&location)?;
 
 		let resource_items = dir_result
@@ -42,7 +44,11 @@ impl StorageEngine for FsStorageEngine {
 				let name = (&resource).clone().file_name().to_str().unwrap().to_owned();
 
 				let guess = mime_guess::from_path(&name);
-				let mime_type = if guess.is_empty() { None } else { Some(guess.first().unwrap().to_string()) };
+				let mime_type = if guess.is_empty() {
+					None
+				} else {
+					Some(guess.first().unwrap().to_string())
+				};
 
 				Ok(ResourceItem {
 					name,
@@ -77,7 +83,10 @@ impl StorageEngine for FsStorageEngine {
 
 	async fn upload_file(&self, path: &str, file: TempFile) -> Result<(), AppError> {
 		let config = get_config(&self.config);
-		let location = Path::new(".").join(config.base_path).join(clean_path(path)).join(file.file_name.unwrap());
+		let location = Path::new(".")
+			.join(config.base_path)
+			.join(clean_path(path))
+			.join(file.file_name.unwrap());
 		fs::rename(&file.file.path(), &location)?;
 
 		Ok(())
@@ -101,7 +110,10 @@ impl StorageEngine for FsStorageEngine {
 
 	async fn create_directory(&self, path: &str, name: &str) -> Result<(), AppError> {
 		let config = get_config(&self.config);
-		let location = Path::new(".").join(config.base_path).join(clean_path(path)).join(name);
+		let location = Path::new(".")
+			.join(config.base_path)
+			.join(clean_path(path))
+			.join(name);
 		fs::create_dir_all(&location)?;
 
 		Ok(())

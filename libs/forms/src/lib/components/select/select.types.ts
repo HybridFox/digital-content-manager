@@ -10,9 +10,11 @@ export interface ISelectProps {
 	placeholder?: string;
 	options: Options<any>;
 	value?: any;
-	onChange?: (value: string | null) => void;
+	onChange?: (value: string | null | string[]) => void;
 	className?: string;
 	closeMenuOnSelect?: boolean;
 	disabled?: boolean;
 	hasError?: boolean;
+	min?: number;
+	max?: number;
 }

@@ -1,4 +1,4 @@
-import { IAPIHALResponse, IPageParameters, IUser } from "@ibs/shared";
+import { IAPIHALResponse, IPageParameters, ISite, IUser } from "@ibs/shared";
 
 export type IUsersResponse = IAPIHALResponse<'users', IUser>
 
@@ -19,6 +19,10 @@ export interface IUserStoreState {
 
 	removeUser: (userId: string) => Promise<void>;
 	removeUserLoading: boolean;
+
+	fetchUserSites: (userId: string, params?: IPageParameters) => Promise<void>;
+	userSites: ISite[];
+	userSitesLoading: boolean;
 }
 
 export interface IUserCreateDTO {

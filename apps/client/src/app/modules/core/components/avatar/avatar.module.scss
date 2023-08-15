@@ -1,0 +1,19 @@
+@use '/src/assets/scss/tools' as tools;
+
+.o-avatar {
+	height: 40px;
+	width: 40px;
+	border-radius: 50%;
+	overflow: hidden;
+
+	&__fallback {
+		height: 100%;
+		width: 100%;
+		background-color: var(--color-secondary);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.2rem;
+		font-weight: bold;
+	}
+}

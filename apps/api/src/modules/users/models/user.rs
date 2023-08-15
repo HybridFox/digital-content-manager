@@ -265,8 +265,7 @@ impl User {
 		pagesize: i64,
 	) -> Result<(Vec<(Self, Vec<Role>)>, i64), AppError> {
 		let query = {
-			let mut query = users::table
-				.into_boxed();
+			let mut query = users::table.into_boxed();
 
 			if pagesize != -1 {
 				query = query.offset((page - 1) * pagesize).limit(pagesize);
@@ -295,9 +294,7 @@ impl User {
 			})
 			.collect::<Vec<(Self, Vec<Role>)>>();
 
-		let total_elements = users::table
-			.count()
-			.get_result::<i64>(conn)?;
+		let total_elements = users::table.count().get_result::<i64>(conn)?;
 
 		Ok((users_with_roles, total_elements))
 	}
@@ -314,10 +311,7 @@ impl User {
 		Ok(user)
 	}
 
-	pub fn remove(
-		conn: &mut PgConnection,
-		user_id: Uuid
-	) -> Result<(), AppError> {
+	pub fn remove(conn: &mut PgConnection, user_id: Uuid) -> Result<(), AppError> {
 		let target = users::table.find(user_id);
 		diesel::delete(target).execute(conn)?;
 		Ok(())
@@ -465,10 +459,7 @@ impl User {
 	pub fn get_roles(
 		&self,
 		conn: &mut PgConnection,
-	) -> Result<
-		Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
-		AppError,
-	> {
+	) -> Result<Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>, AppError> {
 		let roles = UserRole::belonging_to(self)
 			.inner_join(roles::table.on(roles::id.eq(users_roles::role_id)))
 			.select(Role::as_select())

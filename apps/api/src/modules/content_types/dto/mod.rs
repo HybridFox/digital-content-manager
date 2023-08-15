@@ -1,2 +1,2 @@
-pub mod fields;
 pub mod content_types;
+pub mod fields;

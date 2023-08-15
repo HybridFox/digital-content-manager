@@ -281,7 +281,7 @@ impl ContentComponent {
 							PopulatedContentComponent {
 								content_component: cc,
 								configuration_fields: vec![],
-								fields: vec![]
+								fields: vec![],
 							},
 							field_config,
 						))

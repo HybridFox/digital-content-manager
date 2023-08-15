@@ -3,6 +3,10 @@
 	width: 100%;
 }
 
+.u-justify-content-end {
+	justify-content: flex-end;
+}
+
 .u-margin-top-lg {
     margin-top: var(--spacer-lg);
 }
@@ -17,6 +21,10 @@
 
 .u-margin-top-xs {
     margin-top: var(--spacer-xs);
+}
+
+.u-margin-top-xxxs {
+    margin-top: var(--spacer-xxxs);
 }
 
 .u-margin-bottom-lg {
@@ -37,6 +45,10 @@
 
 .u-margin-bottom-xs {
     margin-bottom: var(--spacer-xs);
+}
+
+.u-margin-bottom-xxxs {
+    margin-bottom: var(--spacer-xxxs);
 }
 
 .u-margin-left-auto {

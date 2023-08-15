@@ -86,7 +86,7 @@ pub async fn find_all(
 			size: pagesize,
 			total_elements,
 			total_pages: (total_elements / pagesize + (total_elements % pagesize).signum()).max(1),
-		}
+		},
 	));
 
 	Ok(HttpResponse::Ok().json(res))

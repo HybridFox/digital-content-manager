@@ -47,11 +47,13 @@ impl Role {
 		Ok((role, policies))
 	}
 
-	pub fn find_one(conn: &mut PgConnection, site_id: Option<Uuid>, id: Uuid) -> Result<Self, AppError> {
+	pub fn find_one(
+		conn: &mut PgConnection,
+		site_id: Option<Uuid>,
+		id: Uuid,
+	) -> Result<Self, AppError> {
 		let query = {
-			let mut query = roles::table
-				.filter(roles::id.eq(id))
-				.into_boxed();
+			let mut query = roles::table.filter(roles::id.eq(id)).into_boxed();
 
 			if site_id.is_some() {
 				query = query.filter(roles::site_id.eq(site_id))
@@ -81,9 +83,7 @@ impl Role {
 		pagesize: i64,
 	) -> Result<(Vec<(Self, Vec<IAMPolicy>)>, i64), AppError> {
 		let query = {
-			let mut query = roles::table
-				.select(Role::as_select())
-				.into_boxed();
+			let mut query = roles::table.select(Role::as_select()).into_boxed();
 
 			if site_id.is_some() {
 				query = query.filter(roles::site_id.eq(site_id))

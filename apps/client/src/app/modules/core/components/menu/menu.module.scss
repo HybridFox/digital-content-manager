@@ -15,10 +15,12 @@
 		font-weight: 700;
 		font-size: 1.5rem;
 		margin: var(--spacer-lg) var(--spacer-lg) var(--spacer) var(--spacer-lg);
-		padding-bottom: var(--spacer-lg);
-		border-bottom: 1px solid var(--color-gray-lightest);
+		padding: var(--spacer-xs) 0 calc(#{var(--spacer-lg)} + 6px) 0;
+		border-bottom: 2px solid var(--color-secondary);
 
 		@include tools.to('md') {
+			padding: var(--spacer-xs) 0 calc(#{var(--spacer-lg)} + 2px) 0;
+
 			span {
 				display: none;
 			}
@@ -100,46 +102,6 @@
 			&::after {
 				background-color: var(--color-gray-light);	
 			}
-		}
-	}
-
-	&__profile {
-		border-top: 1px solid var(--color-gray-lightest);
-		padding-top: var(--spacer);
-		margin: auto var(--spacer-lg) var(--spacer-lg) var(--spacer-lg);
-		// background-color: var(--color-gray-lightest);
-		// border-radius: var(--border-radius);
-		// padding: var(--spacer-xs);
-		display: flex;
-		align-items: center;
-
-		&__avatar {
-			height: 50px;
-			width: 50px;
-			border-radius: 50%;
-		}
-
-		&__info {
-			margin-left: var(--spacer)
-		}
-
-		&__name {
-			margin: 0;
-			font-weight: bold;
-			color: var(--color-gray-darkest);
-		}
-
-		&__email {
-			margin: 0;
-			margin-top: var(--spacer-xxs);
-			color: var(--color-gray-dark);
-			font-size: 0.8rem;
-		}
-
-		&__settings {
-			margin-left: auto;
-			display: block;
-			padding: var(--spacer);
 		}
 	}
 }

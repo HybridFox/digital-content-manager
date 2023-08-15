@@ -1,7 +1,9 @@
 use crate::modules::{
-	content_types::models::content_type::{ContentType, ContentTypeKindEnum, PopulatedContentTypeField},
+	content_types::models::content_type::{
+		ContentType, ContentTypeKindEnum, PopulatedContentTypeField,
+	},
 	core::models::hal::{HALLinkList, HALPage},
-	content_components::dto::content_components::response::FieldWithContentComponentDTO
+	content_components::dto::content_components::response::FieldWithContentComponentDTO,
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
@@ -32,7 +34,10 @@ impl From<(ContentType, Vec<PopulatedContentTypeField>)> for ContentTypeWithFiel
 			kind: content_type.kind,
 			workflow_id: content_type.workflow_id,
 			description: content_type.description,
-			fields: fields.into_iter().map(FieldWithContentComponentDTO::from).collect(),
+			fields: fields
+				.into_iter()
+				.map(FieldWithContentComponentDTO::from)
+				.collect(),
 			created_at: content_type.created_at,
 			updated_at: content_type.updated_at,
 		}
@@ -49,7 +54,7 @@ pub struct ContentTypeDTO {
 	pub workflow_id: Uuid,
 	pub description: Option<String>,
 	pub created_at: NaiveDateTime,
-	pub updated_at: NaiveDateTime
+	pub updated_at: NaiveDateTime,
 }
 
 impl From<ContentType> for ContentTypeDTO {
@@ -80,20 +85,8 @@ pub struct ContentTypesDTO {
 	pub _embedded: ContentTypesEmbeddedDTO,
 }
 
-impl
-	From<(
-		Vec<ContentType>,
-		HALPage,
-		Uuid,
-	)> for ContentTypesDTO
-{
-	fn from(
-		(content_types, page, site_id): (
-			Vec<ContentType>,
-			HALPage,
-			Uuid,
-		),
-	) -> Self {
+impl From<(Vec<ContentType>, HALPage, Uuid)> for ContentTypesDTO {
+	fn from((content_types, page, site_id): (Vec<ContentType>, HALPage, Uuid)) -> Self {
 		Self {
 			_links: HALLinkList::from((format!("/api/v1/sites/{}/content-types", site_id), &page)),
 			_embedded: ContentTypesEmbeddedDTO {

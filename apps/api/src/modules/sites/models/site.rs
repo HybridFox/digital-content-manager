@@ -1,6 +1,6 @@
 use crate::modules::languages::models::language::Language;
 use crate::{errors::AppError, schema::sites_languages};
-use crate::schema::{sites, languages};
+use crate::schema::{sites, languages, sites_users};
 use chrono::NaiveDateTime;
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
@@ -10,6 +10,7 @@ use tracing::instrument;
 use uuid::Uuid;
 
 use super::site_language::SiteLanguage;
+use super::site_user::SiteUser;
 
 #[derive(Identifiable, Queryable, Selectable, Serialize, Deserialize, Debug, Clone)]
 #[diesel(table_name = sites)]
@@ -60,9 +61,16 @@ impl Site {
 		conn: &mut PgConnection,
 		page: i64,
 		pagesize: i64,
-	) -> Result<(Vec<(Self, Vec<Language>)>, i64), AppError> {
+		user_id: Uuid,
+	) -> Result<(Vec<(Self, Option<bool>, Vec<Language>)>, i64), AppError> {
 		let query = {
-			let mut query = sites::table.into_boxed();
+			let mut query = sites::table
+				.left_join(
+					sites_users::table.on(sites_users::site_id
+						.eq(sites::id)
+						.and(sites_users::user_id.eq(user_id))),
+				)
+				.into_boxed();
 
 			if pagesize != -1 {
 				query = query.offset((page - 1) * pagesize).limit(pagesize);
@@ -71,25 +79,37 @@ impl Site {
 			query
 		};
 
-		let sites = query.select(Site::as_select()).load::<Site>(conn)?;
+		let sites: Vec<(Site, Option<SiteUser>)> = query
+			.select((Site::as_select(), Option::<SiteUser>::as_select()))
+			.load::<(Site, Option<SiteUser>)>(conn)?;
 
-		let languages = SiteLanguage::belonging_to(&sites)
-			.inner_join(languages::table.on(languages::id.eq(sites_languages::language_id)))
-			.select((SiteLanguage::as_select(), Language::as_select()))
-			.load::<(SiteLanguage, Language)>(conn)?;
-		let grouped_languages = languages.grouped_by(&sites);
+		let languages = SiteLanguage::belonging_to(
+			&sites
+				.iter()
+				.map(|(site, _site_user)| site)
+				.collect::<Vec<&Site>>(),
+		)
+		.inner_join(languages::table.on(languages::id.eq(sites_languages::language_id)))
+		.select((SiteLanguage::as_select(), Language::as_select()))
+		.load::<(SiteLanguage, Language)>(conn)?;
+		let grouped_languages = languages.grouped_by(
+			&sites
+				.iter()
+				.map(|(site, _site_user)| site)
+				.collect::<Vec<&Site>>(),
+		);
 
 		let result = sites
 			.into_iter()
 			.zip(grouped_languages)
-			.map(|(site, site_languages)| {
+			.map(|((site, site_user), site_languages)| {
 				let languages = site_languages
 					.into_iter()
 					.map(|(_site_language, language)| language)
 					.collect::<Vec<Language>>();
-				(site, languages)
+				(site, Some(site_user.is_some()), languages)
 			})
-			.collect::<Vec<(Self, Vec<Language>)>>();
+			.collect::<Vec<(Self, Option<bool>, Vec<Language>)>>();
 
 		let total_elements = sites::table.count().get_result::<i64>(conn)?;
 

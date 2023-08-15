@@ -2,7 +2,10 @@ use serde::{Serialize, Deserialize};
 use utoipa::ToSchema;
 use uuid::Uuid;
 
-use crate::modules::{core::models::hal::{HALLinkList, HALPage}, languages::models::language::Language};
+use crate::modules::{
+	core::models::hal::{HALLinkList, HALPage},
+	languages::models::language::Language,
+};
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct LanguageDTO {

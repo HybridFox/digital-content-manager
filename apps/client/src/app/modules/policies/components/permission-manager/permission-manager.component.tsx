@@ -16,6 +16,11 @@ export const PermissionManager: FC<IPermissionManagerProps> = ({ name, iamAction
 		name,
 	});
 
+	const handleCopy = (index: number): void => {
+		const indexValues = fields[index];
+		append(indexValues);
+	}
+
 	return (
 		<div className={cxBind('o-permission-manager')}>
 			<div className={cxBind('o-permission-manager__permissions')}>
@@ -35,7 +40,10 @@ export const PermissionManager: FC<IPermissionManagerProps> = ({ name, iamAction
 							</div>
 						</div>
 						<div className={cxBind('o-permission-manager__permission__actions')}>
-							<Button size={ButtonSizes.NORMAL} type={ButtonTypes.SECONDARY} onClick={() => remove(index)}>
+							<Button size={ButtonSizes.NORMAL} type={ButtonTypes.SECONDARY} onClick={() => handleCopy(index)}>
+								<i className="las la-copy"></i>
+							</Button>
+							<Button size={ButtonSizes.NORMAL} className='u-margin-left-xs' type={ButtonTypes.SECONDARY} onClick={() => remove(index)}>
 								<i className="las la-trash"></i>
 							</Button>
 						</div>

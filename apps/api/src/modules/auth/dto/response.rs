@@ -2,7 +2,8 @@ use crate::modules::{
 	users::models::user::User,
 	sites::{dto::response::SiteWithRolesDTO, models::site::Site},
 	roles::{models::role::Role, dto::response::RoleWithPoliciesWithPermissionsDTO},
-	iam_policies::models::{iam_policy::IAMPolicy, permission::Permission}, languages::models::language::Language,
+	iam_policies::models::{iam_policy::IAMPolicy, permission::Permission},
+	languages::models::language::Language,
 };
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
@@ -41,7 +42,7 @@ impl
 		Vec<(
 			Site,
 			Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
-			Vec<Language>
+			Vec<Language>,
 		)>,
 		Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
 		String,
@@ -53,7 +54,7 @@ impl
 			Vec<(
 				Site,
 				Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
-				Vec<Language>
+				Vec<Language>,
 			)>,
 			Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>,
 			String,

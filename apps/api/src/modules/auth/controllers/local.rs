@@ -42,8 +42,15 @@ pub async fn register(
 ) -> ApiResponse {
 	let conn = &mut state.get_conn()?;
 
-	let (user, token) =
-		register_user(conn, &form.email, &form.name, &form.password, None, Some("local")).await?;
+	let (user, token) = register_user(
+		conn,
+		&form.email,
+		&form.name,
+		&form.password,
+		None,
+		Some("local"),
+	)
+	.await?;
 	let sites = user.get_sites(conn)?;
 	let roles = user.get_roles(conn)?;
 	let res = response::AuthDTO::from((user, sites, roles, token));

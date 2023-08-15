@@ -82,8 +82,13 @@ pub async fn find_all(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
 
-	let (fields, total_elements) =
-		FieldModel::find(conn, params.site_id, params.content_component_id, page, pagesize)?;
+	let (fields, total_elements) = FieldModel::find(
+		conn,
+		params.site_id,
+		params.content_component_id,
+		page,
+		pagesize,
+	)?;
 
 	let res = response::FieldsDTO::from((
 		fields,

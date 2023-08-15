@@ -10,7 +10,7 @@ export const POLICY_LIST_COLUMNS = (t: TFunction, handleRemove: (policyId: strin
 	{
 		id: 'permissions',
 		label: 'Permissions',
-		format: (permissions: IPermission[]) => permissions.map((permission, i) => <Badge className='u-margin-right-xs' key={i}>{permission.effect}: {permission.resources.join(', ')} / {permission.actions.join(', ')}</Badge>)
+		format: (permissions: IPermission[]) => permissions.map((permission, i) => <Badge className='u-margin-right-xs u-margin-top-xxxs u-margin-bottom-xxxs' key={i}>{permission.effect}: {permission.resources.join(', ')} / {permission.actions.join(', ')}</Badge>)
 	},
 	{
 		id: 'actions',

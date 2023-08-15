@@ -28,10 +28,7 @@ impl UserRole {
 		role_id: Uuid,
 	) -> Result<Vec<Self>, AppError> {
 		let user_role = diesel::insert_into(users_roles::table)
-			.values(CreateUserRole {
-				user_id,
-				role_id,
-			})
+			.values(CreateUserRole { user_id, role_id })
 			.returning(UserRole::as_returning())
 			.get_results(conn)?;
 
@@ -43,16 +40,12 @@ impl UserRole {
 		user_id: Uuid,
 		role_ids: Vec<Uuid>,
 	) -> Result<Vec<Self>, AppError> {
-		let target = users_roles::table
-			.filter(users_roles::user_id.eq(user_id));
+		let target = users_roles::table.filter(users_roles::user_id.eq(user_id));
 		diesel::delete(target).execute(conn)?;
 
 		let insert_items: Vec<CreateUserRole> = role_ids
 			.into_iter()
-			.map(|role_id| CreateUserRole {
-				user_id,
-				role_id,
-			})
+			.map(|role_id| CreateUserRole { user_id, role_id })
 			.collect();
 
 		let permissions_iam_actions = diesel::insert_into(users_roles::table)

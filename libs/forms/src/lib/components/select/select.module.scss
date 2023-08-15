@@ -24,11 +24,37 @@
 		}
 	}
 
+	&__value-container {
+		overflow: visible !important;
+	}
+
 	&__menu {
 		background-color: var(--color-gray-lightest);
 		padding: var(--spacer-xs) 0;
 		border-radius: var(--border-radius-sm);
 		margin-top: var(--spacer-xs)
+	}
+
+	&__multi-value {
+		background-color: var(--color-gray-lightest);
+		border-radius: var(--border-radius-sm);
+		margin-right: var(--spacer-xs);
+		overflow: hidden;
+		margin-top: -1px;
+
+		&__label {
+			padding: var(--spacer-xxxs) var(--spacer-xs);
+		}
+
+		&__remove {
+			padding: var(--spacer-xxxs) var(--spacer-xxs);
+			background-color: var(--color-state-danger-light);
+			cursor: pointer;
+
+			&:hover {
+				background-color: var(--color-state-danger);
+			}
+		}
 	}
 
 	&__option {
@@ -37,9 +63,13 @@
 		&--active {
 			background-color: var(--color-primary);
 		}
+		
+		&--focus {
+			background-color: var(--color-gray-light);
+		}
 
 		&:hover {
-			background-color: var(--color-gray-lighter);
+			background-color: var(--color-gray-light);
 		}
 	}
 

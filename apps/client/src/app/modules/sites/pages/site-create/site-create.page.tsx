@@ -1,10 +1,6 @@
-import {
-	IAPIError,
-	useHeaderStore,
-	useLanguageStore
-} from '@ibs/shared';
+import { IAPIError, useHeaderStore, useLanguageStore } from '@ibs/shared';
 import { useEffect } from 'react';
-import { CheckboxField, TextField } from '@ibs/forms';
+import { CheckboxField, SelectField, TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
 import { Alert, AlertTypes, Button, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -28,10 +24,7 @@ export const SiteCreatePage = () => {
 		state.languagesLoading,
 		state.fetchLanguages,
 	]);
-	const [createSiteLoading, createSite] = useSiteStore((state) => [
-		state.createSiteLoading,
-		state.createSite,
-	]);
+	const [createSiteLoading, createSite] = useSiteStore((state) => [state.createSiteLoading, state.createSite]);
 	const { t } = useTranslation();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 	const formMethods = useForm<CreateSiteForm>({
@@ -46,15 +39,12 @@ export const SiteCreatePage = () => {
 
 	useEffect(() => {
 		fetchLanguages({ pagesize: -1 });
-		setBreadcrumbs([
-			{ label: t(`BREADCRUMBS.SITES`), to: SITE_PATHS.ROOT },
-			{ label: t(`BREADCRUMBS.CREATE`) },
-		]);
+		setBreadcrumbs([{ label: t(`BREADCRUMBS.SITES`), to: SITE_PATHS.ROOT }, { label: t(`BREADCRUMBS.CREATE`) }]);
 	}, []);
 
 	const onSubmit = (values: CreateSiteForm) => {
 		createSite(values)
-			.then((site) => navigate(generatePath(SITE_PATHS.DETAIL, { siteId: site.id })))
+			.then((site) => navigate(generatePath(SITE_PATHS.DETAIL, { rootSiteId: site.id })))
 			.catch((error: IAPIError) => {
 				setError('root', {
 					message: error.code,
@@ -64,10 +54,7 @@ export const SiteCreatePage = () => {
 
 	return (
 		<>
-			<Header
-				breadcrumbs={breadcrumbs}
-				title={t('SITES.TITLES.CREATE')}
-			></Header>
+			<Header breadcrumbs={breadcrumbs} title={t('SITES.TITLES.CREATE')}></Header>
 			<div className="u-margin-top">
 				<Loading loading={languagesLoading}>
 					<FormProvider {...formMethods}>
@@ -79,7 +66,12 @@ export const SiteCreatePage = () => {
 								<TextField name="name" label="Name" />
 							</div>
 							<div className="u-margin-bottom">
-								<CheckboxField name='languages' fieldConfiguration={{ options: languages.map((language) => ({ label: language.name, value: language.id })) }} label='Languages' />
+								<SelectField
+									name="languages"
+									field={{ min: 1, max: 0 }}
+									fieldConfiguration={{ options: languages.map((language) => ({ label: language.name, value: language.id })) }}
+									label="Languages"
+								/>
 							</div>
 							<Button htmlType={HTMLButtonTypes.SUBMIT} disabled={!!Object.keys(errors).length}>
 								{createSiteLoading && <i className="las la-redo-alt la-spin"></i>} Save

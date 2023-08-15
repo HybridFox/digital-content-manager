@@ -5,4 +5,5 @@ export interface IPermissionProp {
 	resource: string;
 	action: string;
 	children: ReactNode;
+	siteId?: string;
 }

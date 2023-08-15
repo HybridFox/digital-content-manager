@@ -1,6 +1,8 @@
 use crate::modules::{
-	workflows::models::{workflow_state::WorkflowState, workflow_state::WorkflowTechnicalStateEnum},
-	core::models::hal::{HALLinkList, HALPage}
+	workflows::models::{
+		workflow_state::WorkflowState, workflow_state::WorkflowTechnicalStateEnum,
+	},
+	core::models::hal::{HALLinkList, HALPage},
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
@@ -23,12 +25,8 @@ pub struct WorkflowStateDTO {
 	pub updated_at: NaiveDateTime,
 }
 
-impl
-	From<WorkflowState> for WorkflowStateDTO
-{
-	fn from(
-		workflow_state: WorkflowState,
-	) -> Self {
+impl From<WorkflowState> for WorkflowStateDTO {
+	fn from(workflow_state: WorkflowState) -> Self {
 		Self {
 			id: workflow_state.id,
 			name: workflow_state.name,
@@ -57,22 +55,13 @@ pub struct WorkflowStatesDTO {
 	pub _embedded: WorkflowStatesEmbeddedDTO,
 }
 
-impl
-	From<(
-		Vec<WorkflowState>,
-		HALPage,
-		Uuid,
-	)> for WorkflowStatesDTO
-{
-	fn from(
-		(workflow_states, page, site_id): (
-			Vec<WorkflowState>,
-			HALPage,
-			Uuid,
-		),
-	) -> Self {
+impl From<(Vec<WorkflowState>, HALPage, Uuid)> for WorkflowStatesDTO {
+	fn from((workflow_states, page, site_id): (Vec<WorkflowState>, HALPage, Uuid)) -> Self {
 		Self {
-			_links: HALLinkList::from((format!("/api/v1/sites/{}/workflow-states", site_id), &page)),
+			_links: HALLinkList::from((
+				format!("/api/v1/sites/{}/workflow-states", site_id),
+				&page,
+			)),
 			_embedded: WorkflowStatesEmbeddedDTO {
 				workflow_states: workflow_states
 					.into_iter()

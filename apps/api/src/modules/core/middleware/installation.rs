@@ -118,7 +118,6 @@ fn find_total_user_count(req: &ServiceRequest) -> Result<i64, &str> {
 	User::total_count(conn).map_err(|_err| "Cannot get total user count")
 }
 
-
 struct SkipCheckRoute {
 	path: Regex,
 	method: Method,
@@ -141,10 +140,8 @@ impl SkipCheckRoute {
 }
 
 lazy_static! {
-	static ref SKIP_CHECK_ROUTES: [SkipCheckRoute; 1] = [
-		SkipCheckRoute {
-			path: Regex::new(r"/api/v1/setup/*").unwrap(),
-			method: Method::POST,
-		},
-	];
+	static ref SKIP_CHECK_ROUTES: [SkipCheckRoute; 1] = [SkipCheckRoute {
+		path: Regex::new(r"/api/v1/setup/*").unwrap(),
+		method: Method::POST,
+	},];
 }

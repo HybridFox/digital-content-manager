@@ -11,7 +11,7 @@ pub struct CreateContentDTO {
 	pub content_type_id: Uuid,
 	pub language_id: Uuid,
 	pub translation_id: Option<Uuid>,
-	pub fields: Value
+	pub fields: Value,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
@@ -20,5 +20,5 @@ pub struct UpdateContentDTO {
 	pub name: Option<String>,
 	pub content_type_id: Uuid,
 	pub workflow_state_id: Uuid,
-	pub fields: Value
+	pub fields: Value,
 }

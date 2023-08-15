@@ -1,9 +1,10 @@
 use crate::modules::{
-	content_types::models::{
-		field::FieldModel, field_config::FieldConfigContent,
-	},
+	content_types::models::{field::FieldModel, field_config::FieldConfigContent},
 	core::models::hal::{HALLinkList, HALPage},
-	content_components::{models::content_component::PopulatedContentComponent, dto::content_components::response::FieldDTO},
+	content_components::{
+		models::content_component::PopulatedContentComponent,
+		dto::content_components::response::FieldDTO,
+	},
 };
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
@@ -25,7 +26,11 @@ pub struct FieldsDTO {
 
 impl
 	From<(
-		Vec<(FieldModel, PopulatedContentComponent, HashMap<String, FieldConfigContent>)>,
+		Vec<(
+			FieldModel,
+			PopulatedContentComponent,
+			HashMap<String, FieldConfigContent>,
+		)>,
 		HALPage,
 		Uuid,
 		Uuid,
@@ -33,7 +38,11 @@ impl
 {
 	fn from(
 		(fields, page, site_id, content_type_id): (
-			Vec<(FieldModel, PopulatedContentComponent, HashMap<String, FieldConfigContent>)>,
+			Vec<(
+				FieldModel,
+				PopulatedContentComponent,
+				HashMap<String, FieldConfigContent>,
+			)>,
 			HALPage,
 			Uuid,
 			Uuid,

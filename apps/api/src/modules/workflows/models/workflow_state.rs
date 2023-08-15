@@ -15,20 +15,20 @@ use diesel::serialize::{self, IsNull, Output, ToSql};
 use crate::errors::AppError;
 use crate::schema::{workflow_states, sql_types::WorkflowStateTechnicalStates};
 
-#[derive(Debug, PartialEq, FromSqlRow, AsExpression, Eq, Clone, Deserialize, Serialize, ToSchema)]
+#[derive(
+	Debug, PartialEq, FromSqlRow, AsExpression, Eq, Clone, Deserialize, Serialize, ToSchema,
+)]
 #[diesel(sql_type = WorkflowStateTechnicalStates)]
 pub enum WorkflowTechnicalStateEnum {
 	DRAFT,
-	PUBLISHED
+	PUBLISHED,
 }
 
 impl ToSql<WorkflowStateTechnicalStates, Pg> for WorkflowTechnicalStateEnum {
 	fn to_sql<'b>(&'b self, out: &mut Output<'b, '_, Pg>) -> serialize::Result {
 		match *self {
 			WorkflowTechnicalStateEnum::DRAFT => out.write_all(b"DRAFT")?,
-			WorkflowTechnicalStateEnum::PUBLISHED => {
-				out.write_all(b"PUBLISHED")?
-			}
+			WorkflowTechnicalStateEnum::PUBLISHED => out.write_all(b"PUBLISHED")?,
 		}
 		Ok(IsNull::No)
 	}
@@ -104,7 +104,9 @@ impl WorkflowState {
 			query
 		};
 
-		let workflow_states = query.select(WorkflowState::as_select()).load::<WorkflowState>(conn)?;
+		let workflow_states = query
+			.select(WorkflowState::as_select())
+			.load::<WorkflowState>(conn)?;
 
 		let total_elements = workflow_states::table
 			// .filter(content::site_id.eq(site_id))

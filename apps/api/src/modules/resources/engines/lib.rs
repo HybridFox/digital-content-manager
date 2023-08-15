@@ -1,4 +1,7 @@
-use crate::{errors::{AppError, AppErrorValue}, modules::resources::models::storage_repository::StorageRepository};
+use crate::{
+	errors::{AppError, AppErrorValue},
+	modules::resources::models::storage_repository::StorageRepository,
+};
 use actix_multipart::form::tempfile::TempFile;
 use chrono::NaiveDateTime;
 use diesel::PgConnection;
@@ -12,7 +15,7 @@ use super::{fs::FsStorageEngine, s3::S3StorageEngine};
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub enum ResourceItemKind {
 	FILE,
-	DIRECTORY
+	DIRECTORY,
 }
 
 #[derive(Debug, Clone)]
@@ -41,21 +44,24 @@ pub fn get_storage_engine(
 	conn: &mut PgConnection,
 	storage_repository_id: Uuid,
 ) -> Result<Box<dyn StorageEngine>, AppError> {
-
 	let storage_repository = StorageRepository::find_one(conn, storage_repository_id)?;
 
 	match storage_repository.kind.as_str() {
 		"LOCAL_FS" => Ok(Box::new({
-			FsStorageEngine { config: storage_repository.configuration }
+			FsStorageEngine {
+				config: storage_repository.configuration,
+			}
 		})),
 		"S3_BUCKET" => Ok(Box::new({
-			S3StorageEngine { config: storage_repository.configuration }
+			S3StorageEngine {
+				config: storage_repository.configuration,
+			}
 		})),
 		_ => Err(AppError::UnprocessableEntity(AppErrorValue {
 			message: "Storage engine is not implemented".to_owned(),
 			status: StatusCode::UNPROCESSABLE_ENTITY.as_u16(),
 			code: "STORAGE_ENGINE_NOT_IMPLEMENTED".to_owned(),
 			..Default::default()
-		}))
+		})),
 	}
 }

@@ -21,7 +21,7 @@ export const CONTENT_LIST_COLUMNS = (siteId: string, contentType: IContentType, 
 	{
 		id: 'name',
 		label: 'Name',
-		format: (value) => (value as string) || <i className="u-text--light">No content item</i>,
+		format: (value) => (value as string) || <span className="u-text--light u-text--italic">No content item</span>,
 	},
 	// {
 	// 	id: 'published',

@@ -10,7 +10,7 @@ import { IModalFooterProps, IModalProps } from './modal.types';
 const cxBind = cx.bind(styles);
 
 export const Modal: FC<IModalProps> = ({ title, children, modalOpen, onClose, size }: IModalProps) => {
-	const [isOpen, setIsOpen] = useState(true);
+	const [isOpen, setIsOpen] = useState(false);
 
 	useEffect(() => {
 		setIsOpen(modalOpen);
@@ -21,6 +21,11 @@ export const Modal: FC<IModalProps> = ({ title, children, modalOpen, onClose, si
 			onClose && onClose();
 		}
 	}, [isOpen])
+
+	// TODO: find a fix for this
+	if (!isOpen) {
+		return <></>
+	}
 
 	return (
 		<ReactModal isOpen={isOpen} className={cxBind('m-modal', `m-modal--${size}`)} onRequestClose={() => setIsOpen(false)}>

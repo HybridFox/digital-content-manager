@@ -8,6 +8,7 @@ export interface ISite {
 	updated_at: string;
 	languages: ILanguage[];
 	roles: IRole[];
+	hasPermission?: boolean;
 }
 
 export interface ILanguage {

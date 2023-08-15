@@ -7,7 +7,9 @@ use slug::slugify;
 use diesel::deserialize::{self, FromSql};
 use diesel::pg::{Pg, PgValue};
 use serde::{Deserialize, Serialize};
-use crate::modules::content_components::models::content_component::{ContentComponent, PopulatedContentComponent};
+use crate::modules::content_components::models::content_component::{
+	ContentComponent, PopulatedContentComponent,
+};
 use crate::modules::content_types::models::content_type::ContentType;
 use crate::schema::field_config;
 use uuid::Uuid;
@@ -30,9 +32,7 @@ impl ToSql<FieldTypes, Pg> for FieldTypeEnum {
 	fn to_sql<'b>(&'b self, out: &mut Output<'b, '_, Pg>) -> serialize::Result {
 		match *self {
 			FieldTypeEnum::ContentTypeField => out.write_all(b"CONTENT-TYPE_FIELD")?,
-			FieldTypeEnum::ContentCompentField => {
-				out.write_all(b"CONTENT-COMPONENT_FIELD")?
-			}
+			FieldTypeEnum::ContentCompentField => out.write_all(b"CONTENT-COMPONENT_FIELD")?,
 			FieldTypeEnum::ContentCompentConfigField => {
 				out.write_all(b"CONTENT-COMPONENT_CONFIG-FIELD")?
 			}
@@ -52,7 +52,9 @@ impl FromSql<FieldTypes, Pg> for FieldTypeEnum {
 	}
 }
 
-#[derive(Selectable, Queryable, Debug, Identifiable, Associations, Clone, Deserialize, Serialize)]
+#[derive(
+	Selectable, Queryable, Debug, Identifiable, Associations, Clone, Deserialize, Serialize,
+)]
 #[diesel(belongs_to(ContentComponent, foreign_key = content_component_id))]
 #[diesel(belongs_to(ContentType, foreign_key = parent_id))]
 #[diesel(table_name = fields)]
@@ -142,7 +144,17 @@ impl FieldModel {
 		parent_id: Uuid,
 		page: i64,
 		pagesize: i64,
-	) -> Result<(Vec<(Self, PopulatedContentComponent, HashMap<String, FieldConfigContent>)>, i64), AppError> {
+	) -> Result<
+		(
+			Vec<(
+				Self,
+				PopulatedContentComponent,
+				HashMap<String, FieldConfigContent>,
+			)>,
+			i64,
+		),
+		AppError,
+	> {
 		let fields = fields::table
 			.filter(fields::parent_id.eq(parent_id))
 			.offset((page - 1) * pagesize)
@@ -162,8 +174,15 @@ impl FieldModel {
 	#[instrument(skip(conn))]
 	pub fn populate_fields(
 		conn: &mut PgConnection,
-		fields: Vec<Self>
-	) -> Result<Vec<(Self, PopulatedContentComponent, HashMap<String, FieldConfigContent>)>, AppError> {
+		fields: Vec<Self>,
+	) -> Result<
+		Vec<(
+			Self,
+			PopulatedContentComponent,
+			HashMap<String, FieldConfigContent>,
+		)>,
+		AppError,
+	> {
 		let all_content_components = content_components::table
 			.select(ContentComponent::as_select())
 			.load::<ContentComponent>(conn)?;
@@ -181,10 +200,16 @@ impl FieldModel {
 					.iter()
 					.find(|cp| cp.id == field.content_component_id)
 					.map(|cp| cp.to_owned());
-				let populated_field_configs = ContentComponent::populate_config(conn, field_configs)?;
-				let populated_content_components = ContentComponent::populate_fields(conn, vec![content_component.unwrap()])?;
-				
-				Ok((field, populated_content_components.first().unwrap().to_owned(), populated_field_configs))
+				let populated_field_configs =
+					ContentComponent::populate_config(conn, field_configs)?;
+				let populated_content_components =
+					ContentComponent::populate_fields(conn, vec![content_component.unwrap()])?;
+
+				Ok((
+					field,
+					populated_content_components.first().unwrap().to_owned(),
+					populated_field_configs,
+				))
 			})
 			.collect::<Result<Vec<_>, AppError>>()?;
 

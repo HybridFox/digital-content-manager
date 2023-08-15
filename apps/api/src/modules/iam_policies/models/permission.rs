@@ -11,10 +11,7 @@ use serde::Deserialize;
 use uuid::Uuid;
 
 use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
-use crate::{
-	schema::permissions,
-	errors::AppError
-};
+use crate::{schema::permissions, errors::AppError};
 
 #[derive(FromSqlRow, AsExpression, serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 #[diesel(sql_type = Jsonb)]
@@ -84,7 +81,10 @@ impl Permission {
 		Ok(permission)
 	}
 
-	pub fn remove_by_policy_id(conn: &mut PgConnection, policy_id: Uuid) -> Result<Vec<Uuid>, AppError> {
+	pub fn remove_by_policy_id(
+		conn: &mut PgConnection,
+		policy_id: Uuid,
+	) -> Result<Vec<Uuid>, AppError> {
 		let permission: Vec<Permission> = permissions::table
 			.filter(permissions::iam_policy_id.eq(policy_id))
 			.select(Self::as_select())

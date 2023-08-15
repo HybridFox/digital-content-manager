@@ -21,5 +21,5 @@ pub struct UpdateFieldDTO {
 	pub max: Option<i32>,
 	pub hidden: Option<bool>,
 	pub multi_language: Option<bool>,
-	pub config: HashMap<String, Value>
+	pub config: HashMap<String, Value>,
 }

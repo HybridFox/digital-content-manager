@@ -2,7 +2,11 @@ use serde::{Serialize, Deserialize};
 use utoipa::ToSchema;
 use uuid::Uuid;
 
-use crate::modules::{users::models::user::User, core::models::hal::{HALLinkList, HALPage}, roles::{models::role::Role, dto::response::RoleDTO}};
+use crate::modules::{
+	users::models::user::User,
+	core::models::hal::{HALLinkList, HALPage},
+	roles::{models::role::Role, dto::response::RoleDTO}, sites::{dto::response::SiteWithRolesDTO, models::site::Site}, iam_policies::models::{permission::Permission, iam_policy::IAMPolicy}, languages::models::language::Language,
+};
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct UserDTO {
@@ -26,7 +30,7 @@ pub struct UserWithRolesDTO {
 	id: Uuid,
 	email: String,
 	name: String,
-	roles: Vec<RoleDTO>
+	roles: Vec<RoleDTO>,
 }
 
 impl From<(User, Vec<Role>)> for UserWithRolesDTO {
@@ -35,7 +39,7 @@ impl From<(User, Vec<Role>)> for UserWithRolesDTO {
 			id: user.id,
 			email: user.email,
 			name: user.name,
-			roles: roles.into_iter().map(RoleDTO::from).collect()
+			roles: roles.into_iter().map(RoleDTO::from).collect(),
 		}
 	}
 }
@@ -60,6 +64,33 @@ impl From<(Vec<(User, Vec<Role>)>, HALPage, Uuid)> for UsersDTO {
 				users: users
 					.into_iter()
 					.map(|user| UserWithRolesDTO::from(user))
+					.collect(),
+			},
+			_page: page,
+		}
+	}
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+pub struct SitesWithRolesEmbeddedDTO {
+	pub sites: Vec<SiteWithRolesDTO>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+pub struct SitesWithRolesDTO {
+	pub _links: HALLinkList,
+	pub _page: HALPage,
+	pub _embedded: SitesWithRolesEmbeddedDTO,
+}
+
+impl From<(Vec<(Site, Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>, Vec<Language>)>, HALPage, Uuid)> for SitesWithRolesDTO {
+	fn from((sites, page, user_id): (Vec<(Site, Vec<(Role, Vec<(IAMPolicy, Vec<(Permission, Vec<String>)>)>)>, Vec<Language>)>, HALPage, Uuid)) -> Self {
+		Self {
+			_links: HALLinkList::from((format!("/api/v1/users/{user_id}/sites"), &page)),
+			_embedded: SitesWithRolesEmbeddedDTO {
+				sites: sites
+					.into_iter()
+					.map(|site| SiteWithRolesDTO::from(site))
 					.collect(),
 			},
 			_page: page,

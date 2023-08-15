@@ -34,11 +34,10 @@ pub struct FindAllQueryParams {
 #[post("")]
 pub async fn create(
 	state: web::Data<AppState>,
-	form: web::Json<request::CreateRoleDTO>
+	form: web::Json<request::CreateRoleDTO>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let (role, policies) =
-		Role::create(conn, None, form.name.clone(), form.policies.clone())?;
+	let (role, policies) = Role::create(conn, None, form.name.clone(), form.policies.clone())?;
 	let res = response::RoleWithPoliciesDTO::from((role, policies));
 	Ok(HttpResponse::Ok().json(res))
 }
@@ -57,7 +56,7 @@ pub async fn create(
 #[get("")]
 pub async fn find_all(
 	state: web::Data<AppState>,
-	query: web::Query<FindAllQueryParams>
+	query: web::Query<FindAllQueryParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
@@ -72,7 +71,7 @@ pub async fn find_all(
 			size: pagesize,
 			total_elements,
 			total_pages: (total_elements / pagesize + (total_elements % pagesize).signum()).max(1),
-		}
+		},
 	));
 
 	Ok(HttpResponse::Ok().json(res))

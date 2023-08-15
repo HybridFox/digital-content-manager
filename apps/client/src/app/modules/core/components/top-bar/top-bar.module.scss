@@ -1,0 +1,61 @@
+@use '/src/assets/scss/tools' as tools;
+
+.o-top-bar {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	border-bottom: 2px solid var(--color-secondary);
+	padding-bottom: var(--spacer);
+	margin-bottom: var(--spacer);
+
+	&__links {
+		margin-right: var(--spacer-sm);
+	
+		ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			align-items: center;
+		}
+	}
+
+	&__link {
+		font-size: 1.5rem;
+		text-decoration: none;
+		color: var(--color-gray-darker);
+		padding: var(--spacer-sm);
+	}
+
+	&__profile {
+		// background-color: var(--color-gray-lightest);
+		// border-radius: var(--border-radius);
+		// padding: var(--spacer-xs);
+		display: flex;
+		align-items: center;
+		width: 300px;
+
+		&__info {
+			margin-left: var(--spacer)
+		}
+
+		&__name {
+			margin: 0;
+			font-weight: bold;
+			color: var(--color-gray-darkest);
+		}
+
+		&__email {
+			margin: 0;
+			margin-top: var(--spacer-xxs);
+			color: var(--color-gray-dark);
+			font-size: 0.8rem;
+		}
+
+		&__settings {
+			margin-left: auto;
+			display: block;
+			padding: var(--spacer);
+		}
+	}
+}

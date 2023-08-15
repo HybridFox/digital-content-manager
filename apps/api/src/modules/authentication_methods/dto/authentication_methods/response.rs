@@ -1,4 +1,7 @@
-use crate::modules::{core::models::hal::{HALLinkList, HALPage}, authentication_methods::models::authentication_method::AuthenticationMethod};
+use crate::modules::{
+	core::models::hal::{HALLinkList, HALPage},
+	authentication_methods::models::authentication_method::AuthenticationMethod,
+};
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -19,12 +22,8 @@ pub struct AuthenticationMethodDTO {
 	pub updated_at: NaiveDateTime,
 }
 
-impl
-	From<AuthenticationMethod> for AuthenticationMethodDTO
-{
-	fn from(
-		authentication_method: AuthenticationMethod,
-	) -> Self {
+impl From<AuthenticationMethod> for AuthenticationMethodDTO {
+	fn from(authentication_method: AuthenticationMethod) -> Self {
 		Self {
 			id: authentication_method.id,
 			name: authentication_method.name,
@@ -51,22 +50,15 @@ pub struct AuthenticationMethodsDTO {
 	pub _embedded: AuthenticationMethodsEmbeddedDTO,
 }
 
-impl
-	From<(
-		Vec<AuthenticationMethod>,
-		HALPage,
-	)> for AuthenticationMethodsDTO
-{
-	fn from(
-		(authentication_methods, page): (
-			Vec<AuthenticationMethod>,
-			HALPage,
-		),
-	) -> Self {
+impl From<(Vec<AuthenticationMethod>, HALPage)> for AuthenticationMethodsDTO {
+	fn from((authentication_methods, page): (Vec<AuthenticationMethod>, HALPage)) -> Self {
 		Self {
 			_links: HALLinkList::from((format!("/api/v1/authentication-methods"), &page)),
 			_embedded: AuthenticationMethodsEmbeddedDTO {
-				authentication_methods: authentication_methods.into_iter().map(AuthenticationMethodDTO::from).collect(),
+				authentication_methods: authentication_methods
+					.into_iter()
+					.map(AuthenticationMethodDTO::from)
+					.collect(),
 			},
 			_page: page,
 		}

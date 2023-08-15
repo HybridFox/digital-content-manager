@@ -1,5 +1,8 @@
 use super::super::dto::content_components::{request, response};
-use crate::{errors::AppError, modules::content_components::models::content_component::UpdateContentComponent};
+use crate::{
+	errors::AppError,
+	modules::content_components::models::content_component::UpdateContentComponent,
+};
 use crate::modules::content_components::models::content_component::ContentComponent;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
@@ -26,7 +29,7 @@ pub struct FindAllQueryParams {
 	page: Option<i64>,
 	pagesize: Option<i64>,
 	include_internal: Option<bool>,
-	include_hidden: Option<bool>
+	include_hidden: Option<bool>,
 }
 
 #[utoipa::path(
@@ -82,8 +85,14 @@ pub async fn find_all(
 	let include_internal = query.include_internal.unwrap_or(false);
 	let include_hidden = query.include_hidden.unwrap_or(false);
 
-	let (content_components, total_elements) =
-		ContentComponent::find(conn, params.site_id, page, pagesize, include_hidden, include_internal)?;
+	let (content_components, total_elements) = ContentComponent::find(
+		conn,
+		params.site_id,
+		page,
+		pagesize,
+		include_hidden,
+		include_internal,
+	)?;
 
 	let res = response::ContentComponentsDTO::from((
 		content_components,
@@ -121,7 +130,9 @@ pub async fn find_one(
 	let populated_content_components =
 		ContentComponent::populate_fields(conn, vec![content_component])?;
 
-	let res = response::ContentComponentWithFieldsDTO::from(populated_content_components.first().unwrap().clone());
+	let res = response::ContentComponentWithFieldsDTO::from(
+		populated_content_components.first().unwrap().clone(),
+	);
 	Ok(HttpResponse::Ok().json(res))
 }
 

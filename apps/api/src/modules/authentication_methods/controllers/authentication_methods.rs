@@ -1,6 +1,11 @@
 use super::super::dto::authentication_methods::{request, response};
-use crate::modules::authentication_methods::models::authentication_method::{CreateAuthenticationMethod, UpdateAuthenticationMethod};
-use crate::{errors::AppError, modules::authentication_methods::models::authentication_method::AuthenticationMethod};
+use crate::modules::authentication_methods::models::authentication_method::{
+	CreateAuthenticationMethod, UpdateAuthenticationMethod,
+};
+use crate::{
+	errors::AppError,
+	modules::authentication_methods::models::authentication_method::AuthenticationMethod,
+};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
@@ -45,7 +50,7 @@ pub async fn create(
 			configuration: form.configuration.clone(),
 			weight: form.weight.clone(),
 			active: form.active.clone(),
-		}
+		},
 	)?;
 	let res = response::AuthenticationMethodDTO::from(authentication_method);
 	Ok(HttpResponse::Ok().json(res))
@@ -65,13 +70,14 @@ pub async fn create(
 #[get("")]
 pub async fn find_all(
 	state: web::Data<AppState>,
-	query: web::Query<FindAllQueryParams>
+	query: web::Query<FindAllQueryParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
 
-	let (authentication_methods, total_elements) = AuthenticationMethod::find(conn, page, pagesize)?;
+	let (authentication_methods, total_elements) =
+		AuthenticationMethod::find(conn, page, pagesize)?;
 
 	let res = response::AuthenticationMethodsDTO::from((
 		authentication_methods,
@@ -80,7 +86,7 @@ pub async fn find_all(
 			size: pagesize,
 			total_elements,
 			total_pages: (total_elements / pagesize + (total_elements % pagesize).signum()).max(1),
-		}
+		},
 	));
 
 	Ok(HttpResponse::Ok().json(res))
@@ -103,7 +109,8 @@ pub async fn find_one(
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let authentication_method = AuthenticationMethod::find_one(conn, params.authentication_method_id)?;
+	let authentication_method =
+		AuthenticationMethod::find_one(conn, params.authentication_method_id)?;
 
 	let res = response::AuthenticationMethodDTO::from(authentication_method);
 	Ok(HttpResponse::Ok().json(res))
@@ -136,7 +143,7 @@ pub async fn update(
 			configuration: form.configuration.clone(),
 			weight: form.weight.clone(),
 			active: form.active.clone(),
-		}
+		},
 	)?;
 	let res = response::AuthenticationMethodDTO::from(authentication_method);
 	Ok(HttpResponse::Ok().json(res))

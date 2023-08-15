@@ -20,7 +20,10 @@ pub struct StorageRepository {
 }
 
 impl StorageRepository {
-	pub fn create(conn: &mut PgConnection, record: CreateStorageRepository) -> Result<Self, AppError> {
+	pub fn create(
+		conn: &mut PgConnection,
+		record: CreateStorageRepository,
+	) -> Result<Self, AppError> {
 		use diesel::prelude::*;
 
 		let asset = diesel::insert_into(storage_repositories::table)
@@ -49,7 +52,9 @@ impl StorageRepository {
 			.offset((page - 1) * pagesize)
 			.limit(pagesize)
 			.load::<StorageRepository>(conn)?;
-		let total_elements = storage_repositories::table.count().get_result::<i64>(conn)?;
+		let total_elements = storage_repositories::table
+			.count()
+			.get_result::<i64>(conn)?;
 
 		Ok((storage_repositories, total_elements))
 	}

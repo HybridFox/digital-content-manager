@@ -51,7 +51,7 @@ export const PolicyCreatePage = () => {
 	} = formMethods;
 
 	useEffect(() => {
-		fetchIAMActions();
+		fetchIAMActions({ pagesize: -1 });
 		setBreadcrumbs([
 			{ label: t(`BREADCRUMBS.STORAGE_REPOSITORIES`), to: POLICY_PATHS.ROOT },
 			{ label: t(`BREADCRUMBS.CREATE`) },

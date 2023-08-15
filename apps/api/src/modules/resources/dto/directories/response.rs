@@ -45,9 +45,17 @@ pub struct ResourcesDTO {
 }
 
 impl From<(Vec<ResourceItem>, HALPage, Uuid, Uuid)> for ResourcesDTO {
-	fn from((resources, page, site_id, storage_repository_id): (Vec<ResourceItem>, HALPage, Uuid, Uuid)) -> Self {
+	fn from(
+		(resources, page, site_id, storage_repository_id): (Vec<ResourceItem>, HALPage, Uuid, Uuid),
+	) -> Self {
 		Self {
-			_links: HALLinkList::from((format!("/api/v1/sites/{}/storage-repositories/{}/directories", site_id, storage_repository_id), &page)),
+			_links: HALLinkList::from((
+				format!(
+					"/api/v1/sites/{}/storage-repositories/{}/directories",
+					site_id, storage_repository_id
+				),
+				&page,
+			)),
 			_embedded: ResourcesEmbeddedDTO {
 				resources: resources
 					.into_iter()

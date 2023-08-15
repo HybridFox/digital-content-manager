@@ -132,16 +132,12 @@ impl From<(Vec<(Role, Vec<IAMPolicy>)>, HALPage, Uuid)> for SiteRolesWithPolicie
 		Self {
 			_links: HALLinkList::from((format!("/api/v1/sites/{}/roles", site_id), &page)),
 			_embedded: SiteRolesWithPoliciesEmbeddedDTO {
-				site_roles: roles
-					.into_iter()
-					.map(RoleWithPoliciesDTO::from)
-					.collect(),
+				site_roles: roles.into_iter().map(RoleWithPoliciesDTO::from).collect(),
 			},
 			_page: page,
 		}
 	}
 }
-
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct RolesWithPoliciesEmbeddedDTO {
@@ -160,10 +156,7 @@ impl From<(Vec<(Role, Vec<IAMPolicy>)>, HALPage)> for RolesWithPoliciesDTO {
 		Self {
 			_links: HALLinkList::from((format!("/api/v1/roles"), &page)),
 			_embedded: RolesWithPoliciesEmbeddedDTO {
-				roles: roles
-					.into_iter()
-					.map(RoleWithPoliciesDTO::from)
-					.collect(),
+				roles: roles.into_iter().map(RoleWithPoliciesDTO::from).collect(),
 			},
 			_page: page,
 		}

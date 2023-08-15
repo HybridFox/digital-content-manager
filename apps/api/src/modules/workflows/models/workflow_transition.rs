@@ -53,7 +53,11 @@ impl WorkflowTransition {
 		let workflows_with_transition = workflows
 			.into_iter()
 			.map(|workflow| {
-				let transitions = populated_transitions.clone().into_iter().filter(|transition| workflow.id == transition.0.workflow_id).collect();
+				let transitions = populated_transitions
+					.clone()
+					.into_iter()
+					.filter(|transition| workflow.id == transition.0.workflow_id)
+					.collect();
 				(workflow, transitions)
 			})
 			.collect();
@@ -64,7 +68,7 @@ impl WorkflowTransition {
 	#[instrument(skip(conn))]
 	pub fn populate(
 		conn: &mut PgConnection,
-		transitions: Vec<Self>
+		transitions: Vec<Self>,
 	) -> Result<Vec<(Self, WorkflowState, WorkflowState)>, AppError> {
 		let id_indices: Vec<Uuid> = transitions
 			.iter()
@@ -76,25 +80,23 @@ impl WorkflowTransition {
 			.select(WorkflowState::as_select())
 			.load::<WorkflowState>(conn)?;
 
-		Ok(
-			transitions
-				.into_iter()
-				.map(|transition| {
-					let from_state = workflow_states
-						.iter()
-						.find(|state| transition.from_workflow_state_id == state.id)
-						.unwrap()
-						.clone();
-					let to_state = workflow_states
-						.iter()
-						.find(|state| transition.to_workflow_state_id == state.id)
-						.unwrap()
-						.clone();
+		Ok(transitions
+			.into_iter()
+			.map(|transition| {
+				let from_state = workflow_states
+					.iter()
+					.find(|state| transition.from_workflow_state_id == state.id)
+					.unwrap()
+					.clone();
+				let to_state = workflow_states
+					.iter()
+					.find(|state| transition.to_workflow_state_id == state.id)
+					.unwrap()
+					.clone();
 
-					(transition, from_state, to_state)
-				})
-				.collect()
-		)
+				(transition, from_state, to_state)
+			})
+			.collect())
 	}
 
 	#[instrument(skip(conn))]

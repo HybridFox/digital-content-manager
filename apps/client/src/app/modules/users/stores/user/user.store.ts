@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
 import { DEFAULT_PAGINATION_OPTIONS, IUser, kyInstance, wrapApi } from '@ibs/shared';
 
+import { ISitesResponse } from '../../../sites/stores/site';
+
 import { IUserStoreState, IUsersResponse } from './user.types';
 
 export const useUserStore = create<IUserStoreState>()(devtools(
@@ -82,5 +84,23 @@ export const useUserStore = create<IUserStoreState>()(devtools(
 			return result;
 		},
 		removeUserLoading: false,
+
+		fetchUserSites: async (userId, searchParams) => {
+			set(() => ({ usersLoading: true }));
+			const [result, error] = await wrapApi(kyInstance.get(`/api/v1/users/${userId}/sites`, {
+				searchParams: {
+					...DEFAULT_PAGINATION_OPTIONS,
+					...searchParams,
+				}
+			}).json<ISitesResponse>());
+
+			if (error) {
+				return set(() => ({ users: [], usersLoading: false }))
+			}
+			
+			set(() => ({ userSites: result._embedded.sites, usersLoading: false }));
+		},
+		userSites: [],
+		userSitesLoading: false,
 	}), { name: 'userStore' }
 ))

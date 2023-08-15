@@ -26,11 +26,8 @@ impl AuthenticationMethod {
 	#[instrument(skip(conn))]
 	pub fn create(
 		conn: &mut PgConnection,
-		authentication_method: CreateAuthenticationMethod
-	) -> Result<
-		Self,
-		AppError,
-	> {
+		authentication_method: CreateAuthenticationMethod,
+	) -> Result<Self, AppError> {
 		let created_authentication_method = diesel::insert_into(authentication_methods::table)
 			.values(authentication_method)
 			.returning(AuthenticationMethod::as_returning())
@@ -40,13 +37,7 @@ impl AuthenticationMethod {
 	}
 
 	#[instrument(skip(conn))]
-	pub fn find_one(
-		conn: &mut PgConnection,
-		id: Uuid,
-	) -> Result<
-		Self,
-		AppError,
-	> {
+	pub fn find_one(conn: &mut PgConnection, id: Uuid) -> Result<Self, AppError> {
 		let authentication_method = authentication_methods::table.find(id).first::<Self>(conn)?;
 
 		Ok(authentication_method)
@@ -57,16 +48,9 @@ impl AuthenticationMethod {
 		conn: &mut PgConnection,
 		page: i64,
 		pagesize: i64,
-	) -> Result<
-		(
-			Vec<Self>,
-			i64,
-		),
-		AppError,
-	> {
+	) -> Result<(Vec<Self>, i64), AppError> {
 		let query = {
-			let mut query = authentication_methods::table
-				.into_boxed();
+			let mut query = authentication_methods::table.into_boxed();
 
 			if pagesize != -1 {
 				query = query.offset((page - 1) * pagesize).limit(pagesize);
@@ -75,7 +59,9 @@ impl AuthenticationMethod {
 			query
 		};
 
-		let authentication_methods = query.select(AuthenticationMethod::as_select()).load::<AuthenticationMethod>(conn)?;
+		let authentication_methods = query
+			.select(AuthenticationMethod::as_select())
+			.load::<AuthenticationMethod>(conn)?;
 		let total_elements = authentication_methods::table
 			.count()
 			.get_result::<i64>(conn)?;
@@ -88,10 +74,7 @@ impl AuthenticationMethod {
 		conn: &mut PgConnection,
 		id: Uuid,
 		changeset: UpdateAuthenticationMethod,
-	) -> Result<
-		Self,
-		AppError,
-	> {
+	) -> Result<Self, AppError> {
 		let target = authentication_methods::table.find(id);
 		let updated_authentication_method = diesel::update(target)
 			.set(changeset)
@@ -103,8 +86,10 @@ impl AuthenticationMethod {
 
 	#[instrument(skip(conn))]
 	pub fn remove(conn: &mut PgConnection, content_id: Uuid) -> Result<(), AppError> {
-		diesel::delete(authentication_methods::table.filter(authentication_methods::id.eq(content_id)))
-			.get_result::<AuthenticationMethod>(conn)?;
+		diesel::delete(
+			authentication_methods::table.filter(authentication_methods::id.eq(content_id)),
+		)
+		.get_result::<AuthenticationMethod>(conn)?;
 
 		Ok(())
 	}

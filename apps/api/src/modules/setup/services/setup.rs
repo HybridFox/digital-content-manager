@@ -32,7 +32,12 @@ pub async fn setup_initial_user(
 	PermissionIAMAction::create(conn, permission.id, vec!["*".to_string()])?;
 
 	// Asign policy to role
-	let (role, _) = Role::create(conn, None, "Default Admin Role".to_string(), vec![policy.id])?;
+	let (role, _) = Role::create(
+		conn,
+		None,
+		"Default Admin Role".to_string(),
+		vec![policy.id],
+	)?;
 
 	// Assign user to site
 	// let _site_user = SiteUser::create(conn, user.id, site.id)?;

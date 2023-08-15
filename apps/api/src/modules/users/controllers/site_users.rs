@@ -1,5 +1,5 @@
 use super::super::dto::users::{response, request};
-use crate::modules::sites::models::site_user_role::SiteUserRole;
+use crate::modules::sites::models::{site_user_role::SiteUserRole, site_user::SiteUser};
 use crate::errors::AppError;
 use crate::modules::users::models::user::User;
 use crate::modules::core::middleware::state::AppState;
@@ -57,7 +57,7 @@ pub async fn find_all(
 			total_elements,
 			total_pages: (total_elements / pagesize + (total_elements % pagesize).signum()).max(1),
 		},
-		params.site_id
+		params.site_id,
 	));
 
 	Ok(HttpResponse::Ok().json(res))
@@ -105,8 +105,13 @@ pub async fn update(
 	form: web::Json<request::UpdateSiteUserDTO>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	
-	dbg!(&form.roles);
+
+	if form.roles.len() > 0 {
+		SiteUser::upsert(conn, params.site_id, params.user_id)?;
+	} else {
+		SiteUser::remove(conn, params.site_id, params.user_id)?;
+	}
+
 	SiteUserRole::upsert_many(conn, params.site_id, params.user_id, form.roles.clone())?;
 	let user = User::find_one_with_roles_in_site(conn, params.site_id, params.user_id)?;
 	Ok(HttpResponse::Ok().json(user))

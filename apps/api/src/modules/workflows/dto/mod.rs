@@ -1,2 +1,2 @@
-pub mod workflows;
 pub mod workflow_states;
+pub mod workflows;

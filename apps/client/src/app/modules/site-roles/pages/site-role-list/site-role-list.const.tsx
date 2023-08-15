@@ -10,7 +10,7 @@ export const ROLE_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: 
 	{
 		id: 'policies',
 		label: 'Policies',
-		format: (policies: IIAMPolicy[]) => policies.map((policy) => <Badge className='u-margin-right-xs' key={policy.id}>{policy.name}</Badge>)
+		format: (policies: IIAMPolicy[]) => policies.map((policy) => <Badge className='u-margin-right-xs u-margin-top-xxxs u-margin-bottom-xxxs' key={policy.id}>{policy.name}</Badge>)
 	},
 	{
 		id: 'actions',

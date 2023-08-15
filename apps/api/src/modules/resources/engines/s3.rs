@@ -1,6 +1,11 @@
 use actix_multipart::form::tempfile::TempFile;
 use aws_credential_types::Credentials;
-use aws_sdk_s3::{Config, config::Region, Client, types::{Delete, ObjectIdentifier}};
+use aws_sdk_s3::{
+	Config,
+	config::Region,
+	Client,
+	types::{Delete, ObjectIdentifier},
+};
 use chrono::NaiveDateTime;
 use serde_json::Value;
 
@@ -17,7 +22,7 @@ fn clean_path(path: &str) -> &str {
 
 #[derive(Debug, Clone)]
 pub struct S3StorageEngine {
-	pub config: Value
+	pub config: Value,
 }
 
 #[derive(Debug, Clone)]
@@ -50,7 +55,12 @@ fn get_config(config: &Value) -> FsStorageEngineConfig {
 	}
 }
 
-async fn put_object_from_file(client: aws_sdk_s3::Client, local_path: &str, key: &str, bucket_name: &str) -> Result<usize, AppError> {
+async fn put_object_from_file(
+	client: aws_sdk_s3::Client,
+	local_path: &str,
+	key: &str,
+	bucket_name: &str,
+) -> Result<usize, AppError> {
 	let mut file = fs::File::open(local_path).await.unwrap();
 
 	let size_estimate = file
@@ -82,7 +92,11 @@ impl StorageEngine for S3StorageEngine {
 			.client
 			.list_objects_v2()
 			.delimiter("/")
-			.prefix(path)
+			.prefix(if path == "" {
+				path.to_string()
+			} else {
+				format!("{path}/")
+			})
 			.bucket(config.bucket_name)
 			.send()
 			.await?;
@@ -92,8 +106,16 @@ impl StorageEngine for S3StorageEngine {
 			.unwrap_or_default()
 			.into_iter()
 			.map(|item| {
+				let mut name = item
+					.prefix()
+					.unwrap()
+					.to_string()
+					.replace(&path, "")
+					.trim_start_matches("/")
+					.to_string();
+				name.pop();
 				Ok(ResourceItem {
-					name: item.prefix().unwrap().to_string(),
+					name,
 					kind: ResourceItemKind::DIRECTORY,
 					created_at: None,
 					updated_at: None,
@@ -107,7 +129,13 @@ impl StorageEngine for S3StorageEngine {
 			.unwrap_or_default()
 			.into_iter()
 			.map(|item| {
-				let name = item.key().unwrap().to_string();
+				let name = item
+					.key()
+					.unwrap()
+					.to_string()
+					.replace(&path, "")
+					.trim_start_matches("/")
+					.to_string();
 
 				let guess = mime_guess::from_path(&name);
 				let mime_type = if guess.is_empty() {
@@ -120,22 +148,16 @@ impl StorageEngine for S3StorageEngine {
 					name: name.clone(),
 					kind: ResourceItemKind::FILE,
 					created_at: NaiveDateTime::from_timestamp_millis(
-						item.last_modified()
-							.unwrap()
-							.to_millis()
-							.unwrap(),
+						item.last_modified().unwrap().to_millis().unwrap(),
 					),
 					updated_at: NaiveDateTime::from_timestamp_millis(
-						item.last_modified()
-							.unwrap()
-							.to_millis()
-							.unwrap(),
+						item.last_modified().unwrap().to_millis().unwrap(),
 					),
 					mime_type,
 				})
 			})
 			.collect::<Result<Vec<ResourceItem>, AppError>>()?;
-		
+
 		directories.append(&mut resource_items);
 		Ok((directories.clone(), directories.len() as i64))
 	}
@@ -143,8 +165,13 @@ impl StorageEngine for S3StorageEngine {
 	async fn upload_file(&self, path: &str, file: TempFile) -> Result<(), AppError> {
 		let key = Path::new(clean_path(path)).join(file.file_name.unwrap());
 		let config = get_config(&self.config);
-		put_object_from_file(config.client, file.file.path().to_str().unwrap(), &key.to_str().unwrap(), &config.bucket_name)
-			.await?;
+		put_object_from_file(
+			config.client,
+			file.file.path().to_str().unwrap(),
+			&key.to_str().unwrap(),
+			&config.bucket_name,
+		)
+		.await?;
 
 		Ok(())
 	}
