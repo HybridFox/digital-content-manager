@@ -19,7 +19,6 @@ use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::{EnvFilter, Registry};
 use opentelemetry::{global, runtime::TokioCurrentThread, sdk::propagation::TraceContextPropagator};
 use opentelemetry::sdk::{trace, Resource};
-use dotenv::dotenv;
 
 use crate::modules::iam_actions::models::iam_action::IAMAction;
 use crate::openapi::{ApiDoc};
@@ -85,7 +84,6 @@ fn init_telemetry() {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-	dotenv().ok();
 	init_telemetry();
 
 	println!("start server...");
