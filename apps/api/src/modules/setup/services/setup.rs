@@ -1,6 +1,6 @@
 use crate::{
 	errors::AppError,
-	modules::{core::middleware::state::AppConn, users::models::user_role::UserRole},
+	modules::{core::middleware::state::AppConn, users::models::user_role::UserRole, authentication_methods::models::authentication_method::AuthenticationMethod},
 };
 use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
 use crate::modules::iam_policies::models::permission::Permission;
@@ -20,7 +20,8 @@ pub async fn setup_initial_user(
 ) -> Result<(User, String), AppError> {
 	// TODO: move this logic somewhere seperatly? Try to implement the `service` pattern perhaps?
 	// Create the user account
-	let (user, token) = User::signup(conn, email, username, password, image, source)?;
+	let local_auth_method = AuthenticationMethod::find_local(conn)?;
+	let (user, token) = User::signup(conn, email, username, password, image, local_auth_method.id)?;
 
 	// Create a site for the user
 	// let site = Site::create(conn, &format!("{}'s site", pluralize(&user.name, 2, false)))?;

@@ -50,7 +50,6 @@ async fn not_found() -> Result<HttpResponse, AppError> {
 }
 
 fn init_telemetry() {
-	// Start a new Jaeger trace pipeline.
 	// Spans are exported in batch - recommended setup for a production application.
 	global::set_text_map_propagator(TraceContextPropagator::new());
 	let tracer = opentelemetry_otlp::new_pipeline()
@@ -76,7 +75,7 @@ fn init_telemetry() {
 	let subscriber = Registry::default()
 		.with(env_filter)
 		.with(telemetry)
-		.with(JsonStorageLayer)
+		// .with(JsonStorageLayer)
 		.with(formatting_layer);
 
 	tracing::subscriber::set_global_default(subscriber)
@@ -103,7 +102,6 @@ async fn main() -> std::io::Result<()> {
 
 	HttpServer::new(move || {
 		App::new()
-			// .wrap(Logger::default())
 			.wrap(TracingLogger::default())
 			.app_data(actix_web::web::Data::new(state.clone()))
 			.app_data(web::JsonConfig::default().error_handler(|err, _| {
@@ -115,15 +113,6 @@ async fn main() -> std::io::Result<()> {
 				})
 				.into()
 			}))
-			// .app_data(web::JsonConfig::default().error_handler(|err, _| {
-			// 	AppError::BadRequest(AppErrorValue {
-			// 		message: err.to_string(),
-			// 		status: StatusCode::BAD_REQUEST.as_u16(),
-			// 		code: "JSON_PARSE_FAILED".to_owned(),
-			// 		..Default::default()
-			// 	})
-			// 	.into()
-			// }))
 			.app_data(web::QueryConfig::default().error_handler(|err, _| {
 				AppError::BadRequest(AppErrorValue {
 					message: err.to_string(),

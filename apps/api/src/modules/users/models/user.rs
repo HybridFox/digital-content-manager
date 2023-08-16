@@ -34,9 +34,9 @@ pub struct User {
 	pub email: String,
 	pub name: String,
 	pub password: String,
-	pub source: String,
 	pub bio: Option<String>,
 	pub avatar: Option<String>,
+	pub authentication_method_id: Uuid,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 }
@@ -69,12 +69,12 @@ impl User {
 	fn find_by_email_and_source(
 		conn: &mut PgConnection,
 		email: &str,
-		source: &str,
+		authentication_method_id: Uuid,
 	) -> Result<Option<User>, diesel::result::Error> {
 		users::table
 			.select(User::as_select())
 			.filter(users::email.eq(email))
-			.filter(users::source.eq(source))
+			.filter(users::authentication_method_id.eq(authentication_method_id))
 			.limit(1)
 			.first(conn)
 			.optional()
@@ -89,7 +89,7 @@ impl User {
 		name: &'a str,
 		naive_password: &'a str,
 		avatar: Option<&'a str>,
-		source: Option<&'a str>,
+		authentication_method_id: Uuid,
 	) -> Result<(User, Token), AppError> {
 		use diesel::prelude::*;
 		let hashed_password = hasher::hash_password(naive_password)?;
@@ -99,7 +99,7 @@ impl User {
 			name,
 			password: &hashed_password,
 			avatar,
-			source,
+			authentication_method_id,
 		};
 
 		let user = diesel::insert_into(users::table)
@@ -116,8 +116,9 @@ impl User {
 		conn: &mut PgConnection,
 		email: &str,
 		naive_password: &str,
+		authentication_method_id: Uuid,
 	) -> Result<(User, Token), AppError> {
-		let user = Self::find_by_email_and_source(conn, email, "local")?;
+		let user = Self::find_by_email_and_source(conn, email, authentication_method_id)?;
 
 		match user {
 			None => Err(AppError::Unauthorized(AppErrorValue {
@@ -148,9 +149,9 @@ impl User {
 	pub fn signin_social(
 		conn: &mut PgConnection,
 		email: &str,
-		source: &str,
+		authentication_method_id: Uuid,
 	) -> Result<(User, Token), AppError> {
-		let user = Self::find_by_email_and_source(conn, email, source)?;
+		let user = Self::find_by_email_and_source(conn, email, authentication_method_id)?;
 
 		match user {
 			None => Err(AppError::NotFound(AppErrorValue {
@@ -546,7 +547,7 @@ pub struct SignupUser<'a> {
 	pub name: &'a str,
 	pub password: &'a str,
 	pub avatar: Option<&'a str>,
-	pub source: Option<&'a str>,
+	pub authentication_method_id: Uuid,
 }
 
 #[derive(AsChangeset, Debug, Deserialize, Clone)]

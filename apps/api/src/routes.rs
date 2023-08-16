@@ -25,10 +25,15 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 								.service(modules::auth::controllers::local::register),
 						)
 						.service(
-							web::scope("/google")
-								.service(modules::auth::controllers::google::login)
-								.service(modules::auth::controllers::google::callback),
+							web::scope("/{auth_id}")
+								.service(modules::auth::controllers::dynamic_auth::login)
+								.service(modules::auth::controllers::dynamic_auth::callback),
 						)
+						// .service(
+						// 	web::scope("/google")
+						// 		.service(modules::auth::controllers::google::login)
+						// 		.service(modules::auth::controllers::google::callback),
+						// )
 				)
 				.service(
 					web::scope("/sites")

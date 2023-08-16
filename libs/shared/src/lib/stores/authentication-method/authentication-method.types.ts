@@ -1,7 +1,8 @@
 import { IAPIHALResponse, IPageParameters } from "../../types";
 
 export enum AUTHENTICATION_METHOD_KINDS {
-	LOCAL = 'LOCAL'
+	LOCAL = 'LOCAL',
+	OAUTH2 = 'OAUTH2'
 }
 
 export interface IAuthenticationMethod {

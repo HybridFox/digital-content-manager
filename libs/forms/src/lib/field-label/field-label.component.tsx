@@ -11,6 +11,10 @@ export const FieldLabel: FC<IFieldLabelProps> = ({ label, multiLanguage, name }:
 	}
 
 	const renderIcon = () => {
+		if (multiLanguage === undefined) {
+			return null;
+		}
+
 		if (multiLanguage) {
 			return <span className="las la-globe" />
 		}

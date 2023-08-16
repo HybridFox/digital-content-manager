@@ -1,4 +1,4 @@
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
 import { useAuthStore } from '@ibs/shared';
 
@@ -19,7 +19,8 @@ const navLinkBinding = {
 export const TopBar = () => {
 	const { user, sites } = useAuthStore();
 	const { siteId } = useParams();
-
+	const navigate = useNavigate();
+	const [clear] = useAuthStore((state) => [state.clear]);
 	const activeSite = sites.find(({ id }) => id === siteId);
 
 	return (
@@ -28,24 +29,37 @@ export const TopBar = () => {
 			<div className={cxBind('o-top-bar__links')}>
 				<ul>
 					<li>
-						<NavLink {...navLinkBinding} to=''>
+						<NavLink {...navLinkBinding} to="">
 							<i className="las la-question-circle"></i>
 						</NavLink>
 					</li>
 					<li>
-						<NavLink {...navLinkBinding} to=''>
+						<NavLink {...navLinkBinding} to="">
 							<i className="las la-bell"></i>
 						</NavLink>
 					</li>
 					<li>
-						<NavLink {...navLinkBinding} to=''>
+						<NavLink {...navLinkBinding} to="">
 							<i className="las la-user"></i>
+						</NavLink>
+					</li>
+					<li>
+						<NavLink
+							{...navLinkBinding}
+							to=""
+							onClick={(e) => {
+								e.preventDefault();
+								clear();
+								navigate('/auth/login');
+							}}
+						>
+							<i className="las la-sign-out-alt"></i>
 						</NavLink>
 					</li>
 				</ul>
 			</div>
 			<div className={cxBind('o-top-bar__profile')}>
-				<Avatar src={user?.avatar} fallbackName={user?.name || ''} /> 
+				<Avatar src={user?.avatar} fallbackName={user?.name || ''} />
 				<div className={cxBind('o-top-bar__profile__info')}>
 					<p className={cxBind('o-top-bar__profile__name')}>{user?.name}</p>
 					<p className={cxBind('o-top-bar__profile__email')}>{user?.email}</p>

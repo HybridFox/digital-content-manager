@@ -1,0 +1,1 @@
+DROP TABLE authentication_method_roles;

@@ -1,6 +1,6 @@
 @use '/src/assets/scss/tools' as tools;
 
-.p-login {
+.p-callback {
 	display: grid;
 	grid-template-columns: tools.rem(500px) auto;
 	height: calc(100vh - var(--spacer-lg) * 2);
@@ -22,28 +22,26 @@
 		}
 	}
 
-	&__form {
+	&__loading {
 		width: 100%;
-		margin-top: var(--spacer-lg);
-		border-top: 1px solid var(--color-gray-lightest);
-		padding-top: var(--spacer-lg);
 	}
-
-	&__button {
-		width: 100%;
-		margin-top: var(--spacer-lg);
-		border-top: 1px solid var(--color-gray-lightest);
-		padding-top: var(--spacer-lg);
-	}
-
+	
 	&__logo {
 		font-weight: 700;
 		font-size: 2rem;
+		padding-bottom: var(--spacer-lg);
+		margin-bottom: var(--spacer-lg);
+		border-bottom: 1px solid var(--color-gray-lightest);
 		width: 100%;
 
 		i {
 			color: var(--color-primary);
 		}
+	}
+
+	&__action {
+		width: 100%;
+		margin-top: var(--spacer);
 	}
 
 	&__aside {

@@ -25,7 +25,7 @@ export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix = '' 
 				...field.config?.fields || [],
 				...field.contentComponent.fields || [],
 			],
-			multiLanguage: !!field.multiLanguage,
+			multiLanguage: field.multiLanguage,
 		};
 
 		if (field.min === 1 && field.max === 1 || field.contentComponent.componentName === FIELD_KEYS.MEDIA) {

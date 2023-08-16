@@ -39,8 +39,34 @@ impl From<AuthenticationMethod> for AuthenticationMethodDTO {
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
+pub struct MinimalAuthenticationMethodDTO {
+	pub id: Uuid,
+	pub name: String,
+	pub kind: String,
+	pub weight: i32,
+	pub active: bool,
+	pub created_at: NaiveDateTime,
+	pub updated_at: NaiveDateTime,
+}
+
+impl From<AuthenticationMethod> for MinimalAuthenticationMethodDTO {
+	fn from(authentication_method: AuthenticationMethod) -> Self {
+		Self {
+			id: authentication_method.id,
+			name: authentication_method.name,
+			kind: authentication_method.kind,
+			weight: authentication_method.weight,
+			active: authentication_method.active,
+			created_at: authentication_method.created_at,
+			updated_at: authentication_method.updated_at,
+		}
+	}
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct AuthenticationMethodsEmbeddedDTO {
-	pub authentication_methods: Vec<AuthenticationMethodDTO>,
+	pub authentication_methods: Vec<MinimalAuthenticationMethodDTO>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
@@ -57,7 +83,7 @@ impl From<(Vec<AuthenticationMethod>, HALPage)> for AuthenticationMethodsDTO {
 			_embedded: AuthenticationMethodsEmbeddedDTO {
 				authentication_methods: authentication_methods
 					.into_iter()
-					.map(AuthenticationMethodDTO::from)
+					.map(MinimalAuthenticationMethodDTO::from)
 					.collect(),
 			},
 			_page: page,

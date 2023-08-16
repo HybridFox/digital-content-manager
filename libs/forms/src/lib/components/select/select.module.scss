@@ -11,6 +11,15 @@
 	width: 100%;
 	transition: all .2s ease;
 
+	&--disabled {
+		cursor: not-allowed !important;
+		pointer-events: all;
+
+		.a-select__value-container {
+			opacity: 0.5;
+		}
+	}
+
 	&--has-error {
 		border-color: var(--color-state-danger-light);
 

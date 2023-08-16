@@ -1,5 +1,5 @@
 use super::super::dto::{request, response};
-use crate::modules::users::models::user::User;
+use crate::modules::{users::models::user::User, authentication_methods::models::authentication_method::AuthenticationMethod};
 use crate::errors::AppError;
 use crate::modules::auth::services::register::register_user;
 use crate::modules::core::middleware::state::AppState;
@@ -20,7 +20,8 @@ pub async fn login(
 	form: web::Json<request::LoginUserDTO>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let (user, token) = User::signin_local(conn, &form.email, &form.password)?;
+	let local_auth_method = AuthenticationMethod::find_local(conn)?;
+	let (user, token) = User::signin_local(conn, form.email.as_ref().unwrap(), form.password.as_ref().unwrap(), local_auth_method.id)?;
 	let sites = user.get_sites(conn)?;
 	let roles = user.get_roles(conn)?;
 	let res = response::AuthDTO::from((user, sites, roles, token));
@@ -48,7 +49,7 @@ pub async fn register(
 		&form.name,
 		&form.password,
 		None,
-		Some("local"),
+		None,
 	)
 	.await?;
 	let sites = user.get_sites(conn)?;

@@ -2,10 +2,10 @@ import { IAPIError, useAuthenticationMethodStore, useHeaderStore } from '@ibs/sh
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { NumberField, RenderFields, SelectField, TextField, ToggleField } from '@ibs/forms';
+import { FieldGroupHeader, NumberField, RenderFields, SelectField, TextField, ToggleField } from '@ibs/forms';
 
 import { AUTHENTICATION_METHOD_FIELDS, AUTHENTICATION_METHOD_OPTIONS } from '../../authentication-methods.const';
 import { AUTHENTICATION_METHOD_PATHS } from '../../authentication-methods.routes';
@@ -45,7 +45,7 @@ export const AuthenticationMethodDetailPage = () => {
 	} = formMethods;
 
 	useEffect(() => {
-		setBreadcrumbs([{ label: t(`BREADCRUMBS.STORAGE_REPOSITORIES`), to: AUTHENTICATION_METHOD_PATHS.ROOT }, { label: t(`BREADCRUMBS.EDIT`) }]);
+		setBreadcrumbs([{ label: t(`BREADCRUMBS.AUTHENTICATION_METHODS`), to: AUTHENTICATION_METHOD_PATHS.ROOT }, { label: t(`BREADCRUMBS.EDIT`) }]);
 	}, [authenticationMethod]);
 
 	useEffect(() => {
@@ -72,11 +72,7 @@ export const AuthenticationMethodDetailPage = () => {
 		<>
 			<Header
 				breadcrumbs={breadcrumbs}
-				title={
-					<>
-						Edit storage repository <i>"{authenticationMethod?.name || '...'}"</i>
-					</>
-				}
+				title={<Trans t={t} i18nKey="AUTHENTICATION_METHODS.TITLES.EDIT" values={{ authenticationMethodName: authenticationMethod?.name || '...' }} />}
 			></Header>
 			<div className="u-margin-top">
 				<Loading loading={authenticationMethodLoading} text="Loading data...">
@@ -98,7 +94,10 @@ export const AuthenticationMethodDetailPage = () => {
 								<SelectField name="kind" label="Kind" disabled fieldConfiguration={{ options: AUTHENTICATION_METHOD_OPTIONS }} />
 							</div>
 							{authenticationMethod?.kind && (
-								<RenderFields fields={AUTHENTICATION_METHOD_FIELDS[authenticationMethod?.kind] || []} fieldPrefix="configuration."></RenderFields>
+								<>
+									<FieldGroupHeader label='Configuration' />
+									<RenderFields fields={AUTHENTICATION_METHOD_FIELDS[authenticationMethod?.kind] || []} fieldPrefix="configuration."></RenderFields>
+								</>
 							)}
 							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{updateAuthenticationMethodLoading && <i className="las la-redo-alt la-spin"></i>} Save

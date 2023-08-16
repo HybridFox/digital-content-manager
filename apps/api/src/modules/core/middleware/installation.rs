@@ -59,7 +59,6 @@ where
 	actix_web::dev::forward_ready!(service);
 
 	fn call(&self, req: ServiceRequest) -> Self::Future {
-		dbg!(is_installed(&req));
 		if is_installed(&req) {
 			let fut = self.service.call(req);
 			Box::pin(async move {

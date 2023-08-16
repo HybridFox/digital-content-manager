@@ -8,8 +8,8 @@ export interface IContentComponent {
 	componentName: FIELD_KEYS;
 	configurationFields: IField[];
 	fields: IField[];
-	createdAt: string;
-	updatedAt: string;
+	createdAt?: string;
+	updatedAt?: string;
 }
 
 export type IContentComponentsResponse = IAPIHALResponse<'contentComponents', IContentComponent>

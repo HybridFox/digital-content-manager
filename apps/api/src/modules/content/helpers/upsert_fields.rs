@@ -33,7 +33,6 @@ pub fn upsert_fields(
 		false,
 	);
 
-	dbg!(&values_to_insert);
 	diesel::insert_into(content_fields::table)
 		.values(values_to_insert)
 		.execute(conn)?;

@@ -8,4 +8,9 @@ export interface IButtonLinkProps {
 	size?: `${ButtonSizes}`;
 	className?: string;
 	to: string;
+	block?: boolean;
+	title?: string;
+	disabled?: boolean;
+	active?: boolean;
+	id?: string;
 }

@@ -1,5 +1,4 @@
 pub const AUTHORIZATION: &str = "Authorization";
-
 pub const BIND: &str = "0.0.0.0:8000";
 
 pub mod env_key {
@@ -7,24 +6,5 @@ pub mod env_key {
 	pub const JWT_SECRET: &str = "JWT_SECRET";
 	pub const ENV: &str = "ENV";
 	pub const OTEL_ENDPOINT: &str = "OTEL_ENDPOINT";
-
-	pub const GOOGLE_OAUTH2_CLIENT_ID: &str = "GOOGLE_OAUTH2_CLIENT_ID";
-	pub const GOOGLE_OAUTH2_CLIENT_SECRET: &str = "GOOGLE_OAUTH2_CLIENT_SECRET";
-	pub const GOOGLE_OAUTH2_AUTH_URL: &str = "GOOGLE_OAUTH2_AUTH_URL";
-	pub const GOOGLE_OAUTH2_TOKEN_URL: &str = "GOOGLE_OAUTH2_TOKEN_URL";
-	pub const GOOGLE_OAUTH2_REDIRECT_URL: &str = "GOOGLE_OAUTH2_REDIRECT_URL";
-	pub const GOOGLE_OAUTH2_USERINFO_URL: &str = "GOOGLE_OAUTH2_USERINFO_URL";
-
-	pub const SLACK_OAUTH2_CLIENT_ID: &str = "SLACK_OAUTH2_CLIENT_ID";
-	pub const SLACK_OAUTH2_CLIENT_SECRET: &str = "SLACK_OAUTH2_CLIENT_SECRET";
-	pub const SLACK_OAUTH2_AUTH_URL: &str = "SLACK_OAUTH2_AUTH_URL";
-	pub const SLACK_OAUTH2_TOKEN_URL: &str = "SLACK_OAUTH2_TOKEN_URL";
-	pub const SLACK_OAUTH2_REDIRECT_URL: &str = "SLACK_OAUTH2_REDIRECT_URL";
-	pub const SLACK_OAUTH2_USERINFO_URL: &str = "SLACK_OAUTH2_USERINFO_URL";
-
-	pub const S3_ENDPOINT: &str = "S3_ENDPOINT";
-	pub const S3_ACCESS_KEY: &str = "S3_ACCESS_KEY";
-	pub const S3_SECRET_KEY: &str = "S3_SECRET_KEY";
-	pub const S3_BUCKET_NAME: &str = "S3_BUCKET_NAME";
-	pub const S3_PUBLIC_URL: &str = "S3_PUBLIC_URL";
+	pub const FRONTEND_URL: &str = "FRONTEND_URL";
 }

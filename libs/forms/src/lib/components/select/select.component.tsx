@@ -40,8 +40,9 @@ export const Select: FC<ISelectProps> = ({
 			className={className}
 			unstyled={true}
 			classNames={{
-				control: () => cxBind('a-select', {
-					'a-select--has-error': hasError
+				control: (props) => cxBind('a-select', {
+					'a-select--has-error': hasError,
+					'a-select--disabled': props.isDisabled,
 				}),
 				valueContainer: () => cxBind('a-select__value-container'),
 				menu: () => cxBind('a-select__menu'),

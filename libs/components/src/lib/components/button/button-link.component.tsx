@@ -15,9 +15,22 @@ export const ButtonLink: FC<IButtonLinkProps> = ({
 	type = ButtonTypes.DEFAULT,
 	size = ButtonSizes.NORMAL,
 	to,
+	block,
+	disabled,
+	active,
+	id,
 }: IButtonLinkProps) => {
 	return (
-		<Link to={to} className={classNames(className, cxBind('a-button', `a-button--${type}`, `a-button--${size}`))}>
+		<Link
+			to={to}
+			className={classNames(
+				className,
+				cxBind('a-button', `a-button--${type}`, `a-button--${size}`, {
+					'a-button--block': block,
+					'a-button--active': active,
+				})
+			)}
+		>
 			{children}
 		</Link>
 	);

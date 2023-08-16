@@ -12,7 +12,7 @@ import styles from './select-field.module.scss';
 
 const cxBind = cx.bind(styles);
 
-export const SelectField: FC<ISelectFieldProps> = ({ name, label, placeholder, fieldConfiguration, field }: ISelectFieldProps) => {
+export const SelectField: FC<ISelectFieldProps> = ({ name, label, placeholder, fieldConfiguration, field, disabled }: ISelectFieldProps) => {
 	const { control } = useFormContext();
 
 	const getMappedValue = (value: string | string[]): ISelectOptions | ISelectOptions[] | undefined => {
@@ -46,6 +46,7 @@ export const SelectField: FC<ISelectFieldProps> = ({ name, label, placeholder, f
 				)}
 				<div className={classNames(cxBind('a-input__field-wrapper'), 'a-input__field-wrapper')}>
 					<Select
+						disabled={disabled}
 						min={field?.min ?? 1}
 						max={field?.max ?? 1} 
 						hasError={!!errors?.[name]}

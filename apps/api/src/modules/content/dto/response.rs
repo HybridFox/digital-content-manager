@@ -78,7 +78,6 @@ fn parse_object_fields(
 	parent_id: Option<Uuid>,
 	fields: Vec<ContentField>,
 ) -> HashMap<String, Option<Value>> {
-	dbg!(&fields);
 	let fields = fields
 		.iter()
 		.filter(|field| field.parent_id == parent_id)

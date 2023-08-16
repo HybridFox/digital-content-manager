@@ -10,8 +10,8 @@ pub struct RegisterUserDTO {
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct LoginUserDTO {
-	pub email: String,
-	pub password: String,
+	pub email: Option<String>,
+	pub password: Option<String>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]

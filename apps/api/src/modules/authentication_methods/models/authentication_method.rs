@@ -44,6 +44,15 @@ impl AuthenticationMethod {
 	}
 
 	#[instrument(skip(conn))]
+	pub fn find_local(conn: &mut PgConnection) -> Result<Self, AppError> {
+		let authentication_method = authentication_methods::table
+			.filter(authentication_methods::kind.eq("LOCAL"))
+			.get_result::<Self>(conn)?;
+
+		Ok(authentication_method)
+	}
+
+	#[instrument(skip(conn))]
 	pub fn find(
 		conn: &mut PgConnection,
 		page: i64,

@@ -5,7 +5,7 @@ import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header } from 
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { NumberField, SelectField, TextField, ToggleField } from '@ibs/forms';
+import { SelectField, TextField } from '@ibs/forms';
 
 import { AUTHENTICATION_METHOD_OPTIONS } from '../../authentication-methods.const';
 import { AUTHENTICATION_METHOD_PATHS } from '../../authentication-methods.routes';
@@ -36,7 +36,7 @@ export const AuthenticationMethodCreatePage = () => {
 	} = formMethods;
 
 	useEffect(() => {
-		setBreadcrumbs([{ label: t(`BREADCRUMBS.STORAGE_REPOSITORIES`), to: AUTHENTICATION_METHOD_PATHS.ROOT }, { label: t(`BREADCRUMBS.CREATE`) }]);
+		setBreadcrumbs([{ label: t(`BREADCRUMBS.AUTHENTICATION_METHODS`), to: AUTHENTICATION_METHOD_PATHS.ROOT }, { label: t(`BREADCRUMBS.CREATE`) }]);
 	}, []);
 
 	const onSubmit = (values: CreateAuthenticationMethodForm) => {
@@ -60,11 +60,7 @@ export const AuthenticationMethodCreatePage = () => {
 		<>
 			<Header
 				breadcrumbs={breadcrumbs}
-				title={
-					<>
-						Create authentication method
-					</>
-				}
+				title={t('AUTHENTICATION_METHODS.TITLES.CREATE')}
 			></Header>
 			<div className="u-margin-top">
 					<FormProvider {...formMethods}>
@@ -76,13 +72,7 @@ export const AuthenticationMethodCreatePage = () => {
 								<TextField name="name" label="Name" />
 							</div>
 							<div className="u-margin-bottom">
-								<NumberField name="weight" label="Weight" />
-							</div>
-							<div className="u-margin-bottom">
-								<ToggleField name="active" label="Active" />
-							</div>
-							<div className="u-margin-bottom">
-								<SelectField name="kind" label="Kind" disabled fieldConfiguration={{ options: AUTHENTICATION_METHOD_OPTIONS }} />
+								<SelectField name="kind" label="Kind" fieldConfiguration={{ options: AUTHENTICATION_METHOD_OPTIONS }} />
 							</div>
 							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{createAuthenticationMethodLoading && <i className="las la-redo-alt la-spin"></i>} Save

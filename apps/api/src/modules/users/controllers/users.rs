@@ -1,5 +1,6 @@
 use super::super::dto::users::{response, request};
 
+use crate::modules::authentication_methods::models::authentication_method::AuthenticationMethod;
 use crate::{errors::AppError, modules::users::models::user_role::UserRole};
 use crate::modules::users::models::user::{User, UpdateUser};
 use crate::modules::core::middleware::state::AppState;
@@ -38,13 +39,14 @@ pub async fn create(
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 
+	let local_auth_method = AuthenticationMethod::find_local(conn)?;
 	let (user, _token) = User::signup(
 		conn,
 		&form.email,
 		&form.name,
 		&form.password,
 		None,
-		Some("local"),
+		local_auth_method.id,
 	)?;
 	UserRole::upsert_many(conn, user.id, form.roles.clone())?;
 	Ok(HttpResponse::Ok().json(user))

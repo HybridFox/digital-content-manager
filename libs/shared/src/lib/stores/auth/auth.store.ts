@@ -15,7 +15,10 @@ interface IAuthStoreState {
 	// TODO: Move this to another store perhaps?
 	fetchUser: () => Promise<void>;
 	setup: (values: any) => Promise<void>;
-	login: (email: string, password: string) => Promise<void>;
+	loginLocal: (authenticationMethodId: string, email: string, password: string) => Promise<void>;
+	login: (authenticationMethodId: string) => Promise<{ redirect: string }>;
+	callback: (authenticationMethodId: string, code: string) => Promise<void>;
+	clear: () => void;
 }
 
 export const useAuthStore = create<IAuthStoreState>()(devtools(
@@ -23,6 +26,7 @@ export const useAuthStore = create<IAuthStoreState>()(devtools(
 		(set) => ({
 			sites: [],
 			roles: [],
+			clear: () => set({ sites: [], roles: [], activeSite: undefined, token: undefined, user: undefined }),
 			fetchUser: async () => {
 				const [result, error] = await wrapApi(kyInstance.get('/admin-api/v1/auth/me').json<IMeReponse>());
 
@@ -33,8 +37,20 @@ export const useAuthStore = create<IAuthStoreState>()(devtools(
 				
 				set(() => ({ ...result, activeSite: result.sites?.[0] }));
 			},
-			login: async (email, password) => {
-				const [result, error] = await wrapApi(kyAuthInstance.post('/admin-api/v1/auth/local/login', {
+			callback: async (authenticationMethodId, code) => {
+				const [result, error] = await wrapApi(kyAuthInstance.post(`/admin-api/v1/auth/${authenticationMethodId}/callback`, {
+					json: {},
+					searchParams: { code }
+				}).json<IMeReponse>());
+
+				if (error) {
+					throw error;
+				}
+
+				set(() => ({ ...result, activeSite: result.sites?.[0] }));
+			},
+			loginLocal: async (authenticationMethodId, email, password) => {
+				const [result, error] = await wrapApi(kyAuthInstance.post(`/admin-api/v1/auth/${authenticationMethodId}/login`, {
 					json: { email, password }
 				}).json<IMeReponse>());
 
@@ -43,6 +59,17 @@ export const useAuthStore = create<IAuthStoreState>()(devtools(
 				}
 
 				set(() => ({ ...result, activeSite: result.sites?.[0] }));
+			},
+			login: async (authenticationMethodId) => {
+				const [result, error] = await wrapApi(kyAuthInstance.post(`/admin-api/v1/auth/${authenticationMethodId}/login`, {
+					json: {}
+				}).json<{ redirect: string }>());
+
+				if (error) {
+					throw error;
+				}
+				
+				return result;
 			},
 			setup: async (values) => {
 				const [result, error] = await wrapApi(kyInstance.post('/admin-api/v1/setup/register', {
