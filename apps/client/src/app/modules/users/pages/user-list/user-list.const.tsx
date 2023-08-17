@@ -18,7 +18,7 @@ export const USER_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: 
 			)),
 	},
 	{
-		id: 'authenticationMethod.name',
+		id: 'authenticationMethod',
 		label: 'Authentication Method',
 		format: (authMethod: IAuthenticationMethod) => (
 			<Badge className="u-margin-right-xs u-margin-top-xxxs u-margin-bottom-xxxs" key={authMethod.id}>
