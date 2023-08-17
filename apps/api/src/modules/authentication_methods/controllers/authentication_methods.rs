@@ -23,6 +23,7 @@ pub struct FindOnePathParams {
 pub struct FindAllQueryParams {
 	page: Option<i64>,
 	pagesize: Option<i64>,
+	all: Option<bool>
 }
 
 #[utoipa::path(
@@ -77,7 +78,7 @@ pub async fn find_all(
 	let pagesize = query.pagesize.unwrap_or(20);
 
 	let (authentication_methods, total_elements) =
-		AuthenticationMethod::find(conn, page, pagesize)?;
+		AuthenticationMethod::find(conn, page, pagesize, query.all)?;
 
 	let res = response::AuthenticationMethodsDTO::from((
 		authentication_methods,

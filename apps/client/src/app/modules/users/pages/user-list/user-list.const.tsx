@@ -1,5 +1,5 @@
-import { Badge, Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
-import { IRole, IUser } from '@ibs/shared';
+import { Badge, Button, ButtonLink, ButtonSizes, ITableColumn } from '@ibs/components';
+import { IAuthenticationMethod, IRole, IUser } from '@ibs/shared';
 import { TFunction } from 'i18next';
 
 export const USER_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: string) => void): ITableColumn<IUser>[] => [
@@ -10,7 +10,22 @@ export const USER_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: 
 	{
 		id: 'roles',
 		label: 'Roles',
-		format: (roles: IRole[]) => roles.map((role) => <Badge className='u-margin-right-xs u-margin-top-xxxs u-margin-bottom-xxxs' key={role.id}>{role.name}</Badge>)
+		format: (roles: IRole[]) =>
+			roles.map((role) => (
+				<Badge className="u-margin-right-xs u-margin-top-xxxs u-margin-bottom-xxxs" key={role.id}>
+					{role.name}
+				</Badge>
+			)),
+	},
+	{
+		id: 'authenticationMethod.name',
+		label: 'Authentication Method',
+		format: (authMethods: IAuthenticationMethod[]) =>
+			authMethods.map((authMethod) => (
+				<Badge className="u-margin-right-xs u-margin-top-xxxs u-margin-bottom-xxxs" key={authMethod.id}>
+					{authMethod.name}
+				</Badge>
+			)),
 	},
 	{
 		id: 'actions',

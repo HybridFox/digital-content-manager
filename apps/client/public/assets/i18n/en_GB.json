@@ -1,6 +1,12 @@
 {
     "API_MESSAGES.SLUG_UNIQUE_VIOLATION": "Slug is not unique",
     "AUTHENTICATION_METHODS.ACTIONS.CREATE": "Create authentication method",
+    "AUTHENTICATION_METHODS.MESSAGES.PERSISTING_ROLES": "Roles are persisted on each register or login. Meaning that if you remove a role from a user, and that role is defined here, it will be reassigned when the user logs in again.",
+    "AUTHENTICATION_METHODS.TABS.CONFIGURATION": "Configuration",
+    "AUTHENTICATION_METHODS.TABS.INFO": "Info",
+    "AUTHENTICATION_METHODS.TABS.ROLE_ASSIGNMENT": "Role Assignment",
+    "AUTHENTICATION_METHODS.TITLES.CREATE": "Create Authentication Method",
+    "AUTHENTICATION_METHODS.TITLES.EDIT": "Editing Authentication Method <i>\"{{authenticationMethodName}}\"</i>",
     "AUTHENTICATION_METHODS.TITLES.LIST": "Authentication Methods",
     "BREADCRUMBS.AUTHENTICATION_METHODS": "Authentication Methods",
     "BREADCRUMBS.CONTENT": "Content",

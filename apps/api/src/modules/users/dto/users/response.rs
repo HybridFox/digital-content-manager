@@ -8,7 +8,7 @@ use crate::modules::{
 	roles::{models::role::Role, dto::response::RoleDTO},
 	sites::{dto::response::SiteWithRolesDTO, models::site::Site},
 	iam_policies::models::{permission::Permission, iam_policy::IAMPolicy},
-	languages::models::language::Language,
+	languages::models::language::Language, authentication_methods::{dto::authentication_methods::response::AuthenticationMethodDTO, models::authentication_method::AuthenticationMethod},
 };
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
@@ -48,8 +48,30 @@ impl From<(User, Vec<Role>)> for UserWithRolesDTO {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct UserWithAuthMethodAndRolesDTO {
+	id: Uuid,
+	email: String,
+	name: String,
+	roles: Vec<RoleDTO>,
+	authentication_method: AuthenticationMethodDTO,
+}
+
+impl From<(User, AuthenticationMethod, Vec<Role>)> for UserWithAuthMethodAndRolesDTO {
+	fn from((user, auth_method, roles): (User, AuthenticationMethod, Vec<Role>)) -> Self {
+		Self {
+			id: user.id,
+			email: user.email,
+			name: user.name,
+			roles: roles.into_iter().map(RoleDTO::from).collect(),
+			authentication_method: AuthenticationMethodDTO::from(auth_method),
+		}
+	}
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct UsersEmbeddedDTO {
-	pub users: Vec<UserWithRolesDTO>,
+	pub users: Vec<UserWithAuthMethodAndRolesDTO>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
@@ -59,14 +81,14 @@ pub struct UsersDTO {
 	pub _embedded: UsersEmbeddedDTO,
 }
 
-impl From<(Vec<(User, Vec<Role>)>, HALPage, Uuid)> for UsersDTO {
-	fn from((users, page, site_id): (Vec<(User, Vec<Role>)>, HALPage, Uuid)) -> Self {
+impl From<(Vec<(User, AuthenticationMethod, Vec<Role>)>, HALPage, Uuid)> for UsersDTO {
+	fn from((users, page, site_id): (Vec<(User, AuthenticationMethod, Vec<Role>)>, HALPage, Uuid)) -> Self {
 		Self {
 			_links: HALLinkList::from((format!("/api/v1/sites/{site_id}/users"), &page)),
 			_embedded: UsersEmbeddedDTO {
 				users: users
 					.into_iter()
-					.map(|user| UserWithRolesDTO::from(user))
+					.map(|user| UserWithAuthMethodAndRolesDTO::from(user))
 					.collect(),
 			},
 			_page: page,

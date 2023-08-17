@@ -10,7 +10,18 @@ export const AUTHENTICATION_METHODS_LIST_COLUMNS = (t: TFunction): ITableColumn[
 		id: 'kind',
 		label: 'Kind',
 		format(value, key, item, index) {
-			return <Badge>{t(`STORAGE_REPOSITORIES.KINDS.${(value as string).toUpperCase()}`)}</Badge>
+			return <Badge>{t(`AUTHENTICATION_METHODS.KINDS.${(value as string).toUpperCase()}`)}</Badge>
+		},
+	},
+	{
+		id: 'active',
+		label: 'Active',
+		format(value) {
+			if (value) {
+				return <span className='las la-check u-text--success'></span>
+			}
+
+			return <span className='las la-times u-text--danger'></span>;
 		},
 	},
 	{

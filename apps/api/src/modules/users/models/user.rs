@@ -1,4 +1,5 @@
 use crate::errors::{AppError, AppErrorValue};
+use crate::modules::authentication_methods::models::authentication_method::AuthenticationMethod;
 use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
 use crate::modules::iam_policies::models::permission::Permission;
 use crate::modules::iam_policies::models::permission_iam_action::PermissionIAMAction;
@@ -12,7 +13,7 @@ use crate::modules::sites::models::site_user_role::SiteUserRole;
 use crate::modules::users::models::user_role::UserRole;
 use crate::schema::{
 	users, sites, sites_users, roles, sites_users_roles, roles_iam_policies, iam_policies,
-	sites_languages, languages, users_roles,
+	sites_languages, languages, users_roles, authentication_methods,
 };
 use crate::utils::{hasher, token};
 use actix_web::http::StatusCode;
@@ -216,9 +217,13 @@ impl User {
 		site_id: Uuid,
 		page: i64,
 		pagesize: i64,
-	) -> Result<(Vec<(Self, Vec<Role>)>, i64), AppError> {
+	) -> Result<(Vec<(Self, AuthenticationMethod, Vec<Role>)>, i64), AppError> {
 		let query = {
 			let mut query = users::table
+				.inner_join(
+					authentication_methods::table
+						.on(authentication_methods::id.eq(users::authentication_method_id)),
+				)
 				.inner_join(sites_users::table.on(sites_users::user_id.eq(users::id)))
 				.filter(sites_users::site_id.eq(site_id))
 				.into_boxed();
@@ -230,26 +235,38 @@ impl User {
 			query
 		};
 
-		let users = query.select(Self::as_select()).load::<Self>(conn)?;
+		let users = query
+			.select((Self::as_select(), AuthenticationMethod::as_select()))
+			.load::<(Self, AuthenticationMethod)>(conn)?;
 
-		let roles: Vec<(SiteUserRole, Role)> = SiteUserRole::belonging_to(&users)
+		let roles: Vec<(SiteUserRole, Role)> = SiteUserRole::belonging_to(
+			&users
+				.iter()
+				.map(|(user, _auth_method)| user)
+				.collect::<Vec<&User>>(),
+		)
 			.inner_join(roles::table.on(roles::id.eq(sites_users_roles::role_id)))
 			.filter(sites_users_roles::site_id.eq(site_id))
 			.select((SiteUserRole::as_select(), Role::as_select()))
 			.load::<(SiteUserRole, Role)>(conn)?;
-		let grouped_roles = roles.grouped_by(&users);
+		let grouped_roles = roles.grouped_by(
+			&users
+				.iter()
+				.map(|(user, _auth_method)| user)
+				.collect::<Vec<&User>>(),
+		);
 		let users_with_roles = users
 			.into_iter()
 			.zip(grouped_roles)
-			.map(|(user, roles)| {
+			.map(|((user, auth_method), roles)| {
 				let only_roles = roles
 					.into_iter()
 					.map(|(_site_user_role, role)| role)
 					.collect::<Vec<Role>>();
 
-				(user, only_roles)
+				(user, auth_method, only_roles)
 			})
-			.collect::<Vec<(Self, Vec<Role>)>>();
+			.collect::<Vec<(Self, AuthenticationMethod, Vec<Role>)>>();
 
 		let total_elements = users::table
 			.inner_join(sites_users::table.on(sites_users::user_id.eq(users::id)))
@@ -264,9 +281,14 @@ impl User {
 		conn: &mut PgConnection,
 		page: i64,
 		pagesize: i64,
-	) -> Result<(Vec<(Self, Vec<Role>)>, i64), AppError> {
+	) -> Result<(Vec<(Self, AuthenticationMethod, Vec<Role>)>, i64), AppError> {
 		let query = {
-			let mut query = users::table.into_boxed();
+			let mut query = users::table
+				.inner_join(
+					authentication_methods::table
+						.on(authentication_methods::id.eq(users::authentication_method_id)),
+				)
+				.into_boxed();
 
 			if pagesize != -1 {
 				query = query.offset((page - 1) * pagesize).limit(pagesize);
@@ -275,25 +297,37 @@ impl User {
 			query
 		};
 
-		let users = query.select(Self::as_select()).load::<Self>(conn)?;
+		let users = query
+			.select((Self::as_select(), AuthenticationMethod::as_select()))
+			.load::<(Self, AuthenticationMethod)>(conn)?;
 
-		let roles: Vec<(UserRole, Role)> = UserRole::belonging_to(&users)
-			.inner_join(roles::table.on(roles::id.eq(users_roles::role_id)))
-			.select((UserRole::as_select(), Role::as_select()))
-			.load::<(UserRole, Role)>(conn)?;
-		let grouped_roles = roles.grouped_by(&users);
+		let roles: Vec<(UserRole, Role)> = UserRole::belonging_to(
+			&users
+				.iter()
+				.map(|(user, _auth_method)| user)
+				.collect::<Vec<&User>>(),
+		)
+		.inner_join(roles::table.on(roles::id.eq(users_roles::role_id)))
+		.select((UserRole::as_select(), Role::as_select()))
+		.load::<(UserRole, Role)>(conn)?;
+		let grouped_roles = roles.grouped_by(
+			&users
+				.iter()
+				.map(|(user, _auth_method)| user)
+				.collect::<Vec<&User>>(),
+		);
 		let users_with_roles = users
 			.into_iter()
 			.zip(grouped_roles)
-			.map(|(user, roles)| {
+			.map(|((user, auth_method), roles)| {
 				let only_roles = roles
 					.into_iter()
 					.map(|(_site_user_role, role)| role)
 					.collect::<Vec<Role>>();
 
-				(user, only_roles)
+				(user, auth_method, only_roles)
 			})
-			.collect::<Vec<(Self, Vec<Role>)>>();
+			.collect::<Vec<(Self, AuthenticationMethod, Vec<Role>)>>();
 
 		let total_elements = users::table.count().get_result::<i64>(conn)?;
 

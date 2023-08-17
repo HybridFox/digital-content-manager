@@ -1,4 +1,5 @@
 import { ISite } from "../../types/site.types";
+import { IAuthenticationMethod } from "../authentication-method";
 
 export enum PERMISSION_EFFECT {
 	GRANT = 'grant',
@@ -34,6 +35,7 @@ export interface IUser {
 	email: string;
 	avatar: string;
 	roles: IRole[];
+	authenticationMethod: IAuthenticationMethod;
 }
 
 export interface IMeReponse {

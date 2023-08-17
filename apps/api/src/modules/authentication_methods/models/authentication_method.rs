@@ -57,6 +57,7 @@ impl AuthenticationMethod {
 		conn: &mut PgConnection,
 		page: i64,
 		pagesize: i64,
+		all: Option<bool>
 	) -> Result<(Vec<Self>, i64), AppError> {
 		let query = {
 			let mut query = authentication_methods::table.into_boxed();
@@ -64,6 +65,10 @@ impl AuthenticationMethod {
 			if pagesize != -1 {
 				query = query.offset((page - 1) * pagesize).limit(pagesize);
 			};
+
+			if all.is_none() || all.unwrap_or(false) == false {
+				query = query.filter(authentication_methods::active.eq(true))
+			}
 
 			query
 		};

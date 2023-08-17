@@ -16,10 +16,14 @@ export interface IAuthenticationMethod {
 	createdAt: string;
 }
 
+interface IFetchAuthenticationMethodsParameters extends IPageParameters {
+	all?: boolean;
+}
+
 export type IAuthenticationMethodsResponse = IAPIHALResponse<'authenticationMethods', IAuthenticationMethod>;
 
 export interface IAuthenticationMethodStoreState {
-	fetchAuthenticationMethods: (params?: IPageParameters) => Promise<IAuthenticationMethod[]>;
+	fetchAuthenticationMethods: (params?: IFetchAuthenticationMethodsParameters) => Promise<IAuthenticationMethod[]>;
 	authenticationMethods: IAuthenticationMethod[];
 	authenticationMethodsLoading: boolean;
 
