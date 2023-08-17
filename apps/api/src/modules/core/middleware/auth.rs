@@ -178,7 +178,7 @@ lazy_static! {
 			method: Method::POST,
 		},
 		SkipAuthRoute {
-			path: Regex::new(r"/admin-api/v1/authentication-methods").unwrap(),
+			path: Regex::new(r"/admin-api/v1/authentication-methods$").unwrap(),
 			method: Method::GET,
 		},
 		SkipAuthRoute {

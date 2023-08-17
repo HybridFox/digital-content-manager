@@ -73,11 +73,9 @@ pub async fn create(
 )]
 #[get("")]
 pub async fn find_all(
-	req: HttpRequest,
 	state: web::Data<AppState>,
 	query: web::Query<FindAllQueryParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:authentication-methods:*"), "root::authentication-methods:read")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
