@@ -20,12 +20,11 @@ export const USER_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: 
 	{
 		id: 'authenticationMethod.name',
 		label: 'Authentication Method',
-		format: (authMethods: IAuthenticationMethod[]) =>
-			authMethods.map((authMethod) => (
-				<Badge className="u-margin-right-xs u-margin-top-xxxs u-margin-bottom-xxxs" key={authMethod.id}>
-					{authMethod.name}
-				</Badge>
-			)),
+		format: (authMethod: IAuthenticationMethod) => (
+			<Badge className="u-margin-right-xs u-margin-top-xxxs u-margin-bottom-xxxs" key={authMethod.id}>
+				{authMethod.name}
+			</Badge>
+		),
 	},
 	{
 		id: 'actions',
