@@ -1,4 +1,5 @@
 export enum AlertTypes {
 	PRIMARY = 'primary',
-	DANGER = 'danger'
+	DANGER = 'danger',
+	INFO = 'info'
 }

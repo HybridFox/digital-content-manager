@@ -24,7 +24,7 @@ export const RootMenu = () => {
 	return (
 		<div className={cxBind('o-menu')}>
 			<div className={cxBind('o-menu__logo')}>
-				<i className="las la-sms"></i> <span>Inhoud Beheer Systeem</span>
+				<img src="/assets/img/logo.svg" alt="Logo" />
 			</div>
 			<div className={cxBind('o-menu__links')}>
 				<ul>

@@ -9,7 +9,7 @@ export interface IAuthenticationMethod {
 	id: string;
 	name: string;
 	kind: AUTHENTICATION_METHOD_KINDS;
-	configuration: Record<string, string>;
+	configuration?: Record<string, string>;
 	weight: number;
 	active: boolean;
 	updatedAt: string;
@@ -37,14 +37,14 @@ export interface IAuthenticationMethodStoreState {
 export interface IAuthenticationMethodCreateDTO {
 	name: string;
 	kind: string;
-	configuration: Record<string, string>;
+	configuration?: Record<string, string>;
 	active: boolean;
 	weight: number;
 }
 
 export interface IAuthenticationMethodUpdateDTO {
 	name: string;
-	configuration: Record<string, string>;
+	configuration?: Record<string, string>;
 	active: boolean;
 	weight: number;
 }

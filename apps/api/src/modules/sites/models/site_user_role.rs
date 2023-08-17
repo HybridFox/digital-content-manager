@@ -43,6 +43,26 @@ impl SiteUserRole {
 		Ok(permissions_iam_actions)
 	}
 
+	pub fn upsert(
+		conn: &mut PgConnection,
+		user_id: Uuid,
+		site_id: Uuid,
+		role_id: Uuid,
+	) -> Result<Vec<Self>, AppError> {
+		let permissions_iam_actions = diesel::insert_into(sites_users_roles::table)
+			.values(CreateSiteUserRole {
+				user_id,
+				site_id,
+				role_id,
+			})
+			.on_conflict((sites_users_roles::user_id, sites_users_roles::site_id, sites_users_roles::role_id))
+			.do_nothing()
+			.returning(SiteUserRole::as_returning())
+			.get_results(conn)?;
+
+		Ok(permissions_iam_actions)
+	}
+
 	pub fn upsert_many(
 		conn: &mut PgConnection,
 		site_id: Uuid,

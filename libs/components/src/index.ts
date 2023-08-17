@@ -8,3 +8,4 @@ export * from './lib/components/badge';
 export * from './lib/components/modal';
 export * from './lib/components/permission';
 export * from './lib/components/resource-explorer';
+export * from './lib/components/tabs';

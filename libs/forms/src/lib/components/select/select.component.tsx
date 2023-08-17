@@ -21,6 +21,11 @@ export const Select: FC<ISelectProps> = ({
 }: ISelectProps) => {
 	const isMulti = min !== 1 || max !== 1;
 	const handleSelection = (key: any) => {
+		if (!key && onChange) {
+			// Clear
+			return onChange(null);
+		}
+
 		if (Array.isArray(key) && onChange) {
 			onChange(key.map(({ value }: { value: string }) => value));
 		} else if (!Array.isArray(key) && onChange) {
@@ -34,6 +39,7 @@ export const Select: FC<ISelectProps> = ({
 
 	return (
 		<ReactSelect
+			isClearable={true}
 			isMulti={isMulti}
 			closeMenuOnSelect={closeMenuOnSelect}
 			isDisabled={disabled}

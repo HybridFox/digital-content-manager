@@ -12,5 +12,6 @@ export * from './site-role';
 export * from './role';
 export * from './storage-repository';
 export * from './authentication-method';
+export * from './authentication-method-role-assignment';
 export * from './language';
 export * from './iam-action';

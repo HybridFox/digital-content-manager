@@ -34,6 +34,21 @@ impl UserRole {
 
 		Ok(user_role)
 	}
+	
+	pub fn upsert(
+		conn: &mut PgConnection,
+		user_id: Uuid,
+		role_id: Uuid,
+	) -> Result<Vec<Self>, AppError> {
+		let user_role = diesel::insert_into(users_roles::table)
+			.values(CreateUserRole { user_id, role_id })
+			.on_conflict((users_roles::user_id, users_roles::role_id))
+			.do_nothing()
+			.returning(UserRole::as_returning())
+			.get_results(conn)?;
+
+		Ok(user_role)
+	}
 
 	pub fn upsert_many(
 		conn: &mut PgConnection,

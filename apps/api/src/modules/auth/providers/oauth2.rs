@@ -10,7 +10,7 @@ use crate::modules::auth::dto::response;
 use crate::modules::auth::services::dynamic_login::AuthProvider;
 use crate::modules::authentication_methods::models::authentication_method::AuthenticationMethod;
 use crate::modules::users::models::user::User;
-use crate::modules::auth::services::register::register_user;
+use crate::modules::auth::services::register::{register_user, persist_role_assignments};
 use crate::utils::string::generate_random_string;
 use actix_web::HttpResponse;
 use oauth2::basic::BasicClient;
@@ -135,6 +135,7 @@ impl AuthProvider for OAuth2AuthProvider {
 
 		match existing_user {
 			Ok((user, token)) => {
+				persist_role_assignments(conn, user.id, Some(self.authentication_method.id))?;
 				let sites = user.get_sites(conn)?;
 				let roles = user.get_roles(conn)?;
 				let res = response::AuthDTO::from((user, sites, roles, token));
@@ -150,6 +151,7 @@ impl AuthProvider for OAuth2AuthProvider {
 					Some(self.authentication_method.id),
 				)
 				.await?;
+				persist_role_assignments(conn, user.id, Some(self.authentication_method.id))?;
 
 				let sites = user.get_sites(conn)?;
 				let roles = user.get_roles(conn)?;

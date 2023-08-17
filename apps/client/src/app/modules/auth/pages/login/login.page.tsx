@@ -90,7 +90,7 @@ export const LoginPage = () => {
 		<div className={cxBind('p-login')}>
 			<div className={cxBind('p-login__content')}>
 				<div className={cxBind('p-login__logo')}>
-					<i className="las la-sms"></i> Inhoud Beheer Systeem
+					<img src="/assets/img/logo.svg" alt="Logo" />
 				</div>
 				<Loading loading={authenticationMethodsLoading}>
 					{(authenticationMethods || []).map((method) => {

@@ -1,6 +1,5 @@
 import { NavLink, generatePath, useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
-import { useAuthStore } from '@ibs/shared';
 import { HasPermission } from '@ibs/components';
 
 import { DASHBOARD_PATHS } from '../../../dashboard';
@@ -33,7 +32,7 @@ export const Menu = () => {
 		<div className={cxBind('o-menu')}>
 			<div className={cxBind('o-menu__logo')}>
 				<NavLink to="/">
-					<i className="las la-sms"></i> <span>Inhoud Beheer Systeem</span>
+					<img src="/assets/img/logo.svg" alt="Logo" />
 				</NavLink>
 			</div>
 			<div className={cxBind('o-menu__links')}>

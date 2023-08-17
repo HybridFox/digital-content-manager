@@ -89,7 +89,8 @@
 				color: var(--color-gray-light);
 			}
 
-			p, a {
+			p,
+			a {
 				text-overflow: ellipsis;
 				white-space: nowrap;
 				overflow: hidden;

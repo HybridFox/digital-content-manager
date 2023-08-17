@@ -167,6 +167,14 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 						.service(modules::authentication_methods::controllers::authentication_methods::find_one)
 						.service(modules::authentication_methods::controllers::authentication_methods::update)
 						.service(modules::authentication_methods::controllers::authentication_methods::remove)
+						.service(
+							web::scope("/{authentication_method_id}/role-assignments")
+								.service(modules::authentication_methods::controllers::authentication_method_roles::create)
+								.service(modules::authentication_methods::controllers::authentication_method_roles::find_all)
+								.service(modules::authentication_methods::controllers::authentication_method_roles::find_one)
+								.service(modules::authentication_methods::controllers::authentication_method_roles::update)
+								.service(modules::authentication_methods::controllers::authentication_method_roles::remove)
+						)
 				)
 				.service(
 					web::scope("/users")

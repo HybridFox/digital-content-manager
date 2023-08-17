@@ -26,4 +26,13 @@
 			color: var(--color-state-danger);
 		}
 	}
+
+	&--info {
+		background-color: var(--color-state-info-light);
+		color: var(--color-state-info);
+
+		.a-alert__close {
+			color: var(--color-state-danger);
+		}
+	}
 }

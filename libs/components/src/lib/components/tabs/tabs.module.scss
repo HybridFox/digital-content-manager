@@ -1,0 +1,27 @@
+.m-tabs {
+	border-bottom: 1px solid var(--color-gray-lightest);
+	margin-bottom: var(--spacer);
+	
+	&__link {
+		display: inline-block;
+		padding: var(--spacer-sm);
+		color: var(--color-gray-darker);
+		text-decoration: none;
+		background-color: transparent;
+		font-weight: normal;
+		border: none;
+		text-transform: none;
+		cursor: pointer;
+
+		&--active {
+			border-bottom: 2px solid var(--color-primary);
+			margin-bottom: -1px;
+		}
+
+		&--disabled {
+			pointer-events: none;
+			opacity: 0.2;
+			cursor: not-allowed;
+		}
+	}
+}

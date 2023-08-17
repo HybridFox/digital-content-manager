@@ -53,7 +53,7 @@ export const PolicyCreatePage = () => {
 	useEffect(() => {
 		fetchIAMActions({ pagesize: -1, kind: 'root' });
 		setBreadcrumbs([
-			{ label: t(`BREADCRUMBS.STORAGE_REPOSITORIES`), to: POLICY_PATHS.ROOT },
+			{ label: t(`BREADCRUMBS.POLICIES`), to: POLICY_PATHS.ROOT },
 			{ label: t(`BREADCRUMBS.CREATE`) },
 		]);
 	}, []);
@@ -72,7 +72,7 @@ export const PolicyCreatePage = () => {
 		<>
 			<Header
 				breadcrumbs={breadcrumbs}
-				title={t('WORKFLOW_STATES.TITLES.CREATE')}
+				title={t('POLICIES.TITLES.CREATE')}
 			></Header>
 			<div className="u-margin-top">
 				<Loading loading={iamActionsLoading}>
