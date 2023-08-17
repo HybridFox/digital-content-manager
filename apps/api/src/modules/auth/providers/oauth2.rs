@@ -24,11 +24,6 @@ use serde::{Serialize, Deserialize};
 use serde_json::{Value, json};
 use utoipa::IntoParams;
 
-#[derive(Deserialize, IntoParams)]
-pub struct CallbackQueryParams {
-	code: String,
-}
-
 #[derive(Deserialize, IntoParams, Debug)]
 pub struct UserInfoResponse {
 	email: String,
@@ -137,8 +132,6 @@ impl AuthProvider for OAuth2AuthProvider {
 		match existing_user {
 			Ok((user, token)) => {
 				persist_role_assignments(conn, user.id, Some(self.authentication_method.id))?;
-				let sites = user.get_sites(conn)?;
-				let roles = user.get_roles(conn)?;
 				let permissions = get_user_permissions(conn, user.id, None)?;
 				let res = response::MeDTO::from((user, token, permissions));
 				Ok(HttpResponse::Ok().json(res))
@@ -155,8 +148,6 @@ impl AuthProvider for OAuth2AuthProvider {
 				.await?;
 				persist_role_assignments(conn, user.id, Some(self.authentication_method.id))?;
 
-				let sites = user.get_sites(conn)?;
-				let roles = user.get_roles(conn)?;
 				let permissions = get_user_permissions(conn, user.id, None)?;
 				let res = response::MeDTO::from((user, token, permissions));
 				Ok(HttpResponse::Ok().json(res))

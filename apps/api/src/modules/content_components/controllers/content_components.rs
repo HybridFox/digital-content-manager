@@ -1,4 +1,5 @@
 use super::super::dto::content_components::{request, response};
+use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::{
 	errors::AppError,
 	modules::content_components::models::content_component::UpdateContentComponent,
@@ -7,7 +8,7 @@ use crate::modules::content_components::models::content_component::ContentCompon
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, put, HttpResponse, delete};
+use actix_web::{get, post, web, put, HttpResponse, delete, HttpRequest};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;
@@ -46,10 +47,12 @@ pub struct FindAllQueryParams {
 )]
 #[post("")]
 pub async fn create(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	form: web::Json<request::CreateContentComponentDTO>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-components:*"), "sites::content-components:create")?;
 	let conn = &mut state.get_conn()?;
 	let content_component = ContentComponent::create(
 		conn,
@@ -75,10 +78,12 @@ pub async fn create(
 )]
 #[get("")]
 pub async fn find_all(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	query: web::Query<FindAllQueryParams>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-components:*"), "sites::content-components:read")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
@@ -121,9 +126,11 @@ pub async fn find_all(
 )]
 #[get("/{content_component_id}")]
 pub async fn find_one(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-components:{}", params.content_component_id), "sites::content-components:read")?;
 	let conn = &mut state.get_conn()?;
 	let content_component =
 		ContentComponent::find_one(conn, Some(params.site_id), params.content_component_id)?;
@@ -150,10 +157,12 @@ pub async fn find_one(
 )]
 #[put("/{content_component_id}")]
 pub async fn update(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateContentComponentDTO>,
 ) -> ApiResponse {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-components:{}", params.content_component_id), "sites::content-components:update")?;
 	let conn = &mut state.get_conn()?;
 	let content_component = ContentComponent::update(
 		conn,
@@ -180,9 +189,11 @@ pub async fn update(
 )]
 #[delete("/{content_component_id}")]
 pub async fn remove(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-components:{}", params.content_component_id), "sites::content-components:remove")?;
 	let conn = &mut state.get_conn()?;
 	ContentComponent::remove(conn, params.content_component_id)?;
 	Ok(HttpResponse::NoContent().body(()))

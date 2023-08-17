@@ -1,9 +1,9 @@
-use crate::modules::resources::dto::files::request;
+use crate::modules::{resources::dto::files::request, auth::helpers::permissions::ensure_permission};
 use crate::modules::resources::engines::lib::get_storage_engine;
 use crate::errors::AppError;
 use crate::modules::core::middleware::state::AppState;
 use actix_multipart::form::MultipartForm;
-use actix_web::{get, post, web, delete, HttpResponse};
+use actix_web::{get, post, web, delete, HttpResponse, HttpRequest};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;
@@ -32,11 +32,13 @@ pub struct FilesQueryParams {
 )]
 #[post("")]
 pub async fn upload_file(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	MultipartForm(form): MultipartForm<request::CreateFileDTO>,
 	query: web::Query<FilesQueryParams>,
 	params: web::Path<SharedParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:storage-repositories:{}:resources:*", params.storage_repository_id), "sites::resources:upload-file")?;
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
 	engine.upload_file(&query.path, form.file).await?;
@@ -57,10 +59,12 @@ pub async fn upload_file(
 )]
 #[get("")]
 pub async fn read_file(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	query: web::Query<FilesQueryParams>,
 	params: web::Path<SharedParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:storage-repositories:{}:resources:*", params.storage_repository_id), "sites::resources:read")?;
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
 	let file = engine.download_file(&query.path).await?;
@@ -81,10 +85,12 @@ pub async fn read_file(
 )]
 #[delete("")]
 pub async fn remove_file(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	query: web::Query<FilesQueryParams>,
 	params: web::Path<SharedParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:storage-repositories:{}:resources:*", params.storage_repository_id), "sites::resources:remove-file")?;
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
 	engine.remove_file(&query.path).await?;

@@ -39,7 +39,7 @@ export const ContentListPage = () => {
 				breadcrumbs={breadcrumbs}
 				title={t(`CONTENT.TITLES.LIST_${kind?.toUpperCase()}`)}
 				action={
-					<HasPermission siteId={siteId} resource='urn:ibs::*' action={`sites::${kind}:create`}>
+					<HasPermission siteId={siteId} resource='urn:ibs:*' action={`sites::${kind}:create`}>
 						<ButtonLink to="create" type={ButtonTypes.PRIMARY}>
 							<span className="las la-plus"></span> {t(`CONTENT.ACTIONS.CREATE_${kind?.toUpperCase()}`)}
 						</ButtonLink>

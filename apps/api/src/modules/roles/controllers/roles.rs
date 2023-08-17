@@ -1,10 +1,11 @@
 use super::super::models::role::{UpdateRole, Role};
 use super::super::dto::{request, response};
 use crate::errors::AppError;
+use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, HttpResponse, put, delete};
+use actix_web::{get, post, web, HttpResponse, put, delete, HttpRequest};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;
@@ -33,9 +34,11 @@ pub struct FindAllQueryParams {
 )]
 #[post("")]
 pub async fn create(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	form: web::Json<request::CreateRoleDTO>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, None, format!("urn:ibs:roles:*"), "root::roles:create")?;
 	let conn = &mut state.get_conn()?;
 	let (role, policies) = Role::create(conn, None, form.name.clone(), form.policies.clone())?;
 	let res = response::RoleWithPoliciesDTO::from((role, policies));
@@ -55,9 +58,11 @@ pub async fn create(
 )]
 #[get("")]
 pub async fn find_all(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	query: web::Query<FindAllQueryParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, None, format!("urn:ibs:roles:*"), "root::roles:read")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
@@ -89,9 +94,11 @@ pub async fn find_all(
 )]
 #[get("/{role_id}")]
 pub async fn find_one(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, None, format!("urn:ibs:roles:{}", params.role_id), "root::roles:read")?;
 	let conn = &mut state.get_conn()?;
 	let role = Role::find_one(conn, None, params.role_id)?;
 	let policies = Role::find_policies(conn, &role)?;
@@ -113,10 +120,12 @@ pub async fn find_one(
 )]
 #[put("/{role_id}")]
 pub async fn update(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateRoleDTO>,
 ) -> ApiResponse {
+	ensure_permission(&req, None, format!("urn:ibs:roles:{}", params.role_id), "root::roles:update")?;
 	let conn = &mut state.get_conn()?;
 	let (role, policies) = Role::update(
 		conn,
@@ -143,9 +152,11 @@ pub async fn update(
 )]
 #[delete("/{role_id}")]
 pub async fn remove(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
+	ensure_permission(&req, None, format!("urn:ibs:roles:{}", params.role_id), "root::roles:remove")?;
 	let conn = &mut state.get_conn()?;
 	Role::remove(conn, params.role_id)?;
 	Ok(HttpResponse::NoContent().body(()))

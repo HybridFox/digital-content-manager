@@ -124,6 +124,17 @@ impl From<R2D2Error> for AppError {
 	}
 }
 
+impl From<regex::Error> for AppError {
+	fn from(err: regex::Error) -> Self {
+		AppError::InternalServerError(AppErrorValue {
+			message: err.to_string(),
+			status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+			code: "REGEX_ERROR".to_owned(),
+			..Default::default()
+		})
+	}
+}
+
 impl From<JwtError> for AppError {
 	fn from(err: JwtError) -> Self {
 		match err.kind() {

@@ -1,6 +1,6 @@
 use crate::modules::iam_actions::models::iam_action::CreateIAMAction;
 
-pub const SITE_IAM_ACTION_SEEDS: [CreateIAMAction<'_>; 61] = [
+pub const SITE_IAM_ACTION_SEEDS: [CreateIAMAction<'_>; 52] = [
 	CreateIAMAction {
 		key: "sites::*",
 		description: None,
@@ -26,52 +26,6 @@ pub const SITE_IAM_ACTION_SEEDS: [CreateIAMAction<'_>; 61] = [
 	},
 	CreateIAMAction {
 		key: "sites::content:remove",
-		description: None,
-	},
-	/*
-	 * pages
-	 */
-	CreateIAMAction {
-		key: "sites::pages:*",
-		description: None,
-	},
-	CreateIAMAction {
-		key: "sites::pages:read",
-		description: None,
-	},
-	CreateIAMAction {
-		key: "sites::pages:create",
-		description: None,
-	},
-	CreateIAMAction {
-		key: "sites::pages:update",
-		description: None,
-	},
-	CreateIAMAction {
-		key: "sites::pages:remove",
-		description: None,
-	},
-	/*
-	 * content-blocks
-	 */
-	CreateIAMAction {
-		key: "sites::content-blocks:*",
-		description: None,
-	},
-	CreateIAMAction {
-		key: "sites::content-blocks:read",
-		description: None,
-	},
-	CreateIAMAction {
-		key: "sites::content-blocks:create",
-		description: None,
-	},
-	CreateIAMAction {
-		key: "sites::content-blocks:update",
-		description: None,
-	},
-	CreateIAMAction {
-		key: "sites::content-blocks:remove",
 		description: None,
 	},
 	/*
@@ -182,11 +136,15 @@ pub const SITE_IAM_ACTION_SEEDS: [CreateIAMAction<'_>; 61] = [
 		description: None,
 	},
 	CreateIAMAction {
+		key: "sites::resources:remove-directory",
+		description: None,
+	},
+	CreateIAMAction {
 		key: "sites::resources:upload-file",
 		description: None,
 	},
 	CreateIAMAction {
-		key: "sites::resources:remove",
+		key: "sites::resources:remove-file",
 		description: None,
 	},
 	/*

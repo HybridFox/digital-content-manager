@@ -1,9 +1,10 @@
 use super::super::models::language::Language;
+use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::sites::dto::languages::response::LanguagesDTO;
 use crate::{errors::AppError, modules::sites::dto::languages::response::LanguageDTO};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
-use actix_web::{get, web, HttpResponse};
+use actix_web::{get, web, HttpResponse, HttpRequest};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;
@@ -32,9 +33,11 @@ pub struct FindAllQueryParams {
 )]
 #[get("")]
 pub async fn find_all(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	query: web::Query<FindAllQueryParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, None, format!("urn:ibs:languages:*"), "root::languages::read")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
@@ -67,9 +70,11 @@ pub async fn find_all(
 )]
 #[get("/{language_id}")]
 pub async fn find_one(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, None, format!("urn:ibs:languages:{}", params.language_id), "root::languages::read")?;
 	let conn = &mut state.get_conn()?;
 	let language = Language::find_one(conn, params.language_id)?;
 

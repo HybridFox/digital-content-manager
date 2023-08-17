@@ -1,7 +1,3 @@
-use std::borrow::Borrow;
-use std::env;
-
-use crate::constants;
 use crate::modules::auth::dto::request::LoginUserDTO;
 use async_trait::async_trait;
 use diesel::PgConnection;
@@ -11,30 +7,8 @@ use crate::modules::auth::dto::response;
 use crate::modules::auth::services::dynamic_login::AuthProvider;
 use crate::modules::authentication_methods::models::authentication_method::AuthenticationMethod;
 use crate::modules::users::models::user::User;
-use crate::modules::auth::services::register::register_user;
-use crate::utils::string::generate_random_string;
 use actix_web::HttpResponse;
-use oauth2::basic::BasicClient;
-use oauth2::{
-	CsrfToken, Scope, AuthorizationCode, ClientId, ClientSecret, AuthUrl, TokenUrl, RedirectUrl,
-	TokenResponse,
-};
-use oauth2::reqwest::async_http_client;
 use serde::{Serialize, Deserialize};
-use serde_json::Value;
-use utoipa::IntoParams;
-
-#[derive(Deserialize, IntoParams)]
-pub struct CallbackQueryParams {
-	code: String,
-}
-
-#[derive(Deserialize, IntoParams, Debug)]
-pub struct UserInfoResponse {
-	email: String,
-	name: String,
-	picture: String,
-}
 
 #[derive(Serialize, Deserialize)]
 struct LocalConfig {
@@ -44,20 +18,6 @@ struct LocalConfig {
 	token_url: String,
 	userinfo_url: String,
 	scopes: Vec<String>,
-}
-
-fn get_client(config: &LocalConfig) -> Result<BasicClient, AppError> {
-	let client = BasicClient::new(
-		ClientId::new(config.client_id.clone()),
-		Some(ClientSecret::new(config.client_secret.clone())),
-		AuthUrl::new(config.auth_url.clone())?,
-		Some(TokenUrl::new(config.token_url.clone())?),
-	)
-	.set_redirect_uri(RedirectUrl::new(env::var(
-		constants::env_key::FRONTEND_URL,
-	)?)?);
-
-	Ok(client)
 }
 
 #[derive(Debug, Clone)]

@@ -15,7 +15,7 @@ use crate::{schema::permissions, errors::AppError};
 
 #[derive(FromSqlRow, AsExpression, serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 #[diesel(sql_type = Jsonb)]
-pub struct PermissionResourcesValue(Vec<String>);
+pub struct PermissionResourcesValue(pub Vec<String>);
 
 impl FromSql<Jsonb, Pg> for PermissionResourcesValue {
 	fn from_sql(bytes: PgValue) -> diesel::deserialize::Result<Self> {

@@ -1,3 +1,4 @@
+use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::content_types::dto::fields::{request, response};
 use crate::modules::content_components::dto::content_components::response::FieldWithContentComponentDTO;
 use crate::modules::content_types::models::field::{UpdateField, FieldTypeEnum};
@@ -6,7 +7,7 @@ use crate::{errors::AppError, modules::content_types::models::field::FieldModel}
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, HttpResponse, delete, put};
+use actix_web::{get, post, web, HttpResponse, delete, put, HttpRequest};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;
@@ -21,6 +22,7 @@ pub struct FindPathParams {
 pub struct FindOnePathParams {
 	site_id: Uuid,
 	field_id: Uuid,
+	content_component_id: Uuid,
 }
 
 #[derive(Deserialize, IntoParams)]
@@ -43,10 +45,12 @@ pub struct FindAllQueryParams {
 )]
 #[post("")]
 pub async fn create(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	form: web::Json<request::CreateFieldDTO>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-components:{}", params.content_component_id), "sites::content-components:update")?;
 	let conn = &mut state.get_conn()?;
 	let field = FieldModel::create(
 		conn,
@@ -74,10 +78,12 @@ pub async fn create(
 )]
 #[get("")]
 pub async fn find_all(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	query: web::Query<FindAllQueryParams>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-components:{}", params.content_component_id), "sites::content-components:update")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
@@ -118,9 +124,11 @@ pub async fn find_all(
 )]
 #[get("/{field_id}")]
 pub async fn find_one(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-components:{}", params.content_component_id), "sites::content-components:update")?;
 	let conn = &mut state.get_conn()?;
 	let field = FieldModel::find_one(conn, params.site_id, params.field_id)?;
 
@@ -142,10 +150,12 @@ pub async fn find_one(
 )]
 #[put("/{field_id}")]
 pub async fn update(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateFieldDTO>,
 ) -> ApiResponse {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-components:{}", params.content_component_id), "sites::content-components:update")?;
 	let conn = &mut state.get_conn()?;
 
 	FieldConfig::upsert(conn, params.field_id, form.config.clone())?;
@@ -180,9 +190,11 @@ pub async fn update(
 )]
 #[delete("/{field_id}")]
 pub async fn remove(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-components:{}", params.content_component_id), "sites::content-components:update")?;
 	let conn = &mut state.get_conn()?;
 	FieldModel::remove(conn, params.field_id)?;
 	Ok(HttpResponse::NoContent().body(()))

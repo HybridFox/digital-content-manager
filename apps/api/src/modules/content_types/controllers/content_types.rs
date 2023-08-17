@@ -1,4 +1,5 @@
 use super::super::dto::content_types::{request, response};
+use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::{errors::AppError, modules::content_types::models::content_type::UpdateContentType};
 use crate::modules::content_types::models::content_type::{
 	ContentType, CreateContentType, ContentTypeKindEnum,
@@ -6,7 +7,7 @@ use crate::modules::content_types::models::content_type::{
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, HttpResponse, delete, put};
+use actix_web::{get, post, web, HttpResponse, delete, put, HttpRequest};
 use serde::Deserialize;
 use slug::slugify;
 use utoipa::IntoParams;
@@ -46,10 +47,13 @@ pub struct FindAllQueryParams {
 )]
 #[post("")]
 pub async fn create(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	form: web::Json<request::CreateContentTypeDTO>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
+	// TODO: fix this so it keeps the "kind" in mind.
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-types:*"), "sites::content-types:create")?;
 	let conn = &mut state.get_conn()?;
 	let content_type = ContentType::create(
 		conn,
@@ -79,10 +83,12 @@ pub async fn create(
 )]
 #[get("")]
 pub async fn find_all(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	query: web::Query<FindAllQueryParams>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-types:*"), "sites::content-types:read")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
@@ -123,9 +129,11 @@ pub async fn find_all(
 )]
 #[get("/{content_type_id}")]
 pub async fn find_one(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-types:{}", params.content_type_id), "sites::content-types:read")?;
 	let conn = &mut state.get_conn()?;
 	let content_type = ContentType::find_one(conn, params.site_id, params.content_type_id)?;
 	let res = response::ContentTypeWithFieldsDTO::from(content_type);
@@ -146,10 +154,12 @@ pub async fn find_one(
 )]
 #[put("/{content_type_id}")]
 pub async fn update(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateContentTypeDTO>,
 ) -> ApiResponse {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-types:{}", params.content_type_id), "sites::content-types:update")?;
 	let conn = &mut state.get_conn()?;
 	let content_type = ContentType::update(
 		conn,
@@ -177,9 +187,11 @@ pub async fn update(
 )]
 #[delete("/{content_type_id}")]
 pub async fn remove(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-types:{}", params.content_type_id), "sites::content-types:remove")?;
 	let conn = &mut state.get_conn()?;
 	ContentType::remove(conn, params.content_type_id)?;
 	Ok(HttpResponse::NoContent().body(()))

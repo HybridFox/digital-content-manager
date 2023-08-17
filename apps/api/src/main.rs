@@ -14,7 +14,7 @@ use tracing_actix_web::TracingLogger;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
-use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
+use tracing_bunyan_formatter::BunyanFormattingLayer;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::{EnvFilter, Registry};
 use opentelemetry::{global, runtime::TokioCurrentThread, sdk::propagation::TraceContextPropagator};

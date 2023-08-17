@@ -1,3 +1,4 @@
+use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::resources::dto::storage_repositories::{response, request};
 use crate::modules::resources::models::storage_repository::{
 	CreateStorageRepository, StorageRepository, UpdateStorageRepository,
@@ -5,7 +6,7 @@ use crate::modules::resources::models::storage_repository::{
 use crate::errors::AppError;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
-use actix_web::{get, post, web, put, delete, HttpResponse};
+use actix_web::{get, post, web, put, delete, HttpResponse, HttpRequest};
 use chrono::Utc;
 use serde::Deserialize;
 use utoipa::IntoParams;
@@ -41,10 +42,12 @@ pub struct FindAllQueryParams {
 )]
 #[post("")]
 pub async fn create(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	form: web::Json<request::CreateStorageRepositoryDTO>,
-	_params: web::Path<FindPathParams>,
+	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:storage-repositories:*"), "sites::storage-repositories:create")?;
 	let conn = &mut state.get_conn()?;
 
 	let storage_repository = StorageRepository::create(
@@ -73,10 +76,12 @@ pub async fn create(
 )]
 #[get("")]
 pub async fn find_all(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	query: web::Query<FindAllQueryParams>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:storage-repositories:*"), "sites::storage-repositories:read")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
@@ -111,9 +116,11 @@ pub async fn find_all(
 )]
 #[get("/{storage_repository_id}")]
 pub async fn find_one(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:storage-repositories:{}", params.storage_repository_id), "sites::storage-repositories:read")?;
 	let conn = &mut state.get_conn()?;
 	let storage_repository = StorageRepository::find_one(conn, params.storage_repository_id)?;
 
@@ -135,10 +142,12 @@ pub async fn find_one(
 )]
 #[put("/{storage_repository_id}")]
 pub async fn update(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateStorageRepositoryDTO>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:storage-repositories:{}", params.storage_repository_id), "sites::storage-repositories:update")?;
 	let conn = &mut state.get_conn()?;
 	let storage_repository = StorageRepository::update(
 		conn,
@@ -166,9 +175,11 @@ pub async fn update(
 )]
 #[delete("/{storage_repository_id}")]
 pub async fn remove(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:storage-repositories:{}", params.storage_repository_id), "sites::storage-repositories:remove")?;
 	let conn = &mut state.get_conn()?;
 	StorageRepository::remove(conn, params.storage_repository_id)?;
 	Ok(HttpResponse::NoContent().finish())

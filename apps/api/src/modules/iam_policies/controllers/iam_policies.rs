@@ -1,12 +1,13 @@
 use super::super::models::iam_policy::{UpdateIAMPolicy, IAMPolicy};
 use super::super::dto::{request, response};
 use crate::errors::AppError;
+use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::modules::iam_policies::models::permission::Permission;
 use crate::modules::iam_policies::models::permission_iam_action::PermissionIAMAction;
 use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, HttpResponse, put, delete};
+use actix_web::{get, post, web, HttpResponse, put, delete, HttpRequest};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;
@@ -35,9 +36,11 @@ pub struct FindAllQueryParams {
 )]
 #[post("")]
 pub async fn create(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	form: web::Json<request::CreateIAMPolicyDTO>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, None, format!("urn:ibs:policies:*"), "root::policies:create")?;
 	let conn = &mut state.get_conn()?;
 	let policy = IAMPolicy::create(conn, None, &form.name)?;
 
@@ -70,9 +73,11 @@ pub async fn create(
 )]
 #[get("")]
 pub async fn find_all(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	query: web::Query<FindAllQueryParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, None, format!("urn:ibs:policies:*"), "root::policies:read")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
@@ -104,9 +109,11 @@ pub async fn find_all(
 )]
 #[get("/{iam_policy_id}")]
 pub async fn find_one(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, None, format!("urn:ibs:policies:{}", params.iam_policy_id), "root::policies::read")?;
 	let conn = &mut state.get_conn()?;
 	let (policy, permissions) = IAMPolicy::find_one(conn, None, params.iam_policy_id)?;
 
@@ -127,10 +134,12 @@ pub async fn find_one(
 )]
 #[put("/{iam_policy_id}")]
 pub async fn update(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateIAMPolicyDTO>,
 ) -> ApiResponse {
+	ensure_permission(&req, None, format!("urn:ibs:policies:{}", params.iam_policy_id), "root::policies::update")?;
 	let conn = &mut state.get_conn()?;
 	let policy = IAMPolicy::update(
 		conn,
@@ -171,9 +180,11 @@ pub async fn update(
 )]
 #[delete("/{iam_policy_id}")]
 pub async fn remove(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
+	ensure_permission(&req, None, format!("urn:ibs:policies:{}", params.iam_policy_id), "root::policies::remove")?;
 	let conn = &mut state.get_conn()?;
 	IAMPolicy::remove(conn, params.iam_policy_id)?;
 	Ok(HttpResponse::NoContent().body(()))

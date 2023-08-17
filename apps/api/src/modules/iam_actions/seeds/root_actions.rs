@@ -1,8 +1,19 @@
 use crate::modules::iam_actions::models::iam_action::CreateIAMAction;
 
-pub const ROOT_IAM_ACTION_SEEDS: [CreateIAMAction<'_>; 26] = [
+pub const ROOT_IAM_ACTION_SEEDS: [CreateIAMAction<'_>; 28] = [
 	CreateIAMAction {
 		key: "root::*",
+		description: None,
+	},
+	/*
+	 * Languages
+	 */
+	CreateIAMAction {
+		key: "root::languages:*",
+		description: None,
+	},
+	CreateIAMAction {
+		key: "root::languages:read",
 		description: None,
 	},
 	/*

@@ -1,10 +1,11 @@
 use super::super::dto::workflow_states::{request, response};
+use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::workflows::models::workflow_state::{CreateWorkflowState, UpdateWorkflowState};
 use crate::{errors::AppError, modules::workflows::models::workflow_state::WorkflowState};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, HttpResponse, delete, put};
+use actix_web::{get, post, web, HttpResponse, delete, put, HttpRequest};
 use serde::Deserialize;
 use slug::slugify;
 use utoipa::IntoParams;
@@ -41,10 +42,12 @@ pub struct FindAllQueryParams {
 )]
 #[post("")]
 pub async fn create(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	form: web::Json<request::CreateWorkflowStateDTO>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:workflow-states:*"), "sites::workflow-states:create")?;
 	let conn = &mut state.get_conn()?;
 	let workflow = WorkflowState::create(
 		conn,
@@ -73,10 +76,12 @@ pub async fn create(
 )]
 #[get("")]
 pub async fn find_all(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	query: web::Query<FindAllQueryParams>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:workflow-states:*"), "sites::workflow-states:read")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
@@ -110,9 +115,11 @@ pub async fn find_all(
 )]
 #[get("/{workflow_id}")]
 pub async fn find_one(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:workflow-states:{}", params.workflow_id), "sites::workflow-states:read")?;
 	let conn = &mut state.get_conn()?;
 	let workflow = WorkflowState::find_one(conn, params.site_id, params.workflow_id)?;
 
@@ -134,10 +141,12 @@ pub async fn find_one(
 )]
 #[put("/{workflow_id}")]
 pub async fn update(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateWorkflowStateDTO>,
 ) -> ApiResponse {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:workflow-states:{}", params.workflow_id), "sites::workflow-states:update")?;
 	let conn = &mut state.get_conn()?;
 	let workflow = WorkflowState::update(
 		conn,
@@ -166,9 +175,11 @@ pub async fn update(
 )]
 #[delete("/{workflow_id}")]
 pub async fn remove(
+	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:workflow-states:{}", params.workflow_id), "sites::workflow-states:remove")?;
 	let conn = &mut state.get_conn()?;
 	WorkflowState::remove(conn, params.workflow_id)?;
 	Ok(HttpResponse::NoContent().body(()))

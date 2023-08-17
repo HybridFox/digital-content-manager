@@ -68,7 +68,7 @@ export const PermissionManager: FC<IPermissionManagerProps> = ({ name, iamAction
 					</div>
 				))}
 			</div>
-			<button type='button' className={cxBind('o-permission-manager__add')} onClick={() => append({ effect: 'grant', resources: ['urn:ibs::*'] })}>
+			<button type='button' className={cxBind('o-permission-manager__add')} onClick={() => append({ effect: 'grant', resources: ['urn:ibs:*'] })}>
 				<i className="las la-plus"></i>
 				<p>
 					{t('PERMISSIONS.ADD')}

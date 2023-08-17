@@ -7,11 +7,6 @@ use utoipa::IntoParams;
 use uuid::Uuid;
 
 #[derive(Deserialize, IntoParams)]
-pub struct FilesPathParams {
-	site_id: Uuid,
-}
-
-#[derive(Deserialize, IntoParams)]
 #[serde(rename_all = "camelCase")]
 pub struct FilesQueryParams {
 	path: String,
@@ -33,7 +28,6 @@ pub struct FilesQueryParams {
 pub async fn read_file(
 	state: web::Data<AppState>,
 	query: web::Query<FilesQueryParams>,
-	_params: web::Path<FilesPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, query.storage_repository_id)?;
