@@ -22,6 +22,8 @@ import { SITE_ROUTES } from './modules/sites';
 import { USER_ROUTES } from './modules/users';
 import { POLICY_ROUTES } from './modules/policies';
 import { SITE_ROLE_ROUTES } from './modules/site-roles';
+import { SiteView } from './modules/core/views/site/site.view';
+import { RootView } from './modules/core/views/root/root.view';
 
 const router = createBrowserRouter([
 	{
@@ -42,21 +44,33 @@ const router = createBrowserRouter([
 				path: '',
 				element: <AuthenticatedView />,
 				children: [
-					...SITE_ROUTES,
-					...DASHBOARD_ROUTES,
-					...CONTENT_TYPE_ROUTES,
-					...CONTENT_ROUTES,
-					...CONTENT_COMPONENT_ROUTES,
-					...RESOURCE_ROUTES,
-					...STORAGE_ROUTES,
-					...WORKFLOW_ROUTES,
-					...POLICY_ROUTES,
-					...SITE_USER_ROUTES,
-					...USER_ROUTES,
-					...ROLE_ROUTES,
-					...SITE_ROLE_ROUTES,
-					...SITE_POLICY_ROUTES,
-					...AUTHENTICATION_METHOD_ROUTES
+					{
+						path: '',
+						element: <SiteView />,
+						children: [
+							...DASHBOARD_ROUTES,
+							...CONTENT_TYPE_ROUTES,
+							...CONTENT_ROUTES,
+							...CONTENT_COMPONENT_ROUTES,
+							...RESOURCE_ROUTES,
+							...STORAGE_ROUTES,
+							...WORKFLOW_ROUTES,
+							...SITE_USER_ROUTES,
+							...SITE_ROLE_ROUTES,
+							...SITE_POLICY_ROUTES,
+						],
+					},
+					{
+						path: '',
+						element: <RootView />,
+						children: [
+							...SITE_ROUTES,
+							...USER_ROUTES,
+							...ROLE_ROUTES,
+							...POLICY_ROUTES,
+							...AUTHENTICATION_METHOD_ROUTES
+						],
+					},
 				]
 			}
 		]

@@ -4,16 +4,16 @@ import { devtools, persist } from 'zustand/middleware'
 import { kyAuthInstance, kyInstance, wrapApi } from '../../services';
 import { ISite } from '../../types';
 
-import { IMeReponse, IRole, IUser } from './auth.types';
+import { IMeReponse, IPermission, IUser } from './auth.types';
 
 interface IAuthStoreState {
 	user?: IUser;
-	sites: ISite[];
-	roles: IRole[];
-	activeSite?: ISite;
+	permissions: IPermission[];
 	token?: string;
+	activeSite?: ISite;
 	// TODO: Move this to another store perhaps?
-	fetchUser: () => Promise<void>;
+	fetchUser: (siteId?: string) => Promise<void>;
+	fetchSite: (siteId: string) => Promise<void>;
 	setup: (values: any) => Promise<void>;
 	loginLocal: (authenticationMethodId: string, email: string, password: string) => Promise<void>;
 	login: (authenticationMethodId: string) => Promise<{ redirect: string }>;
@@ -25,17 +25,31 @@ export const useAuthStore = create<IAuthStoreState>()(devtools(
 	persist(
 		(set) => ({
 			sites: [],
-			roles: [],
-			clear: () => set({ sites: [], roles: [], activeSite: undefined, token: undefined, user: undefined }),
-			fetchUser: async () => {
-				const [result, error] = await wrapApi(kyInstance.get('/admin-api/v1/auth/me').json<IMeReponse>());
+			permissions: [],
+			clear: () => set({ permissions: [], activeSite: undefined, token: undefined, user: undefined }),
+			fetchUser: async (siteId) => {
+				const [result, error] = await wrapApi(kyInstance.get('/admin-api/v1/auth/me', {
+					searchParams: {
+						...(siteId && { siteId })
+					}
+				}).json<IMeReponse>());
 
 				if (error) {
 					set(() => ({ user: undefined, token: undefined, sites: [] }));
 					throw error;
 				}
 				
-				set(() => ({ ...result, activeSite: result.sites?.[0] }));
+				set(() => ({ ...result }));
+			},
+			fetchSite: async (siteId) => {
+				const [activeSite, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}`).json<ISite>());
+
+				if (error) {
+					set(() => ({ user: undefined, token: undefined, sites: [] }));
+					throw error;
+				}
+				
+				set(() => ({ activeSite }));
 			},
 			callback: async (authenticationMethodId, code) => {
 				const [result, error] = await wrapApi(kyAuthInstance.post(`/admin-api/v1/auth/${authenticationMethodId}/callback`, {
@@ -47,7 +61,7 @@ export const useAuthStore = create<IAuthStoreState>()(devtools(
 					throw error;
 				}
 
-				set(() => ({ ...result, activeSite: result.sites?.[0] }));
+				set(() => ({ ...result }));
 			},
 			loginLocal: async (authenticationMethodId, email, password) => {
 				const [result, error] = await wrapApi(kyAuthInstance.post(`/admin-api/v1/auth/${authenticationMethodId}/login`, {
@@ -58,7 +72,7 @@ export const useAuthStore = create<IAuthStoreState>()(devtools(
 					throw error;
 				}
 
-				set(() => ({ ...result, activeSite: result.sites?.[0] }));
+				set(() => ({ ...result }));
 			},
 			login: async (authenticationMethodId) => {
 				const [result, error] = await wrapApi(kyAuthInstance.post(`/admin-api/v1/auth/${authenticationMethodId}/login`, {
@@ -80,7 +94,7 @@ export const useAuthStore = create<IAuthStoreState>()(devtools(
 					throw error;
 				}
 	
-				set(() => ({ ...result, activeSite: result.sites?.[0] }));
+				set(() => ({ ...result }));
 			} 
 		}), { name: 'authStore' }
 	), { name: 'authStore' }

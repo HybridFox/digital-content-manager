@@ -41,6 +41,5 @@ export interface IUser {
 export interface IMeReponse {
 	token: string;
 	user: IUser;
-	roles: IRole[];
-	sites: ISite[];
+	permissions: IPermission[];
 }

@@ -1,9 +1,19 @@
 use crate::modules::auth::dto::request;
+use crate::modules::auth::helpers::permissions::get_user_permissions;
 use crate::modules::users::models::user::{User, UpdateUser};
 use crate::modules::{core::middleware::auth, auth::dto::response};
 use crate::modules::core::middleware::state::AppState;
 use crate::utils::api::ApiResponse;
 use actix_web::{get, web, HttpRequest, HttpResponse, put};
+use serde::Deserialize;
+use utoipa::IntoParams;
+use uuid::Uuid;
+
+#[derive(Deserialize, IntoParams)]
+#[serde(rename_all = "camelCase")]
+pub struct MeQueryParams {
+	site_id: Option<Uuid>
+}
 
 #[utoipa::path(
 	context_path = "/api/v1/auth",
@@ -16,13 +26,12 @@ use actix_web::{get, web, HttpRequest, HttpResponse, put};
     )
 )]
 #[get("/me")]
-pub async fn me(state: web::Data<AppState>, req: HttpRequest) -> ApiResponse {
+pub async fn me(state: web::Data<AppState>, req: HttpRequest, query: web::Query<MeQueryParams>) -> ApiResponse {
 	let conn = &mut state.get_conn()?;
 	let user = auth::get_current_user(&req)?;
 	let token = user.generate_token()?;
-	let sites = user.get_sites(conn)?;
-	let roles = user.get_roles(conn)?;
-	let res = response::AuthDTO::from((user, sites, roles, token));
+	let permissions = get_user_permissions(conn, user.id, query.site_id)?;
+	let res = response::MeDTO::from((user, token, permissions));
 	Ok(HttpResponse::Ok().json(res))
 }
 

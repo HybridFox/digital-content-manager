@@ -1,57 +1,39 @@
-import { IRole, PERMISSION_EFFECT } from "../stores";
-import { ISite } from "../types";
+import { IPermission, IRole, PERMISSION_EFFECT } from '../stores';
+import { ISite } from '../types';
 
-interface IAggregatedPermission {
-	resource: string;
-	action: string;
-}
+const aggregatePermissions = (roles: IPermission[]): [IPermission[], IPermission[]] => {
+	const [denyList, grantList] = roles.reduce(
+		([accDenyList, accGrantList], permission) => {
+			if (permission.effect === PERMISSION_EFFECT.DENY) {
+				return [[...accDenyList, permission], [...accGrantList]];
+			}
 
-const aggregatePermissions = (roles: IRole[]): [IAggregatedPermission[], IAggregatedPermission[]] => {
-	const [denyList, grantList] = roles.reduce(([accDenyList, accGrantList], role) => {
-		const [subDenyList, subGrantList] = role.policies.reduce(([accSubDenyList, accSubGrantList], policy) => {
-			const dl = policy.permissions.filter((permission) => permission.effect === PERMISSION_EFFECT.DENY).reduce((permissionAcc, permission) => [...permissionAcc, {
-				resource: permission.resources[0],
-				action: permission.actions[0],
-			}], [] as IAggregatedPermission[]);
-			const gl = policy.permissions.filter((permission) => permission.effect === PERMISSION_EFFECT.GRANT).reduce((permissionAcc, permission) => [...permissionAcc, {
-				resource: permission.resources[0],
-				action: permission.actions[0],
-			}], [] as IAggregatedPermission[]);
-
-			return [
-				[...accSubDenyList, ...dl],
-				[...accSubGrantList, ...gl]
-			];
-		}, [[], []] as [IAggregatedPermission[], IAggregatedPermission[]]);
-
-		return [
-			[...accDenyList, ...subDenyList],
-			[...accGrantList, ...subGrantList]
-		]
-	}, [[], []] as [IAggregatedPermission[], IAggregatedPermission[]]);
+			return [[...accDenyList], [...accGrantList, permission]];
+		},
+		[[], []] as [IPermission[], IPermission[]]
+	);
 
 	return [denyList, grantList];
-}
+};
 
-export const hasPermission = (siteId: string | undefined, sites: ISite[], roles: IRole[], resource: string, action: string | string[]): boolean => {
-	let rolesToCheck = [];
-	if (siteId) {
-		const site = sites.find((site) => site.id === siteId);
-		rolesToCheck = site?.roles || [];
-	} else {
-		rolesToCheck = roles;
-	}
-
-	const [denyList, grantList] = aggregatePermissions(rolesToCheck);
-
+export const hasPermission = (permissions: IPermission[], resource: string, action: string | string[]): boolean => {
+	const [denyList, grantList] = aggregatePermissions(permissions);
 
 	return !!grantList.find((item) => {
 		if (Array.isArray(action)) {
-			return (!!action.find((a) => new RegExp(item?.action?.replaceAll('*', "(\\w*)")).test(a)) || !!action.find((a) => new RegExp(a.replaceAll('*', "(\\w*)")).test(item?.action))) 
-				&& (new RegExp(item?.resource?.replaceAll('*', "(\\w*)")).test(resource) || new RegExp(resource.replaceAll('*', "(\\w*)")).test(item?.resource));
+			return (
+				(!!action.find((a) => new RegExp(item?.actions?.[0]?.replaceAll('*', '(\\w*)')).test(a)) ||
+					!!action.find((a) => new RegExp(a.replaceAll('*', '(\\w*)')).test(item?.actions?.[0]))) &&
+				(new RegExp(item?.resources?.[0]?.replaceAll('*', '(\\w*)')).test(resource) ||
+					new RegExp(resource.replaceAll('*', '(\\w*)')).test(item?.resources?.[0]))
+			);
 		}
 
-		return (new RegExp(item?.action?.replaceAll('*', "(\\w*)")).test(action) || new RegExp(action.replaceAll('*', "(\\w*)")).test(item?.action)) 
-			&& (new RegExp(item?.resource?.replaceAll('*', "(\\w*)")).test(resource) || new RegExp(resource.replaceAll('*', "(\\w*)")).test(item?.resource));
+		return (
+			(new RegExp(item?.actions?.[0]?.replaceAll('*', '(\\w*)')).test(action) ||
+				new RegExp(action.replaceAll('*', '(\\w*)')).test(item?.actions?.[0])) &&
+			(new RegExp(item?.resources?.[0]?.replaceAll('*', '(\\w*)')).test(resource) ||
+				new RegExp(resource.replaceAll('*', '(\\w*)')).test(item?.resources?.[0]))
+		);
 	});
-}
+};

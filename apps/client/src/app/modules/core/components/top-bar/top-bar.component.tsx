@@ -17,11 +17,9 @@ const navLinkBinding = {
 };
 
 export const TopBar = () => {
-	const { user, sites } = useAuthStore();
-	const { siteId } = useParams();
+	const { user, activeSite } = useAuthStore();
 	const navigate = useNavigate();
 	const [clear] = useAuthStore((state) => [state.clear]);
-	const activeSite = sites.find(({ id }) => id === siteId);
 
 	return (
 		<div className={cxBind('o-top-bar')}>

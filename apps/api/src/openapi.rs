@@ -27,8 +27,6 @@ impl Modify for SecurityAddon {
 
 		super::modules::auth::controllers::auth::me,
 		super::modules::auth::controllers::auth::update,
-		super::modules::auth::controllers::local::login,
-		super::modules::auth::controllers::local::register,
 
 		super::modules::sites::controllers::sites::create,
 		super::modules::sites::controllers::sites::find_all,

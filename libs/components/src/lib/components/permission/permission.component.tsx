@@ -11,10 +11,10 @@ export const HasPermission: FC<IPermissionProp> = ({
 	action,
 	siteId
 }: IPermissionProp) => {
-	const [sites, roles] = useAuthStore((state) => [state.sites, state.roles]);
+	const [permissions] = useAuthStore((state) => [state.permissions]);
 	const shouldShow = useMemo(() => {
-		return hasPermission(siteId, sites, roles, resource, action);
-	}, [siteId, resource, action, sites, roles])
+		return hasPermission(permissions, resource, action);
+	}, [siteId, resource, action, permissions])
 
 	if (!shouldShow) {
 		return null;

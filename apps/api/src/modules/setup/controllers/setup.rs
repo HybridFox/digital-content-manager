@@ -1,5 +1,6 @@
 use super::super::dto::request;
-use crate::modules::auth::dto::response::AuthDTO;
+use crate::modules::auth::dto::response::MeDTO;
+use crate::modules::auth::helpers::permissions::get_user_permissions;
 use crate::modules::{core::middleware::state::AppState, setup::services::setup::setup_initial_user};
 use crate::utils::api::ApiResponse;
 use actix_web::{post, web, HttpResponse};
@@ -21,8 +22,8 @@ pub async fn register(
 
 	let (user, token) =
 		setup_initial_user(conn, &form.email, &form.name, &form.password, None, None).await?;
-	let roles = user.get_roles(conn)?;
+	let permissions = get_user_permissions(conn, user.id, None)?;
 
-	let res = AuthDTO::from((user, vec![], roles, token));
+	let res = MeDTO::from((user, token, permissions));
 	Ok(HttpResponse::Ok().json(res))
 }

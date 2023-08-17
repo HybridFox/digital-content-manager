@@ -2,7 +2,10 @@ use crate::modules::{
 	users::models::user::User,
 	sites::{dto::response::SiteWithRolesDTO, models::site::Site},
 	roles::{models::role::Role, dto::response::RoleWithPoliciesWithPermissionsDTO},
-	iam_policies::models::{iam_policy::IAMPolicy, permission::Permission},
+	iam_policies::{
+		models::{iam_policy::IAMPolicy, permission::Permission},
+		dto::response::PermissionDTO,
+	},
 	languages::models::language::Language,
 };
 use serde::{Deserialize, Serialize};
@@ -70,6 +73,26 @@ impl
 			roles: roles
 				.into_iter()
 				.map(|role| RoleWithPoliciesWithPermissionsDTO::from(role))
+				.collect(),
+		}
+	}
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+pub struct MeDTO {
+	pub user: UserDTO,
+	pub token: String,
+	pub permissions: Vec<PermissionDTO>,
+}
+
+impl From<(User, String, Vec<(Permission, Vec<String>)>)> for MeDTO {
+	fn from((user, token, permissions): (User, String, Vec<(Permission, Vec<String>)>)) -> Self {
+		Self {
+			token,
+			user: UserDTO::from(user),
+			permissions: permissions
+				.into_iter()
+				.map(|permission| PermissionDTO::from(permission))
 				.collect(),
 		}
 	}

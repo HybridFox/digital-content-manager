@@ -22,7 +22,6 @@ export const ResourceExplorer: FC<IResourceExplorerProps> = ({
 	maxSelection,
 	siteId,
 }: IResourceExplorerProps) => {
-	const [site] = useAuthStore((state) => [state.activeSite]);
 	const [resources, resourcesLoading, fetchResources] = useResourceStore((state) => [
 		state.resources,
 		state.resourcesLoading,
@@ -125,7 +124,7 @@ export const ResourceExplorer: FC<IResourceExplorerProps> = ({
 					selection={selection.map(({ path }) => path)}
 					selectable={actions.includes(ResourceExplorerAction.SELECT)}
 					selectablePredicate={(row: IResource) => row.kind === ResourceKind.FILE}
-					columns={RESOURCE_COLUMNS(site?.id || null, path.split('/'), actions, onSubNavigate, handleRemoveDirectory, handleRemoveFile)}
+					columns={RESOURCE_COLUMNS(siteId! || null, path.split('/'), actions, onSubNavigate, handleRemoveDirectory, handleRemoveFile)}
 					rows={(resources || []).map(mapResource)}
 					onSelection={handleSelection}
 				></Table>

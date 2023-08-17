@@ -20,11 +20,6 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 						.service(modules::auth::controllers::auth::me)
 						.service(modules::auth::controllers::auth::update)
 						.service(
-							web::scope("/local")
-								.service(modules::auth::controllers::local::login)
-								.service(modules::auth::controllers::local::register),
-						)
-						.service(
 							web::scope("/{auth_id}")
 								.service(modules::auth::controllers::dynamic_auth::login)
 								.service(modules::auth::controllers::dynamic_auth::callback),
