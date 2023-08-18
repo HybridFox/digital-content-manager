@@ -15,9 +15,9 @@ inputs:
 runs:
     using: "composite"
     steps:
-		- name: Set output
-			id: vars
-			run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+        - name: Set output
+            id: vars
+            run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
         - name: Set up QEMU
           uses: docker/setup-qemu-action@v2
         - name: Set up Docker Buildx
@@ -46,4 +46,4 @@ runs:
               tags: ${{ steps.meta.outputs.tags }}
               labels: ${{ steps.meta.outputs.labels }}
               build-args: |
-                APP_VERSION=${{ steps.vars.outputs.tag }}
+                  APP_VERSION=${{ steps.vars.outputs.tag }}
