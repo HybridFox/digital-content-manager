@@ -46,7 +46,8 @@ pub async fn create(
 	form: web::Json<request::CreateRoleDTO>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:roles:*"), "sites::roles:create")?;
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:roles:*"), "sites::roles:create")
+		.or_else(|_| ensure_permission(&req, None, format!("urn:ibs:roles:*"), "root::roles:create"))?;
 	let conn = &mut state.get_conn()?;
 	let (role, policies) = Role::create(
 		conn,
@@ -76,7 +77,8 @@ pub async fn find_all(
 	query: web::Query<FindAllQueryParams>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:roles:*"), "sites::roles:read")?;
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:roles:*"), "sites::roles:read")
+		.or_else(|_| ensure_permission(&req, None, format!("urn:ibs:roles:*"), "root::roles:read"))?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
@@ -114,7 +116,8 @@ pub async fn find_one(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:roles:{}", params.role_id), "sites::roles:read")?;
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:roles:{}", params.role_id), "sites::roles:read")
+		.or_else(|_| ensure_permission(&req, None, format!("urn:ibs:roles:{}", params.role_id), "root::roles:read"))?;
 	let conn = &mut state.get_conn()?;
 	let role = Role::find_one(conn, Some(params.site_id), params.role_id)?;
 	let policies = Role::find_policies(conn, &role)?;
@@ -142,7 +145,8 @@ pub async fn update(
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateRoleDTO>,
 ) -> ApiResponse {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:roles:{}", params.role_id), "sites::roles:update")?;
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:roles:{}", params.role_id), "sites::roles:update")
+		.or_else(|_| ensure_permission(&req, None, format!("urn:ibs:roles:{}", params.role_id), "root::roles:update"))?;
 	let conn = &mut state.get_conn()?;
 	let (role, policies) = Role::update(
 		conn,
@@ -173,7 +177,8 @@ pub async fn remove(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:roles:{}", params.role_id), "sites::roles:remove")?;
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:roles:{}", params.role_id), "sites::roles:remove")
+		.or_else(|_| ensure_permission(&req, None, format!("urn:ibs:roles:{}", params.role_id), "root::roles:remove"))?;
 	let conn = &mut state.get_conn()?;
 	Role::remove(conn, params.role_id)?;
 	Ok(HttpResponse::NoContent().body(()))
