@@ -1,4 +1,4 @@
-import { IAPIHALResponse, IPageParameters } from "../../types/paging.types";
+import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types/paging.types";
 import { IContentComponent } from "../content-component";
 
 export enum FIELD_KEYS {
@@ -74,6 +74,7 @@ export type IContentTypesResponse = IAPIHALResponse<'contentTypes', IContentType
 export interface IContentTypeStoreState {
 	fetchContentTypes: (siteId: string, params?: IFetchContentTypesParameters) => Promise<void>;
 	contentTypes: IContentType[];
+	contentTypesPagination?: IAPIPagination;
 	contentTypesLoading: boolean;
 
 	fetchContentType: (siteId: string, contentTypeId: string) => Promise<IContentType>;

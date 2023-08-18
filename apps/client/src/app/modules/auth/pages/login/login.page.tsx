@@ -3,7 +3,7 @@ import cx from 'classnames/bind';
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useNavigate } from "react-router-dom";
-import { IAPIError, IAuthenticationMethod, useAuthStore, useAuthenticationMethodStore } from "@ibs/shared";
+import { IAPIError, IAuthenticationMethod, useAuthStore, useAuthenticationMethodStore, useThemeStore } from "@ibs/shared";
 import { TextField, TextFieldTypes } from "@ibs/forms";
 import { useTranslation } from "react-i18next";
 import { FormEvent, useEffect } from "react";
@@ -22,6 +22,7 @@ export const LoginPage = () => {
 	const navigate = useNavigate();
 	const formMethods = useForm<ILoginForm>({ resolver: yupResolver(loginSchema) });
 	const { handleSubmit, setError, formState: { errors } } = formMethods;
+	const [theme] = useThemeStore((state) => [state.theme]);
 	const { t } = useTranslation();
 	const [authenticationMethods, authenticationMethodsLoading, fetchAuthenticationMethods] = useAuthenticationMethodStore((state) => [
 		state.authenticationMethods,
@@ -46,7 +47,7 @@ export const LoginPage = () => {
 		}
 		
 		return (
-			<div className={cxBind('p-login__button')}>
+			<div className={cxBind('p-login__button')} key={authenticationMethod.id}>
 				<form onSubmit={handleSubmit}>
 					<Button htmlType={HTMLButtonTypes.SUBMIT}>Login with {authenticationMethod.name}</Button>
 				</form>
@@ -66,7 +67,7 @@ export const LoginPage = () => {
 		}
 
 		return (
-			<div className={cxBind('p-login__form')}>
+			<div className={cxBind('p-login__form')} key={authenticationMethod.id}>
 				<Alert className="u-margin-bottom" type={AlertTypes.DANGER}>{errors?.root?.message}</Alert>
 				<FormProvider {...formMethods}>
 					<form onSubmit={handleSubmit(onSubmit)}>
@@ -90,7 +91,7 @@ export const LoginPage = () => {
 		<div className={cxBind('p-login')}>
 			<div className={cxBind('p-login__content')}>
 				<div className={cxBind('p-login__logo')}>
-					<img src="/assets/img/logo-alternative-light.svg" alt="Logo" />
+					<img src={`/assets/img/logo-alternative-${theme}.svg`} alt="Logo" />
 				</div>
 				<Loading loading={authenticationMethodsLoading}>
 					{(authenticationMethods || []).sort((a, b) => b.weight - a.weight).map((method) => {
@@ -102,9 +103,20 @@ export const LoginPage = () => {
 					})}
 				</Loading>
 			</div>
-			<div className={cxBind('p-login__aside')} style={{
-				backgroundImage: `url(https://source.unsplash.com/random/?fox,animal,nature)`
-			}}></div>
+			<div className={cxBind('p-login__aside')}>
+				<div
+					className={cxBind('p-login__aside__lazy')}
+					style={{
+						backgroundImage: `url(https://images.unsplash.com/photo-1579033014049-f33d9b14d37e?auto=format&fit=crop&w=300&q=10)`,
+					}}
+				></div>
+				<div
+					className={cxBind('p-login__aside__background')}
+					style={{
+						backgroundImage: `url(https://images.unsplash.com/photo-1579033014049-f33d9b14d37e?auto=format&fit=crop&w=1920&q=100)`,
+					}}
+				></div>
+			</div>
 		</div>
 	)
 }

@@ -44,6 +44,30 @@
 		background-size: cover;
 		background-position: center center;
 		border-radius: var(--border-radius-md);
+		position: relative;
+		overflow: hidden;
+		
+		&__lazy {
+			filter: blur(10px);
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-position: center center;
+			background-size: cover;
+		}
+		
+		&__background {
+			z-index: 1;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-position: center center;
+			background-size: cover;
+		}
 
 		@include tools.to('md') {
 			display: none;

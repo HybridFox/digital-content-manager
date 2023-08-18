@@ -1,6 +1,6 @@
-import { IAPIError, useAuthenticationMethodRoleAssignmentStore, useAuthenticationMethodStore, useRoleStore, useSiteRoleStore } from '@ibs/shared';
-import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, ButtonTypes, Card, HTMLButtonTypes, Loading, Table, Tabs } from '@ibs/components';
+import { IAPIError, getPageParams, getPaginationProps, useAuthenticationMethodRoleAssignmentStore, useAuthenticationMethodStore, useRoleStore, useSiteRoleStore } from '@ibs/shared';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { Alert, AlertTypes, Button, ButtonTypes, Card, HTMLButtonTypes, Loading, Pagination, Table, Tabs } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SelectField } from '@ibs/forms';
@@ -17,13 +17,15 @@ interface AddAssignmentForm {
 }
 
 export const AuthenticationMethodRoleAssignmentPage = () => {
+	const [searchParams, setSearchParams] = useSearchParams();
 	const { t } = useTranslation();
 	const [assignmentType, setAssignmentType] = useState<'root' | 'site'>('site');
 	const [authenticationMethod] = useAuthenticationMethodStore((state) => [
 		state.authenticationMethod,
 	]);
-	const [authenticationMethodRoleAssignments, authenticationMethodRoleAssignmentLoading, fetchAuthenticationMethodRoleAssignments] = useAuthenticationMethodRoleAssignmentStore((state) => [
+	const [authenticationMethodRoleAssignments, authenticationMethodRoleAssignmentsPagination, authenticationMethodRoleAssignmentLoading, fetchAuthenticationMethodRoleAssignments] = useAuthenticationMethodRoleAssignmentStore((state) => [
 		state.authenticationMethodRoleAssignments,
+		state.authenticationMethodRoleAssignmentsPagination,
 		state.authenticationMethodRoleAssignmentLoading,
 		state.fetchAuthenticationMethodRoleAssignments,
 	]);
@@ -62,9 +64,13 @@ export const AuthenticationMethodRoleAssignmentPage = () => {
 	}, [selectedSiteId])
 
 	useEffect(() => {
-		fetchAuthenticationMethodRoleAssignments(authenticationMethodId!);
+		// TODO: Dynamic Search
 		fetchSites({ pagesize: -1 });
 	}, []);
+
+	useEffect(() => {
+		fetchAuthenticationMethodRoleAssignments(authenticationMethodId!, { ...getPageParams(searchParams) });
+	}, [searchParams])
 	
 	const onAddAssignment = (values: AddAssignmentForm) => {
 		if (!authenticationMethodId) {
@@ -99,6 +105,13 @@ export const AuthenticationMethodRoleAssignmentPage = () => {
 			<Alert className='u-margin-bottom' closable={false} type={AlertTypes.INFO}>{t('AUTHENTICATION_METHODS.MESSAGES.PERSISTING_ROLES')}</Alert>
 			<Loading loading={authenticationMethodRoleAssignmentLoading}>
 				<Table columns={AUTHENTICATION_METHOD_ROLE_ASSIGNMENTS_COLUMNS(t, onRemoveAssignment)} rows={authenticationMethodRoleAssignments || []}/>
+				<Pagination
+					className="u-margin-top"
+					totalPages={authenticationMethodRoleAssignmentsPagination?.totalPages}
+					number={authenticationMethodRoleAssignmentsPagination?.number}
+					size={authenticationMethodRoleAssignmentsPagination?.size}
+					{...getPaginationProps(searchParams, setSearchParams)}
+				/>
 			</Loading>
 			<Card title="Add role assignment" className='u-margin-top'>
 				<FormProvider {...formMethods}>

@@ -1,7 +1,7 @@
 import { NavLink, generatePath, useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
 import { HasPermission } from '@ibs/components';
-import { useAuthStore } from '@ibs/shared';
+import { useThemeStore } from '@ibs/shared';
 
 import { DASHBOARD_PATHS } from '../../../dashboard';
 import { RESOURCE_PATHS } from '../../../resources';
@@ -28,7 +28,7 @@ const navLinkBinding = {
 
 export const Menu = () => {
 	const { siteId } = useParams();
-	const [theme] = useAuthStore((state) => [state.theme])
+	const [theme] = useThemeStore((state) => [state.theme]);
 
 	return (
 		<div className={cxBind('o-menu')}>

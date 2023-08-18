@@ -16,8 +16,9 @@ export const Select: FC<ISelectProps> = ({
 	closeMenuOnSelect,
 	disabled,
 	hasError,
-	min,
-	max,
+	min = 1,
+	max = 1,
+	isClearable = true,
 }: ISelectProps) => {
 	const isMulti = min !== 1 || max !== 1;
 	const handleSelection = (key: any) => {
@@ -39,7 +40,7 @@ export const Select: FC<ISelectProps> = ({
 
 	return (
 		<ReactSelect
-			isClearable={true}
+			isClearable={isClearable}
 			isMulti={isMulti}
 			closeMenuOnSelect={closeMenuOnSelect}
 			isDisabled={disabled}

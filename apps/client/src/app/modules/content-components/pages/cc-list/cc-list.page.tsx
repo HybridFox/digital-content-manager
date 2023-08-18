@@ -1,25 +1,30 @@
 import { useEffect } from 'react';
-import { useContentComponentStore, useHeaderStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Table } from '@ibs/components';
+import { getPageParams, getPaginationProps, useContentComponentStore, useHeaderStore } from '@ibs/shared';
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { CONTENT_COMPONENTS_LIST_COLUMNS } from './cc-list.const';
 
 export const CCListPage = () => {
-	const [contentComponents, contentComponentsLoading, fetchContentComponents] = useContentComponentStore((state) => [state.contentComponents, state.contentComponentsLoading, state.fetchContentComponents]);
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [contentComponents, contentComponentsPagination, contentComponentsLoading, fetchContentComponents] = useContentComponentStore((state) => [
+		state.contentComponents,
+		state.contentComponentsPagination,
+		state.contentComponentsLoading,
+		state.fetchContentComponents,
+	]);
 	const { t } = useTranslation();
 	const { kind, siteId } = useParams();
-	const [breadcrumbs, setBreadcrumbs] =
-		useHeaderStore((state) => [
-			state.breadcrumbs,
-			state.setBreadcrumbs
-		]);
+	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		fetchContentComponents(siteId!, {});
-		setBreadcrumbs([{ label: t(`BREADCRUMBS.CONTENT_COMPONENTS`) }])
+		setBreadcrumbs([{ label: t(`BREADCRUMBS.CONTENT_COMPONENTS`) }]);
 	}, [kind]);
+
+	useEffect(() => {
+		fetchContentComponents(siteId!, { ...getPageParams(searchParams) });
+	}, [searchParams]);
 
 	return (
 		<>
@@ -32,14 +37,15 @@ export const CCListPage = () => {
 					</ButtonLink>
 				}
 			></Header>
-			<Loading
-				loading={contentComponentsLoading}
-				text={t(`GENERAL.LOADING`)}
-			>
-				<Table
-					columns={CONTENT_COMPONENTS_LIST_COLUMNS(t)}
-					rows={contentComponents}
-				></Table>
+			<Loading loading={contentComponentsLoading} text={t(`GENERAL.LOADING`)}>
+				<Table columns={CONTENT_COMPONENTS_LIST_COLUMNS(t)} rows={contentComponents}></Table>
+				<Pagination
+					className="u-margin-top"
+					totalPages={contentComponentsPagination?.totalPages}
+					number={contentComponentsPagination?.number}
+					size={contentComponentsPagination?.size}
+					{...getPaginationProps(searchParams, setSearchParams)}
+				/>
 			</Loading>
 		</>
 	);

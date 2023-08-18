@@ -1,13 +1,16 @@
 import { useEffect } from 'react';
-import { useAuthenticationMethodStore, useHeaderStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Table } from '@ibs/components';
+import { getPageParams, getPaginationProps, useAuthenticationMethodStore, useHeaderStore } from '@ibs/shared';
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 
 import { AUTHENTICATION_METHODS_LIST_COLUMNS } from './authentication-method-list.const';
 
 export const AuthenticationMethodListPage = () => {
-	const [authenticationMethods, authenticationMethodsLoading, fetchAuthenticationMethods] = useAuthenticationMethodStore((state) => [
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [authenticationMethods, authenticationMethodsPagination, authenticationMethodsLoading, fetchAuthenticationMethods] = useAuthenticationMethodStore((state) => [
 		state.authenticationMethods,
+		state.authenticationMethodsPagination,
 		state.authenticationMethodsLoading,
 		state.fetchAuthenticationMethods,
 	]);
@@ -15,9 +18,12 @@ export const AuthenticationMethodListPage = () => {
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		fetchAuthenticationMethods({ all: true });
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.AUTHENTICATION_METHODS`) }]);
 	}, []);
+
+	useEffect(() => {
+		fetchAuthenticationMethods({ all: true, ...getPageParams(searchParams) });
+	}, [searchParams])
 
 	return (
 		<>
@@ -32,6 +38,13 @@ export const AuthenticationMethodListPage = () => {
 			></Header>
 			<Loading loading={authenticationMethodsLoading} text={t(`GENERAL.LABELS.LOADING`)}>
 				<Table columns={AUTHENTICATION_METHODS_LIST_COLUMNS(t)} rows={authenticationMethods || []}></Table>
+				<Pagination
+					className="u-margin-top"
+					totalPages={authenticationMethodsPagination?.totalPages}
+					number={authenticationMethodsPagination?.number}
+					size={authenticationMethodsPagination?.size}
+					{...getPaginationProps(searchParams, setSearchParams)}
+				/>
 			</Loading>
 		</>
 	);

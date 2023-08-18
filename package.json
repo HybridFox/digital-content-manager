@@ -96,6 +96,7 @@
 		"react-hook-form": "7.45.1",
 		"react-i18next": "13.0.2",
 		"react-modal": "3.16.1",
+		"react-paginate": "8.2.0",
 		"react-router-dom": "6.11.2",
 		"react-select": "5.7.4",
 		"react-tooltip": "5.18.1",

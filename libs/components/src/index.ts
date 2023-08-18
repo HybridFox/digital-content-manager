@@ -9,3 +9,5 @@ export * from './lib/components/modal';
 export * from './lib/components/permission';
 export * from './lib/components/resource-explorer';
 export * from './lib/components/tabs';
+export * from './lib/components/pagination';
+export * from './lib/components/select';

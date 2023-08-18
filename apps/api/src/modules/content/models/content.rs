@@ -220,6 +220,27 @@ impl Content {
 			query
 		};
 
+		let total_query = {
+			let mut query = content::table
+				.filter(content::site_id.eq(site_id))
+				.inner_join(content_types::table.on(content_types::id.eq(content::content_type_id)))
+				.into_boxed();
+
+			if let Some(kind) = kind {
+				query = query.filter(content_types::kind.eq(kind));
+			}
+
+			if let Some(translation_id) = translation_id {
+				query = query.filter(content::translation_id.eq(translation_id));
+			}
+
+			if let Some(language_id) = language_id {
+				query = query.filter(content::language_id.eq(language_id));
+			}
+
+			query
+		};
+
 		let content = query
 			.select((
 				Content::as_select(),
@@ -229,8 +250,7 @@ impl Content {
 			))
 			.load::<(Content, Language, ContentType, WorkflowState)>(conn)?;
 
-		let total_elements = content::table
-			.filter(content::site_id.eq(site_id))
+		let total_elements = total_query
 			.count()
 			.get_result::<i64>(conn)?;
 

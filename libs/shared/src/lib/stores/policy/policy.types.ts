@@ -1,4 +1,4 @@
-import { IAPIHALResponse, IPageParameters } from "../../types";
+import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types";
 import { IPermission } from "../auth";
 
 export interface IPolicy {
@@ -14,6 +14,7 @@ export type IPoliciesResponse = IAPIHALResponse<'policies', IPolicy>
 export interface IPolicyStoreState {
 	fetchPolicies: (params?: IPageParameters) => Promise<void>;
 	policies: IPolicy[];
+	policiesPagination?: IAPIPagination;
 	policiesLoading: boolean;
 
 	fetchPolicy: (policyId: string) => Promise<void>;

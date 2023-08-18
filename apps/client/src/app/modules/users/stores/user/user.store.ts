@@ -21,7 +21,7 @@ export const useUserStore = create<IUserStoreState>()(devtools(
 				return set(() => ({ users: [], usersLoading: false }))
 			}
 			
-			set(() => ({ users: result._embedded.users, usersLoading: false }));
+			set(() => ({ users: result._embedded.users, usersPagination: result._page, usersLoading: false }));
 		},
 		users: [],
 		usersLoading: false,
@@ -98,7 +98,7 @@ export const useUserStore = create<IUserStoreState>()(devtools(
 				return set(() => ({ users: [], usersLoading: false }))
 			}
 			
-			set(() => ({ userSites: result._embedded.sites, usersLoading: false }));
+			set(() => ({ userSites: result._embedded.sites, userSitesPagination: result._page, usersLoading: false }));
 		},
 		userSites: [],
 		userSitesLoading: false,

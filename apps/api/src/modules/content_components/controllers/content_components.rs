@@ -86,7 +86,7 @@ pub async fn find_all(
 	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-components:*"), "sites::content-components:read")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
-	let pagesize = query.pagesize.unwrap_or(20);
+	let pagesize = query.pagesize.unwrap_or(10);
 	let include_internal = query.include_internal.unwrap_or(false);
 	let include_hidden = query.include_hidden.unwrap_or(false);
 

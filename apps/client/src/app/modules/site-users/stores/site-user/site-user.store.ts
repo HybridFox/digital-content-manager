@@ -19,7 +19,7 @@ export const useSiteUserStore = create<ISiteUserStoreState>()(devtools(
 				return set(() => ({ users: [], usersLoading: false }))
 			}
 			
-			set(() => ({ users: result._embedded.users, usersLoading: false }));
+			set(() => ({ users: result._embedded.users, usersPagination: result._page, usersLoading: false }));
 		},
 		users: [],
 		usersLoading: false,

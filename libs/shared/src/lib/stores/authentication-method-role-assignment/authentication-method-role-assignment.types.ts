@@ -1,5 +1,5 @@
 import { IRole } from "..";
-import { IAPIHALResponse, IPageParameters, ISite } from "../../types";
+import { IAPIHALResponse, IAPIPagination, IPageParameters, ISite } from "../../types";
 
 export interface IAuthenticationMethodRoleAssignment {
 	id: string;
@@ -14,6 +14,7 @@ export type IAuthenticationMethodRoleAssignmentsResponse = IAPIHALResponse<'auth
 export interface IAuthenticationMethodRoleAssignmentStoreState {
 	fetchAuthenticationMethodRoleAssignments: (authenticationMethodId: string, params?: IPageParameters) => Promise<IAuthenticationMethodRoleAssignment[]>;
 	authenticationMethodRoleAssignments: IAuthenticationMethodRoleAssignment[];
+	authenticationMethodRoleAssignmentsPagination?: IAPIPagination;
 	authenticationMethodRoleAssignmentsLoading: boolean;
 
 	fetchAuthenticationMethodRoleAssignment: (authenticationMethodId: string, authenticationMethodRoleAssignmentId: string) => Promise<IAuthenticationMethodRoleAssignment>;

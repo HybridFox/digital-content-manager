@@ -84,7 +84,7 @@ pub async fn find_all(
 	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:workflow-states:*"), "sites::workflow-states:read")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
-	let pagesize = query.pagesize.unwrap_or(20);
+	let pagesize = query.pagesize.unwrap_or(10);
 
 	let (workflows, total_elements) = WorkflowState::find(conn, params.site_id, page, pagesize)?;
 

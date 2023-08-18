@@ -20,7 +20,7 @@ export const useStorageRepositoryStore = create<IStorageRepositoryStoreState>()(
 				return []
 			}
 			
-			set(() => ({ storageRepositories: result._embedded.storageRepositories, storageRepositoriesLoading: false }));
+			set(() => ({ storageRepositories: result._embedded.storageRepositories, storageRepositoriesPagination: result._page, storageRepositoriesLoading: false }));
 			return result._embedded.storageRepositories;
 		},
 		storageRepositories: [],

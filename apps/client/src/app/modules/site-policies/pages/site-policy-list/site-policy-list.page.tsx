@@ -1,14 +1,16 @@
 import { useEffect } from 'react';
-import { useHeaderStore, useSitePolicyStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Table } from '@ibs/components';
+import { getPageParams, getPaginationProps, useHeaderStore, useSitePolicyStore } from '@ibs/shared';
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { POLICY_LIST_COLUMNS } from './site-policy-list.const';
 
 export const SitePolicyListPage = () => {
-	const [policies, policiesLoading, fetchPolicies] = useSitePolicyStore((state) => [
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [policies, policiesPagination, policiesLoading, fetchPolicies] = useSitePolicyStore((state) => [
 		state.policies,
+		state.policiesPagination,
 		state.policiesLoading,
 		state.fetchPolicies,
 	]);
@@ -16,13 +18,16 @@ export const SitePolicyListPage = () => {
 		state.removePolicy,
 	]);
 	const { t } = useTranslation();
-	const { kind, siteId } = useParams();
+	const { siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		fetchPolicies(siteId!);
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.SITE_POLICIES`) }]);
-	}, [kind]);
+	}, []);
+
+	useEffect(() => {
+		fetchPolicies(siteId!, { ...getPageParams(searchParams) });
+	}, [searchParams])
 
 	const handleRemove = (policyId: string): void => {
 		removePolicy(siteId!, policyId).then(() => fetchPolicies(siteId!));
@@ -41,6 +46,13 @@ export const SitePolicyListPage = () => {
 			></Header>
 			<Loading loading={policiesLoading} text={t(`GENERAL.LABELS.LOADING`)}>
 				<Table columns={POLICY_LIST_COLUMNS(t, handleRemove)} rows={policies || []}></Table>
+				<Pagination
+					className="u-margin-top"
+					totalPages={policiesPagination?.totalPages}
+					number={policiesPagination?.number}
+					size={policiesPagination?.size}
+					{...getPaginationProps(searchParams, setSearchParams)}
+				/>
 			</Loading>
 		</>
 	);

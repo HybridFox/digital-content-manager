@@ -18,9 +18,10 @@ export const useContentStore = create<IContentStoreState>()(devtools(
 				return set(() => ({ content: [], contentLoading: false }))
 			}
 			
-			set(() => ({ content: result._embedded.content, contentLoading: false }));
+			set(() => ({ content: result._embedded.content, contentPagination: result._page, contentLoading: false }));
 		},
 		content: [],
+		contentPagination: undefined,
 		contentLoading: false,
 
 		fetchContentItem: async (siteId, contentId) => {

@@ -1,14 +1,16 @@
 import { useEffect } from 'react';
-import { useHeaderStore, useWorkflowStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Table } from '@ibs/components';
+import { getPageParams, getPaginationProps, useHeaderStore, useWorkflowStore } from '@ibs/shared';
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { WORKFLOW_LIST_COLUMNS } from './workflow-list.const';
 
 export const WorkflowListPage = () => {
-	const [workflows, workflowsLoading, fetchWorkflows] = useWorkflowStore((state) => [
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [workflows, workflowsPagination, workflowsLoading, fetchWorkflows] = useWorkflowStore((state) => [
 		state.workflows,
+		state.workflowsPagination,
 		state.workflowsLoading,
 		state.fetchWorkflows,
 	]);
@@ -17,9 +19,12 @@ export const WorkflowListPage = () => {
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		fetchWorkflows(siteId!);
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.WORKFLOWS`) }]);
 	}, [siteId]);
+
+	useEffect(() => {
+		fetchWorkflows(siteId!, { ...getPageParams(searchParams) });
+	}, [searchParams])
 
 	return (
 		<>
@@ -34,6 +39,13 @@ export const WorkflowListPage = () => {
 			></Header>
 			<Loading loading={workflowsLoading} text={t(`GENERAL.LABELS.LOADING`)}>
 				<Table columns={WORKFLOW_LIST_COLUMNS(t)} rows={workflows || []}></Table>
+				<Pagination
+					className="u-margin-top"
+					totalPages={workflowsPagination?.totalPages}
+					number={workflowsPagination?.number}
+					size={workflowsPagination?.size}
+					{...getPaginationProps(searchParams, setSearchParams)}
+				/>
 			</Loading>
 		</>
 	);

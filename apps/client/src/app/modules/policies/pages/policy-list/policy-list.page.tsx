@@ -1,14 +1,16 @@
 import { useEffect } from 'react';
-import { useHeaderStore, usePolicyStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Table } from '@ibs/components';
+import { getPageParams, getPaginationProps, useHeaderStore, usePolicyStore } from '@ibs/shared';
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { POLICY_LIST_COLUMNS } from './policy-list.const';
 
 export const PolicyListPage = () => {
-	const [policies, policiesLoading, fetchPolicies] = usePolicyStore((state) => [
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [policies, policiesPagination, policiesLoading, fetchPolicies] = usePolicyStore((state) => [
 		state.policies,
+		state.policiesPagination,
 		state.policiesLoading,
 		state.fetchPolicies,
 	]);
@@ -20,9 +22,12 @@ export const PolicyListPage = () => {
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		fetchPolicies();
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.POLICIES`) }]);
 	}, [kind]);
+
+	useEffect(() => {
+		fetchPolicies({ ...getPageParams(searchParams) });
+	}, [])
 
 	const handleRemove = (policyId: string): void => {
 		removePolicy(policyId).then(() => fetchPolicies());
@@ -41,6 +46,13 @@ export const PolicyListPage = () => {
 			></Header>
 			<Loading loading={policiesLoading} text={t(`GENERAL.LABELS.LOADING`)}>
 				<Table columns={POLICY_LIST_COLUMNS(t, handleRemove)} rows={policies || []}></Table>
+				<Pagination
+					className="u-margin-top"
+					totalPages={policiesPagination?.totalPages}
+					number={policiesPagination?.number}
+					size={policiesPagination?.size}
+					{...getPaginationProps(searchParams, setSearchParams)}
+				/>
 			</Loading>
 		</>
 	);

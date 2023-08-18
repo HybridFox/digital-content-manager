@@ -22,7 +22,7 @@ export const useSitePolicyStore = create<ISitePolicyStoreState>()(devtools(
 				return set(() => ({ policies: [], policiesLoading: false }))
 			}
 			
-			set(() => ({ policies: result._embedded.sitePolicies, policiesLoading: false }));
+			set(() => ({ policies: result._embedded.sitePolicies, policiesPagination: result._page, policiesLoading: false }));
 		},
 		policies: [],
 		policiesLoading: false,

@@ -1,4 +1,4 @@
-import { IAPIHALResponse, IPageParameters } from "../../types";
+import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types";
 
 export enum STORAGE_KINDS {
 	LOCAL_FS = 'LOCAL_FS',
@@ -19,6 +19,7 @@ export type IStorageRepositoriesResponse = IAPIHALResponse<'storageRepositories'
 export interface IStorageRepositoryStoreState {
 	fetchStorageRepositories: (siteId: string, params?: IPageParameters) => Promise<IStorageRepository[]>;
 	storageRepositories: IStorageRepository[];
+	storageRepositoriesPagination?: IAPIPagination,
 	storageRepositoriesLoading: boolean;
 
 	fetchStorageRepository: (siteId: string, storageRepositoryId: string) => Promise<IStorageRepository>;

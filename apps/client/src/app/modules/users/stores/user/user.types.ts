@@ -1,10 +1,11 @@
-import { IAPIHALResponse, IPageParameters, ISite, IUser } from "@ibs/shared";
+import { IAPIHALResponse, IAPIPagination, IPageParameters, ISite, IUser } from "@ibs/shared";
 
 export type IUsersResponse = IAPIHALResponse<'users', IUser>
 
 export interface IUserStoreState {
 	fetchUsers: (params?: IPageParameters) => Promise<void>;
 	users: IUser[];
+	usersPagination?: IAPIPagination;
 	usersLoading: boolean;
 
 	fetchUser: (siteID: string) => Promise<void>;
@@ -22,6 +23,7 @@ export interface IUserStoreState {
 
 	fetchUserSites: (userId: string, params?: IPageParameters) => Promise<void>;
 	userSites: ISite[];
+	userSitesPagination?: IAPIPagination;
 	userSitesLoading: boolean;
 }
 

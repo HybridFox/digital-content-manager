@@ -50,12 +50,11 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import * as React from 'react';
 import cx from 'classnames/bind';
-import { Button, ButtonSizes, ButtonTypes } from '@ibs/components';
+import { Button, ButtonSizes, ButtonTypes, Select } from '@ibs/components';
 import classNames from 'classnames';
 import { SketchPicker } from 'react-color';
 import { Tooltip } from 'react-tooltip';
 
-import { Select } from '../../../../components';
 import { getSelectedNode } from '../../utils/getSelectNode';
 import { sanitizeUrl } from '../../utils/url';
 import { IS_APPLE } from '../../utils/dom';

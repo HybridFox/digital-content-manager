@@ -81,7 +81,7 @@ pub async fn find_all(
 		.or_else(|_| ensure_permission(&req, None, format!("urn:ibs:roles:*"), "root::roles:read"))?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
-	let pagesize = query.pagesize.unwrap_or(20);
+	let pagesize = query.pagesize.unwrap_or(10);
 
 	let (roles, total_elements) = Role::find(conn, Some(params.site_id), page, pagesize)?;
 

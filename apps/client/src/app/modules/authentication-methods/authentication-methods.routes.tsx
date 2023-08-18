@@ -17,7 +17,7 @@ export const AUTHENTICATION_METHOD_PATHS = {
 export const AUTHENTICATION_METHOD_ROUTES: RouteObject[] = [
 	{
 		path: AUTHENTICATION_METHOD_PATHS.ROOT,
-		lazy: async () => ({ Component: (await import('./pages/storage-repository-list/authentication-method-list.page')).AuthenticationMethodListPage }),
+		lazy: async () => ({ Component: (await import('./pages/authentication-method-list/authentication-method-list.page')).AuthenticationMethodListPage }),
 	},
 	{
 		path: AUTHENTICATION_METHOD_PATHS.CREATE,

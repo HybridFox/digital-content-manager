@@ -1,10 +1,11 @@
-import { IAPIHALResponse, IPageParameters, ISite } from "@ibs/shared";
+import { IAPIHALResponse, IAPIPagination, IPageParameters, ISite } from "@ibs/shared";
 
 export type ISitesResponse = IAPIHALResponse<'sites', ISite>
 
 export interface ISiteStoreState {
 	fetchSites: (params?: IPageParameters) => Promise<void>;
 	sites: ISite[];
+	sitesPagination?: IAPIPagination,
 	sitesLoading: boolean;
 
 	fetchSite: (workflowId: string) => Promise<void>;

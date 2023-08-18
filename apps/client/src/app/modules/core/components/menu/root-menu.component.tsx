@@ -1,7 +1,7 @@
 import { NavLink, generatePath } from 'react-router-dom';
 import cx from 'classnames/bind';
 import { HasPermission } from '@ibs/components';
-import { useAuthStore } from '@ibs/shared';
+import { useThemeStore } from '@ibs/shared';
 
 import { AUTHENTICATION_METHOD_PATHS } from '../../../authentication-methods';
 import { SITE_PATHS } from '../../../sites';
@@ -22,7 +22,7 @@ const navLinkBinding = {
 };
 
 export const RootMenu = () => {
-	const [theme] = useAuthStore((state) => [state.theme]);
+	const [theme] = useThemeStore((state) => [state.theme]);
 
 	return (
 		<div className={cxBind('o-menu')}>

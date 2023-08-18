@@ -1,10 +1,11 @@
-import { IAPIHALResponse, IPageParameters, IUser } from "@ibs/shared";
+import { IAPIHALResponse, IAPIPagination, IPageParameters, IUser } from "@ibs/shared";
 
 export type ISiteUsersResponse = IAPIHALResponse<'users', IUser>
 
 export interface ISiteUserStoreState {
 	fetchUsers: (siteId: string, params?: IPageParameters) => Promise<void>;
 	users: IUser[];
+	usersPagination?: IAPIPagination;
 	usersLoading: boolean;
 
 	fetchUser: (siteId: string, workflowId: string) => Promise<void>;

@@ -1,10 +1,11 @@
-import { IAPIHALResponse, IPageParameters, IWorkflowState } from "@ibs/shared";
+import { IAPIHALResponse, IAPIPagination, IPageParameters, IWorkflowState } from "@ibs/shared";
 
 export type IWorkflowStatesResponse = IAPIHALResponse<'workflowStates', IWorkflowState>
 
 export interface IWorkflowStateStoreState {
 	fetchWorkflowStates: (siteId: string, params?: IPageParameters) => Promise<void>;
 	workflowStates: IWorkflowState[];
+	workflowStatesPagination?: IAPIPagination;
 	workflowStatesLoading: boolean;
 
 	fetchWorkflowState: (siteId: string, workflowId: string) => Promise<void>;

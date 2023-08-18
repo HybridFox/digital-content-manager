@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
-import { DEFAULT_PAGINATION_OPTIONS, IWorkflowState, kyInstance, useAuthStore, wrapApi } from '@ibs/shared';
+import { DEFAULT_PAGINATION_OPTIONS, IWorkflowState, kyInstance, wrapApi } from '@ibs/shared';
 
 import { IWorkflowStateStoreState, IWorkflowStatesResponse } from './workflow-state.types';
 
@@ -19,7 +19,7 @@ export const useWorkflowStateStore = create<IWorkflowStateStoreState>()(devtools
 				return set(() => ({ workflowStates: [], workflowStatesLoading: false }))
 			}
 			
-			set(() => ({ workflowStates: result._embedded.workflowStates, workflowStatesLoading: false }));
+			set(() => ({ workflowStates: result._embedded.workflowStates, workflowStatesPagination: result._page, workflowStatesLoading: false }));
 		},
 		workflowStates: [],
 		workflowStatesLoading: false,

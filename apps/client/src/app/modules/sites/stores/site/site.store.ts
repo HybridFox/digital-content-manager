@@ -19,7 +19,7 @@ export const useSiteStore = create<ISiteStoreState>()(devtools(
 				return set(() => ({ sites: [], sitesLoading: false }))
 			}
 			
-			set(() => ({ sites: result._embedded.sites, sitesLoading: false }));
+			set(() => ({ sites: result._embedded.sites, sitesPagination: result._page, sitesLoading: false }));
 		},
 		sites: [],
 		sitesLoading: false,

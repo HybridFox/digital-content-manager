@@ -1,4 +1,4 @@
-import { IAPIHALResponse, IGenericPageOptions } from "../../types/paging.types";
+import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types/paging.types";
 import { FIELD_KEYS, IField } from "../content-type";
 
 export interface IContentComponent {
@@ -12,14 +12,20 @@ export interface IContentComponent {
 	updatedAt?: string;
 }
 
+interface IFetchContentComponentsParams extends IPageParameters {
+	includeInternal?: boolean;
+	includeHidden?: boolean
+}
+
 export type IContentComponentsResponse = IAPIHALResponse<'contentComponents', IContentComponent>
 
 export interface IContentComponentStoreState {
 	fetchContentComponents: (
 		siteId: string, 
-		props: IGenericPageOptions & { includeInternal?: boolean; includeHidden?: boolean }
+		params: IFetchContentComponentsParams
 	) => Promise<void>;
 	contentComponents: IContentComponent[];
+	contentComponentsPagination?: IAPIPagination;
 	contentComponentsLoading: boolean;
 
 	fetchContentComponent: (siteId: string, contentComponentId: string) => Promise<IContentComponent>;

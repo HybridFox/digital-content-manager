@@ -1,4 +1,4 @@
-import { IAPIHALResponse, IPageParameters } from "../../types";
+import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types";
 import { IRole } from "../auth";
 
 export type ISiteRolesResponse = IAPIHALResponse<'siteRoles', IRole>
@@ -6,6 +6,7 @@ export type ISiteRolesResponse = IAPIHALResponse<'siteRoles', IRole>
 export interface ISiteRoleStoreState {
 	fetchRoles: (siteId: string, params?: IPageParameters) => Promise<void>;
 	roles: IRole[];
+	rolesPagination?: IAPIPagination;
 	rolesLoading: boolean;
 
 	fetchRole: (siteId: string, roleId: string) => Promise<void>;

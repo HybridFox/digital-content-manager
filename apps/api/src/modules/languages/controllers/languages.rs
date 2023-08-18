@@ -40,7 +40,7 @@ pub async fn find_all(
 	ensure_permission(&req, None, format!("urn:ibs:languages:*"), "root::languages::read")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
-	let pagesize = query.pagesize.unwrap_or(20);
+	let pagesize = query.pagesize.unwrap_or(10);
 
 	let (languages, total_elements) = Language::find(conn, page, pagesize)?;
 

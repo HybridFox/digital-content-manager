@@ -1,13 +1,16 @@
 import { useEffect } from 'react';
-import { useHeaderStore, useRoleStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Table } from '@ibs/components';
+import { getPageParams, getPaginationProps, useHeaderStore, useRoleStore } from '@ibs/shared';
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 
 import { ROLE_LIST_COLUMNS } from './role-list.const';
 
 export const RoleListPage = () => {
-	const [roles, rolesLoading, fetchRoles] = useRoleStore((state) => [
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [roles, rolesPagination, rolesLoading, fetchRoles] = useRoleStore((state) => [
 		state.roles,
+		state.rolesPagination,
 		state.rolesLoading,
 		state.fetchRoles,
 	]);
@@ -18,9 +21,12 @@ export const RoleListPage = () => {
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		fetchRoles();
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.ROLES`) }]);
 	}, []);
+
+	useEffect(() => {
+		fetchRoles({ ...getPageParams(searchParams) });
+	}, [searchParams])
 
 	const handleRemove = (roleId: string): void => {
 		removeRole(roleId).then(() => fetchRoles());
@@ -39,6 +45,13 @@ export const RoleListPage = () => {
 			></Header>
 			<Loading loading={rolesLoading} text={t(`GENERAL.LABELS.LOADING`)}>
 				<Table columns={ROLE_LIST_COLUMNS(t, handleRemove)} rows={roles || []}></Table>
+				<Pagination
+					className="u-margin-top"
+					totalPages={rolesPagination?.totalPages}
+					number={rolesPagination?.number}
+					size={rolesPagination?.size}
+					{...getPaginationProps(searchParams, setSearchParams)}
+				/>
 			</Loading>
 		</>
 	);

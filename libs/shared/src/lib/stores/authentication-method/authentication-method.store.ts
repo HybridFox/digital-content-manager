@@ -20,7 +20,7 @@ export const useAuthenticationMethodStore = create<IAuthenticationMethodStoreSta
 				return []
 			}
 			
-			set(() => ({ authenticationMethods: result._embedded.authenticationMethods, authenticationMethodsLoading: false }));
+			set(() => ({ authenticationMethods: result._embedded.authenticationMethods, authenticationMethodsPagination: result._page, authenticationMethodsLoading: false }));
 			return result._embedded.authenticationMethods;
 		},
 		authenticationMethods: [],

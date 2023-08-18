@@ -1,16 +1,18 @@
 import { useEffect } from 'react';
-import { useHeaderStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, HasPermission, Header, Loading, Table } from '@ibs/components';
+import { getPageParams, getPaginationProps, useHeaderStore } from '@ibs/shared';
+import { ButtonLink, ButtonTypes, HasPermission, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import { useSiteStore } from '../../stores/site';
 
 import { ROLE_LIST_COLUMNS } from './site-list.const';
 
 export const SiteListPage = () => {
-	const [sites, sitesLoading, fetchSites] = useSiteStore((state) => [
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [sites, sitesPagination, sitesLoading, fetchSites] = useSiteStore((state) => [
 		state.sites,
+		state.sitesPagination,
 		state.sitesLoading,
 		state.fetchSites,
 	]);
@@ -18,13 +20,15 @@ export const SiteListPage = () => {
 		state.removeSite
 	]);
 	const { t } = useTranslation();
-	const { kind } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		fetchSites();
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.SITES`) }]);
-	}, [kind]);
+	}, []);
+
+	useEffect(() => {
+		fetchSites({ ...getPageParams(searchParams) });
+	}, [searchParams])
 
 	const handleRemove = (roleId: string): void => {
 		removeSite(roleId).then(() => fetchSites());
@@ -45,6 +49,13 @@ export const SiteListPage = () => {
 			></Header>
 			<Loading loading={sitesLoading} text={t(`GENERAL.LABELS.LOADING`)}>
 				<Table columns={ROLE_LIST_COLUMNS(t, handleRemove)} rows={sites || []}></Table>
+				<Pagination
+					className="u-margin-top"
+					totalPages={sitesPagination?.totalPages}
+					number={sitesPagination?.number}
+					size={sitesPagination?.size}
+					{...getPaginationProps(searchParams, setSearchParams)}
+				/>
 			</Loading>
 		</>
 	);

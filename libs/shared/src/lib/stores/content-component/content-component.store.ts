@@ -27,7 +27,7 @@ export const useContentComponentStore = create<IContentComponentStoreState>()(
 					throw error;
 				}
 
-				set(() => ({ contentComponents: result._embedded.contentComponents, contentComponentsLoading: false }));
+				set(() => ({ contentComponents: result._embedded.contentComponents, contentComponentsPagination: result._page, contentComponentsLoading: false }));
 			},
 			contentComponents: [],
 			contentComponentsLoading: false,

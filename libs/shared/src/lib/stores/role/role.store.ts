@@ -22,7 +22,7 @@ export const useRoleStore = create<IRoleStoreState>()(devtools(
 				return set(() => ({ roles: [], rolesLoading: false }))
 			}
 			
-			set(() => ({ roles: result._embedded.roles, rolesLoading: false }));
+			set(() => ({ roles: result._embedded.roles, rolesPagination: result._page, rolesLoading: false }));
 		},
 		roles: [],
 		rolesLoading: false,

@@ -21,7 +21,7 @@ export const useContentTypeStore = create<IContentTypeStoreState>()(devtools(
 				return set(() => ({ contentTypes: [], contentTypesLoading: false }))
 			}
 			
-			set(() => ({ contentTypes: result._embedded.contentTypes, contentTypesLoading: false }));
+			set(() => ({ contentTypes: result._embedded.contentTypes, contentTypesPagination: result._page, contentTypesLoading: false }));
 		},
 		contentTypes: [],
 		contentTypesLoading: false,

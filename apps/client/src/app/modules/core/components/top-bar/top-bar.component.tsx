@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import cx from 'classnames/bind';
-import { useAuthStore } from '@ibs/shared';
+import { useAuthStore, useThemeStore } from '@ibs/shared';
 
 import { Avatar } from '../avatar/avatar.component';
 
@@ -17,7 +17,8 @@ const navLinkBinding = {
 };
 
 export const TopBar = () => {
-	const [user, activeSite, setTheme, theme] = useAuthStore((state) => [state.user, state.activeSite, state.setTheme, state.theme]);
+	const [user, activeSite] = useAuthStore((state) => [state.user, state.activeSite,]);
+	const [setTheme, theme] = useThemeStore((state) => [state.setTheme, state.theme]);
 	const navigate = useNavigate();
 	const [clear] = useAuthStore((state) => [state.clear]);
 

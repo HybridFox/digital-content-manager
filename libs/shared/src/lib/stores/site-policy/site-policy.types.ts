@@ -1,4 +1,4 @@
-import { IAPIHALResponse, IPageParameters } from "../../types";
+import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types";
 import { IPolicy } from "../policy";
 
 export type ISitePoliciesResponse = IAPIHALResponse<'sitePolicies', IPolicy>
@@ -6,6 +6,7 @@ export type ISitePoliciesResponse = IAPIHALResponse<'sitePolicies', IPolicy>
 export interface ISitePolicyStoreState {
 	fetchPolicies: (siteId: string, params?: IPageParameters) => Promise<void>;
 	policies: IPolicy[];
+	policiesPagination?: IAPIPagination;
 	policiesLoading: boolean;
 
 	fetchPolicy: (siteId: string, workflowId: string) => Promise<void>;

@@ -83,6 +83,7 @@ function flush(done) {
 module.exports = {
 	input: [
 		'apps/client/**/*.{ts,tsx}',
+		'libs/**/*.{ts,tsx}',
 		// Use ! to filter out files or directories
 		'!apps/**/*.spec.{ts,tsx}',
 		'!apps/**/i18n/**',

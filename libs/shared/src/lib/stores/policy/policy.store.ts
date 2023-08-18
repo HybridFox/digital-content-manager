@@ -21,7 +21,7 @@ export const usePolicyStore = create<IPolicyStoreState>()(devtools(
 				return set(() => ({ policies: [], policiesLoading: false }))
 			}
 			
-			set(() => ({ policies: result._embedded.policies, policiesLoading: false }));
+			set(() => ({ policies: result._embedded.policies, policiesPagination: result._page, policiesLoading: false }));
 		},
 		policies: [],
 		policiesLoading: false,

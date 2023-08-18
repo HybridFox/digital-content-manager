@@ -22,7 +22,7 @@ export const useSiteRoleStore = create<ISiteRoleStoreState>()(devtools(
 				return set(() => ({ roles: [], rolesLoading: false }))
 			}
 			
-			set(() => ({ roles: result._embedded.siteRoles, rolesLoading: false }));
+			set(() => ({ roles: result._embedded.siteRoles, rolesPagination: result._page, rolesLoading: false }));
 		},
 		roles: [],
 		rolesLoading: false,

@@ -11,9 +11,6 @@ interface IAuthStoreState {
 	permissions: IPermission[];
 	token?: string;
 	activeSite?: ISite;
-	theme: string;
-	// TODO: Move this to another store perhaps?
-	setTheme: (theme: string) => void;
 	fetchUser: (siteId?: string) => Promise<void>;
 	fetchSite: (siteId: string) => Promise<void>;
 	setup: (values: any) => Promise<void>;
@@ -28,9 +25,7 @@ export const useAuthStore = create<IAuthStoreState>()(devtools(
 		(set) => ({
 			sites: [],
 			permissions: [],
-			theme: 'light',
 			clear: () => set({ permissions: [], activeSite: undefined, token: undefined, user: undefined }),
-			setTheme: (theme) => set({ theme }),
 			fetchUser: async (siteId) => {
 				const [result, error] = await wrapApi(kyInstance.get('/admin-api/v1/auth/me', {
 					searchParams: {

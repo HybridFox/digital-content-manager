@@ -1,4 +1,4 @@
-import { IAPIHALResponse, IPageParameters } from "../../types/paging.types";
+import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types/paging.types";
 
 export enum WORKFLOW_TECHNICAL_STATES {
 	DRAFT = 'DRAFT',
@@ -43,6 +43,7 @@ export type IWorkflowsResponse = IAPIHALResponse<'workflows', IWorkflow>
 export interface IWorkflowStoreState {
 	fetchWorkflows: (siteId: string, params?: IPageParameters) => Promise<void>;
 	workflows: IWorkflow[];
+	workflowsPagination?: IAPIPagination;
 	workflowsLoading: boolean;
 
 	fetchWorkflow: (siteId: string, workflowId: string) => Promise<void>;

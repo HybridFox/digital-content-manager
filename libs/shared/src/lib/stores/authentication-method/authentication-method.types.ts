@@ -1,4 +1,4 @@
-import { IAPIHALResponse, IPageParameters } from "../../types";
+import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types";
 
 export enum AUTHENTICATION_METHOD_KINDS {
 	LOCAL = 'LOCAL',
@@ -25,6 +25,7 @@ export type IAuthenticationMethodsResponse = IAPIHALResponse<'authenticationMeth
 export interface IAuthenticationMethodStoreState {
 	fetchAuthenticationMethods: (params?: IFetchAuthenticationMethodsParameters) => Promise<IAuthenticationMethod[]>;
 	authenticationMethods: IAuthenticationMethod[];
+	authenticationMethodsPagination?: IAPIPagination;
 	authenticationMethodsLoading: boolean;
 
 	fetchAuthenticationMethod: (authenticationMethodId: string) => Promise<IAuthenticationMethod>;

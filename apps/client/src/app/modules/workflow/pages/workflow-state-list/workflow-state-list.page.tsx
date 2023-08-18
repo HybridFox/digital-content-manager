@@ -1,16 +1,18 @@
 import { useEffect } from 'react';
-import { useHeaderStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Table } from '@ibs/components';
+import { getPageParams, getPaginationProps, useHeaderStore } from '@ibs/shared';
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { useWorkflowStateStore } from '../../stores/workflow-state';
 
 import { WORKFLOW_LIST_COLUMNS } from './workflow-state-list.const';
 
 export const WorkflowStateListPage = () => {
-	const [workflowStates, workflowStatesLoading, fetchWorkflowStates] = useWorkflowStateStore((state) => [
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [workflowStates, workflowStatesPagination, workflowStatesLoading, fetchWorkflowStates] = useWorkflowStateStore((state) => [
 		state.workflowStates,
+		state.workflowStatesPagination,
 		state.workflowStatesLoading,
 		state.fetchWorkflowStates,
 	]);
@@ -22,9 +24,12 @@ export const WorkflowStateListPage = () => {
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 
 	useEffect(() => {
-		fetchWorkflowStates(siteId!);
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.WORKFLOW_STATES`) }]);
 	}, [siteId]);
+
+	useEffect(() => {
+		fetchWorkflowStates(siteId!, { ...getPageParams(searchParams) });
+	}, [searchParams])
 
 	const handleRemove = (workflowStateId: string): void => {
 		removeWorkflowState(siteId!, workflowStateId).then(() => fetchWorkflowStates(siteId!));
@@ -43,6 +48,13 @@ export const WorkflowStateListPage = () => {
 			></Header>
 			<Loading loading={workflowStatesLoading} text={t(`GENERAL.LABELS.LOADING`)}>
 				<Table columns={WORKFLOW_LIST_COLUMNS(t, handleRemove)} rows={workflowStates || []}></Table>
+				<Pagination
+					className="u-margin-top"
+					totalPages={workflowStatesPagination?.totalPages}
+					number={workflowStatesPagination?.number}
+					size={workflowStatesPagination?.size}
+					{...getPaginationProps(searchParams, setSearchParams)}
+				/>
 			</Loading>
 		</>
 	);

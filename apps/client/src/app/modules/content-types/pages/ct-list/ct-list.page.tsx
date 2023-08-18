@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useContentTypeStore, useHeaderStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Table } from '@ibs/components';
-import { useParams } from 'react-router-dom';
+import { getPageParams, getPaginationProps, useContentTypeStore, useHeaderStore } from '@ibs/shared';
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { CONTENT_TYPE_LIST_COLUMNS } from './ct-list.const';
@@ -9,9 +9,11 @@ import { CONTENT_TYPE_LIST_COLUMNS } from './ct-list.const';
 export const CTListPage = () => {
 	const { t } = useTranslation();
 	const { siteId } = useParams();
-	const [contentTypes, contentTypesLoading, fetchContentTypes] =
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [contentTypes, contentTypesPagination, contentTypesLoading, fetchContentTypes] =
 		useContentTypeStore((state) => [
 			state.contentTypes,
+			state.contentTypesPagination,
 			state.contentTypesLoading,
 			state.fetchContentTypes,
 		]);
@@ -22,9 +24,12 @@ export const CTListPage = () => {
 		]);
 
 	useEffect(() => {
-		fetchContentTypes(siteId!);
 		setBreadcrumbs([{ label: t('BREADCRUMBS.CONTENT_TYPES') }])
 	}, []);
+
+	useEffect(() => {
+		fetchContentTypes(siteId!, { ...getPageParams(searchParams) });
+	}, [searchParams])
 
 	return (
 		<>
@@ -44,6 +49,13 @@ export const CTListPage = () => {
 					columns={CONTENT_TYPE_LIST_COLUMNS(t)}
 					rows={contentTypes}
 				></Table>
+				<Pagination
+					className="u-margin-top"
+					totalPages={contentTypesPagination?.totalPages}
+					number={contentTypesPagination?.number}
+					size={contentTypesPagination?.size}
+					{...getPaginationProps(searchParams, setSearchParams)}
+				/>
 			</Loading>
 		</>
 	);

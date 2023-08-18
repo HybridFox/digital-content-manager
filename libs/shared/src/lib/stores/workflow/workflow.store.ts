@@ -21,7 +21,7 @@ export const useWorkflowStore = create<IWorkflowStoreState>()(devtools(
 				return set(() => ({ workflows: [], workflowsLoading: false }))
 			}
 			
-			set(() => ({ workflows: result._embedded.workflows, workflowsLoading: false }));
+			set(() => ({ workflows: result._embedded.workflows, workflowsPagination: result._page, workflowsLoading: false }));
 		},
 		workflows: [],
 		workflowsLoading: false,

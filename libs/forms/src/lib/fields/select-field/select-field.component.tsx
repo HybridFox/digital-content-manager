@@ -3,8 +3,8 @@ import { Controller, useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
 import { Tooltip } from 'react-tooltip';
 import classNames from 'classnames';
+import { Select } from '@ibs/components';
 
-import { Select } from '../../components/select';
 import { IRenderControllerField } from '../fields.types';
 
 import { ISelectFieldProps, ISelectOptions } from './select-field.types';

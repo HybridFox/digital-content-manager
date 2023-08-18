@@ -1,16 +1,18 @@
 import { useEffect } from 'react';
-import { useHeaderStore } from '@ibs/shared';
-import { ButtonLink, Header, Loading, Table } from '@ibs/components';
+import { getPaginationProps, useHeaderStore } from '@ibs/shared';
+import { Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { useSiteUserStore } from '../../stores/site-user';
 
 import { USER_LIST_COLUMNS } from './user-list.const';
 
 export const UserListPage = () => {
-	const [users, usersLoading, fetchWorkflowStates] = useSiteUserStore((state) => [
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [users, usersPagination, usersLoading, fetchWorkflowStates] = useSiteUserStore((state) => [
 		state.users,
+		state.usersPagination,
 		state.usersLoading,
 		state.fetchUsers,
 	]);
@@ -32,14 +34,16 @@ export const UserListPage = () => {
 			<Header
 				breadcrumbs={breadcrumbs}
 				title={t(`SITE_USERS.TITLES.LIST`)}
-				// action={
-				// 	<ButtonLink to="create" type={ButtonTypes.PRIMARY}>
-				// 		<span className="las la-plus"></span> {t(`WORKFLOW_STATES.ACTIONS.CREATE`)}
-				// 	</ButtonLink>
-				// }
 			></Header>
 			<Loading loading={usersLoading} text={t(`GENERAL.LABELS.LOADING`)}>
 				<Table columns={USER_LIST_COLUMNS(t, handleRemove)} rows={users || []}></Table>
+				<Pagination
+					className="u-margin-top"
+					totalPages={usersPagination?.totalPages}
+					number={usersPagination?.number}
+					size={usersPagination?.size}
+					{...getPaginationProps(searchParams, setSearchParams)}
+				/>
 			</Loading>
 		</>
 	);
