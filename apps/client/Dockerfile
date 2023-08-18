@@ -9,6 +9,7 @@ WORKDIR /usr/build
 COPY package.json package-lock.json* ./
 RUN npm ci
 COPY . .
+RUN echo $APP_VERSION
 ENV APP_VERSION=$APP_VERSION
 RUN npm run nx run client:build
 
