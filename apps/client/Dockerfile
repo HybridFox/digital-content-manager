@@ -1,3 +1,5 @@
+ARG APP_VERSION
+
 # Stage 0: Build Angular
 FROM node:hydrogen-alpine AS build
 
@@ -7,6 +9,7 @@ WORKDIR /usr/build
 COPY package.json package-lock.json* ./
 RUN npm ci
 COPY . .
+ENV APP_VERSION=$APP_VERSION
 RUN npm run nx run client:build
 
 # Stage 1: Serve React
