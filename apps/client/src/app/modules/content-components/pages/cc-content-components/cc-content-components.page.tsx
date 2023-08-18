@@ -127,6 +127,7 @@ export const CCContentComponentsPage = () => {
 					{deleteError}
 				</Alert>
 				<Table
+					orderable={true}
 					columns={CONTENT_TYPE_DETAIL_COLUMNS(onDeleteField)}
 					rows={contentComponent?.fields || []}
 				></Table>

@@ -1,0 +1,16 @@
+.a-table-order {
+	display: flex;
+	flex-direction: column;
+	margin-right: var(--spacer-sm);
+
+	& :first-child {
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+
+	& :last-child {
+		margin-top: -2px;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+	}
+}

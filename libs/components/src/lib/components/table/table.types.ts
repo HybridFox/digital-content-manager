@@ -21,8 +21,10 @@ export interface ITableProps {
 	selectable?: boolean;
 	selectablePredicate?: (value: any) => boolean;
 	onSelection?: (selection: any[]) => void;
+	onOrderChange?: (rows: any[]) => void;
 	selection?: any[];
 	idKey?: string;
 	minSelection?: number;
 	maxSelection?: number;
+	orderable?: boolean;
 }

@@ -6,6 +6,7 @@ import { path } from 'rambda';
 import { ITableColumn, ITableProps } from './table.types';
 import styles from './table.module.scss';
 import { TableCheckbox } from './components/table-checkbox/table-checkbox.component';
+import { TableOrder } from './components/table-order/table-order.component';
 
 const cxBind = cx.bind(styles);
 
@@ -19,7 +20,9 @@ export const Table: FC<ITableProps> = ({
 	onSelection,
 	selection = [],
 	minSelection = 1,
-	maxSelection = 1
+	maxSelection = 1,
+	orderable,
+	onOrderChange
 }: ITableProps) => {
 	const handleSelection = (id: string, selected: boolean): void => {
 		if (!onSelection) {
@@ -64,6 +67,11 @@ export const Table: FC<ITableProps> = ({
 					handleSelection(row[idKey], !selection.includes(row[idKey]))
 				}
 			>
+				{orderable && (
+					<td className={cxBind('a-table__row__cell')} style={{ width: '50px' }}>
+						<TableOrder totalRows={rows.length} currentIndex={i} onOrder={console.log} />
+					</td>
+				)}
 				{selectable && (selectablePredicate ? selectablePredicate(row) : true) && (
 					<td className={cxBind('a-table__row__cell')} style={{ width: '50px' }}>
 						<TableCheckbox selected={selection.includes(row[idKey])} onSelection={(selected) => handleSelection(row[idKey], selected)} />
@@ -99,6 +107,7 @@ export const Table: FC<ITableProps> = ({
 				<thead className={cxBind('a-table__header')}>
 					<tr>
 						{selectable && <th style={{ width: '50px' }} className={cxBind('a-table__header__column')} />}
+						{orderable && <th style={{ width: '50px' }} className={cxBind('a-table__header__column')} />}
 						{columns.map((column, i) => (
 							<th key={i} className={cxBind('a-table__header__column')} style={column.width ? { width: column.width } : {}}>
 								{column.label}

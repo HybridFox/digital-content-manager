@@ -12,6 +12,7 @@
 	color: var(--color-gray-darkest);
 	display: inline-block;
 	height: 44px;
+	white-space: nowrap;
 
 	&:disabled {
 		opacity: 0.5;
@@ -42,7 +43,7 @@
 	}
 
 	&--x-small {
-		padding: var(--spacer-xxxs) var(--spacer-xs);
+		padding: 1px var(--spacer-xxxs);
 		font-size: 0.9rem;
 		height: auto;
 	}
