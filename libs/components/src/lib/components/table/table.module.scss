@@ -11,6 +11,7 @@
 
 	&__header {
 		font-weight: bold;
+		color: var(--color-gray-darker);
 
 		&__column {
 			background-color: var(--color-gray-lightest);
@@ -29,6 +30,7 @@
 		&__cell {
 			border-top: 1px solid var(--color-gray-accent);
 			padding: var(--spacer);
+			color: var(--color-black);
 		}
 	}
 

@@ -50,8 +50,10 @@
 	&--primary {
 		background-color: var(--color-primary);
 		border: 2px solid var(--color-primary);
+		color: rgb(30, 30, 30);
 
 		&:hover {
+			color: var(--color-gray-darkest);
 			position: relative;
 			border: 2px solid var(--color-primary);
 			background: transparent;
@@ -63,8 +65,10 @@
 		font-weight: 500;
 		background-color: var(--color-secondary);
 		border: 2px solid transparent;
+		color: rgb(30, 30, 30);
 
 		&:hover {
+			color: var(--color-gray-darkest);
 			border: 2px solid var(--color-secondary);
 		}
 	}

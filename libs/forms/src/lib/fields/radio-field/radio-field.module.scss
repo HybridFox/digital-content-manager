@@ -27,6 +27,10 @@
 		position: relative;
 	}
 
+	&__field label {
+		color: var(--color-black);
+	}
+
 	&__field:not(:last-child) {
 		margin-bottom: var(--spacer-xs);
 	}

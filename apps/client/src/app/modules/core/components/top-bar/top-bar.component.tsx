@@ -1,4 +1,4 @@
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import cx from 'classnames/bind';
 import { useAuthStore } from '@ibs/shared';
 
@@ -17,7 +17,7 @@ const navLinkBinding = {
 };
 
 export const TopBar = () => {
-	const { user, activeSite } = useAuthStore();
+	const [user, activeSite, setTheme, theme] = useAuthStore((state) => [state.user, state.activeSite, state.setTheme, state.theme]);
 	const navigate = useNavigate();
 	const [clear] = useAuthStore((state) => [state.clear]);
 
@@ -26,7 +26,7 @@ export const TopBar = () => {
 			{activeSite && <div className={cxBind('o-top-bar__site')}>{activeSite?.name}</div>}
 			<div className={cxBind('o-top-bar__links')}>
 				<ul>
-					<li>
+					{/* <li>
 						<NavLink {...navLinkBinding} to="">
 							<i className="las la-question-circle"></i>
 						</NavLink>
@@ -39,6 +39,18 @@ export const TopBar = () => {
 					<li>
 						<NavLink {...navLinkBinding} to="">
 							<i className="las la-user"></i>
+						</NavLink>
+					</li> */}
+					<li>
+						<NavLink
+							{...navLinkBinding}
+							to=""
+							onClick={(e) => {
+								e.preventDefault();
+								setTheme(theme === 'light' ? 'dark' : 'light')
+							}}
+						>
+							<i className="las la-adjust"></i>
 						</NavLink>
 					</li>
 					<li>

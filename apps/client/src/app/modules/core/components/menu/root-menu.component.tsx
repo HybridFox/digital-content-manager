@@ -1,6 +1,7 @@
 import { NavLink, generatePath } from 'react-router-dom';
 import cx from 'classnames/bind';
 import { HasPermission } from '@ibs/components';
+import { useAuthStore } from '@ibs/shared';
 
 import { AUTHENTICATION_METHOD_PATHS } from '../../../authentication-methods';
 import { SITE_PATHS } from '../../../sites';
@@ -21,11 +22,13 @@ const navLinkBinding = {
 };
 
 export const RootMenu = () => {
+	const [theme] = useAuthStore((state) => [state.theme]);
+
 	return (
 		<div className={cxBind('o-menu')}>
 			<div className={cxBind('o-menu__logo')}>
 				<NavLink to="/">
-					<img src="/assets/img/logo.svg" alt="Logo" className={cxBind('o-menu__logo__image--big')} />
+					<img src={`/assets/img/logo-${theme}.svg`} alt="Logo" className={cxBind('o-menu__logo__image--big')} />
 					<img src="/assets/img/logo-icon.svg" alt="Logo" className={cxBind('o-menu__logo__image--small')} />
 				</NavLink>
 			</div>

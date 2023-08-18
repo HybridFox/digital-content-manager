@@ -63,6 +63,7 @@ export const Select: FC<ISelectProps> = ({
 				multiValue: () => cxBind('a-select__multi-value'),
 				multiValueLabel: () => cxBind('a-select__multi-value__label'),
 				multiValueRemove: () => cxBind('a-select__multi-value__remove'),
+				indicatorsContainer: () => cxBind('a-select__indicators-container'),
 			}}
 			placeholder={placeholder}
 			value={value}

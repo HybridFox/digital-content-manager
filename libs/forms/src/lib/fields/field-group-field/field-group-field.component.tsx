@@ -18,7 +18,7 @@ export const FieldGroupField: FC<IFieldGroupFieldProps> = ({
 	return (
 		<div className={cxBind('o-field-group')}>
 			<FieldGroupHeader label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} badge='Group' />
-			<div className="u-row">
+			<div className={cxBind("o-field-group__fields")}>
 				<RenderFields fieldPrefix={`${name}.`} fields={fieldConfiguration?.fields as IField[] || []} />
 			</div>
 		</div>

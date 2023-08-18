@@ -21,7 +21,7 @@ futures = { version = "0.3.28" }
 utoipa = { version = "3.3.0", features = ["actix_extras", "uuid", "chrono", "openapi_extensions"] }
 utoipa-swagger-ui = { version = "3.1.3", features = ["actix-web"] }
 regex = { version = "1.8.4" }
-slug = "0.1.4"
+slug = { version = "0.1.4" }
 lazy_static = { version = "1.4.0" }
 diesel_migrations = { version = "2.1.0" }
 oauth2 = { version = "4.4.1" }
@@ -35,14 +35,14 @@ tracing-subscriber = { version = "0.3.17", features = ["registry", "env-filter"]
 tracing-actix-web = { version = "0.7.5", features = ["opentelemetry_0_19"]}
 tracing-bunyan-formatter = "0.3.7"
 opentelemetry-otlp = { version = "0.12.0" }
-aws-sdk-s3 = "0.28.0"
-actix-multipart = "0.6.0"
+aws-sdk-s3 = { version = "0.28.0" }
+actix-multipart = { version = "0.6.0" }
 aws-config = { version = "0.55.3" }
 aws-credential-types = { version = "0.55.3", features = ["hardcoded-credentials"] }
 tokio = { version = "1.29.1", features = ["io-util", "fs"] }
-mime_guess = "2.0.4"
-async-trait = "0.1.73"
-itertools = "0.11.0"
+mime_guess = { version = "2.0.4" }
+async-trait = { version = "0.1.73" }
+itertools = { version = "0.11.0" }
 
 # [dev-dependencies]
 # rusty-hook = "0.11.2"

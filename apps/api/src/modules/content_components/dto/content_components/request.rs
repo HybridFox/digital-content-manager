@@ -10,8 +10,7 @@ use uuid::Uuid;
 pub struct CreateContentComponentDTO {
 	pub name: String,
 	pub description: Option<String>,
-	pub component_name: String,
-	pub workflow_id: Uuid,
+	pub component_name: String
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]

@@ -35,7 +35,6 @@ pub fn ensure_permission<'a>(
 	let conn = &mut app_state.get_conn()?;
 	let permissions = get_user_permissions(conn, user.id, site_id)?;
 
-	dbg!(&permissions);
 	let result = permissions
 		.into_iter()
 		.map(|(permission, permission_actions)| {

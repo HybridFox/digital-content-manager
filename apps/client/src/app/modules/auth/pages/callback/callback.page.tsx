@@ -26,7 +26,7 @@ export const CallbackPage = () => {
 		<div className={cxBind('p-callback')}>
 			<div className={cxBind('p-callback__content')}>
 				<div className={cxBind('p-callback__logo')}>
-					<img src="/assets/img/logo-alternative.svg" alt="Logo" />
+					<img src="/assets/img/logo-alternative-light.svg" alt="Logo" />
 				</div>
 				<Loading className={cxBind('p-callback__loading')} loading={!error}></Loading>
 				{error && (

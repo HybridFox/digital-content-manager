@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { SelectField, TextField, TextareaField } from '@ibs/forms';
+import { TextField, TextareaField } from '@ibs/forms';
 
 import { CONTENT_COMPONENT_PATHS } from '../../content-components.routes';
 
@@ -13,7 +13,6 @@ import { createContentComponentForm } from './cc-create.const';
 interface ICreateContentComponent {
 	name: string;
 	description: undefined | string;
-	workflowId: string;
 }
 
 export const CCCreatePage = () => {
@@ -31,7 +30,6 @@ export const CCCreatePage = () => {
 	const navigate = useNavigate();
 	const formMethods = useForm<ICreateContentComponent>({
 		resolver: yupResolver(createContentComponentForm),
-		values: { workflowId: workflows?.[0]?.id, description: '', name: '' },
 	});
 	const {
 		handleSubmit,
@@ -69,13 +67,6 @@ export const CCCreatePage = () => {
 						<TextField name="name" label="Name"></TextField>
 						<div className="u-margin-top">
 							<TextareaField name="description" label="Description"></TextareaField>
-						</div>
-						<div className="u-margin-top">
-							<SelectField
-								name="workflowId"
-								label="Workflow"
-								fieldConfiguration={{ options: (workflows || []).map((workflow) => ({ label: workflow.name, value: workflow.id })) }}
-							/>
 						</div>
 						<div className="u-margin-top">
 							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>

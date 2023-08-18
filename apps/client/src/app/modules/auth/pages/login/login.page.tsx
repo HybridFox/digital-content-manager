@@ -90,7 +90,7 @@ export const LoginPage = () => {
 		<div className={cxBind('p-login')}>
 			<div className={cxBind('p-login__content')}>
 				<div className={cxBind('p-login__logo')}>
-					<img src="/assets/img/logo-alternative.svg" alt="Logo" />
+					<img src="/assets/img/logo-alternative-light.svg" alt="Logo" />
 				</div>
 				<Loading loading={authenticationMethodsLoading}>
 					{(authenticationMethods || []).sort((a, b) => b.weight - a.weight).map((method) => {

@@ -35,6 +35,12 @@
 
 	&__value-container {
 		overflow: visible !important;
+		color: var(--color-black);
+	}
+
+	&__indicators-container svg {
+		fill: var(--color-gray-darker);
+		stroke: var(--color-gray-darker);
 	}
 
 	&__placeholder {
@@ -72,6 +78,7 @@
 
 	&__option {
 		padding: var(--spacer-xs) var(--spacer);
+		color: var(--color-black);
 
 		&--active {
 			background-color: var(--color-primary);

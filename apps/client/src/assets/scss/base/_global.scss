@@ -18,3 +18,8 @@ body, #root {
 :root {
 	--rt-opacity: 1 !important;
 }
+
+.u-theme {
+	background-color: var(--color-white);
+	min-height: 100vh;
+}
