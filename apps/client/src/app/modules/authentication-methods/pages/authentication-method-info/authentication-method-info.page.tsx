@@ -16,9 +16,7 @@ interface EditAuthenticationMethodForm {
 }
 
 export const AuthenticationMethodInfoPage = () => {
-	const [authenticationMethod] = useAuthenticationMethodStore((state) => [
-		state.authenticationMethod,
-	]);
+	const [authenticationMethod] = useAuthenticationMethodStore((state) => [state.authenticationMethod]);
 	const [updateAuthenticationMethodLoading, updateAuthenticationMethod] = useAuthenticationMethodStore((state) => [
 		state.updateAuthenticationMethodLoading,
 		state.updateAuthenticationMethod,
@@ -60,13 +58,18 @@ export const AuthenticationMethodInfoPage = () => {
 					<TextField name="name" label="Name" />
 				</div>
 				<div className="u-margin-bottom">
-					<NumberField name="weight" label="Weight" />
+					<NumberField name="weight" label="Weight" fieldConfiguration={{ hint: 'Higher values will be placed higher on the login page'}} />
 				</div>
 				<div className="u-margin-bottom">
 					<ToggleField name="active" label="Active" />
 				</div>
 				<div className="u-margin-bottom">
-					<SelectField name="kind" label="Kind" disabled fieldConfiguration={{ options: AUTHENTICATION_METHOD_OPTIONS }} />
+					<SelectField
+						name="kind"
+						label="Kind"
+						disabled
+						fieldConfiguration={{ options: AUTHENTICATION_METHOD_OPTIONS }}
+					/>
 				</div>
 				<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 					{updateAuthenticationMethodLoading && <i className="las la-redo-alt la-spin"></i>} Save

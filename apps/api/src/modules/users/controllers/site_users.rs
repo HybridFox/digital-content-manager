@@ -45,7 +45,8 @@ pub async fn find_all(
 	query: web::Query<FindAllQueryParams>,
 	params: web::Path<FindAllPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:users:*"), "sites::users:read")?;
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:users:*"), "sites::users:read")
+		.or_else(|_| ensure_permission(&req, None, format!("urn:ibs:users:*"), "root::users:read"))?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(20);
@@ -83,7 +84,8 @@ pub async fn find_one(
 	state: web::Data<AppState>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:users:{}", params.user_id), "sites::users:read")?;
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:users:{}", params.user_id), "sites::users:read")
+		.or_else(|_| ensure_permission(&req, None, format!("urn:ibs:users:{}", params.user_id), "root::users:read"))?;
 	let conn = &mut state.get_conn()?;
 	let user = User::find_one_with_roles_in_site(conn, params.site_id, params.user_id)?;
 
@@ -110,7 +112,8 @@ pub async fn update(
 	params: web::Path<FindPathParams>,
 	form: web::Json<request::UpdateSiteUserDTO>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:users:{}", params.user_id), "sites::users:update")?;
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:users:{}", params.user_id), "sites::users:update")
+		.or_else(|_| ensure_permission(&req, None, format!("urn:ibs:users:{}", params.user_id), "root::users:update"))?;
 	let conn = &mut state.get_conn()?;
 
 	if form.roles.len() > 0 {

@@ -90,10 +90,10 @@ export const LoginPage = () => {
 		<div className={cxBind('p-login')}>
 			<div className={cxBind('p-login__content')}>
 				<div className={cxBind('p-login__logo')}>
-					<img src="/assets/img/logo.svg" alt="Logo" />
+					<img src="/assets/img/logo-alternative.svg" alt="Logo" />
 				</div>
 				<Loading loading={authenticationMethodsLoading}>
-					{(authenticationMethods || []).map((method) => {
+					{(authenticationMethods || []).sort((a, b) => b.weight - a.weight).map((method) => {
 						if (method.kind === 'LOCAL') {
 							return renderLocalAuthForm(method);
 						}
@@ -103,7 +103,7 @@ export const LoginPage = () => {
 				</Loading>
 			</div>
 			<div className={cxBind('p-login__aside')} style={{
-				backgroundImage: `url(https://images.unsplash.com/photo-1563923683738-4ad77b43411c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`
+				backgroundImage: `url(https://source.unsplash.com/random/?fox,animal,nature)`
 			}}></div>
 		</div>
 	)

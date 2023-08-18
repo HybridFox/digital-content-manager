@@ -32,7 +32,8 @@ export const Menu = () => {
 		<div className={cxBind('o-menu')}>
 			<div className={cxBind('o-menu__logo')}>
 				<NavLink to="/">
-					<img src="/assets/img/logo.svg" alt="Logo" />
+					<img src="/assets/img/logo.svg" alt="Logo" className={cxBind('o-menu__logo__image--big')} />
+					<img src="/assets/img/logo-icon.svg" alt="Logo" className={cxBind('o-menu__logo__image--small')} />
 				</NavLink>
 			</div>
 			<div className={cxBind('o-menu__links')}>

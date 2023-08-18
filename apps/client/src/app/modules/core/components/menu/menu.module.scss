@@ -9,6 +9,19 @@
 
 	@include tools.to('md') {
 		width: 60px;
+
+
+		&__logo__image--big {
+			display: none;
+		}
+
+		&__logo__image--small {
+			display: block !important;
+		}
+	}
+
+	&__logo__image--small {
+		display: none;
 	}
 
 	&__logo {
@@ -27,7 +40,7 @@
 		}
 
 		@include tools.to('md') {
-			padding: var(--spacer-xs) 0 var(--spacer-lg) 0;
+			padding: var(--spacer) 0 var(--spacer-lg) 0;
 
 			span {
 				display: none;

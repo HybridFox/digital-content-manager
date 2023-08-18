@@ -26,7 +26,7 @@ export const CallbackPage = () => {
 		<div className={cxBind('p-callback')}>
 			<div className={cxBind('p-callback__content')}>
 				<div className={cxBind('p-callback__logo')}>
-					<i className="las la-sms"></i> Inhoud Beheer Systeem
+					<img src="/assets/img/logo-alternative.svg" alt="Logo" />
 				</div>
 				<Loading className={cxBind('p-callback__loading')} loading={!error}></Loading>
 				{error && (
@@ -45,7 +45,7 @@ export const CallbackPage = () => {
 			<div
 				className={cxBind('p-callback__aside')}
 				style={{
-					backgroundImage: `url(https://images.unsplash.com/photo-1563923683738-4ad77b43411c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
+					backgroundImage: `url(https://source.unsplash.com/random/?fox,animal,nature)`,
 				}}
 			></div>
 		</div>

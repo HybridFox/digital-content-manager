@@ -1,0 +1,9 @@
+.a-input {
+	&__hint {
+		margin: 0;
+		font-size: 0.8rem;
+		font-style: italic;
+		color: var(--color-gray);
+		margin-top: var(--spacer-xxxs);
+	}
+}

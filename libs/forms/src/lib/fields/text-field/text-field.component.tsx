@@ -4,6 +4,7 @@ import cx from 'classnames/bind';
 import { Tooltip } from 'react-tooltip'
 
 import { FieldLabel } from '../../field-label/field-label.component';
+import { FieldHint } from '../../field-hint/field-hint.component';
 
 import { ITextFieldProps } from './text-field.types';
 import styles from './text-field.module.scss';
@@ -51,6 +52,7 @@ export const TextField: FC<ITextFieldProps> = ({
 					
 				)}
 			</div>
+			<FieldHint hint={fieldConfiguration?.hint as string} />
 		</div>
 	);
 };
