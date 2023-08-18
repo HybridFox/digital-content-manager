@@ -16,8 +16,8 @@ runs:
     using: "composite"
     steps:
         - name: Set output
-            id: vars
-            run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+          id: vars
+          run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
         - name: Set up QEMU
           uses: docker/setup-qemu-action@v2
         - name: Set up Docker Buildx
