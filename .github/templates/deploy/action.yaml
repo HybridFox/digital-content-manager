@@ -45,5 +45,5 @@ runs:
               platforms: linux/amd64
               tags: ${{ steps.meta.outputs.tags }}
               labels: ${{ steps.meta.outputs.labels }}
-			  build-args: |
-			  	APP_VERSION=${{ steps.vars.outputs.tag }}
+              build-args: |
+              	APP_VERSION=${{ steps.vars.outputs.tag }}
