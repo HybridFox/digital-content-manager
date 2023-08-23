@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
-import { kyInstance, wrapApi } from '@ibs/shared';
+
+import { kyInstance, parseQueryParams, wrapApi } from '../../services';
 
 import { IContentItem, IContentStoreState, IContentResponse } from './content.types';
 
@@ -9,9 +10,7 @@ export const useContentStore = create<IContentStoreState>()(devtools(
 		fetchContent: async (siteId, params) => {
 			set(() => ({ contentLoading: true }));
 			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/content`, {
-				searchParams: {
-					...(params || {})
-				}
+				searchParams: parseQueryParams(params as any)
 			}).json<IContentResponse>());
 
 			if (error) {

@@ -13,12 +13,6 @@
 	},
 	"generators": {
 		"@nx/react": {
-			"application": {
-				"style": "scss",
-				"linter": "eslint",
-				"bundler": "vite",
-				"babel": true
-			},
 			"component": {
 				"style": "scss"
 			},
@@ -26,16 +20,18 @@
 				"style": "scss",
 				"linter": "eslint",
 				"unitTestRunner": "none"
+			},
+			"application": {
+				"style": "scss",
+				"linter": "eslint",
+				"bundler": "webpack",
+				"babel": true
 			}
 		}
 	},
 	"targetDefaults": {
 		"lint": {
-			"inputs": [
-				"default",
-				"{workspaceRoot}/.eslintrc.json",
-				"{workspaceRoot}/.eslintignore"
-			]
+			"inputs": ["default", "{workspaceRoot}/.eslintrc.json", "{workspaceRoot}/.eslintignore"]
 		},
 		"test": {
 			"inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]

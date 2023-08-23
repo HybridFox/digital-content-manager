@@ -104,59 +104,90 @@ impl Content {
 		Ok((content_item, fields, language, workflow_state))
 	}
 
-	// TODO: dedupe next 2 pls
 	#[instrument(skip(conn))]
-	pub fn find_one_public_by_slug<'a>(
+	pub fn find_one_public<'a>(
 		conn: &mut PgConnection,
 		site_id: Uuid,
-		slug: &'a str,
+		slug: Option<String>,
+		content_item_id: Option<Uuid>,
+		populate: Option<bool>,
 		lang: &'a str,
 	) -> Result<(Self, Vec<ContentField>, Language, Vec<(Self, Language)>), AppError> {
-		let (content_item, language) = content::table
-			.filter(content::slug.eq(slug))
-			.filter(content::published.eq(true))
-			.inner_join(languages::table.on(languages::id.eq(content::language_id)))
-			.filter(languages::key.eq(lang))
-			.get_result::<(Self, Language)>(conn)?;
+		let query = {
+			let mut query = content::table
+				.filter(content::published.eq(true))
+				.inner_join(languages::table.on(languages::id.eq(content::language_id)))
+				.filter(languages::key.eq(lang))
+				.into_boxed();
 
-		let fields = content_fields::table
-			.filter(
-				content_fields::source_id
-					.eq_any(vec![content_item.id, content_item.translation_id]),
-			)
-			.select(ContentField::as_select())
-			.load::<ContentField>(conn)?;
+			if let Some(slug) = slug {
+				query = query.filter(content::slug.eq(slug))
+			}
 
-		let translations = content::table
-			.filter(content::translation_id.eq(&content_item.translation_id))
-			.filter(content::published.eq(true))
-			.inner_join(languages::table.on(languages::id.eq(content::language_id)))
-			.get_results::<(Self, Language)>(conn)?;
+			if let Some(content_item_id) = content_item_id {
+				query = query.filter(content::id.eq(content_item_id))
+			}
 
-		Ok((content_item, fields, language, translations))
-	}
+			// if let Some(populate) = populate {
+			// 	query = query.filter(content::id.eq(content_item_id))
+			// }
 
-	#[instrument(skip(conn))]
-	pub fn find_one_public_by_uuid<'a>(
-		conn: &mut PgConnection,
-		site_id: Uuid,
-		content_item_id: &'a Uuid,
-		lang: &'a str,
-	) -> Result<(Self, Vec<ContentField>, Language, Vec<(Self, Language)>), AppError> {
-		let (content_item, language) = content::table
-			.filter(content::id.eq(content_item_id))
-			.filter(content::published.eq(true))
-			.inner_join(languages::table.on(languages::id.eq(content::language_id)))
-			.filter(languages::key.eq(lang))
-			.get_result::<(Self, Language)>(conn)?;
+			query
+		};
 
-		let fields = content_fields::table
-			.filter(
-				content_fields::source_id
-					.eq_any(vec![content_item.id, content_item.translation_id]),
-			)
-			.select(ContentField::as_select())
-			.load::<ContentField>(conn)?;
+		let (content_item, language) = query.get_result::<(Self, Language)>(conn)?;
+		let fields = match populate {
+			Some(true) => {
+				let query = sql_query(
+					"
+					WITH RECURSIVE cte_fields AS (
+						SELECT
+							a.id,
+							a.name,
+							a.value,
+							a.parent_id,
+							a.source_id,
+							a.content_component_id,
+							a.sequence_number,
+							a.data_type
+						FROM
+							content_fields a
+							WHERE
+								a.source_id = ANY ($1)
+						UNION ALL
+						SELECT
+							b.id,
+							b.name,
+							b.value,
+							b.parent_id,
+							b.source_id,
+							b.content_component_id,
+							b.sequence_number,
+							b.data_type
+						FROM
+							content_fields b
+							INNER JOIN cte_fields f ON b.source_id::text = ANY( ARRAY [f.value->>'contentId', f.value->>'translationId'])
+					)
+					SELECT
+						*
+					FROM
+						cte_fields",
+				);
+				query
+					.bind::<diesel::sql_types::Array<diesel::sql_types::Uuid>, _>(vec![content_item.id, content_item.translation_id])
+					.get_results::<ContentField>(conn)?
+			},
+			Some(false) |
+			None => {
+				content_fields::table
+					.filter(
+						content_fields::source_id
+							.eq_any(vec![content_item.id, content_item.translation_id]),
+					)
+					.select(ContentField::as_select())
+					.load::<ContentField>(conn)?
+			}
+		};
 
 		let translations = content::table
 			.filter(content::translation_id.eq(&content_item.translation_id))
@@ -190,6 +221,7 @@ impl Content {
 		kind: Option<ContentTypeKindEnum>,
 		language_id: Option<Uuid>,
 		translation_id: Option<Uuid>,
+		content_types: Option<Vec<Uuid>>,
 	) -> Result<(Vec<(Self, Language, ContentType, WorkflowState)>, i64), AppError> {
 		let query = {
 			let mut query = content::table
@@ -207,6 +239,10 @@ impl Content {
 
 			if let Some(kind) = kind {
 				query = query.filter(content_types::kind.eq(kind));
+			}
+
+			if let Some(content_types) = content_types {
+				query = query.filter(content_types::id.eq_any(content_types));
 			}
 
 			if let Some(translation_id) = translation_id {
@@ -250,9 +286,7 @@ impl Content {
 			))
 			.load::<(Content, Language, ContentType, WorkflowState)>(conn)?;
 
-		let total_elements = total_query
-			.count()
-			.get_result::<i64>(conn)?;
+		let total_elements = total_query.count().get_result::<i64>(conn)?;
 
 		Ok((content, total_elements))
 	}
@@ -267,20 +301,20 @@ impl Content {
 		values: Value,
 	) -> Result<(Self, Vec<ContentField>, Language, WorkflowState), AppError> {
 		let target = content::table.find(id);
-		let updated_content_iten = diesel::update(target)
+		let updated_content_item = diesel::update(target)
 			.set(changeset)
 			.returning(Content::as_returning())
 			.get_result::<Self>(conn)?;
 
 		let (_content_type, fields) = ContentType::find_one(conn, site_id, content_type_id)?;
 		let content_fields = content_fields::table
-			.filter(content_fields::source_id.eq_any(vec![id, updated_content_iten.translation_id]))
+			.filter(content_fields::source_id.eq_any(vec![id, updated_content_item.translation_id]))
 			.select(ContentField::as_select())
 			.load::<ContentField>(conn)?;
 		upsert_fields(
 			conn,
 			id,
-			updated_content_iten.translation_id,
+			updated_content_item.translation_id,
 			fields,
 			values,
 			&content_fields,

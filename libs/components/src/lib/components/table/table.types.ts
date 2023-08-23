@@ -27,4 +27,5 @@ export interface ITableProps {
 	minSelection?: number;
 	maxSelection?: number;
 	orderable?: boolean;
+	noDataText?: ReactNode;
 }

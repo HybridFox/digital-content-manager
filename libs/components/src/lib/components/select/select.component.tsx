@@ -19,6 +19,7 @@ export const Select: FC<ISelectProps> = ({
 	min = 1,
 	max = 1,
 	isClearable = true,
+	loading,
 }: ISelectProps) => {
 	const isMulti = min !== 1 || max !== 1;
 	const handleSelection = (key: any) => {
@@ -46,6 +47,7 @@ export const Select: FC<ISelectProps> = ({
 			isDisabled={disabled}
 			className={className}
 			unstyled={true}
+			isLoading={loading}
 			classNames={{
 				control: (props) => cxBind('a-select', {
 					'a-select--has-error': hasError,

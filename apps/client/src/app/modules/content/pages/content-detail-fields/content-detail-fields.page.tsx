@@ -1,4 +1,4 @@
-import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentTypeStore, useHeaderStore } from '@ibs/shared';
+import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, IContentItem, useContentStore, useContentTypeStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { RenderFields, TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +7,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
 import { CONTENT_PATHS } from '../../content.routes';
-import { IContentItem, useContentStore } from '../../stores/content';
 
 export const ContentDetailFieldsPage = () => {
 	const [contentType] = useContentTypeStore((state) => [state.contentType]);
@@ -57,7 +56,7 @@ export const ContentDetailFieldsPage = () => {
 			</Alert>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<div className="u-margin-bottom">
-					<RenderFields fieldPrefix="fields." fields={contentType?.fields || []} />
+					<RenderFields siteId={siteId!} fieldPrefix="fields." fields={contentType?.fields || []} />
 				</div>
 				<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>{updateContentItemLoading && <i className="las la-redo-alt la-spin"></i>} Save</Button>
 			</form>

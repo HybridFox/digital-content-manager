@@ -83,7 +83,7 @@ export const StorageRepositoryCreatePage = () => {
 						<div className="u-margin-bottom">
 							<SelectField name="kind" label="Kind" fieldConfiguration={{ options: STORAGE_KIND_OPTIONS }} />
 						</div>
-						{kind && <RenderFields fields={STORAGE_KIND_FIELDS[kind] || []} fieldPrefix='configuration.'></RenderFields>}
+						{kind && <RenderFields siteId='' fields={STORAGE_KIND_FIELDS[kind] || []} fieldPrefix='configuration.'></RenderFields>}
 						<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 							{createStorageRepositoryLoading && <i className="las la-redo-alt la-spin"></i>} Save
 						</Button>

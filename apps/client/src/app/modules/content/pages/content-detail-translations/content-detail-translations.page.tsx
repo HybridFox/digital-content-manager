@@ -1,10 +1,9 @@
 import { useEffect, useMemo } from 'react';
-import { CONTENT_TYPE_KINDS_TRANSLATIONS, useAuthStore, useContentTypeStore, useHeaderStore } from '@ibs/shared';
+import { CONTENT_TYPE_KINDS_TRANSLATIONS, useAuthStore, useContentStore, useContentTypeStore, useHeaderStore } from '@ibs/shared';
 import { Loading, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { useContentStore } from '../../stores/content';
 import { CONTENT_PATHS } from '../../content.routes';
 
 import { CONTENT_TRANSLATIONS_LIST_COLUMNS } from './content-detail-translations.const';

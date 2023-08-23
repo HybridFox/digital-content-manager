@@ -39,3 +39,25 @@ export const kyAuthInstance = ky.extend({
 export const wrapApi = async <T = unknown, E = IAPIError>(fn: Promise<T>): Promise<[T, null] | [null, E]> => fn
 	.then((result) => [result, null] as [T, null])
 	.catch((error) => [null, error])
+
+export const parseQueryParams = (params?: Record<any, undefined | null | string | number | string[]>): URLSearchParams => {
+	if (!params) {
+		return new URLSearchParams();
+	}
+
+	const searchParams = new URLSearchParams();
+
+	Object.keys(params).forEach((key) => {
+		if (!params[key]) {
+			return;
+		}
+
+		if (Array.isArray(params[key])) {
+			return (params[key] as string[]).forEach((value) => searchParams.append(`${key}[]`, value))
+		}
+
+		searchParams.append(key, params[key]!.toString())
+	})
+
+	return searchParams
+}

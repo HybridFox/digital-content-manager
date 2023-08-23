@@ -18,7 +18,7 @@ export const ROLE_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: 
 		format: (value, key, item) => (
 			<div className="u-display-flex u-justify-content-end">
 				{item?.hasPermission && (
-					<ButtonLink to={`${item.id}/dashboard`} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY}>
+					<ButtonLink to={`${item.id}/content`} size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY}>
 						<i className="las la-eye"></i> {t(`GENERAL.LABELS.VIEW`)}
 					</ButtonLink>
 				)}

@@ -51,7 +51,7 @@ export const FieldConfigurationPage = () => {
 
 	return (
 		<div className="u-margin-top">
-			<RenderFields fieldPrefix='config.' fields={contentTypeField?.contentComponent?.configurationFields || []} />
+			<RenderFields siteId={siteId!} fieldPrefix='config.' fields={contentTypeField?.contentComponent?.configurationFields || []} />
 		</div>
 	);
 };

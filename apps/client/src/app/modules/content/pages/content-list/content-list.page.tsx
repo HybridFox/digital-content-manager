@@ -1,10 +1,8 @@
 import { useEffect } from 'react';
-import { CONTENT_TYPE_KINDS_PARAMETER_MAP, getPageParams, getPaginationProps, useHeaderStore } from '@ibs/shared';
+import { CONTENT_TYPE_KINDS_PARAMETER_MAP, getPageParams, getPaginationProps, useContentStore, useHeaderStore } from '@ibs/shared';
 import { ButtonLink, ButtonTypes, HasPermission, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
-
-import { useContentStore } from '../../stores/content';
 
 import { CONTENT_LIST_COLUMNS } from './content-list.const';
 

@@ -1,10 +1,11 @@
 import { CONTENT_TYPE_KINDS_OPTIONS, IAPIError, useContentTypeStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, Card, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { generatePath, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { SelectField, TextField, TextareaField } from '@ibs/forms';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 
@@ -24,12 +25,14 @@ export const CTCreatePage = () => {
 		state.workflowsLoading,
 		state.fetchWorkflows,
 	]);
+	const [t] = useTranslation();
 	const { siteId } = useParams();
+	const [searchParams] = useSearchParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 	const navigate = useNavigate();
 	const formMethods = useForm<ICreateContentTypeForm>({
 		resolver: yupResolver(createContentTypeForm),
-		values: { workflowId: workflows?.[0]?.id, kind: CONTENT_TYPE_KINDS_OPTIONS[0].value, description: '', name: '' },
+		values: { workflowId: workflows?.[0]?.id, kind: searchParams.get('kind') || CONTENT_TYPE_KINDS_OPTIONS[0].value, description: '', name: '' },
 	});
 	const {
 		handleSubmit,
@@ -74,6 +77,13 @@ export const CTCreatePage = () => {
 						</div>
 						<div className="u-margin-top">
 							<SelectField name="kind" label="Content Type Kind" fieldConfiguration={{ options: CONTENT_TYPE_KINDS_OPTIONS }} />
+							<Card className='u-margin-top' title={t('CONTENT_TYPES.INFO.KIND.TITLE')}>
+								<ul>
+									<li><Trans t={t} values={{}} i18nKey='CONTENT_TYPES.INFO.KIND.CONTENT' /></li>
+									<li><Trans t={t} values={{}} i18nKey='CONTENT_TYPES.INFO.KIND.PAGES' /></li>
+									<li><Trans t={t} values={{}} i18nKey='CONTENT_TYPES.INFO.KIND.CONTENT-BLOCKS' /></li>
+								</ul>
+							</Card>
 						</div>
 						<div className="u-margin-top">
 							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>Create</Button>

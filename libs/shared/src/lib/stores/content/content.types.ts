@@ -1,4 +1,5 @@
-import { IAPIHALResponse, IAPIPagination, ILanguage, IPageParameters, IWorkflowState } from "@ibs/shared";
+import { IAPIHALResponse, IAPIPagination, ILanguage, IPageParameters } from "../../types";
+import { IWorkflowState } from "../workflow";
 
 export interface IContentItem {
 	id: string;
@@ -18,6 +19,7 @@ export interface IContentItem {
 export interface IFetchContentParams {
 	translationId?: string
 	kind?: string;
+	contentTypes?: string[];
 }
 
 export type IContentResponse = IAPIHALResponse<'content', IContentItem>;
@@ -25,7 +27,7 @@ export type IContentResponse = IAPIHALResponse<'content', IContentItem>;
 export interface IContentStoreState {
 	fetchContent: (siteId: string, params?: IPageParameters & IFetchContentParams) => Promise<void>;
 	content: IContentItem[];
-	contentPagination?: IAPIPagination
+	contentPagination?: IAPIPagination;
 	contentLoading: boolean;
 
 	fetchContentItem: (siteId: string, contentId: string) => Promise<IContentItem>;
