@@ -284,6 +284,15 @@ diesel::table! {
 }
 
 diesel::table! {
+    sites_content_components (site_id, content_component_id) {
+        site_id -> Uuid,
+        content_component_id -> Uuid,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     sites_content_types (site_id, content_type_id) {
         site_id -> Uuid,
         content_type_id -> Uuid,
@@ -428,6 +437,8 @@ diesel::joinable!(permissions_iam_conditions -> permissions (permission_id));
 diesel::joinable!(roles -> sites (site_id));
 diesel::joinable!(roles_iam_policies -> iam_policies (iam_policy_id));
 diesel::joinable!(roles_iam_policies -> roles (role_id));
+diesel::joinable!(sites_content_components -> content_components (content_component_id));
+diesel::joinable!(sites_content_components -> sites (site_id));
 diesel::joinable!(sites_content_types -> content_types (content_type_id));
 diesel::joinable!(sites_content_types -> sites (site_id));
 diesel::joinable!(sites_languages -> languages (language_id));
@@ -465,6 +476,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     roles,
     roles_iam_policies,
     sites,
+    sites_content_components,
     sites_content_types,
     sites_languages,
     sites_storage_repositories,

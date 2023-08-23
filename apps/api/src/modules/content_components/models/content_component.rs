@@ -87,7 +87,7 @@ impl ContentComponent {
 	#[instrument(skip(conn))]
 	pub fn find(
 		conn: &mut PgConnection,
-		_site_id: Uuid,
+		site_id: Uuid,
 		page: i64,
 		pagesize: i64,
 		include_hidden: bool,
@@ -95,7 +95,7 @@ impl ContentComponent {
 	) -> Result<(Vec<ContentComponent>, i64), AppError> {
 		let query = {
 			let mut query = content_components::table
-				// .filter(not(content_components::hidden.eq(true)))
+				.filter(not(content_components::hidden.eq(true)))
 				.into_boxed();
 
 			if include_hidden == false {
