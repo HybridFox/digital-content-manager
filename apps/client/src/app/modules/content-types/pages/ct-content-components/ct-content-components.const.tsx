@@ -57,14 +57,12 @@ export const CONTENT_TYPE_DETAIL_COLUMNS = (
 				<ButtonLink
 					to={`../fields/${item.id}`}
 					size={ButtonSizes.SMALL}
-					type={ButtonTypes.SECONDARY}
 					className="u-margin-left-auto"
 				>
 					<i className="las la-pen"></i> Edit
 				</ButtonLink>
 				<Button
 					size={ButtonSizes.SMALL}
-					type={ButtonTypes.SECONDARY}
 					className="u-margin-left-sm"
 					onClick={() => onDeleteField(item.id as string)}
 				>

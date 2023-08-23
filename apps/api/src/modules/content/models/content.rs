@@ -11,9 +11,11 @@ use crate::modules::content::helpers::upsert_fields::upsert_fields;
 use crate::modules::content_types::models::content_type::{ContentType, ContentTypeKindEnum};
 use crate::modules::languages::models::language::Language;
 use crate::modules::workflows::models::workflow_state::WorkflowState;
+use crate::schema::content_revisions;
 use crate::schema::{content, content_fields, languages, content_types, workflow_states};
 
 use super::content_field::ContentField;
+use super::content_revision::ContentRevision;
 
 #[derive(Identifiable, Selectable, Queryable, Debug, Associations, Clone)]
 #[diesel(table_name = content)]
@@ -36,60 +38,28 @@ pub struct Content {
 
 impl Content {
 	#[instrument(skip(conn))]
-	pub fn create(
-		conn: &mut PgConnection,
-		site_id: Uuid,
-		content_item: CreateContent,
-		values: Value,
-	) -> Result<(Self, Vec<ContentField>, Language, WorkflowState), AppError> {
-		let content_item = diesel::insert_into(content::table)
-			.values(&content_item)
-			.returning(Content::as_returning())
-			.get_result(conn)?;
-
-		let (_content_type, fields) =
-			ContentType::find_one(conn, site_id, content_item.content_type_id)?;
-		upsert_fields(
-			conn,
-			content_item.id,
-			content_item.translation_id,
-			fields,
-			values,
-			&vec![],
-		)?;
-
-		let fields = content_fields::table
-			.filter(
-				content_fields::source_id
-					.eq_any(vec![content_item.id, content_item.translation_id]),
-			)
-			.select(ContentField::as_select())
-			.load::<ContentField>(conn)?;
-		let language = languages::table
-			.find(content_item.language_id)
-			.first(conn)?;
-		let workflow_state = workflow_states::table
-			.find(content_item.workflow_state_id)
-			.first(conn)?;
-
-		Ok((content_item, fields, language, workflow_state))
-	}
-
-	#[instrument(skip(conn))]
 	pub fn find_one(
 		conn: &mut PgConnection,
 		site_id: Uuid,
 		id: Uuid,
-	) -> Result<(Self, Vec<ContentField>, Language, WorkflowState), AppError> {
+	) -> Result<(Self, ContentRevision, Vec<ContentField>, Language, WorkflowState), AppError> {
 		let content_item = content::table
 			.filter(content::site_id.eq(site_id))
 			.find(id)
 			.first::<Self>(conn)?;
+	
+		let revision = content_revisions::table
+			.filter(content_revisions::site_id.eq(site_id))
+			.filter(content_revisions::content_id.eq(id))
+			.order(content_revisions::created_at.desc())
+			.first::<ContentRevision>(conn)?;
+
+		dbg!(&revision);
 
 		let fields = content_fields::table
 			.filter(
 				content_fields::source_id
-					.eq_any(vec![content_item.id, content_item.translation_id]),
+					.eq_any(vec![revision.id, revision.revision_translation_id]),
 			)
 			.select(ContentField::as_select())
 			.load::<ContentField>(conn)?;
@@ -98,10 +68,10 @@ impl Content {
 			.find(content_item.language_id)
 			.first(conn)?;
 		let workflow_state = workflow_states::table
-			.find(content_item.workflow_state_id)
+			.find(revision.workflow_state_id)
 			.first(conn)?;
 
-		Ok((content_item, fields, language, workflow_state))
+		Ok((content_item, revision, fields, language, workflow_state))
 	}
 
 	#[instrument(skip(conn))]
@@ -112,7 +82,7 @@ impl Content {
 		content_item_id: Option<Uuid>,
 		populate: Option<bool>,
 		lang: &'a str,
-	) -> Result<(Self, Vec<ContentField>, Language, Vec<(Self, Language)>), AppError> {
+	) -> Result<(Self, ContentRevision, Vec<ContentField>, Language, Vec<(Self, Language)>), AppError> {
 		let query = {
 			let mut query = content::table
 				.filter(content::published.eq(true))
@@ -136,6 +106,12 @@ impl Content {
 		};
 
 		let (content_item, language) = query.get_result::<(Self, Language)>(conn)?;
+		let revision: ContentRevision = content_revisions::table
+			.filter(content_revisions::site_id.eq(site_id))
+			.filter(content_revisions::content_id.eq(content_item.id))
+			.filter(content_revisions::published.eq(true))
+			.order(content_revisions::created_at.desc())
+			.first::<ContentRevision>(conn)?;
 		let fields = match populate {
 			Some(true) => {
 				let query = sql_query(
@@ -174,7 +150,7 @@ impl Content {
 						cte_fields",
 				);
 				query
-					.bind::<diesel::sql_types::Array<diesel::sql_types::Uuid>, _>(vec![content_item.id, content_item.translation_id])
+					.bind::<diesel::sql_types::Array<diesel::sql_types::Uuid>, _>(vec![revision.id, revision.revision_translation_id])
 					.get_results::<ContentField>(conn)?
 			},
 			Some(false) |
@@ -182,7 +158,7 @@ impl Content {
 				content_fields::table
 					.filter(
 						content_fields::source_id
-							.eq_any(vec![content_item.id, content_item.translation_id]),
+							.eq_any(vec![revision.id, revision.revision_translation_id]),
 					)
 					.select(ContentField::as_select())
 					.load::<ContentField>(conn)?
@@ -195,7 +171,7 @@ impl Content {
 			.inner_join(languages::table.on(languages::id.eq(content::language_id)))
 			.get_results::<(Self, Language)>(conn)?;
 
-		Ok((content_item, fields, language, translations))
+		Ok((content_item, revision, fields, language, translations))
 	}
 
 	#[instrument(skip(conn))]
@@ -292,40 +268,6 @@ impl Content {
 	}
 
 	#[instrument(skip(conn))]
-	pub fn update(
-		conn: &mut PgConnection,
-		site_id: Uuid,
-		content_type_id: Uuid,
-		id: Uuid,
-		changeset: UpdateContent,
-		values: Value,
-	) -> Result<(Self, Vec<ContentField>, Language, WorkflowState), AppError> {
-		let target = content::table.find(id);
-		let updated_content_item = diesel::update(target)
-			.set(changeset)
-			.returning(Content::as_returning())
-			.get_result::<Self>(conn)?;
-
-		let (_content_type, fields) = ContentType::find_one(conn, site_id, content_type_id)?;
-		let content_fields = content_fields::table
-			.filter(content_fields::source_id.eq_any(vec![id, updated_content_item.translation_id]))
-			.select(ContentField::as_select())
-			.load::<ContentField>(conn)?;
-		upsert_fields(
-			conn,
-			id,
-			updated_content_item.translation_id,
-			fields,
-			values,
-			&content_fields,
-		)?;
-
-		let content_item = Self::find_one(conn, site_id, id)?;
-
-		Ok(content_item)
-	}
-
-	#[instrument(skip(conn))]
 	pub fn remove(conn: &mut PgConnection, content_id: Uuid) -> Result<(), AppError> {
 		diesel::delete(content::table.filter(content::id.eq(content_id)))
 			.get_result::<Content>(conn)?;
@@ -376,7 +318,7 @@ pub struct CreateContent<'a> {
 pub struct UpdateContent {
 	pub name: Option<String>,
 	pub slug: Option<String>,
-	pub published: bool,
+	pub published: Option<bool>,
 	pub workflow_state_id: Uuid,
 	pub updated_at: NaiveDateTime,
 }

@@ -153,12 +153,12 @@ impl Modify for SecurityAddon {
 			super::modules::content_types::dto::fields::response::FieldsEmbeddedDTO,
 
 			// Content
-			super::modules::content::dto::response::ContentDTO,
-			super::modules::content::dto::response::ContentWithFieldsDTO,
-			super::modules::content::dto::response::ContentListDTO,
-			super::modules::content::dto::response::ContentListEmbeddedDTO,
-			super::modules::content::dto::request::CreateContentDTO,
-			super::modules::content::dto::request::UpdateContentDTO,
+			super::modules::content::dto::content::response::ContentDTO,
+			super::modules::content::dto::content::response::ContentWithFieldsDTO,
+			super::modules::content::dto::content::response::ContentListDTO,
+			super::modules::content::dto::content::response::ContentListEmbeddedDTO,
+			super::modules::content::dto::content::request::CreateContentDTO,
+			super::modules::content::dto::content::request::UpdateContentDTO,
 
 			// Content Components
 			super::modules::content_components::dto::content_components::response::ContentComponentDTO,

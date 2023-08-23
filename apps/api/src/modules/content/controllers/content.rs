@@ -1,4 +1,4 @@
-use super::super::dto::{request, response};
+use super::super::dto::content::{request, response};
 use crate::errors::AppErrorValue;
 use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::content::models::content::{CreateContent, UpdateContent};
@@ -82,7 +82,7 @@ pub async fn create(
 		}));
 	}
 
-	let (content, fields, language, workflow_state) = Content::create(
+	let (content, revision, fields, language, workflow_state) = Content::create(
 		conn,
 		params.site_id,
 		CreateContent {
@@ -97,7 +97,7 @@ pub async fn create(
 		form.fields.clone(),
 	)?;
 
-	let res = response::ContentWithFieldsDTO::from((content, fields, language, workflow_state, false));
+	let res = response::ContentWithFieldsDTO::from((content, revision, fields, language, workflow_state, false));
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -168,9 +168,9 @@ pub async fn find_one(
 ) -> Result<HttpResponse, AppError> {
 	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:{}", params.content_id), "sites::content:read")?;
 	let conn = &mut state.get_conn()?;
-	let (content, fields, language, workflow_state) = Content::find_one(conn, params.site_id, params.content_id)?;
+	let (content, revision, fields, language, workflow_state) = Content::find_one(conn, params.site_id, params.content_id)?;
 
-	let res = response::ContentWithFieldsDTO::from((content, fields, language, workflow_state, false));
+	let res = response::ContentWithFieldsDTO::from((content, revision, fields, language, workflow_state, false));
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -198,9 +198,11 @@ pub async fn update(
 
 	let workflow_state = WorkflowState::find_one(conn, params.site_id, form.workflow_state_id)?;
 	let published = if workflow_state.technical_state == WorkflowTechnicalStateEnum::PUBLISHED {
-		true
+		Some(true)
+	} else if workflow_state.technical_state == WorkflowTechnicalStateEnum::UNPUBLISHED {
+		Some(false)
 	} else {
-		false
+		None
 	};
 
 	if form.slug.is_some() {
@@ -220,7 +222,7 @@ pub async fn update(
 		}
 	};
 
-	let (content, fields, language, workflow_state) = Content::update(
+	let (content, revision, fields, language, workflow_state) = Content::update(
 		conn,
 		params.site_id,
 		form.content_type_id.clone(),
@@ -234,7 +236,7 @@ pub async fn update(
 		},
 		form.fields.clone(),
 	)?;
-	let res = response::ContentWithFieldsDTO::from((content, fields, language, workflow_state, false));
+	let res = response::ContentWithFieldsDTO::from((content, revision, fields, language, workflow_state, false));
 	Ok(HttpResponse::Ok().json(res))
 }
 

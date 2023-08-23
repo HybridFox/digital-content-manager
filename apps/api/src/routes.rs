@@ -85,6 +85,12 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 								.service(modules::content::controllers::content::update)
 								.service(modules::content::controllers::content::remove)
 								.service(modules::content::controllers::content::default_values)
+								.service(
+									web::scope("/{content_id}/revisions")
+										// .service(modules::content::controllers::content_revisions::create)
+										.service(modules::content::controllers::content_revisions::find_all)
+										// .service(modules::content::controllers::content_revisions::find_one)
+								)
 						)
 						.service(
 							web::scope("/{site_id}/content-components")

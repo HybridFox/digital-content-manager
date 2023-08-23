@@ -31,14 +31,14 @@ export const CONTENT_DETAIL_TABS = (
 		}),
 		label: 'Fields',
 	},
-	{
-		to: generatePath(CONTENT_PATHS.DETAIL_STATUS, {
-			contentId: contentItem?.id || '',
-			kind,
-			siteId,
-		}),
-		label: <>Status <Badge>{contentItem?.currentWorkflowState?.name}</Badge></>,
-	},
+	// {
+	// 	to: generatePath(CONTENT_PATHS.DETAIL_STATUS, {
+	// 		contentId: contentItem?.id || '',
+	// 		kind,
+	// 		siteId,
+	// 	}),
+	// 	label: <>Status <Badge>{contentItem?.currentWorkflowState?.name}</Badge></>,
+	// },
 	{
 		to: generatePath(CONTENT_PATHS.DETAIL_TRANSLATIONS, {
 			contentId: contentItem?.id || '',

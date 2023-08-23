@@ -1,4 +1,4 @@
-use super::super::dto::response;
+use super::super::dto::content::response;
 use crate::errors::AppErrorValue;
 use crate::{errors::AppError, modules::content::models::content::Content};
 use crate::modules::core::middleware::state::AppState;
@@ -40,7 +40,7 @@ pub async fn find_one(
 	query: web::Query<FindOneQueryParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let (content, fields, languages, translations) = if query.slug.is_some() || query.id.is_some() {
+	let (content, revision, fields, languages, translations) = if query.slug.is_some() || query.id.is_some() {
 		Content::find_one_public(
 			conn,
 			params.site_id,
@@ -58,6 +58,6 @@ pub async fn find_one(
 		}));
 	};
 
-	let res = response::PublicContentDTO::from((content, fields, languages, translations, query.populate.unwrap_or(false)));
+	let res = response::PublicContentDTO::from((content, revision, fields, languages, translations, query.populate.unwrap_or(false)));
 	Ok(HttpResponse::Ok().json(res))
 }

@@ -6,6 +6,7 @@ use serde::{Serialize, Deserialize};
 use uuid::Uuid;
 use slug::slugify;
 use tracing::instrument;
+use diesel::dsl::*;
 
 use crate::errors::AppError;
 use crate::modules::content_components::enums::data_type::DataTypeEnum;
@@ -13,7 +14,9 @@ use crate::modules::content_types::models::field::{FieldModel, FieldTypeEnum};
 use crate::modules::content_types::models::field_config::{
 	FieldConfig, FieldConfigTypeEnum, FieldConfigContent,
 };
-use crate::schema::{content_components, fields};
+use crate::schema::{content_components, fields, sites_content_components};
+
+use super::site_content_component::SiteContentComponent;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PopulatedContentComponent {
@@ -52,7 +55,7 @@ impl ContentComponent {
 	#[instrument(skip(conn))]
 	pub fn create(
 		conn: &mut PgConnection,
-		_site_id: Uuid,
+		site_id: Uuid,
 		name: String,
 		description: Option<String>,
 		component_name: String,
@@ -68,6 +71,7 @@ impl ContentComponent {
 			.returning(ContentComponent::as_returning())
 			.get_result(conn)?;
 
+		SiteContentComponent::create(conn, site_id, created_content_component.id)?;
 		let content_components = Self::populate_fields(conn, vec![created_content_component])?;
 
 		Ok(content_components.first().unwrap().clone())
@@ -93,6 +97,31 @@ impl ContentComponent {
 		include_hidden: bool,
 		include_internal: bool,
 	) -> Result<(Vec<ContentComponent>, i64), AppError> {
+		let site_query = {
+			let mut query = sites_content_components::table
+				.filter(sites_content_components::site_id.eq(site_id))
+				.inner_join(
+					content_components::table.on(content_components::id
+						.eq(sites_content_components::content_component_id)
+						.or(content_components::internal.eq(true))),
+				)
+				.into_boxed();
+
+			if include_hidden == false {
+				query = query.filter(content_components::hidden.eq(false))
+			};
+
+			if include_internal == false {
+				query = query.filter(content_components::internal.eq(false))
+			};
+
+			if pagesize != -1 {
+				query = query.offset((page - 1) * pagesize).limit(pagesize);
+			};
+
+			query
+		};
+
 		let query = {
 			let mut query = content_components::table
 				.filter(not(content_components::hidden.eq(true)))
@@ -117,7 +146,10 @@ impl ContentComponent {
 			.select(ContentComponent::as_select())
 			.load::<ContentComponent>(conn)?;
 		// TODO: take filtering in consideration
-		let total_elements = content_components::table.count().get_result::<i64>(conn)?;
+		let total_elements = sites_content_components::table
+			.filter(sites_content_components::site_id.eq(site_id))
+			.count()
+			.get_result::<i64>(conn)?;
 
 		Ok((content_components, total_elements))
 	}
@@ -125,10 +157,12 @@ impl ContentComponent {
 	#[instrument(skip(conn))]
 	pub fn update(
 		conn: &mut PgConnection,
+		site_id: Uuid,
 		content_component_id: Uuid,
 		changeset: UpdateContentComponent,
 	) -> Result<PopulatedContentComponent, AppError> {
-		let target = content_components::table.find(content_component_id);
+		let target = content_components::table
+			.filter(content_components::id.eq(content_component_id));
 		let updated_content_component = diesel::update(target)
 			.set(changeset)
 			.get_result::<ContentComponent>(conn)?;

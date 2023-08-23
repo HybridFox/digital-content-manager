@@ -1,6 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TYPE workflow_state_technical_states AS ENUM('DRAFT', 'PUBLISHED');
+CREATE TYPE workflow_state_technical_states AS ENUM('DRAFT', 'PUBLISHED', 'UNPUBLISHED');
 
 CREATE TABLE workflow_states (
 	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

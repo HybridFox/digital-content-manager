@@ -21,6 +21,7 @@ use crate::schema::{workflow_states, sql_types::WorkflowStateTechnicalStates};
 #[diesel(sql_type = WorkflowStateTechnicalStates)]
 pub enum WorkflowTechnicalStateEnum {
 	DRAFT,
+	UNPUBLISHED,
 	PUBLISHED,
 }
 
@@ -29,6 +30,7 @@ impl ToSql<WorkflowStateTechnicalStates, Pg> for WorkflowTechnicalStateEnum {
 		match *self {
 			WorkflowTechnicalStateEnum::DRAFT => out.write_all(b"DRAFT")?,
 			WorkflowTechnicalStateEnum::PUBLISHED => out.write_all(b"PUBLISHED")?,
+			WorkflowTechnicalStateEnum::UNPUBLISHED => out.write_all(b"UNPUBLISHED")?,
 		}
 		Ok(IsNull::No)
 	}
@@ -39,6 +41,7 @@ impl FromSql<WorkflowStateTechnicalStates, Pg> for WorkflowTechnicalStateEnum {
 		match bytes.as_bytes() {
 			b"DRAFT" => Ok(WorkflowTechnicalStateEnum::DRAFT),
 			b"PUBLISHED" => Ok(WorkflowTechnicalStateEnum::PUBLISHED),
+			b"UNPUBLISHED" => Ok(WorkflowTechnicalStateEnum::UNPUBLISHED),
 			_ => Err("Unrecognized enum variant".into()),
 		}
 	}

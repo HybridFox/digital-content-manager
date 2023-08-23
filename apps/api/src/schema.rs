@@ -125,6 +125,19 @@ diesel::table! {
 }
 
 diesel::table! {
+    content_revisions (id) {
+        id -> Uuid,
+        workflow_state_id -> Uuid,
+        revision_translation_id -> Uuid,
+        content_id -> Uuid,
+        site_id -> Uuid,
+        published -> Bool,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     use diesel::sql_types::*;
     use super::sql_types::ContentTypeKinds;
 
@@ -428,6 +441,9 @@ diesel::joinable!(authentication_method_roles -> sites (site_id));
 diesel::joinable!(content -> content_types (content_type_id));
 diesel::joinable!(content -> sites (site_id));
 diesel::joinable!(content -> workflow_states (workflow_state_id));
+diesel::joinable!(content_revisions -> content (content_id));
+diesel::joinable!(content_revisions -> sites (site_id));
+diesel::joinable!(content_revisions -> workflow_states (workflow_state_id));
 diesel::joinable!(iam_policies -> sites (site_id));
 diesel::joinable!(permissions -> iam_policies (iam_policy_id));
 diesel::joinable!(permissions_iam_actions -> iam_actions (iam_action_key));
@@ -463,6 +479,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     content,
     content_components,
     content_fields,
+    content_revisions,
     content_types,
     field_config,
     fields,

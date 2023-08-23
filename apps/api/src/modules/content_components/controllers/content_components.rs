@@ -166,6 +166,7 @@ pub async fn update(
 	let conn = &mut state.get_conn()?;
 	let content_component = ContentComponent::update(
 		conn,
+		params.site_id,
 		params.content_component_id,
 		UpdateContentComponent {
 			name: form.name.clone(),

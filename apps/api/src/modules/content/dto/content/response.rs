@@ -1,5 +1,5 @@
 use crate::modules::{
-	content::models::{content::Content, content_field::ContentField},
+	content::models::{content::Content, content_field::ContentField, content_revision::ContentRevision},
 	core::models::hal::{HALLinkList, HALPage},
 	content_components::enums::data_type::DataTypeEnum,
 	sites::dto::languages::response::LanguageDTO,
@@ -160,10 +160,11 @@ fn parse_object_fields(
 	fields
 }
 
-impl From<(Content, Vec<ContentField>, Language, WorkflowState, bool)> for ContentWithFieldsDTO {
+impl From<(Content, ContentRevision, Vec<ContentField>, Language, WorkflowState, bool)> for ContentWithFieldsDTO {
 	fn from(
-		(content, fields, language, workflow_state, populate): (
+		(content, revision, fields, language, workflow_state, populate): (
 			Content,
+			ContentRevision,
 			Vec<ContentField>,
 			Language,
 			WorkflowState,
@@ -181,7 +182,7 @@ impl From<(Content, Vec<ContentField>, Language, WorkflowState, bool)> for Conte
 			deleted: content.deleted,
 			created_at: content.created_at,
 			updated_at: content.updated_at,
-			fields: parse_object_fields(Some(content.id), content.translation_id, None, fields, populate),
+			fields: parse_object_fields(Some(revision.id), revision.revision_translation_id, None, fields, populate),
 			language: LanguageDTO::from(language),
 			current_workflow_state: WorkflowStateDTO::from(workflow_state),
 		}
@@ -222,6 +223,7 @@ pub struct PublicContentDTO {
 impl
 	From<(
 		Content,
+		ContentRevision,
 		Vec<ContentField>,
 		Language,
 		Vec<(Content, Language)>,
@@ -229,8 +231,9 @@ impl
 	)> for PublicContentDTO
 {
 	fn from(
-		(content, fields, language, translations, populate): (
+		(content, revision, fields, language, translations, populate): (
 			Content,
+			ContentRevision,
 			Vec<ContentField>,
 			Language,
 			Vec<(Content, Language)>,
@@ -243,7 +246,7 @@ impl
 			slug: content.slug,
 			created_at: content.created_at,
 			updated_at: content.updated_at,
-			fields: parse_object_fields(Some(content.id), content.translation_id, None, fields, populate),
+			fields: parse_object_fields(Some(revision.id), revision.revision_translation_id, None, fields, populate),
 			language: language.key,
 			translations: translations
 				.into_iter()

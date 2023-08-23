@@ -1,0 +1,14 @@
+.p-content-detail {
+	display: flex;
+
+	&__fields {
+		flex: 1;
+		padding-right: var(--spacer);
+	}
+
+	&__status {
+		width: 300px;
+		border-left: 1px solid var(--color-gray-lightest);
+		padding-left: var(--spacer);
+	}
+}
