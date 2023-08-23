@@ -1,6 +1,6 @@
 # Inhoud Beheer Systeem (IBS) - A State-of-the-Art Content Management System
 
-![IBS Logo](logo.png)
+<img src="logo.jpg" alt="logo" width="200"/>
 
 Welcome to the Inhoud Beheer Systeem (IBS) repository! IBS is a cutting-edge Content Management System that empowers you to manage your content with unprecedented ease and efficiency. This README provides a comprehensive overview of IBS, its features, architecture, installation instructions, and much more.
 
