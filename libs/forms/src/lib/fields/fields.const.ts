@@ -19,6 +19,15 @@ const RichtextField = lazy(async () => ({
 const AssetField = lazy(async () => ({
 	default: (await import('./asset-field')).AssetField
 }));
+const CheckboxField = lazy(async () => ({
+	default: (await import('./checkbox-field')).CheckboxField
+}));
+const ContentTypesField = lazy(async () => ({
+	default: (await import('./content-types-field')).ContentTypesField
+}));
+const ContentReferenceField = lazy(async () => ({
+	default: (await import('./content-reference-field')).ContentReferenceField
+}));
 
 export const FIELD_COMPONENTS: Record<FIELD_KEYS, FC<any>> = {
 	[FIELD_KEYS.FIELD_GROUP]: FieldGroupField,
@@ -29,9 +38,10 @@ export const FIELD_COMPONENTS: Record<FIELD_KEYS, FC<any>> = {
 	[FIELD_KEYS.URL]: TextField,
 	[FIELD_KEYS.SELECT]: SelectField,
 	[FIELD_KEYS.RADIO]: TextField,
-	[FIELD_KEYS.CHECKBOX]: TextField,
+	[FIELD_KEYS.CHECKBOX]: CheckboxField,
 	[FIELD_KEYS.MAP]: TextField,
 	[FIELD_KEYS.MEDIA]: AssetField,
 	[FIELD_KEYS.TOGGLE]: TextField,
-	[FIELD_KEYS.REFERENCE]: TextField,
+	[FIELD_KEYS.CONTENT_REFERENCE]: ContentReferenceField,
+	[FIELD_KEYS.CONTENT_TYPES]: ContentTypesField,
 }

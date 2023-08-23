@@ -40,12 +40,12 @@ export const Menu = () => {
 			</div>
 			<div className={cxBind('o-menu__links')}>
 				<ul>
-					<li>
+					{/* <li>
 						<NavLink {...navLinkBinding} to={generatePath(DASHBOARD_PATHS.ROOT, { siteId })}>
 							<i className="las la-chart-line"></i>
 							<span>Dashboard</span>
 						</NavLink>
-					</li>
+					</li> */}
 					<li>
 						<HasPermission siteId={siteId} resource="*" action="sites::resources:read">
 							<NavLink {...navLinkBinding} to={generatePath(RESOURCE_PATHS.ROOT, { siteId })}>

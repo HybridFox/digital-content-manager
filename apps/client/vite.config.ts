@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 import { visualizer } from "rollup-plugin-visualizer";
+import federation from "@originjs/vite-plugin-federation";
 
 export default defineConfig({
 	cacheDir: '../../node_modules/.vite/client',
@@ -22,6 +23,11 @@ export default defineConfig({
 	},
 
 	plugins: [
+		federation({
+			name: 'ibs',
+			remotes: {},
+			shared: ['react']
+		}),
 		react(),
 		viteTsConfigPaths({
 			root: '../../',

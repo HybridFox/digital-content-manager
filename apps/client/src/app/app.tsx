@@ -48,7 +48,7 @@ const router = createBrowserRouter([
 						path: '',
 						element: <SiteView />,
 						children: [
-							...DASHBOARD_ROUTES,
+							// ...DASHBOARD_ROUTES,
 							...CONTENT_TYPE_ROUTES,
 							...CONTENT_ROUTES,
 							...CONTENT_COMPONENT_ROUTES,

@@ -87,7 +87,7 @@ export const StorageRepositoryDetailPage = () => {
 								<TextField name="name" label="Name" />
 							</div>
 							{storageRepository?.kind && (
-								<RenderFields fields={STORAGE_KIND_FIELDS[storageRepository?.kind] || []} fieldPrefix="configuration."></RenderFields>
+								<RenderFields siteId='' fields={STORAGE_KIND_FIELDS[storageRepository?.kind] || []} fieldPrefix="configuration."></RenderFields>
 							)}
 							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{updateStorageRepositoryLoading && <i className="las la-redo-alt la-spin"></i>} Save

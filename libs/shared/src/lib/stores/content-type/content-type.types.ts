@@ -14,7 +14,8 @@ export enum FIELD_KEYS {
 	MAP = 'MAP',
 	MEDIA = 'MEDIA',
 	TOGGLE = 'TOGGLE',
-	REFERENCE = 'REFERENCE',
+	CONTENT_REFERENCE = 'CONTENT_REFERENCE',
+	CONTENT_TYPES = 'CONTENT_TYPES',
 };
 
 export interface IContentType {

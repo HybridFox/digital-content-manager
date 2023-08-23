@@ -10,4 +10,7 @@ import { Trans } from "react-i18next";
 	<Trans i18nKey="BREADCRUMBS.CONTENT" />
 	<Trans i18nKey="BREADCRUMBS.PAGES" />
 	<Trans i18nKey="BREADCRUMBS.CONTENT-BLOCKS" />
+	<Trans i18nKey="CONTENT.CREATE.NO_DATA.CONTENT" />
+	<Trans i18nKey="CONTENT.CREATE.NO_DATA.PAGES" />
+	<Trans i18nKey="CONTENT.CREATE.NO_DATA.CONTENT-BLOCKS" />
 </>

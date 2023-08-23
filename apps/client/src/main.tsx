@@ -35,6 +35,11 @@ i18n.use(initReactI18next)
 		}
 	});
 
+(async () => {
+	// @ts-expect-error reasons
+	await __webpack_init_sharing__("default");
+})();
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
 	// <StrictMode>

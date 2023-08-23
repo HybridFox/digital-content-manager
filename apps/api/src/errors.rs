@@ -188,12 +188,15 @@ impl From<DieselError> for AppError {
 						..Default::default()
 					})
 				}
-				_ => AppError::InternalServerError(AppErrorValue {
-					message: format!("Unimplemented diesel error: {:?}", kind),
-					status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
-					code: "UNIMPLEMENTED_DIESEL_DATABASE_ERROR".to_owned(),
-					..Default::default()
-				}),
+				_ => {
+					dbg!(&info);
+					AppError::InternalServerError(AppErrorValue {
+						message: format!("Unimplemented diesel error: {:?}", kind),
+						status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+						code: "UNIMPLEMENTED_DIESEL_DATABASE_ERROR".to_owned(),
+						..Default::default()
+					})
+				},
 			},
 			DieselError::NotFound => AppError::NotFound(AppErrorValue {
 				message: "Resource could not be found".to_owned(),

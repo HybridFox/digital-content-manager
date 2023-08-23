@@ -4,7 +4,11 @@
 	padding: var(--spacer-sm) var(--spacer);
 	display: flex;
 	justify-content: space-between;
-	font-weight: 500;
+	// font-weight: 500;
+	
+	ul {
+		margin: 0;
+	}
 
 	&__close {
 		padding: 0;

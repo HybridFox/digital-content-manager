@@ -16,6 +16,10 @@ export const CONTENT_ROUTES: RouteObject[] = [
 		lazy: async () => ({ Component: (await import('./pages/content-create-detail/content-create-detail.page')).ContentCreateDetailPage }),
 	},
 	{
+		path: CONTENT_PATHS.ROOT_DETAIL,
+		element: <Navigate to="content" />,
+	},
+	{
 		path: CONTENT_PATHS.DETAIL,
 		lazy: async () => ({ Component: (await import('./pages/content-detail/content-detail.page')).ContentDetailPage }),
 		children: [

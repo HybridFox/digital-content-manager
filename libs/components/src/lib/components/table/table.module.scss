@@ -3,6 +3,7 @@
 	border: 1px solid var(--color-gray-lightest);
 	overflow-x: auto;
 	width: 100%;
+	background-color: var(--color-white);
 
 	&__data {
 		border-collapse: collapse;
@@ -37,7 +38,6 @@
 	&__no-data {
 		color: var(--color-gray);
 		padding: var(--spacer-xl) 0;
-		font-size: 0.8rem;
 		text-align: center;
 	}
 }

@@ -41,6 +41,7 @@ pub struct FindAllQueryParams {
 	kind: Option<ContentTypeKindEnum>,
 	language_id: Option<Uuid>,
 	translation_id: Option<Uuid>,
+	content_types: Option<Vec<Uuid>>,
 }
 
 #[utoipa::path(
@@ -81,7 +82,7 @@ pub async fn create(
 		}));
 	}
 
-	let content = Content::create(
+	let (content, fields, language, workflow_state) = Content::create(
 		conn,
 		params.site_id,
 		CreateContent {
@@ -96,7 +97,7 @@ pub async fn create(
 		form.fields.clone(),
 	)?;
 
-	let res = response::ContentWithFieldsDTO::from(content);
+	let res = response::ContentWithFieldsDTO::from((content, fields, language, workflow_state, false));
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -131,6 +132,7 @@ pub async fn find_all(
 		query.kind,
 		query.language_id,
 		query.translation_id,
+		query.content_types.clone()
 	)?;
 
 	let res = response::ContentListDTO::from((
@@ -166,9 +168,9 @@ pub async fn find_one(
 ) -> Result<HttpResponse, AppError> {
 	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:{}", params.content_id), "sites::content:read")?;
 	let conn = &mut state.get_conn()?;
-	let content = Content::find_one(conn, params.site_id, params.content_id)?;
+	let (content, fields, language, workflow_state) = Content::find_one(conn, params.site_id, params.content_id)?;
 
-	let res = response::ContentWithFieldsDTO::from(content);
+	let res = response::ContentWithFieldsDTO::from((content, fields, language, workflow_state, false));
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -218,7 +220,7 @@ pub async fn update(
 		}
 	};
 
-	let content = Content::update(
+	let (content, fields, language, workflow_state) = Content::update(
 		conn,
 		params.site_id,
 		form.content_type_id.clone(),
@@ -232,7 +234,7 @@ pub async fn update(
 		},
 		form.fields.clone(),
 	)?;
-	let res = response::ContentWithFieldsDTO::from(content);
+	let res = response::ContentWithFieldsDTO::from((content, fields, language, workflow_state, false));
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -280,6 +282,6 @@ pub async fn default_values(
 	let conn = &mut state.get_conn()?;
 	let content = Content::default_values(conn, params.site_id, params.translation_id)?;
 
-	let res = response::ContentDefaultValuesDTO::from((params.translation_id, content));
+	let res = response::ContentDefaultValuesDTO::from((None, params.translation_id, content, false));
 	Ok(HttpResponse::Ok().json(res))
 }

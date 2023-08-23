@@ -16,3 +16,4 @@ export * from './authentication-method-role-assignment';
 export * from './language';
 export * from './iam-action';
 export * from './theme';
+export * from './content';

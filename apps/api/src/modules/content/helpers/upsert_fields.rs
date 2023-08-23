@@ -11,6 +11,11 @@ use crate::modules::content_types::models::content_type::PopulatedContentTypeFie
 use crate::modules::content_types::models::field::FieldModel;
 use crate::schema::content_fields;
 
+pub enum FieldIndex {
+	Number(usize),
+	String(String)
+}
+
 pub fn upsert_fields(
 	conn: &mut PgConnection,
 	content_id: Uuid,
@@ -40,20 +45,29 @@ pub fn upsert_fields(
 	Ok(())
 }
 
-// TODO: Fix dupe function
 // Parent ID => The parent id is either null (root) or the parent_id
 // Source ID => Either the translation ID or the OG content item
 fn get_field_insert(
 	content_id: Uuid,
 	translation_id: Uuid,
 	parent_id: Option<Uuid>,
-	slug: String,
+	index: FieldIndex,
 	populated_cc: PopulatedContentComponent,
 	values: Value,
 	field: FieldModel,
 	existing_content_fields: &Vec<ContentField>,
 	skip_multi_language: bool,
 ) -> Vec<CreateContentField> {
+	let index_key = match &index {
+		FieldIndex::Number(number) => number.to_string(),
+		FieldIndex::String(string) => string.clone()
+	};
+
+	let value = match index {
+		FieldIndex::Number(number) => values[number].clone(),
+		FieldIndex::String(string) => values[string.clone()].clone(),
+	};
+
 	match populated_cc.content_component.data_type {
 		DataTypeEnum::TEXT
 		| DataTypeEnum::NUMBER
@@ -66,16 +80,16 @@ fn get_field_insert(
 			} else {
 				translation_id
 			},
-			name: slug.clone(),
+			name: index_key.clone(),
 			sequence_number: None,
 			content_component_id: Some(populated_cc.content_component.id),
 			data_type: populated_cc.content_component.data_type,
-			value: Some(values[slug.clone()].clone()),
+			value: Some(value),
 		}],
 		DataTypeEnum::ARRAY => todo!(),
 		DataTypeEnum::OBJECT => {
 			let existing_content_field = existing_content_fields.iter().find(|content_field| {
-				content_field.parent_id == parent_id && content_field.name == slug
+				content_field.parent_id == parent_id && content_field.name == index_key
 			});
 			let uuid = if existing_content_field.is_some() {
 				existing_content_field.unwrap().id.to_owned()
@@ -91,7 +105,7 @@ fn get_field_insert(
 				} else {
 					translation_id
 				},
-				name: slug.clone(),
+				name: index_key.clone(),
 				sequence_number: None,
 				content_component_id: None,
 				data_type: populated_cc.content_component.data_type,
@@ -104,83 +118,7 @@ fn get_field_insert(
 				translation_id,
 				parent_field.id,
 				populated_cc.fields,
-				values[slug.clone()].clone(),
-				existing_content_fields,
-				if skip_multi_language {
-					true
-				} else {
-					field.multi_language
-				},
-			);
-			fields.append(&mut sub_fields);
-
-			fields
-		}
-	}
-}
-
-fn get_field_insert_by_index(
-	content_id: Uuid,
-	translation_id: Uuid,
-	parent_id: Option<Uuid>,
-	slug: usize,
-	populated_cc: PopulatedContentComponent,
-	values: Value,
-	field: FieldModel,
-	existing_content_fields: &Vec<ContentField>,
-	skip_multi_language: bool,
-) -> Vec<CreateContentField> {
-	match populated_cc.content_component.data_type {
-		DataTypeEnum::TEXT
-		| DataTypeEnum::NUMBER
-		| DataTypeEnum::BOOLEAN
-		| DataTypeEnum::REFERENCE => vec![CreateContentField {
-			id: None,
-			parent_id,
-			source_id: if field.multi_language == true || skip_multi_language {
-				content_id
-			} else {
-				translation_id
-			},
-			name: slug.clone().to_string(),
-			sequence_number: None,
-			content_component_id: Some(populated_cc.content_component.id),
-			data_type: populated_cc.content_component.data_type,
-			value: Some(values[slug.clone()].clone()),
-		}],
-		DataTypeEnum::ARRAY => todo!(),
-		DataTypeEnum::OBJECT => {
-			let existing_content_field = existing_content_fields.iter().find(|content_field| {
-				content_field.parent_id == parent_id && content_field.name == slug.to_string()
-			});
-			let uuid = if existing_content_field.is_some() {
-				existing_content_field.unwrap().id.to_owned()
-			} else {
-				Uuid::new_v4()
-			};
-
-			let parent_field = CreateContentField {
-				id: Some(uuid),
-				parent_id,
-				source_id: if field.multi_language == true || skip_multi_language {
-					content_id
-				} else {
-					translation_id
-				},
-				name: slug.clone().to_string(),
-				sequence_number: None,
-				content_component_id: None,
-				data_type: populated_cc.content_component.data_type,
-				value: None,
-			};
-			let mut fields = vec![parent_field.clone()];
-
-			let mut sub_fields = get_field_inserts(
-				content_id,
-				translation_id,
-				parent_field.id,
-				populated_cc.fields,
-				values[slug.clone()].clone(),
+				value,
 				existing_content_fields,
 				if skip_multi_language {
 					true
@@ -235,11 +173,11 @@ pub fn get_field_inserts(
 					.into_iter()
 					.enumerate()
 					.map(|(i, _value)| {
-						get_field_insert_by_index(
+						get_field_insert(
 							content_id,
 							translation_id,
 							parent_field.id,
-							i,
+							FieldIndex::Number(i),
 							populated_cc.clone(),
 							values[field.slug.clone()].clone(),
 							field.clone(),
@@ -262,7 +200,7 @@ pub fn get_field_inserts(
 				content_id,
 				translation_id,
 				parent_id,
-				field.slug.clone(),
+				FieldIndex::String(field.slug.clone()),
 				populated_cc,
 				values.clone(),
 				field.clone(),

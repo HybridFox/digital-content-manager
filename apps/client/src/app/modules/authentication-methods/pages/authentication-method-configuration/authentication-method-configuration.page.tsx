@@ -58,7 +58,7 @@ export const AuthenticationMethodConfigurationPage = () => {
 			</Alert>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				{authenticationMethod?.kind && (
-					<RenderFields fields={AUTHENTICATION_METHOD_FIELDS[authenticationMethod?.kind] || []} fieldPrefix="configuration."></RenderFields>
+					<RenderFields siteId='' fields={AUTHENTICATION_METHOD_FIELDS[authenticationMethod?.kind] || []} fieldPrefix="configuration."></RenderFields>
 				)}
 				<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 					{updateAuthenticationMethodLoading && <i className="las la-redo-alt la-spin"></i>} Save

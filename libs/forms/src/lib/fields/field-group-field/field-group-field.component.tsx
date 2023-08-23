@@ -14,12 +14,13 @@ export const FieldGroupField: FC<IFieldGroupFieldProps> = ({
 	name,
 	label,
 	fieldConfiguration,
+	siteId
 }: IFieldGroupFieldProps) => {
 	return (
 		<div className={cxBind('o-field-group')}>
 			<FieldGroupHeader label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} badge='Group' />
 			<div className={cxBind("o-field-group__fields")}>
-				<RenderFields fieldPrefix={`${name}.`} fields={fieldConfiguration?.fields as IField[] || []} />
+				<RenderFields siteId={siteId || ''} fieldPrefix={`${name}.`} fields={fieldConfiguration?.fields as IField[] || []} />
 			</div>
 		</div>
 	);

@@ -5,6 +5,7 @@ const DETAIL_PATH = `${ROOT_PATH}/:contentId`;
 
 export const CONTENT_PATHS = {
 	ROOT: `${ROOT_PATH}`,
+	ROOT_DETAIL: `${APP_SITE_ROOT_PATH}/content`,
 	CREATE: `${ROOT_PATH}/create`,
 	CREATE_DETAIL: `${ROOT_PATH}/create/:contentTypeId`,
 	DETAIL: `${DETAIL_PATH}`,

@@ -1,9 +1,7 @@
-import { useContentTypeStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
+import { useContentStore, useContentTypeStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 import { Header, Loading } from '@ibs/components';
-
-import { useContentStore } from '../../stores/content';
 
 import { CONTENT_DETAIL_TABS } from './content-detail.const';
 

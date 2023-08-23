@@ -8,6 +8,7 @@ export interface IGenericFieldProps {
 	fieldOptions?: RegisterOptions<FieldValues, string>;
 	field?: Partial<IField>;
 	disabled?: boolean;
+	siteId?: string;
 }
 
 export interface IRenderControllerField {

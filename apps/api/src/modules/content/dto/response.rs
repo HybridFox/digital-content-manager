@@ -13,10 +13,10 @@ use crate::modules::{
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use serde_json::{Value, json};
 use utoipa::ToSchema;
 use uuid::Uuid;
-use std::{convert::From, collections::HashMap};
+use std::{convert::From, collections::HashMap, str::FromStr};
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
@@ -36,37 +36,102 @@ pub struct ContentWithFieldsDTO {
 	pub current_workflow_state: WorkflowStateDTO,
 }
 
+// TODO: dedupe
+fn parse_field(
+	content_id: Option<Uuid>,
+	translation_id: Uuid,
+	field: &ContentField,
+	all_fields: Vec<ContentField>,
+	populate: bool,
+) -> Option<Value> {
+	match field.data_type {
+		DataTypeEnum::TEXT | DataTypeEnum::NUMBER | DataTypeEnum::BOOLEAN => {
+			field.value.clone()
+		}
+		DataTypeEnum::REFERENCE => {
+			if field.value.is_none()
+				|| field.value.as_ref().unwrap()["contentId"]
+					.as_str()
+					.is_none()
+				|| field.value.as_ref().unwrap()["translationId"]
+					.as_str()
+					.is_none()
+				|| !populate
+			{
+				let json = serde_json::to_string(&field.value).unwrap();
+				return serde_json::from_str(&json).unwrap()
+			}
+
+			let referenced_fields = parse_object_fields(
+				Some(
+					Uuid::from_str(
+						field.value.as_ref().unwrap()["contentId"].as_str().unwrap(),
+					)
+					.expect("No uuid"),
+				),
+				Uuid::from_str(
+					field.value.as_ref().unwrap()["translationId"]
+						.as_str()
+						.unwrap(),
+				)
+				.expect("No uuid"),
+				None,
+				all_fields.clone(),
+				populate,
+			);
+
+			// TODO: clean this up somehow 🤮
+			let json = serde_json::to_string(&json!({
+				"contentId": field.value.as_ref().unwrap()["contentId"],
+				"translationId": field.value.as_ref().unwrap()["translationid"],
+				"fields": &referenced_fields
+			})).unwrap();
+			serde_json::from_str(&json).unwrap()
+		}
+		DataTypeEnum::ARRAY => {
+			let sub_fields = parse_array_fields(
+				content_id,
+				translation_id,
+				Some(field.id),
+				all_fields.clone(),
+				populate,
+			);
+
+			// TODO: clean this up somehow 🤮
+			let json = serde_json::to_string(&sub_fields).unwrap();
+			serde_json::from_str(&json).unwrap()
+		}
+		DataTypeEnum::OBJECT => {
+			let sub_fields = parse_object_fields(
+				content_id,
+				translation_id,
+				Some(field.id),
+				all_fields.clone(),
+				populate,
+			);
+
+			// TODO: clean this up somehow 🤮
+			let json = serde_json::to_string(&sub_fields).unwrap();
+			serde_json::from_str(&json).unwrap()
+		}
+	}
+}
+
 fn parse_array_fields(
+	content_id: Option<Uuid>,
 	translation_id: Uuid,
 	parent_id: Option<Uuid>,
 	fields: Vec<ContentField>,
+	populate: bool,
 ) -> Vec<Option<Value>> {
 	let fields = fields
 		.iter()
-		.filter(|field| field.parent_id == parent_id)
+		.filter(|field| {
+			field.parent_id == parent_id
+				&& vec![content_id, Some(translation_id)].contains(&Some(field.source_id))
+		})
 		.map(|field| {
-			match field.data_type {
-				DataTypeEnum::TEXT
-				| DataTypeEnum::NUMBER
-				| DataTypeEnum::BOOLEAN
-				| DataTypeEnum::REFERENCE => field.value.clone(),
-				DataTypeEnum::ARRAY => {
-					let sub_fields =
-						parse_array_fields(translation_id, Some(field.id), fields.clone());
-
-					// TODO: clean this up somehow 🤮
-					let json = serde_json::to_string(&sub_fields).unwrap();
-					serde_json::from_str(&json).unwrap()
-				}
-				DataTypeEnum::OBJECT => {
-					let sub_fields =
-						parse_object_fields(translation_id, Some(field.id), fields.clone());
-
-					// TODO: clean this up somehow 🤮
-					let json = serde_json::to_string(&sub_fields).unwrap();
-					serde_json::from_str(&json).unwrap()
-				}
-			}
+			parse_field(content_id, translation_id, field, fields.clone(), populate)
 		})
 		.collect();
 
@@ -74,49 +139,35 @@ fn parse_array_fields(
 }
 
 fn parse_object_fields(
+	content_id: Option<Uuid>,
 	translation_id: Uuid,
 	parent_id: Option<Uuid>,
 	fields: Vec<ContentField>,
+	populate: bool,
 ) -> HashMap<String, Option<Value>> {
 	let fields = fields
 		.iter()
-		.filter(|field| field.parent_id == parent_id)
+		.filter(|field| {
+			field.parent_id == parent_id
+				&& vec![content_id, Some(translation_id)].contains(&Some(field.source_id))
+		})
 		.map(|field| {
-			match field.data_type {
-				DataTypeEnum::TEXT
-				| DataTypeEnum::NUMBER
-				| DataTypeEnum::BOOLEAN
-				| DataTypeEnum::REFERENCE => (field.name.clone(), field.value.clone()),
-				DataTypeEnum::ARRAY => {
-					let sub_fields =
-						parse_array_fields(translation_id, Some(field.id), fields.clone());
-
-					// TODO: clean this up somehow 🤮
-					let json = serde_json::to_string(&sub_fields).unwrap();
-					(field.name.clone(), serde_json::from_str(&json).unwrap())
-				}
-				DataTypeEnum::OBJECT => {
-					let sub_fields =
-						parse_object_fields(translation_id, Some(field.id), fields.clone());
-
-					// TODO: clean this up somehow 🤮
-					let json = serde_json::to_string(&sub_fields).unwrap();
-					(field.name.clone(), serde_json::from_str(&json).unwrap())
-				}
-			}
+			let parsed_field = parse_field(content_id, translation_id, field, fields.clone(), populate);
+			(field.name.clone(), parsed_field)
 		})
 		.collect::<HashMap<_, _>>();
 
 	fields
 }
 
-impl From<(Content, Vec<ContentField>, Language, WorkflowState)> for ContentWithFieldsDTO {
+impl From<(Content, Vec<ContentField>, Language, WorkflowState, bool)> for ContentWithFieldsDTO {
 	fn from(
-		(content, fields, language, workflow_state): (
+		(content, fields, language, workflow_state, populate): (
 			Content,
 			Vec<ContentField>,
 			Language,
 			WorkflowState,
+			bool,
 		),
 	) -> Self {
 		Self {
@@ -130,7 +181,7 @@ impl From<(Content, Vec<ContentField>, Language, WorkflowState)> for ContentWith
 			deleted: content.deleted,
 			created_at: content.created_at,
 			updated_at: content.updated_at,
-			fields: parse_object_fields(content.translation_id, None, fields),
+			fields: parse_object_fields(Some(content.id), content.translation_id, None, fields, populate),
 			language: LanguageDTO::from(language),
 			current_workflow_state: WorkflowStateDTO::from(workflow_state),
 		}
@@ -174,14 +225,16 @@ impl
 		Vec<ContentField>,
 		Language,
 		Vec<(Content, Language)>,
+		bool,
 	)> for PublicContentDTO
 {
 	fn from(
-		(content, fields, language, translations): (
+		(content, fields, language, translations, populate): (
 			Content,
 			Vec<ContentField>,
 			Language,
 			Vec<(Content, Language)>,
+			bool,
 		),
 	) -> Self {
 		Self {
@@ -190,7 +243,7 @@ impl
 			slug: content.slug,
 			created_at: content.created_at,
 			updated_at: content.updated_at,
-			fields: parse_object_fields(content.translation_id, None, fields),
+			fields: parse_object_fields(Some(content.id), content.translation_id, None, fields, populate),
 			language: language.key,
 			translations: translations
 				.into_iter()
@@ -206,10 +259,10 @@ pub struct ContentDefaultValuesDTO {
 	pub fields: HashMap<String, Option<Value>>,
 }
 
-impl From<(Uuid, Vec<ContentField>)> for ContentDefaultValuesDTO {
-	fn from((translation_id, fields): (Uuid, Vec<ContentField>)) -> Self {
+impl From<(Option<Uuid>, Uuid, Vec<ContentField>, bool)> for ContentDefaultValuesDTO {
+	fn from((content_id, translation_id, fields, populate): (Option<Uuid>, Uuid, Vec<ContentField>, bool)) -> Self {
 		Self {
-			fields: parse_object_fields(translation_id, None, fields),
+			fields: parse_object_fields(content_id, translation_id, None, fields, populate),
 		}
 	}
 }

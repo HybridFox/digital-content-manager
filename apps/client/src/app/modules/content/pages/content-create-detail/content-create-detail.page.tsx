@@ -1,4 +1,4 @@
-import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentTypeStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
+import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentStore, useContentTypeStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { generatePath, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { RenderFields, TextField } from '@ibs/forms';
@@ -9,7 +9,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import slugify from 'slugify';
 
 import { CONTENT_PATHS } from '../../content.routes';
-import { useContentStore } from '../../stores/content';
 
 import { createContentItemSchema } from './content-create-detail.const';
 
@@ -136,7 +135,7 @@ export const ContentCreateDetailPage = () => {
 								</div>
 							</Card>
 							<div className="u-margin-bottom">
-								<RenderFields fieldPrefix="fields." fields={contentType?.fields || []} />
+								<RenderFields siteId={siteId!} fieldPrefix="fields." fields={contentType?.fields || []} />
 							</div>
 							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{createContentItemLoading && <i className="las la-redo-alt la-spin"></i>} Save

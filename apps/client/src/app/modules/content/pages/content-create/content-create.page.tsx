@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { CONTENT_TYPE_KINDS_PARAMETER_MAP, ContentTypeKinds, useAuthStore, useContentTypeStore, useHeaderStore } from '@ibs/shared';
-import { Button, ButtonTypes, HTMLButtonTypes, Header, Loading, Modal, ModalFooter, Table } from '@ibs/components';
+import { CONTENT_TYPE_KINDS_PARAMETER_MAP, useAuthStore, useContentTypeStore, useHeaderStore } from '@ibs/shared';
+import { Button, ButtonLink, ButtonTypes, HTMLButtonTypes, Header, Loading, Modal, ModalFooter, Table } from '@ibs/components';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { RadioField } from '@ibs/forms';
@@ -8,6 +8,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { CONTENT_PATHS } from '../../content.routes';
+import { CONTENT_TYPES_PATHS } from '../../../content-types';
 
 import { CONTENT_CREATE_COLUMNS, selectLanguageSchema } from './content-create.const';
 
@@ -30,7 +31,7 @@ export const ContentCreatePage = () => {
 	const [selectedContentTypeId, setSelectedContentTypeId] = useState('');
 	const navigate = useNavigate();
 	const formMethods = useForm<ISelectLanguageForm>({
-		resolver: yupResolver(selectLanguageSchema)
+		resolver: yupResolver(selectLanguageSchema),
 	});
 	const { handleSubmit } = formMethods;
 
@@ -50,14 +51,23 @@ export const ContentCreatePage = () => {
 
 	const onSubmit = ({ language }: ISelectLanguageForm) => {
 		setModalOpen(false);
-		navigate(generatePath(CONTENT_PATHS.CREATE_DETAIL, { contentTypeId: selectedContentTypeId, kind, siteId }) + `?languageId=${language}`)
-	}
+		navigate(generatePath(CONTENT_PATHS.CREATE_DETAIL, { contentTypeId: selectedContentTypeId, kind, siteId }) + `?languageId=${language}`);
+	};
 
 	return (
 		<>
 			<Header breadcrumbs={breadcrumbs} title="Select Content Type"></Header>
 			<Loading loading={contentTypesLoading} text="Loading content types...">
-				<Table columns={CONTENT_CREATE_COLUMNS(onSelectContentType, kind === 'pages')} rows={contentTypes}></Table>
+				<Table
+					columns={CONTENT_CREATE_COLUMNS(onSelectContentType, kind === 'pages')}
+					rows={contentTypes}
+					noDataText={
+						<>
+							<p>{t(`CONTENT.CREATE.NO_DATA.${kind?.toUpperCase()}`)}</p>
+							<ButtonLink type={ButtonTypes.PRIMARY} to={generatePath(CONTENT_TYPES_PATHS.CREATE, { siteId }) + `?kind=${CONTENT_TYPE_KINDS_PARAMETER_MAP[kind!]}`}>{t('CONTENT_TYPES.ACTIONS.CREATE')}</ButtonLink>
+						</>
+					}
+				/>
 			</Loading>
 			<Modal modalOpen={modalOpen} title="Select language">
 				<FormProvider {...formMethods}>
@@ -73,7 +83,9 @@ export const ContentCreatePage = () => {
 							}}
 						></RadioField>
 						<ModalFooter>
-							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>Create</Button>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
+								Create
+							</Button>
 						</ModalFooter>
 					</form>
 				</FormProvider>

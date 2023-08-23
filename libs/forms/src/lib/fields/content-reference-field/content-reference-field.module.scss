@@ -1,0 +1,16 @@
+.a-input {
+	display: flex;
+	flex-direction: column;
+
+	&__field-wrapper {
+		position: relative;
+	}
+
+	&__error {
+		position: absolute;
+		right: var(--spacer-xl);
+		top: var(--spacer-sm);
+		color: var(--color-state-danger);
+		font-size: 1.2rem;
+	}
+}

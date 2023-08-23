@@ -22,7 +22,8 @@ export const Table: FC<ITableProps> = ({
 	minSelection = 1,
 	maxSelection = 1,
 	orderable,
-	onOrderChange
+	onOrderChange,
+	noDataText = 'No data'
 }: ITableProps) => {
 	const handleSelection = (id: string, selected: boolean): void => {
 		if (!onSelection) {
@@ -93,7 +94,7 @@ export const Table: FC<ITableProps> = ({
 		if (rows.length === 0) {
 			return (
 				<div className={cxBind('a-table__content')}>
-					<div className={cxBind('a-table__no-data')}>No data</div>
+					<div className={cxBind('a-table__no-data')}>{noDataText}</div>
 				</div>
 			);
 		}

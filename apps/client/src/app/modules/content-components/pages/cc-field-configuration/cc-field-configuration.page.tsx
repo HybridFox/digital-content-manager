@@ -50,7 +50,7 @@ export const CCFieldConfigurationPage = () => {
 
 	return (
 		<div className="u-margin-top">
-			<RenderFields fieldPrefix='config.' fields={contentComponentField?.contentComponent?.configurationFields || []} />
+			<RenderFields siteId={siteId!} fieldPrefix='config.' fields={contentComponentField?.contentComponent?.configurationFields || []} />
 		</div>
 	);
 };

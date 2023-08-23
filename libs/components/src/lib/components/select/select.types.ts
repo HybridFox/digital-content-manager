@@ -19,4 +19,5 @@ export interface ISelectProps {
 	min?: number;
 	max?: number;
 	isClearable?: boolean;
+	loading?: boolean;
 }

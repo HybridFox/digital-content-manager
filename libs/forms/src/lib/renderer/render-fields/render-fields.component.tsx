@@ -11,12 +11,12 @@ import styles from './render-fields.module.scss';
 import { IRenderFieldsProps } from "./render-fields.types";
 const cxBind = cx.bind(styles);
 
-export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix = '' }: IRenderFieldsProps) => {
+export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix = '', siteId }: IRenderFieldsProps) => {
 	const renderContentComponent = (field: IField) => {
 		const Component = FIELD_COMPONENTS[field.contentComponent.componentName];
 
 		if (!Component) {
-			return <Alert>Component not found</Alert>
+			return <Alert>Component not found: {field.contentComponent.componentName}</Alert>
 		}
 
 		const fieldConfiguration = {
@@ -28,14 +28,14 @@ export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix = '' 
 			multiLanguage: field.multiLanguage,
 		};
 
-		if (field.min === 1 && field.max === 1 || field.contentComponent.componentName === FIELD_KEYS.MEDIA) {
+		if (field.min === 1 && field.max === 1 || [FIELD_KEYS.MEDIA, FIELD_KEYS.CONTENT_REFERENCE, FIELD_KEYS.SELECT].includes(field.contentComponent.componentName)) {
 			// TODO: Check the `config.fields` vs `contentComponent.fields`, is there are reason for this? If yes, can we make this cleaner?
-			return <Component name={`${fieldPrefix}${field.slug}`} label={field.name} fieldConfiguration={fieldConfiguration} field={field} />
+			return <Component siteId={siteId} name={`${fieldPrefix}${field.slug}`} label={field.name} fieldConfiguration={fieldConfiguration} field={field} />
 		}
 
 		// TODO: Ditto
 		return <RenderMultiple fieldPrefix={fieldPrefix} field={field}>
-			{(index) => <Component name={`${fieldPrefix}${field.slug}.${index}`} label={field.name} fieldConfiguration={fieldConfiguration} field={field} />}
+			{(index) => <Component siteId={siteId} name={`${fieldPrefix}${field.slug}.${index}`} label={field.name} fieldConfiguration={fieldConfiguration} field={field} />}
 		</RenderMultiple>
 	}
 
