@@ -14,4 +14,5 @@ export interface IHeaderProps {
 	tabs?: IHeaderTab[];
 	breadcrumbs?: IHeaderBreadcrumb[];
 	metaInfo?: string;
+	subText?: ReactNode;
 }

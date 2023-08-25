@@ -89,7 +89,8 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 									web::scope("/{content_id}/revisions")
 										// .service(modules::content::controllers::content_revisions::create)
 										.service(modules::content::controllers::content_revisions::find_all)
-										// .service(modules::content::controllers::content_revisions::find_one)
+										.service(modules::content::controllers::content_revisions::find_one)
+										.service(modules::content::controllers::content_revisions::compare)
 								)
 						)
 						.service(

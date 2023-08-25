@@ -131,6 +131,7 @@ diesel::table! {
         revision_translation_id -> Uuid,
         content_id -> Uuid,
         site_id -> Uuid,
+        user_id -> Uuid,
         published -> Bool,
         created_at -> Timestamp,
         updated_at -> Timestamp,
@@ -443,6 +444,7 @@ diesel::joinable!(content -> sites (site_id));
 diesel::joinable!(content -> workflow_states (workflow_state_id));
 diesel::joinable!(content_revisions -> content (content_id));
 diesel::joinable!(content_revisions -> sites (site_id));
+diesel::joinable!(content_revisions -> users (user_id));
 diesel::joinable!(content_revisions -> workflow_states (workflow_state_id));
 diesel::joinable!(iam_policies -> sites (site_id));
 diesel::joinable!(permissions -> iam_policies (iam_policy_id));

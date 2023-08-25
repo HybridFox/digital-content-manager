@@ -23,7 +23,7 @@ export const Table: FC<ITableProps> = ({
 	maxSelection = 1,
 	orderable,
 	onOrderChange,
-	noDataText = 'No data'
+	noDataText = 'No data',
 }: ITableProps) => {
 	const handleSelection = (id: string, selected: boolean): void => {
 		if (!onSelection) {
@@ -55,6 +55,22 @@ export const Table: FC<ITableProps> = ({
 		return path<ReactNode>(column.id.split('.'))(row);
 	};
 
+	const isSelectable = (row: Record<any, any>): boolean => {
+		if (!selectable) {
+			return false;
+		}
+
+		if (selectablePredicate ? !selectablePredicate(row) : false) {
+			return false;
+		}
+
+		if (!selection.includes(row[idKey]) && selection.length >= maxSelection) {
+			return false;
+		}
+
+		return true;
+	}
+
 	const renderRows = () => {
 		return rows.map((row, i) => (
 			<tr
@@ -62,11 +78,13 @@ export const Table: FC<ITableProps> = ({
 				className={cxBind('a-table__row', {
 					'a-table__row--selectable': selectable && (selectablePredicate ? selectablePredicate(row) : true),
 				})}
-				onClick={() =>
-					selectable &&
-					(selectablePredicate ? selectablePredicate(row) : true) &&
+				onClick={() => {
+					if (!isSelectable(row)) {
+						return;
+					}
+
 					handleSelection(row[idKey], !selection.includes(row[idKey]))
-				}
+				}}
 			>
 				{orderable && (
 					<td className={cxBind('a-table__row__cell')} style={{ width: '50px' }}>
@@ -75,7 +93,11 @@ export const Table: FC<ITableProps> = ({
 				)}
 				{selectable && (selectablePredicate ? selectablePredicate(row) : true) && (
 					<td className={cxBind('a-table__row__cell')} style={{ width: '50px' }}>
-						<TableCheckbox selected={selection.includes(row[idKey])} onSelection={(selected) => handleSelection(row[idKey], selected)} />
+						<TableCheckbox
+							selected={selection.includes(row[idKey])}
+							onSelection={(selected) => handleSelection(row[idKey], selected)}
+							disabled={!isSelectable(row)}
+						/>
 					</td>
 				)}
 				{selectable && !(selectablePredicate ? selectablePredicate(row) : true) && (

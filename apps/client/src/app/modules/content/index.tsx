@@ -42,6 +42,18 @@ export const CONTENT_ROUTES: RouteObject[] = [
 			{
 				path: CONTENT_PATHS.DETAIL_STATUS,
 				lazy: async () => ({ Component: (await import('./pages/content-detail-status/content-detail-status.page')).ContentDetailStatusPage }),
+			},
+			{
+				path: CONTENT_PATHS.DETAIL_REVISIONS,
+				lazy: async () => ({ Component: (await import('./pages/content-detail-revisions/content-detail-revisions.page')).ContentDetailRevisionsPage }),
+			},
+			{
+				path: CONTENT_PATHS.DETAIL_REVISION_PREVIEW,
+				lazy: async () => ({ Component: (await import('./pages/content-detail-revision-detail/content-detail-revision-detail.page')).ContentDetailRevisionDetailPage }),
+			},
+			{
+				path: CONTENT_PATHS.DETAIL_REVISION_COMPARE,
+				lazy: async () => ({ Component: (await import('./pages/content-detail-revision-compare/content-detail-revision-compare.page')).ContentDetailRevisionComparePage }),
 			}
 		]
 	},

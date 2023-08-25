@@ -1,7 +1,4 @@
-use chrono::NaiveDateTime;
-use diesel::dsl::*;
 use diesel::prelude::*;
-use serde::Deserialize;
 use serde_json::Value;
 use uuid::Uuid;
 use tracing::instrument;
@@ -11,10 +8,10 @@ use crate::modules::content::helpers::upsert_fields::upsert_fields;
 use crate::modules::content::models::content::CreateContent;
 use crate::modules::content::models::content_revision::ContentRevision;
 use crate::modules::content::models::content_revision::CreateContentRevision;
-use crate::modules::content_types::models::content_type::{ContentType, ContentTypeKindEnum};
+use crate::modules::content_types::models::content_type::ContentType;
 use crate::modules::languages::models::language::Language;
 use crate::modules::workflows::models::workflow_state::WorkflowState;
-use crate::schema::{content, content_fields, languages, content_types, workflow_states};
+use crate::schema::content;
 
 use super::super::content_field::ContentField;
 use super::super::content::Content;
@@ -23,6 +20,7 @@ impl Content {
 	#[instrument(skip(conn))]
 	pub fn create(
 		conn: &mut PgConnection,
+		user_id: Uuid,
 		site_id: Uuid,
 		content_item: CreateContent,
 		values: Value,
@@ -39,6 +37,7 @@ impl Content {
 			workflow_state_id: content_item.workflow_state_id,
 			content_id: created_content_item.id,
 			published: false,
+			user_id,
 			// TODO: Check this
 			revision_translation_id: Uuid::new_v4(),
 			site_id

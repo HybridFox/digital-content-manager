@@ -31,6 +31,14 @@ export const CONTENT_DETAIL_TABS = (
 		}),
 		label: 'Fields',
 	},
+	{
+		to: generatePath(CONTENT_PATHS.DETAIL_REVISIONS, {
+			contentId: contentItem?.id || '',
+			kind,
+			siteId,
+		}),
+		label: 'Revisions',
+	},
 	// {
 	// 	to: generatePath(CONTENT_PATHS.DETAIL_STATUS, {
 	// 		contentId: contentItem?.id || '',

@@ -6,12 +6,13 @@ import { Alert, Loading } from "@ibs/components";
 
 import { FIELD_COMPONENTS } from "../../fields";
 import { RenderMultiple } from "../render-multiple";
+import { FIELD_VIEW_MODE } from "../../fields/fields.types";
 
 import styles from './render-fields.module.scss';
 import { IRenderFieldsProps } from "./render-fields.types";
 const cxBind = cx.bind(styles);
 
-export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix = '', siteId }: IRenderFieldsProps) => {
+export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix = '', siteId, viewMode = FIELD_VIEW_MODE.EDIT }: IRenderFieldsProps) => {
 	const renderContentComponent = (field: IField) => {
 		const Component = FIELD_COMPONENTS[field.contentComponent.componentName];
 
@@ -29,13 +30,11 @@ export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix = '',
 		};
 
 		if (field.min === 1 && field.max === 1 || [FIELD_KEYS.MEDIA, FIELD_KEYS.CONTENT_REFERENCE, FIELD_KEYS.SELECT].includes(field.contentComponent.componentName)) {
-			// TODO: Check the `config.fields` vs `contentComponent.fields`, is there are reason for this? If yes, can we make this cleaner?
-			return <Component siteId={siteId} name={`${fieldPrefix}${field.slug}`} label={field.name} fieldConfiguration={fieldConfiguration} field={field} />
+			return <Component viewMode={viewMode} siteId={siteId} name={`${fieldPrefix}${field.slug}`} label={field.name} fieldConfiguration={fieldConfiguration} field={field} />
 		}
 
-		// TODO: Ditto
-		return <RenderMultiple fieldPrefix={fieldPrefix} field={field}>
-			{(index) => <Component siteId={siteId} name={`${fieldPrefix}${field.slug}.${index}`} label={field.name} fieldConfiguration={fieldConfiguration} field={field} />}
+		return <RenderMultiple viewMode={viewMode} fieldPrefix={fieldPrefix} field={field}>
+			{(index) => <Component viewMode={viewMode} siteId={siteId} name={`${fieldPrefix}${field.slug}.${index}`} label={field.name} fieldConfiguration={fieldConfiguration} field={field} />}
 		</RenderMultiple>
 	}
 

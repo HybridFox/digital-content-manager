@@ -2,6 +2,7 @@ import {
 	CONTENT_TYPE_KINDS_TRANSLATIONS,
 	IAPIError,
 	IContentItem,
+	WORKFLOW_TECHNICAL_STATES,
 	useContentStore,
 	useContentTypeStore,
 	useHeaderStore,
@@ -14,14 +15,22 @@ import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '@ibs/co
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { CONTENT_PATHS } from '../../content.routes';
+import { useWorkflowStateStore } from '../../../workflow/stores/workflow-state';
 
 import styles from './content-detail-fields.module.scss';
+import { editContentItemSchema } from './content-detail-fields.const';
 
 const cxBind = cx.bind(styles);
 
 export const ContentDetailFieldsPage = () => {
+	const [workflowStates, workflowStatesLoading, fetchWorkflowStates] = useWorkflowStateStore((state) => [
+		state.workflowStates,
+		state.workflowStatesLoading,
+		state.fetchWorkflowStates,
+	]);
 	const [contentType] = useContentTypeStore((state) => [state.contentType]);
 	const [content] = useContentStore((state) => [state.contentItem]);
 	const [updateContentItem, updateContentItemLoading] = useContentStore((state) => [state.updateContentItem, state.updateContentItemLoading]);
@@ -31,7 +40,7 @@ export const ContentDetailFieldsPage = () => {
 	const { siteId } = useParams();
 	const [setBreadcrumbs] = useHeaderStore((state) => [state.setBreadcrumbs]);
 	const formMethods = useForm<IContentItem>({
-		// resolver: yupResolver(editFieldSchema),
+		// resolver: yupResolver(editContentItemSchema),
 		values: contentItem,
 	});
 
@@ -39,7 +48,12 @@ export const ContentDetailFieldsPage = () => {
 		handleSubmit,
 		formState: { errors },
 		setError,
+		watch,
 	} = formMethods;
+
+	useEffect(() => {
+		fetchWorkflowStates(siteId!, { pagesize: -1 });
+	}, [])
 
 	useEffect(() => {
 		setBreadcrumbs([
@@ -64,30 +78,55 @@ export const ContentDetailFieldsPage = () => {
 		});
 	};
 
+	const workflowStateId = watch('workflowStateId');
+
+	const technicalState = useMemo(() => {
+		return workflowStates.find((state) => state.id === workflowStateId)?.technicalState;
+	}, [workflowStateId, workflowStates]);
+
 	const statusOptions = useMemo(() => {
 		return (workflow?.transitions || [])
+			.filter((transition) => contentItem?.published ? true : transition.toState.technicalState !== WORKFLOW_TECHNICAL_STATES.UNPUBLISHED)
 			.filter((transition) => transition.fromState.id === contentItem?.workflowStateId)
+			.sort((a, b) => (a.fromState.name < b.fromState.name ? -1 : 1))
 			.map((transition) => ({
 				label: transition.toState.name,
 				value: transition.toState.id,
-			}))
-	}, [workflow, contentItem])
+			}));
+	}, [workflow, contentItem]);
 
 	return (
 		<FormProvider {...formMethods}>
 			<Alert className="u-margin-bottom" type={AlertTypes.DANGER}>
 				{errors?.root?.message}
 			</Alert>
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<form onSubmit={handleSubmit(onSubmit)} style={{ height: '100%' }}>
 				<div className={cxBind('p-content-detail')}>
 					<div className={cxBind('p-content-detail__fields')}>
 						<RenderFields siteId={siteId!} fieldPrefix="fields." fields={contentType?.fields || []} />
 					</div>
 					<div className={cxBind('p-content-detail__status')}>
-						<p>Current status: {content?.currentWorkflowState?.name}</p>
-						<RadioField name="workflowStateId" fieldConfiguration={{ options: statusOptions }}></RadioField>
-						<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
-							{updateContentItemLoading && <i className="las la-redo-alt la-spin"></i>} Save
+						<div>
+							Item Online:{' '}
+							<strong>
+								{content?.published ? (
+									<span className="las la-check u-text--success"></span>
+								) : (
+									<span className="las la-times u-text--danger"></span>
+								)}
+							</strong>
+						</div>
+						<div className='u-margin-bottom'>
+							Revision status: <strong>{content?.currentWorkflowState?.name}</strong>
+						</div>
+						<div className="u-margin-bottom">
+							<RadioField label="New status" name="workflowStateId" fieldConfiguration={{ options: statusOptions }}></RadioField>
+						</div>
+						<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT} block>
+							{updateContentItemLoading && <i className="las la-redo-alt la-spin"></i>}{' '}
+							{technicalState === WORKFLOW_TECHNICAL_STATES.PUBLISHED && 'Publish'}
+							{technicalState === WORKFLOW_TECHNICAL_STATES.UNPUBLISHED && 'Unpublish'}
+							{technicalState === WORKFLOW_TECHNICAL_STATES.DRAFT && 'Save draft'}
 						</Button>
 					</div>
 				</div>

@@ -7,11 +7,13 @@ export interface IContentItem {
 	slug: string;
 	translationId: string;
 	contentTypeId: string;
+	published: boolean;
 	kind: string;
 	workflowStateId: string;
 	fields: Record<string, unknown>;
 	language: ILanguage;
 	currentWorkflowState: IWorkflowState;
+	revisionId: string;
 	updatedAt: string;
 	createdAt: string;
 }

@@ -1,6 +1,12 @@
 import { IField } from "@ibs/shared";
 import { ControllerFieldState, ControllerRenderProps, FieldPath, FieldValues, RegisterOptions, UseFormStateReturn } from "react-hook-form";
 
+export enum FIELD_VIEW_MODE {
+	EDIT = 'EDIT',
+	VIEW = 'VIEW',
+	DIFF = 'DIFF'
+}
+
 export interface IGenericFieldProps {
 	name: string;
 	label?: string;
@@ -9,6 +15,7 @@ export interface IGenericFieldProps {
 	field?: Partial<IField>;
 	disabled?: boolean;
 	siteId?: string;
+	viewMode?: FIELD_VIEW_MODE;
 }
 
 export interface IRenderControllerField {

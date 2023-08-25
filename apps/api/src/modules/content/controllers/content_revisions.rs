@@ -16,6 +16,21 @@ pub struct FindPathParams {
 }
 
 #[derive(Deserialize, IntoParams)]
+pub struct FindOnePathParams {
+	site_id: Uuid,
+	content_id: Uuid,
+	revision_id: Uuid,
+}
+
+#[derive(Deserialize, IntoParams)]
+pub struct ComparePathParams {
+	site_id: Uuid,
+	content_id: Uuid,
+	first_revision_id: Uuid,
+	second_revision_id: Uuid,
+}
+
+#[derive(Deserialize, IntoParams)]
 #[serde(rename_all = "camelCase")]
 pub struct FindAllQueryParams {
 	page: Option<i64>,
@@ -66,4 +81,56 @@ pub async fn find_all(
 	));
 
 	Ok(HttpResponse::Ok().json(res))
+}
+
+#[utoipa::path(
+	context_path = "/api/v1/sites/{site_id}/content",
+	responses(
+		(status = 200, body = ContentWithFieldsDTO),
+		(status = 401, body = AppErrorValue, description = "Unauthorized")
+	),
+    security(
+        ("jwt_token" = [])
+    ),
+	params(FindPathParams)
+)]
+#[get("/{revision_id}")]
+pub async fn find_one(
+	req: HttpRequest,
+	state: web::Data<AppState>,
+	params: web::Path<FindOnePathParams>,
+) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:{}", params.content_id), "sites::content:read")?;
+	let conn = &mut state.get_conn()?;
+	let revision = ContentRevision::find_one(conn, params.site_id, params.revision_id)?;
+
+	let res = response::ContentRevisionWithFieldsDTO::from(revision);
+	Ok(HttpResponse::Ok().json(res))
+}
+
+#[utoipa::path(
+	context_path = "/api/v1/sites/{site_id}/content",
+	responses(
+		(status = 200, body = ContentWithFieldsDTO),
+		(status = 401, body = AppErrorValue, description = "Unauthorized")
+	),
+    security(
+        ("jwt_token" = [])
+    ),
+	params(FindPathParams)
+)]
+#[get("/{first_revision_id}/compare/{second_revision_id}")]
+pub async fn compare(
+	req: HttpRequest,
+	state: web::Data<AppState>,
+	params: web::Path<ComparePathParams>,
+) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:{}", params.content_id), "sites::content:read")?;
+	let conn = &mut state.get_conn()?;
+	let first_revision = ContentRevision::find_one(conn, params.site_id, params.first_revision_id)?;
+	let second_revision = ContentRevision::find_one(conn, params.site_id, params.second_revision_id)?;
+
+	let first_res = response::ContentRevisionWithFieldsDTO::from(first_revision);
+	let second_res = response::ContentRevisionWithFieldsDTO::from(second_revision);
+	Ok(HttpResponse::Ok().json(vec![first_res, second_res]))
 }

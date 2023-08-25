@@ -17,7 +17,7 @@ pub fn ensure_permission<'a>(
 	site_id: Option<Uuid>,
 	resource: String,
 	action: &'a str,
-) -> Result<(), AppError> {
+) -> Result<Uuid, AppError> {
 	let app_state = req.app_data::<Data<AppState>>().ok_or(AppError::InternalServerError(AppErrorValue {
 		message: "Could not fetch app state from request".to_owned(),
 		status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
@@ -66,7 +66,7 @@ pub fn ensure_permission<'a>(
 		}));
 	}
 
-	Ok(())
+	Ok(user.id)
 }
 
 // TODO: Dedupe

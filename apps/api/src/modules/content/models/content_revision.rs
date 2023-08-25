@@ -10,7 +10,9 @@ use crate::errors::AppError;
 use crate::modules::content::helpers::upsert_fields::upsert_fields;
 use crate::modules::content_types::models::content_type::{ContentType, ContentTypeKindEnum};
 use crate::modules::languages::models::language::Language;
+use crate::modules::users::models::user::User;
 use crate::modules::workflows::models::workflow_state::WorkflowState;
+use crate::schema::users;
 use crate::schema::{content_revisions, content_fields, languages, content_types, workflow_states};
 
 use super::content_field::ContentField;
@@ -26,6 +28,7 @@ pub struct ContentRevision {
 	pub revision_translation_id: Uuid,
 	pub content_id: Uuid,
 	pub site_id: Uuid,
+	pub user_id: Uuid,
 	pub published: bool,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
@@ -52,7 +55,7 @@ impl ContentRevision {
 		conn: &mut PgConnection,
 		site_id: Uuid,
 		id: Uuid,
-	) -> Result<(Self, Vec<ContentField>, WorkflowState), AppError> {
+	) -> Result<(Self, Vec<ContentField>, WorkflowState, User), AppError> {
 		let revision = content_revisions::table
 			.filter(content_revisions::site_id.eq(site_id))
 			.find(id)
@@ -70,7 +73,11 @@ impl ContentRevision {
 			.find(revision.workflow_state_id)
 			.first(conn)?;
 
-		Ok((revision, fields, workflow_state))
+		let user = users::table
+			.find(revision.user_id)
+			.first(conn)?;
+
+		Ok((revision, fields, workflow_state, user))
 	}
 
 	#[instrument(skip(conn))]
@@ -94,12 +101,16 @@ impl ContentRevision {
 		page: i64,
 		pagesize: i64,
 		revision_translation_id: Option<Uuid>,
-	) -> Result<(Vec<(Self, WorkflowState)>, i64), AppError> {
+	) -> Result<(Vec<(Self, WorkflowState, User)>, i64), AppError> {
 		let query = {
 			let mut query = content_revisions::table
 				.filter(content_revisions::site_id.eq(site_id))
+				.order(content_revisions::created_at.desc())
 				.inner_join(
 					workflow_states::table.on(workflow_states::id.eq(content_revisions::workflow_state_id)),
+				)
+				.inner_join(
+					users::table.on(users::id.eq(content_revisions::user_id)),
 				)
 				.into_boxed();
 
@@ -130,8 +141,9 @@ impl ContentRevision {
 			.select((
 				ContentRevision::as_select(),
 				WorkflowState::as_select(),
+				User::as_select(),
 			))
-			.load::<(ContentRevision, WorkflowState)>(conn)?;
+			.load::<(ContentRevision, WorkflowState, User)>(conn)?;
 
 		let total_elements = total_query.count().get_result::<i64>(conn)?;
 
@@ -186,6 +198,7 @@ impl ContentRevision {
 pub struct CreateContentRevision {
 	pub workflow_state_id: Uuid,
 	pub content_id: Uuid,
+	pub user_id: Uuid,
 	pub published: bool,
 	pub revision_translation_id: Uuid,
 	pub site_id: Uuid,

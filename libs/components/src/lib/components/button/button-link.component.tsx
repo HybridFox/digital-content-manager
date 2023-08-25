@@ -28,6 +28,7 @@ export const ButtonLink: FC<IButtonLinkProps> = ({
 				cxBind('a-button', `a-button--${type}`, `a-button--${size}`, {
 					'a-button--block': block,
 					'a-button--active': active,
+					'a-button--disabled': disabled,
 				})
 			)}
 		>

@@ -32,7 +32,8 @@ export const Header: FC<IHeaderProps> = ({
 	action,
 	tabs = [],
 	breadcrumbs = [],
-	metaInfo
+	metaInfo,
+	subText,
 }: IHeaderProps) => {
 	return (
 		<div className={classNames(className, cxBind('m-header'))}>
@@ -80,6 +81,11 @@ export const Header: FC<IHeaderProps> = ({
 					</div>
 				)}
 			</div>
+			{subText && (
+				<div className={cxBind("m-header__sub-text")}>
+					{subText}
+				</div>
+			)}
 		</div>
 	);
 };

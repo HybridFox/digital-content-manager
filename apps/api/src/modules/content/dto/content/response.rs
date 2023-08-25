@@ -1,5 +1,5 @@
 use crate::modules::{
-	content::models::{content::Content, content_field::ContentField, content_revision::ContentRevision},
+	content::{models::{content::Content, content_field::ContentField, content_revision::ContentRevision}, dto::revisions::response::ContentRevisionDTO},
 	core::models::hal::{HALLinkList, HALPage},
 	content_components::enums::data_type::DataTypeEnum,
 	sites::dto::languages::response::LanguageDTO,
@@ -34,6 +34,7 @@ pub struct ContentWithFieldsDTO {
 	pub fields: HashMap<String, Option<Value>>,
 	pub language: LanguageDTO,
 	pub current_workflow_state: WorkflowStateDTO,
+	pub revision_id: Uuid,
 }
 
 // TODO: dedupe
@@ -138,7 +139,7 @@ fn parse_array_fields(
 	fields
 }
 
-fn parse_object_fields(
+pub fn parse_object_fields(
 	content_id: Option<Uuid>,
 	translation_id: Uuid,
 	parent_id: Option<Uuid>,
@@ -185,6 +186,7 @@ impl From<(Content, ContentRevision, Vec<ContentField>, Language, WorkflowState,
 			fields: parse_object_fields(Some(revision.id), revision.revision_translation_id, None, fields, populate),
 			language: LanguageDTO::from(language),
 			current_workflow_state: WorkflowStateDTO::from(workflow_state),
+			revision_id: revision.id,
 		}
 	}
 }

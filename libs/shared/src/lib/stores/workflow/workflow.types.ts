@@ -2,7 +2,8 @@ import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types/pa
 
 export enum WORKFLOW_TECHNICAL_STATES {
 	DRAFT = 'DRAFT',
-	PUBLISHED = 'PUBLISHED'
+	PUBLISHED = 'PUBLISHED',
+	UNPUBLISHED = 'UNPUBLISHED'
 }
 
 export interface IWorkflowState {

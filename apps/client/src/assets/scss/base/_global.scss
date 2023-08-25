@@ -20,6 +20,11 @@ body, #root {
 }
 
 .u-theme {
+	color: var(--color-gray-darker);
 	background-color: var(--color-white);
 	min-height: 100vh;
+}
+
+body {
+	color: var(--color-gray-darker);
 }

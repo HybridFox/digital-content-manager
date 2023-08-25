@@ -1,0 +1,11 @@
+.p-revision-compare {
+	display: flex;
+
+	&__left {
+		flex: 1;
+	}
+
+	&__right {
+		flex: 1;
+	}
+}

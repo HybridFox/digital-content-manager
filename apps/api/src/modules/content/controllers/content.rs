@@ -63,7 +63,7 @@ pub async fn create(
 	form: web::Json<request::CreateContentDTO>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:*"), "sites::content:create")?;
+	let user_id = ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:*"), "sites::content:create")?;
 	let conn = &mut state.get_conn()?;
 
 	let translation_id = match form.translation_id {
@@ -84,6 +84,7 @@ pub async fn create(
 
 	let (content, revision, fields, language, workflow_state) = Content::create(
 		conn,
+		user_id,
 		params.site_id,
 		CreateContent {
 			name: &form.name,
@@ -193,7 +194,7 @@ pub async fn update(
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateContentDTO>,
 ) -> ApiResponse {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:{}", params.content_id), "sites::content:update")?;
+	let user_id = ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:{}", params.content_id), "sites::content:update")?;
 	let conn = &mut state.get_conn()?;
 
 	let workflow_state = WorkflowState::find_one(conn, params.site_id, form.workflow_state_id)?;
@@ -224,6 +225,7 @@ pub async fn update(
 
 	let (content, revision, fields, language, workflow_state) = Content::update(
 		conn,
+		user_id,
 		params.site_id,
 		form.content_type_id.clone(),
 		params.content_id,

@@ -39,6 +39,7 @@
     "CONTENT.TITLES.LIST_CONTENT": "Content Overview",
     "CONTENT.TITLES.LIST_CONTENT-BLOCKS": "Content Blocks Overview",
     "CONTENT.TITLES.LIST_PAGES": "Pages Overview",
+    "CONTENT_DETAIL_REVISION.STATE_AT": "This preview shows the state of this content item at <strong>{{createdAt}}</strong>",
     "CONTENT_TYPES.ACTIONS.CREATE": "Create Content Type",
     "CONTENT_TYPES.INFO.KIND.CONTENT": "<strong>Content</strong>: This is your normal type of content, it is queryable, searchable and can exist multiple times.",
     "CONTENT_TYPES.INFO.KIND.CONTENT-BLOCKS": "<strong>Content Blocks</strong>: These are not queryable by the public API, and should be used as generic blocks in your content items or pages",

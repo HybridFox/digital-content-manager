@@ -6,13 +6,21 @@ import styles from './table-checkbox.module.scss';
 
 const cxBind = cx.bind(styles);
 
-export const TableCheckbox: FC<ITableCheckboxProps> = ({
-	selected,
-	onSelection
-}: ITableCheckboxProps) => {
+export const TableCheckbox: FC<ITableCheckboxProps> = ({ selected, onSelection, disabled = false }: ITableCheckboxProps) => {
 	return (
 		<label className={cxBind('a-table-checkbox')}>
-			<input type="checkbox" checked={selected} onChange={() => onSelection(!selected)} />
+			<input
+				type="checkbox"
+				checked={selected}
+				disabled={disabled}
+				onChange={() => {
+					if (disabled) {
+						return;
+					}
+					
+					onSelection(!selected);
+				}}
+			/>
 		</label>
 	);
 };

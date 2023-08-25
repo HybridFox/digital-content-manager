@@ -18,6 +18,7 @@ impl Content {
 	#[instrument(skip(conn))]
 	pub fn update(
 		conn: &mut PgConnection,
+		user_id: Uuid,
 		site_id: Uuid,
 		content_type_id: Uuid,
 		content_id: Uuid,
@@ -40,6 +41,7 @@ impl Content {
 		let revision = ContentRevision::create(conn, site_id, content_id, CreateContentRevision {
 			workflow_state_id: changeset.workflow_state_id,
 			content_id,
+			user_id,
 			published: changeset.published.is_some(),
 			// TODO: Check this
 			revision_translation_id: Uuid::new_v4(),
