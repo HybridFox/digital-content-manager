@@ -6,7 +6,7 @@ use uuid::Uuid;
 
 use crate::constants;
 
-static ONE_DAY: i64 = 60 * 60 * 24; // in seconds
+static SEVEN_DAYS: i64 = 60 * 60 * 24 * 7; // in seconds
 static ISSUER: &str = "auth.ibs.sh";
 static AUDIENCE: &str = "ibs";
 
@@ -45,7 +45,7 @@ impl Claims {
 	pub fn new(user_id: Uuid, now: i64) -> Self {
 		Claims {
 			iat: now,
-			exp: now + ONE_DAY,
+			exp: now + SEVEN_DAYS,
 			sub: user_id,
 			iss: ISSUER.to_owned(),
 			aud: AUDIENCE.to_owned(),
