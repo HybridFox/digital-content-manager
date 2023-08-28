@@ -62,20 +62,20 @@ export const ContentDetailRevisionsPage = () => {
 				>
 					<span className="las la-file-import"></span> {t('REVISIONS.COMPARE_TO_CURRENT')}
 				</ButtonLink>
-				<ButtonLink
-					to={generatePath(CONTENT_PATHS.DETAIL_REVISION_COMPARE, {
-						siteId,
-						contentId,
-						kind,
-						firstRevisionId: revisionSelection[0] || '',
-						secondRevisionId: revisionSelection[1] || '',
-					})}
-					className="u-margin-left-xs"
-					disabled={revisionSelection.length !== 2}
-					type={ButtonTypes.SECONDARY}
-				>
-					<span className="las la-copy"></span> {t('REVISIONS.COMPARE_EACH_OTHER')}
-				</ButtonLink>
+				{/*<ButtonLink*/}
+				{/*	to={generatePath(CONTENT_PATHS.DETAIL_REVISION_COMPARE, {*/}
+				{/*		siteId,*/}
+				{/*		contentId,*/}
+				{/*		kind,*/}
+				{/*		firstRevisionId: revisionSelection[0] || '',*/}
+				{/*		secondRevisionId: revisionSelection[1] || '',*/}
+				{/*	})}*/}
+				{/*	className="u-margin-left-xs"*/}
+				{/*	disabled={revisionSelection.length !== 2}*/}
+				{/*	type={ButtonTypes.SECONDARY}*/}
+				{/*>*/}
+				{/*	<span className="las la-copy"></span> {t('REVISIONS.COMPARE_EACH_OTHER')}*/}
+				{/*</ButtonLink>*/}
 			</div>
 			<Table
 				columns={CONTENT_TRANSLATIONS_LIST_COLUMNS(siteId!, kind!, contentId!, revisionSelection, t)}
@@ -83,7 +83,7 @@ export const ContentDetailRevisionsPage = () => {
 				selectable={true}
 				onSelection={(selection) => setRevisionSelection(selection)}
 				selection={revisionSelection}
-				maxSelection={2}
+				maxSelection={1}
 			></Table>
 			<Pagination
 				className="u-margin-top"

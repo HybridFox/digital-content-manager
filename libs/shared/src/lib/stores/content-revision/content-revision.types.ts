@@ -1,18 +1,18 @@
-import { IUser } from "..";
-import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types";
-import { IWorkflowState } from "../workflow";
+import { IUser } from '..';
+import { IAPIHALResponse, IAPIPagination, IPageParameters } from '../../types';
+import { IWorkflowState } from '../workflow';
 
 export interface IContentRevision {
 	id: string;
 	workflowStateId: string;
 	workflowState: IWorkflowState;
 	user: IUser;
+	fields: Record<string, unknown>;
 	updatedAt: string;
 	createdAt: string;
 }
 
-
-export type IContentRevisionsResponse = IAPIHALResponse<'contentRevisions', IContentRevision>
+export type IContentRevisionsResponse = IAPIHALResponse<'contentRevisions', IContentRevision>;
 
 export interface IContentRevisionStoreState {
 	fetchContentRevisions: (siteId: string, contentId: string, params?: IPageParameters) => Promise<void>;

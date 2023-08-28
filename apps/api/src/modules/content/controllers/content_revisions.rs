@@ -1,10 +1,10 @@
 use super::super::dto::revisions::response;
 use crate::modules::auth::helpers::permissions::ensure_permission;
-use crate::modules::content::models::content_revision::ContentRevision;
+use crate::modules::content::models::content_revision::{ContentRevision, CreateContentRevision};
 use crate::errors::AppError;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
-use actix_web::{get, web, HttpResponse, HttpRequest};
+use actix_web::{get, web, HttpResponse, HttpRequest, post};
 use serde::Deserialize;
 
 use utoipa::IntoParams;
@@ -106,6 +106,30 @@ pub async fn find_one(
 
 	let res = response::ContentRevisionWithFieldsDTO::from(revision);
 	Ok(HttpResponse::Ok().json(res))
+}
+
+#[utoipa::path(
+	context_path = "/api/v1/sites/{site_id}/content",
+	responses(
+		(status = 200, body = ContentWithFieldsDTO),
+		(status = 401, body = AppErrorValue, description = "Unauthorized")
+	),
+    security(
+        ("jwt_token" = [])
+    ),
+	params(FindPathParams)
+)]
+#[post("/{revision_id}/restore")]
+pub async fn restore(
+	req: HttpRequest,
+	state: web::Data<AppState>,
+	params: web::Path<FindOnePathParams>,
+) -> Result<HttpResponse, AppError> {
+	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:{}", params.content_id), "sites::content:update")?;
+	let conn = &mut state.get_conn()?;
+	let _revision = ContentRevision::find_one(conn, params.site_id, params.revision_id)?;
+
+	Ok(HttpResponse::NoContent().finish())
 }
 
 #[utoipa::path(

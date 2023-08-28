@@ -10,12 +10,24 @@ import {
 	useHeaderStore,
 	useWorkflowStore,
 } from '@ibs/shared';
-import { useEffect, useMemo } from 'react';
-import { FIELD_VIEW_MODE, RenderFields } from '@ibs/forms';
+import { useEffect, useMemo, useState } from 'react';
+import { FIELD_VIEW_MODE, RadioField, RenderFields } from '@ibs/forms';
 import { Trans, useTranslation } from 'react-i18next';
-import { Alert, AlertTypes } from '@ibs/components';
+import {
+	Alert,
+	AlertTypes,
+	Button,
+	ButtonSizes,
+	ButtonTypes,
+	Card,
+	CardFooter,
+	CardMeta,
+	HTMLButtonTypes,
+	Modal,
+	ModalFooter,
+} from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 import { CONTENT_PATHS } from '../../content.routes';
@@ -23,12 +35,19 @@ import { useWorkflowStateStore } from '../../../workflow/stores/workflow-state';
 
 export const ContentDetailRevisionDetailPage = () => {
 	const [contentType] = useContentTypeStore((state) => [state.contentType]);
-	const [content] = useContentStore((state) => [state.contentItem]);
 	const [contentRevision, contentRevisionLoading, fetchContentRevision] = useContentRevisionStore((state) => [
 		state.contentRevision,
 		state.contentRevisionLoading,
 		state.fetchContentRevision,
 	]);
+	const [restoreModalVisible, setRestoreModalVisible] = useState(false);
+	const navigate = useNavigate();
+	const workflowStateFormMethods = useForm<{ workflowStateId: string }>({
+		values: {
+			workflowStateId: contentRevision?.workflowStateId || '',
+		},
+	});
+	const [updateContentItem, updateContentItemLoading] = useContentStore((state) => [state.updateContentItem, state.updateContentItemLoading]);
 	const [contentItem] = useContentStore((state) => [state.contentItem]);
 	const [workflow] = useWorkflowStore((state) => [state.workflow]);
 	const { t } = useTranslation();
@@ -54,14 +73,76 @@ export const ContentDetailRevisionDetailPage = () => {
 		]);
 	}, [contentItem, contentType]);
 
+	const onSubmit = ({ workflowStateId }: { workflowStateId: string }) => {
+		if (!contentItem) {
+			return;
+		}
+
+		updateContentItem(siteId!, contentItem.id, {
+			...contentItem,
+			workflowStateId,
+			fields: contentRevision?.fields || {},
+		}).then(() => {
+			setRestoreModalVisible(false);
+			navigate(generatePath(CONTENT_PATHS.DETAIL_FIELDS, { contentId, kind, siteId }));
+		});
+	};
+
+	const statusOptions = useMemo(() => {
+		return (workflow?.transitions || [])
+			.filter((transition) => (contentItem?.published ? true : transition.toState.technicalState !== WORKFLOW_TECHNICAL_STATES.UNPUBLISHED))
+			.filter((transition) => transition.fromState.id === contentItem?.workflowStateId)
+			.sort((a, b) => (a.fromState.name < b.fromState.name ? -1 : 1))
+			.map((transition) => ({
+				label: transition.toState.name,
+				value: transition.toState.id,
+			}));
+	}, [workflow]);
+
+	const { handleSubmit } = workflowStateFormMethods;
+
 	return (
-		<FormProvider {...formMethods}>
-			<Alert closable={false} className='u-margin-bottom' type={AlertTypes.INFO}>
-				<Trans i18nKey="CONTENT_DETAIL_REVISION.STATE_AT" values={{ createdAt: dayjs(contentRevision?.createdAt).format(DATE_FORMAT) }} />
-			</Alert>
-			<form style={{ height: '100%' }}>
-				<RenderFields viewMode={FIELD_VIEW_MODE.VIEW} siteId={siteId!} fieldPrefix="fields." fields={contentType?.fields || []} />
-			</form>
-		</FormProvider>
+		<>
+			<FormProvider {...formMethods}>
+				<Card className="u-margin-bottom">
+					<CardMeta
+						items={[
+							{
+								label: 'Created at',
+								value: dayjs(contentRevision?.createdAt).format(DATE_FORMAT),
+							},
+							{ label: 'Status', value: contentRevision?.workflowState?.name },
+							{ label: 'Editor', value: contentRevision?.user?.name },
+						]}
+					/>
+					<CardFooter>
+						<Button size={ButtonSizes.SMALL} type={ButtonTypes.SECONDARY} onClick={() => setRestoreModalVisible(true)}>
+							<span className="las la-undo"></span> Restore
+						</Button>
+					</CardFooter>
+				</Card>
+				<form style={{ height: '100%' }}>
+					<RenderFields viewMode={FIELD_VIEW_MODE.VIEW} siteId={siteId!} fieldPrefix="fields." fields={contentType?.fields || []} />
+				</form>
+			</FormProvider>
+			<Modal modalOpen={restoreModalVisible} title="Restore as..." onClose={() => setRestoreModalVisible(false)}>
+				<FormProvider {...workflowStateFormMethods}>
+					<form onSubmit={handleSubmit(onSubmit)}>
+						<RadioField
+							name="workflowStateId"
+							label="Workflow State"
+							fieldConfiguration={{
+								options: statusOptions,
+							}}
+						></RadioField>
+						<ModalFooter>
+							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
+								{updateContentItemLoading && <i className="las la-redo-alt la-spin"></i>} Restore
+							</Button>
+						</ModalFooter>
+					</form>
+				</FormProvider>
+			</Modal>
+		</>
 	);
 };

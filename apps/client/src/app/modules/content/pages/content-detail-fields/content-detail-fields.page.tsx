@@ -7,15 +7,17 @@ import {
 	useContentTypeStore,
 	useHeaderStore,
 	useWorkflowStore,
+	DATE_FORMAT,
 } from '@ibs/shared';
 import { useEffect, useMemo } from 'react';
 import { RadioField, RenderFields } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonSizes, ButtonTypes, Card, CardFooter, CardMeta, HTMLButtonTypes } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
 import { yupResolver } from '@hookform/resolvers/yup';
+import dayjs from 'dayjs';
 
 import { CONTENT_PATHS } from '../../content.routes';
 import { useWorkflowStateStore } from '../../../workflow/stores/workflow-state';
@@ -53,7 +55,7 @@ export const ContentDetailFieldsPage = () => {
 
 	useEffect(() => {
 		fetchWorkflowStates(siteId!, { pagesize: -1 });
-	}, [])
+	}, []);
 
 	useEffect(() => {
 		setBreadcrumbs([
@@ -86,7 +88,7 @@ export const ContentDetailFieldsPage = () => {
 
 	const statusOptions = useMemo(() => {
 		return (workflow?.transitions || [])
-			.filter((transition) => contentItem?.published ? true : transition.toState.technicalState !== WORKFLOW_TECHNICAL_STATES.UNPUBLISHED)
+			.filter((transition) => (contentItem?.published ? true : transition.toState.technicalState !== WORKFLOW_TECHNICAL_STATES.UNPUBLISHED))
 			.filter((transition) => transition.fromState.id === contentItem?.workflowStateId)
 			.sort((a, b) => (a.fromState.name < b.fromState.name ? -1 : 1))
 			.map((transition) => ({
@@ -106,28 +108,38 @@ export const ContentDetailFieldsPage = () => {
 						<RenderFields siteId={siteId!} fieldPrefix="fields." fields={contentType?.fields || []} />
 					</div>
 					<div className={cxBind('p-content-detail__status')}>
-						<div>
-							Item Online:{' '}
-							<strong>
-								{content?.published ? (
-									<span className="las la-check u-text--success"></span>
-								) : (
-									<span className="las la-times u-text--danger"></span>
-								)}
-							</strong>
-						</div>
-						<div className='u-margin-bottom'>
-							Revision status: <strong>{content?.currentWorkflowState?.name}</strong>
-						</div>
-						<div className="u-margin-bottom">
-							<RadioField label="New status" name="workflowStateId" fieldConfiguration={{ options: statusOptions }}></RadioField>
-						</div>
-						<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT} block>
-							{updateContentItemLoading && <i className="las la-redo-alt la-spin"></i>}{' '}
-							{technicalState === WORKFLOW_TECHNICAL_STATES.PUBLISHED && 'Publish'}
-							{technicalState === WORKFLOW_TECHNICAL_STATES.UNPUBLISHED && 'Unpublish'}
-							{technicalState === WORKFLOW_TECHNICAL_STATES.DRAFT && 'Save draft'}
-						</Button>
+						<Card className="u-margin-bottom">
+							<CardMeta
+								items={[
+									{
+										label: 'Item Online',
+										value: content?.published ? (
+											<span className="las la-check u-text--success"></span>
+										) : (
+											<span className="las la-times u-text--danger"></span>
+										),
+									},
+									{ label: 'Revision status', value: contentItem?.currentWorkflowState?.name },
+									{
+										label: (
+											<RadioField
+												label="New status"
+												name="workflowStateId"
+												fieldConfiguration={{ options: statusOptions }}
+											></RadioField>
+										),
+									},
+								]}
+							/>
+							<CardFooter>
+								<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT} block>
+									{updateContentItemLoading && <i className="las la-redo-alt la-spin"></i>}{' '}
+									{technicalState === WORKFLOW_TECHNICAL_STATES.PUBLISHED && 'Publish'}
+									{technicalState === WORKFLOW_TECHNICAL_STATES.UNPUBLISHED && 'Unpublish'}
+									{technicalState === WORKFLOW_TECHNICAL_STATES.DRAFT && 'Save draft'}
+								</Button>
+							</CardFooter>
+						</Card>
 					</div>
 				</div>
 			</form>

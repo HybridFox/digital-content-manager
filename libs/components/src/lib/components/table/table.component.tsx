@@ -56,6 +56,10 @@ export const Table: FC<ITableProps> = ({
 	};
 
 	const isSelectable = (row: Record<any, any>): boolean => {
+		if (minSelection === 1 && maxSelection === 1) {
+			return true;
+		}
+
 		if (!selectable) {
 			return false;
 		}

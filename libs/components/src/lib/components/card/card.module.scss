@@ -4,9 +4,51 @@
 	padding: var(--spacer);
 	justify-content: space-between;
 	font-weight: 500;
+	overflow: hidden;
 	
 	&__title {
 		color: var(--color-black);
 		margin: 0 0 var(--spacer) 0;
+	}
+
+	&__footer {
+		background-color: var(--color-gray-lightest);
+		margin: var(--spacer-sm) calc(#{var(--spacer)} * -1) calc(#{var(--spacer)} * -1) calc(#{var(--spacer)} * -1);
+		padding: calc(#{var(--spacer)}) var(--spacer-sm) var(--spacer-xs) var(--spacer-sm);
+		position: relative;
+
+		&::before {
+			position: absolute;
+			border-radius: var(--border-radius-sm);
+			content: "";
+			top: calc(#{var(--spacer-xs)} * -1);
+			left: 0;
+			width: 100%;
+			height: var(--spacer);
+			background-color: var(--color-white);
+		}
+	}
+
+	&__meta {
+		display: flex;
+		margin: 0 calc(#{var(--spacer)} * -1);
+		padding: var(--spacer);
+		border-bottom: 1px solid var(--color-gray-lightest);
+		justify-content: space-between;
+		align-items: flex-start;
+
+		&:first-child {
+			padding-top: 0;
+		}
+
+		&:last-child {
+			border-bottom: 0;
+			padding-bottom: 0;
+		}
+
+		&__value {
+			font-family: 'IBM Plex Mono', monospace;
+			font-size: 0.9rem;
+		}
 	}
 }

@@ -2,10 +2,11 @@
 	display: flex;
 
 	&__left {
-		flex: 1;
+		flex: 50%;
+		padding-right: var(--spacer);
 	}
 
 	&__right {
-		flex: 1;
+		flex: 50%;
 	}
 }
