@@ -1,5 +1,7 @@
 use super::super::dto::directories::{request, response};
-use crate::modules::{resources::engines::lib::get_storage_engine, auth::helpers::permissions::ensure_permission};
+use crate::modules::{
+	resources::engines::lib::get_storage_engine, auth::helpers::permissions::ensure_permission,
+};
 use crate::errors::AppError;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
@@ -39,7 +41,15 @@ pub async fn read_directory(
 	query: web::Query<ResourcesQueryParams>,
 	params: web::Path<SharedParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:storage-repositories:{}:resources:*", params.storage_repository_id), "sites::resources:read")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!(
+			"urn:ibs:storage-repositories:{}:resources:*",
+			params.storage_repository_id
+		),
+		"sites::resources:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
 
@@ -82,7 +92,15 @@ pub async fn create_directory(
 	form: web::Json<request::CreateDirectoryDTO>,
 	params: web::Path<SharedParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:storage-repositories:{}:resources:*", params.storage_repository_id), "sites::resources:create-directory")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!(
+			"urn:ibs:storage-repositories:{}:resources:*",
+			params.storage_repository_id
+		),
+		"sites::resources:create-directory",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
 	engine.create_directory(&query.path, &form.name).await?;
@@ -108,7 +126,15 @@ pub async fn remove_directory(
 	query: web::Query<ResourcesQueryParams>,
 	params: web::Path<SharedParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:storage-repositories:{}:resources:*", params.storage_repository_id), "sites::resources:remove-directory")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!(
+			"urn:ibs:storage-repositories:{}:resources:*",
+			params.storage_repository_id
+		),
+		"sites::resources:remove-directory",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
 	engine.remove_directory(&query.path).await?;

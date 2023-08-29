@@ -57,7 +57,7 @@ impl AuthenticationMethod {
 		conn: &mut PgConnection,
 		page: i64,
 		pagesize: i64,
-		all: Option<bool>
+		all: Option<bool>,
 	) -> Result<(Vec<Self>, i64), AppError> {
 		let query = {
 			let mut query = authentication_methods::table.into_boxed();

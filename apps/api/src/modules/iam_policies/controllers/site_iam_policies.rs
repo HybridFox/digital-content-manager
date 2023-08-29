@@ -48,7 +48,12 @@ pub async fn create(
 	form: web::Json<request::CreateIAMPolicyDTO>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:policies:*"), "sites::policies:create")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:policies:*"),
+		"sites::policies:create",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let policy = IAMPolicy::create(conn, Some(params.site_id), &form.name)?;
 
@@ -86,7 +91,12 @@ pub async fn find_all(
 	query: web::Query<FindAllQueryParams>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:policies:*"), "sites::policies:read")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:policies:*"),
+		"sites::policies:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
@@ -124,7 +134,12 @@ pub async fn find_one(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:policies:{}", params.iam_policy_id), "sites::policies:read")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:policies:{}", params.iam_policy_id),
+		"sites::policies:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let (policy, permissions) =
 		IAMPolicy::find_one(conn, Some(params.site_id), params.iam_policy_id)?;
@@ -152,7 +167,12 @@ pub async fn update(
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateIAMPolicyDTO>,
 ) -> ApiResponse {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:policies:{}", params.iam_policy_id), "sites::policies:update")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:policies:{}", params.iam_policy_id),
+		"sites::policies:update",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let policy = IAMPolicy::update(
 		conn,
@@ -197,7 +217,12 @@ pub async fn remove(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:policies:{}", params.iam_policy_id), "sites::policies:remove")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:policies:{}", params.iam_policy_id),
+		"sites::policies:remove",
+	)?;
 	let conn = &mut state.get_conn()?;
 	IAMPolicy::remove(conn, params.iam_policy_id)?;
 	Ok(HttpResponse::NoContent().body(()))

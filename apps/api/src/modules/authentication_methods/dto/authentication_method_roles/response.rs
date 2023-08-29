@@ -1,6 +1,8 @@
 use crate::modules::{
 	core::models::hal::{HALLinkList, HALPage},
-	authentication_methods::models::authentication_method_role::AuthenticationMethodRole, roles::{models::role::Role, dto::response::RoleDTO}, sites::{dto::response::SiteDTO, models::site::Site},
+	authentication_methods::models::authentication_method_role::AuthenticationMethodRole,
+	roles::{models::role::Role, dto::response::RoleDTO},
+	sites::{dto::response::SiteDTO, models::site::Site},
 };
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
@@ -18,13 +20,19 @@ pub struct AuthenticationMethodRoleDTO {
 }
 
 impl From<(AuthenticationMethodRole, Role, Option<Site>)> for AuthenticationMethodRoleDTO {
-	fn from((authentication_method, role, site): (AuthenticationMethodRole, Role, Option<Site>)) -> Self {
+	fn from(
+		(authentication_method, role, site): (AuthenticationMethodRole, Role, Option<Site>),
+	) -> Self {
 		Self {
 			id: authentication_method.id,
 			site_id: authentication_method.site_id,
 			role_id: authentication_method.role_id,
 			role: RoleDTO::from(role),
-			site: if site.is_some() { Some(SiteDTO::from(site.unwrap())) } else { None }
+			site: if site.is_some() {
+				Some(SiteDTO::from(site.unwrap()))
+			} else {
+				None
+			},
 		}
 	}
 }
@@ -42,8 +50,15 @@ pub struct AuthenticationMethodRolesDTO {
 	pub _embedded: AuthenticationMethodRolesEmbeddedDTO,
 }
 
-impl From<(Vec<(AuthenticationMethodRole, Role, Option<Site>)>, HALPage)> for AuthenticationMethodRolesDTO {
-	fn from((authentication_method_role_assignments, page): (Vec<(AuthenticationMethodRole, Role, Option<Site>)>, HALPage)) -> Self {
+impl From<(Vec<(AuthenticationMethodRole, Role, Option<Site>)>, HALPage)>
+	for AuthenticationMethodRolesDTO
+{
+	fn from(
+		(authentication_method_role_assignments, page): (
+			Vec<(AuthenticationMethodRole, Role, Option<Site>)>,
+			HALPage,
+		),
+	) -> Self {
 		Self {
 			_links: HALLinkList::from((format!("/api/v1/authentication-methods"), &page)),
 			_embedded: AuthenticationMethodRolesEmbeddedDTO {

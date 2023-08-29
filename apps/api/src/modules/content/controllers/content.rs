@@ -63,7 +63,12 @@ pub async fn create(
 	form: web::Json<request::CreateContentDTO>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	let user_id = ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:*"), "sites::content:create")?;
+	let user_id = ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content:*"),
+		"sites::content:create",
+	)?;
 	let conn = &mut state.get_conn()?;
 
 	let translation_id = match form.translation_id {
@@ -98,7 +103,14 @@ pub async fn create(
 		form.fields.clone(),
 	)?;
 
-	let res = response::ContentWithFieldsDTO::from((content, revision, fields, language, workflow_state, false));
+	let res = response::ContentWithFieldsDTO::from((
+		content,
+		revision,
+		fields,
+		language,
+		workflow_state,
+		false,
+	));
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -120,7 +132,12 @@ pub async fn find_all(
 	query: web::Query<FindAllQueryParams>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:*"), "sites::content:read")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content:*"),
+		"sites::content:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
@@ -133,7 +150,7 @@ pub async fn find_all(
 		query.kind,
 		query.language_id,
 		query.translation_id,
-		query.content_types.clone()
+		query.content_types.clone(),
 	)?;
 
 	let res = response::ContentListDTO::from((
@@ -167,11 +184,24 @@ pub async fn find_one(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:{}", params.content_id), "sites::content:read")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content:{}", params.content_id),
+		"sites::content:read",
+	)?;
 	let conn = &mut state.get_conn()?;
-	let (content, revision, fields, language, workflow_state) = Content::find_one(conn, params.site_id, params.content_id)?;
+	let (content, revision, fields, language, workflow_state) =
+		Content::find_one(conn, params.site_id, params.content_id)?;
 
-	let res = response::ContentWithFieldsDTO::from((content, revision, fields, language, workflow_state, false));
+	let res = response::ContentWithFieldsDTO::from((
+		content,
+		revision,
+		fields,
+		language,
+		workflow_state,
+		false,
+	));
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -194,7 +224,12 @@ pub async fn update(
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateContentDTO>,
 ) -> ApiResponse {
-	let user_id = ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:{}", params.content_id), "sites::content:update")?;
+	let user_id = ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content:{}", params.content_id),
+		"sites::content:update",
+	)?;
 	let conn = &mut state.get_conn()?;
 
 	let workflow_state = WorkflowState::find_one(conn, params.site_id, form.workflow_state_id)?;
@@ -238,7 +273,14 @@ pub async fn update(
 		},
 		form.fields.clone(),
 	)?;
-	let res = response::ContentWithFieldsDTO::from((content, revision, fields, language, workflow_state, false));
+	let res = response::ContentWithFieldsDTO::from((
+		content,
+		revision,
+		fields,
+		language,
+		workflow_state,
+		false,
+	));
 	Ok(HttpResponse::Ok().json(res))
 }
 
@@ -259,7 +301,12 @@ pub async fn remove(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:{}", params.content_id), "sites::content:remove")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content:{}", params.content_id),
+		"sites::content:remove",
+	)?;
 	let conn = &mut state.get_conn()?;
 	Content::remove(conn, params.content_id)?;
 	Ok(HttpResponse::NoContent().body(()))
@@ -282,10 +329,16 @@ pub async fn default_values(
 	state: web::Data<AppState>,
 	params: web::Path<DefaultValuesPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:*"), "sites::content:read")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content:*"),
+		"sites::content:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let content = Content::default_values(conn, params.site_id, params.translation_id)?;
 
-	let res = response::ContentDefaultValuesDTO::from((None, params.translation_id, content, false));
+	let res =
+		response::ContentDefaultValuesDTO::from((None, params.translation_id, content, false));
 	Ok(HttpResponse::Ok().json(res))
 }

@@ -40,7 +40,12 @@ pub async fn create(
 	state: web::Data<AppState>,
 	form: web::Json<request::CreateIAMPolicyDTO>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:policies:*"), "root::policies:create")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:policies:*"),
+		"root::policies:create",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let policy = IAMPolicy::create(conn, None, &form.name)?;
 
@@ -77,7 +82,12 @@ pub async fn find_all(
 	state: web::Data<AppState>,
 	query: web::Query<FindAllQueryParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:policies:*"), "root::policies:read")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:policies:*"),
+		"root::policies:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
@@ -113,7 +123,12 @@ pub async fn find_one(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:policies:{}", params.iam_policy_id), "root::policies::read")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:policies:{}", params.iam_policy_id),
+		"root::policies::read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let (policy, permissions) = IAMPolicy::find_one(conn, None, params.iam_policy_id)?;
 
@@ -139,7 +154,12 @@ pub async fn update(
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateIAMPolicyDTO>,
 ) -> ApiResponse {
-	ensure_permission(&req, None, format!("urn:ibs:policies:{}", params.iam_policy_id), "root::policies::update")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:policies:{}", params.iam_policy_id),
+		"root::policies::update",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let policy = IAMPolicy::update(
 		conn,
@@ -184,7 +204,12 @@ pub async fn remove(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
-	ensure_permission(&req, None, format!("urn:ibs:policies:{}", params.iam_policy_id), "root::policies::remove")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:policies:{}", params.iam_policy_id),
+		"root::policies::remove",
+	)?;
 	let conn = &mut state.get_conn()?;
 	IAMPolicy::remove(conn, params.iam_policy_id)?;
 	Ok(HttpResponse::NoContent().body(()))

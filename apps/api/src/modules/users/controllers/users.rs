@@ -72,7 +72,12 @@ pub async fn find_all(
 	state: web::Data<AppState>,
 	query: web::Query<FindAllQueryParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:languages:*"), "root::users:read")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:languages:*"),
+		"root::users:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
@@ -111,7 +116,12 @@ pub async fn find_one(
 	state: web::Data<AppState>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:languages:{}", params.user_id), "root::users:read")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:languages:{}", params.user_id),
+		"root::users:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let user = User::find_one_with_roles(conn, params.user_id)?;
 
@@ -138,7 +148,12 @@ pub async fn update(
 	params: web::Path<FindPathParams>,
 	form: web::Json<request::UpdateUserDTO>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:languages:{}", params.user_id), "root::users:update")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:languages:{}", params.user_id),
+		"root::users:update",
+	)?;
 	let conn = &mut state.get_conn()?;
 
 	User::update(
@@ -173,7 +188,12 @@ pub async fn remove(
 	state: web::Data<AppState>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:languages:{}", params.user_id), "root::users:remove")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:languages:{}", params.user_id),
+		"root::users:remove",
+	)?;
 	let conn = &mut state.get_conn()?;
 	User::remove(conn, params.user_id)?;
 	Ok(HttpResponse::NoContent().body(()))
@@ -196,7 +216,12 @@ pub async fn find_sites(
 	state: web::Data<AppState>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:languages:{}", params.user_id), "root::users:read")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:languages:{}", params.user_id),
+		"root::users:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let user = User::find_one(conn, params.user_id)?;
 	let sites = user.get_sites(conn)?;

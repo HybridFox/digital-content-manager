@@ -12,7 +12,7 @@ use uuid::Uuid;
 #[derive(Deserialize, IntoParams)]
 #[serde(rename_all = "camelCase")]
 pub struct MeQueryParams {
-	site_id: Option<Uuid>
+	site_id: Option<Uuid>,
 }
 
 #[utoipa::path(
@@ -26,7 +26,11 @@ pub struct MeQueryParams {
     )
 )]
 #[get("/me")]
-pub async fn me(state: web::Data<AppState>, req: HttpRequest, query: web::Query<MeQueryParams>) -> ApiResponse {
+pub async fn me(
+	state: web::Data<AppState>,
+	req: HttpRequest,
+	query: web::Query<MeQueryParams>,
+) -> ApiResponse {
 	let conn = &mut state.get_conn()?;
 	let user = auth::get_current_user(&req)?;
 	let token = user.generate_token()?;

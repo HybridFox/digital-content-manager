@@ -47,7 +47,12 @@ pub async fn create(
 	form: web::Json<request::CreateWorkflowDTO>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:workflows:*"), "sites::workflows:create")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:workflows:*"),
+		"sites::workflows:create",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let workflow = Workflow::create(
 		conn,
@@ -82,7 +87,12 @@ pub async fn find_all(
 	query: web::Query<FindAllQueryParams>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:workflows:*"), "sites::workflows:read")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:workflows:*"),
+		"sites::workflows:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
@@ -120,7 +130,12 @@ pub async fn find_one(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:workflows:{}", params.workflow_id), "sites::workflows:read")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:workflows:{}", params.workflow_id),
+		"sites::workflows:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let workflow = Workflow::find_one(conn, params.site_id, params.workflow_id)?;
 
@@ -147,7 +162,12 @@ pub async fn update(
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateWorkflowDTO>,
 ) -> ApiResponse {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:workflows:{}", params.workflow_id), "sites::workflows:update")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:workflows:{}", params.workflow_id),
+		"sites::workflows:update",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let workflow = Workflow::update(
 		conn,
@@ -181,7 +201,12 @@ pub async fn remove(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:workflows:{}", params.workflow_id), "sites::workflows:remove")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:workflows:{}", params.workflow_id),
+		"sites::workflows:remove",
+	)?;
 	let conn = &mut state.get_conn()?;
 	Workflow::remove(conn, params.workflow_id)?;
 	Ok(HttpResponse::NoContent().body(()))

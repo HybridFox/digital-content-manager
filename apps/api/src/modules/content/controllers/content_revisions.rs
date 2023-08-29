@@ -56,18 +56,18 @@ pub async fn find_all(
 	query: web::Query<FindAllQueryParams>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:*"), "sites::content:read")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content:*"),
+		"sites::content:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
 
-	let (revisions, total_elements) = ContentRevision::find(
-		conn,
-		params.site_id,
-		page,
-		pagesize,
-		query.translation_id,
-	)?;
+	let (revisions, total_elements) =
+		ContentRevision::find(conn, params.site_id, page, pagesize, query.translation_id)?;
 
 	let res = response::ContentRevisionsDTO::from((
 		revisions,
@@ -100,7 +100,12 @@ pub async fn find_one(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:{}", params.content_id), "sites::content:read")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content:{}", params.content_id),
+		"sites::content:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let revision = ContentRevision::find_one(conn, params.site_id, params.revision_id)?;
 
@@ -125,7 +130,12 @@ pub async fn restore(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:{}", params.content_id), "sites::content:update")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content:{}", params.content_id),
+		"sites::content:update",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let _revision = ContentRevision::find_one(conn, params.site_id, params.revision_id)?;
 
@@ -149,10 +159,16 @@ pub async fn compare(
 	state: web::Data<AppState>,
 	params: web::Path<ComparePathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content:{}", params.content_id), "sites::content:read")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content:{}", params.content_id),
+		"sites::content:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let first_revision = ContentRevision::find_one(conn, params.site_id, params.first_revision_id)?;
-	let second_revision = ContentRevision::find_one(conn, params.site_id, params.second_revision_id)?;
+	let second_revision =
+		ContentRevision::find_one(conn, params.site_id, params.second_revision_id)?;
 
 	let first_res = response::ContentRevisionWithFieldsDTO::from(first_revision);
 	let second_res = response::ContentRevisionWithFieldsDTO::from(second_revision);

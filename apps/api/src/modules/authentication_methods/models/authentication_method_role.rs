@@ -33,12 +33,22 @@ impl AuthenticationMethodRole {
 	}
 
 	#[instrument(skip(conn))]
-	pub fn find_one(conn: &mut PgConnection, id: Uuid) -> Result<(Self, Role, Option<Site>), AppError> {
+	pub fn find_one(
+		conn: &mut PgConnection,
+		id: Uuid,
+	) -> Result<(Self, Role, Option<Site>), AppError> {
 		let authentication_method = authentication_method_roles::table
 			.find(id)
 			.inner_join(roles::table.on(roles::id.eq(authentication_method_roles::role_id)))
-			.left_join(sites::table.on(sites::id.eq(authentication_method_roles::site_id.assume_not_null())))
-			.select((Self::as_select(), Role::as_select(), Option::<Site>::as_select()))
+			.left_join(
+				sites::table
+					.on(sites::id.eq(authentication_method_roles::site_id.assume_not_null())),
+			)
+			.select((
+				Self::as_select(),
+				Role::as_select(),
+				Option::<Site>::as_select(),
+			))
 			.get_result::<(Self, Role, Option<Site>)>(conn)?;
 
 		Ok(authentication_method)
@@ -53,10 +63,20 @@ impl AuthenticationMethodRole {
 	) -> Result<(Vec<(Self, Role, Option<Site>)>, i64), AppError> {
 		let query = {
 			let mut query = authentication_method_roles::table
-				.filter(authentication_method_roles::authentication_method_id.eq(authentication_method_id))
+				.filter(
+					authentication_method_roles::authentication_method_id
+						.eq(authentication_method_id),
+				)
 				.inner_join(roles::table.on(roles::id.eq(authentication_method_roles::role_id)))
-				.left_join(sites::table.on(sites::id.eq(authentication_method_roles::site_id.assume_not_null())))
-				.select((Self::as_select(), Role::as_select(), Option::<Site>::as_select()))
+				.left_join(
+					sites::table
+						.on(sites::id.eq(authentication_method_roles::site_id.assume_not_null())),
+				)
+				.select((
+					Self::as_select(),
+					Role::as_select(),
+					Option::<Site>::as_select(),
+				))
 				.into_boxed();
 
 			if pagesize != -1 {
@@ -66,8 +86,8 @@ impl AuthenticationMethodRole {
 			query
 		};
 
-		let authentication_method_roles = query
-			.load::<(AuthenticationMethodRole, Role, Option<Site>)>(conn)?;
+		let authentication_method_roles =
+			query.load::<(AuthenticationMethodRole, Role, Option<Site>)>(conn)?;
 		let total_elements = authentication_method_roles::table
 			.count()
 			.get_result::<i64>(conn)?;
@@ -93,7 +113,8 @@ impl AuthenticationMethodRole {
 	#[instrument(skip(conn))]
 	pub fn remove(conn: &mut PgConnection, content_id: Uuid) -> Result<(), AppError> {
 		diesel::delete(
-			authentication_method_roles::table.filter(authentication_method_roles::id.eq(content_id)),
+			authentication_method_roles::table
+				.filter(authentication_method_roles::id.eq(content_id)),
 		)
 		.get_result::<AuthenticationMethodRole>(conn)?;
 
@@ -112,5 +133,5 @@ pub struct CreateAuthenticationMethodRole {
 #[derive(AsChangeset, Debug, Deserialize, Clone)]
 #[diesel(table_name = authentication_method_roles)]
 pub struct UpdateAuthenticationMethodRole {
-	pub role_id: Uuid
+	pub role_id: Uuid,
 }

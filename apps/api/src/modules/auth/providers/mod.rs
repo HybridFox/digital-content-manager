@@ -1,2 +1,2 @@
-pub mod oauth2;
 pub mod local;
+pub mod oauth2;

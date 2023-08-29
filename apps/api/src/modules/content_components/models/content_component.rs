@@ -161,8 +161,8 @@ impl ContentComponent {
 		content_component_id: Uuid,
 		changeset: UpdateContentComponent,
 	) -> Result<PopulatedContentComponent, AppError> {
-		let target = content_components::table
-			.filter(content_components::id.eq(content_component_id));
+		let target =
+			content_components::table.filter(content_components::id.eq(content_component_id));
 		let updated_content_component = diesel::update(target)
 			.set(changeset)
 			.get_result::<ContentComponent>(conn)?;

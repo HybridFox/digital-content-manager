@@ -245,10 +245,10 @@ impl User {
 				.map(|(user, _auth_method)| user)
 				.collect::<Vec<&User>>(),
 		)
-			.inner_join(roles::table.on(roles::id.eq(sites_users_roles::role_id)))
-			.filter(sites_users_roles::site_id.eq(site_id))
-			.select((SiteUserRole::as_select(), Role::as_select()))
-			.load::<(SiteUserRole, Role)>(conn)?;
+		.inner_join(roles::table.on(roles::id.eq(sites_users_roles::role_id)))
+		.filter(sites_users_roles::site_id.eq(site_id))
+		.select((SiteUserRole::as_select(), Role::as_select()))
+		.load::<(SiteUserRole, Role)>(conn)?;
 		let grouped_roles = roles.grouped_by(
 			&users
 				.iter()

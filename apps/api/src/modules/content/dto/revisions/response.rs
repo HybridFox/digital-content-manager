@@ -31,7 +31,9 @@ pub struct ContentRevisionWithFieldsDTO {
 	pub fields: HashMap<String, Option<Value>>,
 }
 
-impl From<(ContentRevision, Vec<ContentField>, WorkflowState, User)> for ContentRevisionWithFieldsDTO {
+impl From<(ContentRevision, Vec<ContentField>, WorkflowState, User)>
+	for ContentRevisionWithFieldsDTO
+{
 	fn from(
 		(content_revision, fields, workflow_state, user): (
 			ContentRevision,

@@ -13,7 +13,7 @@ use crate::schema::content_fields;
 
 pub enum FieldIndex {
 	Number(usize),
-	String(String)
+	String(String),
 }
 
 pub fn upsert_fields(
@@ -60,7 +60,7 @@ fn get_field_insert(
 ) -> Vec<CreateContentField> {
 	let index_key = match &index {
 		FieldIndex::Number(number) => number.to_string(),
-		FieldIndex::String(string) => string.clone()
+		FieldIndex::String(string) => string.clone(),
 	};
 
 	let value = match index {

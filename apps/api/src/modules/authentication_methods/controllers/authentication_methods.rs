@@ -24,7 +24,7 @@ pub struct FindOnePathParams {
 pub struct FindAllQueryParams {
 	page: Option<i64>,
 	pagesize: Option<i64>,
-	all: Option<bool>
+	all: Option<bool>,
 }
 
 #[utoipa::path(
@@ -44,7 +44,12 @@ pub async fn create(
 	state: web::Data<AppState>,
 	form: web::Json<request::CreateAuthenticationMethodDTO>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:authentication-methods:*"), "root::authentication-methods:create")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:authentication-methods:*"),
+		"root::authentication-methods:create",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let authentication_method = AuthenticationMethod::create(
 		conn,
@@ -113,7 +118,15 @@ pub async fn find_one(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:authentication-methods:{}", params.authentication_method_id), "root::authentication-methods:read")?;
+	ensure_permission(
+		&req,
+		None,
+		format!(
+			"urn:ibs:authentication-methods:{}",
+			params.authentication_method_id
+		),
+		"root::authentication-methods:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let authentication_method =
 		AuthenticationMethod::find_one(conn, params.authentication_method_id)?;
@@ -141,7 +154,15 @@ pub async fn update(
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateAuthenticationMethodDTO>,
 ) -> ApiResponse {
-	ensure_permission(&req, None, format!("urn:ibs:authentication-methods:{}", params.authentication_method_id), "root::authentication-methods:update")?;
+	ensure_permission(
+		&req,
+		None,
+		format!(
+			"urn:ibs:authentication-methods:{}",
+			params.authentication_method_id
+		),
+		"root::authentication-methods:update",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let authentication_method = AuthenticationMethod::update(
 		conn,
@@ -174,7 +195,15 @@ pub async fn remove(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
-	ensure_permission(&req, None, format!("urn:ibs:authentication-methods:{}", params.authentication_method_id), "root::authentication-methods:remove")?;
+	ensure_permission(
+		&req,
+		None,
+		format!(
+			"urn:ibs:authentication-methods:{}",
+			params.authentication_method_id
+		),
+		"root::authentication-methods:remove",
+	)?;
 	let conn = &mut state.get_conn()?;
 	AuthenticationMethod::remove(conn, params.authentication_method_id)?;
 	Ok(HttpResponse::NoContent().body(()))

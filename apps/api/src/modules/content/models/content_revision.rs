@@ -40,7 +40,7 @@ impl ContentRevision {
 		conn: &mut PgConnection,
 		site_id: Uuid,
 		content_id: Uuid,
-		revision: CreateContentRevision
+		revision: CreateContentRevision,
 	) -> Result<Self, AppError> {
 		let created_revision = diesel::insert_into(content_revisions::table)
 			.values(&revision)
@@ -73,9 +73,7 @@ impl ContentRevision {
 			.find(revision.workflow_state_id)
 			.first(conn)?;
 
-		let user = users::table
-			.find(revision.user_id)
-			.first(conn)?;
+		let user = users::table.find(revision.user_id).first(conn)?;
 
 		Ok((revision, fields, workflow_state, user))
 	}
@@ -107,11 +105,10 @@ impl ContentRevision {
 				.filter(content_revisions::site_id.eq(site_id))
 				.order(content_revisions::created_at.desc())
 				.inner_join(
-					workflow_states::table.on(workflow_states::id.eq(content_revisions::workflow_state_id)),
+					workflow_states::table
+						.on(workflow_states::id.eq(content_revisions::workflow_state_id)),
 				)
-				.inner_join(
-					users::table.on(users::id.eq(content_revisions::user_id)),
-				)
+				.inner_join(users::table.on(users::id.eq(content_revisions::user_id)))
 				.into_boxed();
 
 			if pagesize != -1 {
@@ -119,7 +116,8 @@ impl ContentRevision {
 			};
 
 			if let Some(revision_translation_id) = revision_translation_id {
-				query = query.filter(content_revisions::revision_translation_id.eq(revision_translation_id));
+				query = query
+					.filter(content_revisions::revision_translation_id.eq(revision_translation_id));
 			}
 
 			query
@@ -131,7 +129,8 @@ impl ContentRevision {
 				.into_boxed();
 
 			if let Some(revision_translation_id) = revision_translation_id {
-				query = query.filter(content_revisions::revision_translation_id.eq(revision_translation_id));
+				query = query
+					.filter(content_revisions::revision_translation_id.eq(revision_translation_id));
 			}
 
 			query

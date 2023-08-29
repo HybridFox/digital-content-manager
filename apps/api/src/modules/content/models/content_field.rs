@@ -5,7 +5,9 @@ use uuid::Uuid;
 
 use crate::{schema::content_fields, modules::content_components::enums::data_type::DataTypeEnum};
 
-#[derive(Selectable, Queryable, Debug, Identifiable, Clone, Deserialize, Serialize, QueryableByName)]
+#[derive(
+	Selectable, Queryable, Debug, Identifiable, Clone, Deserialize, Serialize, QueryableByName,
+)]
 #[diesel(table_name = content_fields)]
 #[diesel(primary_key(id))]
 pub struct ContentField {

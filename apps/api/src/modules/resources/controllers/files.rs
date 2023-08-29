@@ -38,7 +38,15 @@ pub async fn upload_file(
 	query: web::Query<FilesQueryParams>,
 	params: web::Path<SharedParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:storage-repositories:{}:resources:*", params.storage_repository_id), "sites::resources:upload-file")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!(
+			"urn:ibs:storage-repositories:{}:resources:*",
+			params.storage_repository_id
+		),
+		"sites::resources:upload-file",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
 	engine.upload_file(&query.path, form.file).await?;
@@ -64,7 +72,15 @@ pub async fn read_file(
 	query: web::Query<FilesQueryParams>,
 	params: web::Path<SharedParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:storage-repositories:{}:resources:*", params.storage_repository_id), "sites::resources:read")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!(
+			"urn:ibs:storage-repositories:{}:resources:*",
+			params.storage_repository_id
+		),
+		"sites::resources:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
 	let file = engine.download_file(&query.path).await?;
@@ -90,7 +106,15 @@ pub async fn remove_file(
 	query: web::Query<FilesQueryParams>,
 	params: web::Path<SharedParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:storage-repositories:{}:resources:*", params.storage_repository_id), "sites::resources:remove-file")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!(
+			"urn:ibs:storage-repositories:{}:resources:*",
+			params.storage_repository_id
+		),
+		"sites::resources:remove-file",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
 	engine.remove_file(&query.path).await?;

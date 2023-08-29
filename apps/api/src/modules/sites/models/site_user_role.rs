@@ -55,7 +55,11 @@ impl SiteUserRole {
 				site_id,
 				role_id,
 			})
-			.on_conflict((sites_users_roles::user_id, sites_users_roles::site_id, sites_users_roles::role_id))
+			.on_conflict((
+				sites_users_roles::user_id,
+				sites_users_roles::site_id,
+				sites_users_roles::role_id,
+			))
 			.do_nothing()
 			.returning(SiteUserRole::as_returning())
 			.get_results(conn)?;

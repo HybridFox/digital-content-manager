@@ -19,7 +19,7 @@ pub struct FindOneQueryParams {
 	lang: String,
 	slug: Option<String>,
 	id: Option<Uuid>,
-	populate: Option<bool>
+	populate: Option<bool>,
 }
 
 #[utoipa::path(
@@ -40,24 +40,32 @@ pub async fn find_one(
 	query: web::Query<FindOneQueryParams>,
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
-	let (content, revision, fields, languages, translations) = if query.slug.is_some() || query.id.is_some() {
-		Content::find_one_public(
-			conn,
-			params.site_id,
-			query.slug.clone(),
-			query.id,
-			query.populate,
-			&query.lang,
-		)?
-	} else {
-		return Err(AppError::BadRequest(AppErrorValue {
-			message: "Please pass a id or slug as a query parameter".to_string(),
-			status: StatusCode::BAD_REQUEST.as_u16(),
-			code: "INCOMPLETE_REQUEST".to_owned(),
-			..Default::default()
-		}));
-	};
+	let (content, revision, fields, languages, translations) =
+		if query.slug.is_some() || query.id.is_some() {
+			Content::find_one_public(
+				conn,
+				params.site_id,
+				query.slug.clone(),
+				query.id,
+				query.populate,
+				&query.lang,
+			)?
+		} else {
+			return Err(AppError::BadRequest(AppErrorValue {
+				message: "Please pass a id or slug as a query parameter".to_string(),
+				status: StatusCode::BAD_REQUEST.as_u16(),
+				code: "INCOMPLETE_REQUEST".to_owned(),
+				..Default::default()
+			}));
+		};
 
-	let res = response::PublicContentDTO::from((content, revision, fields, languages, translations, query.populate.unwrap_or(false)));
+	let res = response::PublicContentDTO::from((
+		content,
+		revision,
+		fields,
+		languages,
+		translations,
+		query.populate.unwrap_or(false),
+	));
 	Ok(HttpResponse::Ok().json(res))
 }

@@ -34,7 +34,7 @@ impl UserRole {
 
 		Ok(user_role)
 	}
-	
+
 	pub fn upsert(
 		conn: &mut PgConnection,
 		user_id: Uuid,

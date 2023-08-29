@@ -124,7 +124,12 @@ pub async fn find_one(
 	state: web::Data<AppState>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:sites:{}", params.site_id), "root::sites:read")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:sites:{}", params.site_id),
+		"root::sites:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let (site, languages) = Site::find_one(conn, params.site_id)?;
 
@@ -151,7 +156,12 @@ pub async fn update(
 	params: web::Path<FindPathParams>,
 	form: web::Json<request::UpdateSiteDTO>,
 ) -> ApiResponse {
-	ensure_permission(&req, None, format!("urn:ibs:sites:{}", params.site_id), "root::sites:update")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:sites:{}", params.site_id),
+		"root::sites:update",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let site = Site::update(
 		conn,
@@ -182,7 +192,12 @@ pub async fn remove(
 	state: web::Data<AppState>,
 	params: web::Path<FindPathParams>,
 ) -> ApiResponse {
-	ensure_permission(&req, None, format!("urn:ibs:sites:{}", params.site_id), "root::sites:remove")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:sites:{}", params.site_id),
+		"root::sites:remove",
+	)?;
 	let conn = &mut state.get_conn()?;
 	Site::remove(conn, params.site_id)?;
 	Ok(HttpResponse::NoContent().body(()))

@@ -8,7 +8,11 @@ use crate::modules::{
 	roles::{models::role::Role, dto::response::RoleDTO},
 	sites::{dto::response::SiteWithRolesDTO, models::site::Site},
 	iam_policies::models::{permission::Permission, iam_policy::IAMPolicy},
-	languages::models::language::Language, authentication_methods::{dto::authentication_methods::response::AuthenticationMethodDTO, models::authentication_method::AuthenticationMethod},
+	languages::models::language::Language,
+	authentication_methods::{
+		dto::authentication_methods::response::AuthenticationMethodDTO,
+		models::authentication_method::AuthenticationMethod,
+	},
 };
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
@@ -82,7 +86,9 @@ pub struct UsersDTO {
 }
 
 impl From<(Vec<(User, AuthenticationMethod, Vec<Role>)>, HALPage, Uuid)> for UsersDTO {
-	fn from((users, page, site_id): (Vec<(User, AuthenticationMethod, Vec<Role>)>, HALPage, Uuid)) -> Self {
+	fn from(
+		(users, page, site_id): (Vec<(User, AuthenticationMethod, Vec<Role>)>, HALPage, Uuid),
+	) -> Self {
 		Self {
 			_links: HALLinkList::from((format!("/api/v1/sites/{site_id}/users"), &page)),
 			_embedded: UsersEmbeddedDTO {

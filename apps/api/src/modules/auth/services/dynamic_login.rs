@@ -2,7 +2,10 @@ use crate::{
 	errors::{AppError, AppErrorValue},
 	modules::{
 		authentication_methods::models::authentication_method::AuthenticationMethod,
-		auth::{providers::{oauth2::OAuth2AuthProvider, local::LocalAuthProvider}, dto::request::LoginUserDTO},
+		auth::{
+			providers::{oauth2::OAuth2AuthProvider, local::LocalAuthProvider},
+			dto::request::LoginUserDTO,
+		},
 	},
 };
 use actix_web::HttpResponse;

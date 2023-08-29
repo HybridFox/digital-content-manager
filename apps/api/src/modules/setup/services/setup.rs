@@ -1,6 +1,9 @@
 use crate::{
 	errors::AppError,
-	modules::{core::middleware::state::AppConn, users::models::user_role::UserRole, authentication_methods::models::authentication_method::AuthenticationMethod},
+	modules::{
+		core::middleware::state::AppConn, users::models::user_role::UserRole,
+		authentication_methods::models::authentication_method::AuthenticationMethod,
+	},
 };
 use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
 use crate::modules::iam_policies::models::permission::Permission;

@@ -53,7 +53,8 @@ fn get_client(
 		Some(TokenUrl::new(config.token_url.clone())?),
 	)
 	.set_redirect_uri(RedirectUrl::new(format!(
-		"{}/auth/{}/callback", frontend_url, authentication_method.id
+		"{}/auth/{}/callback",
+		frontend_url, authentication_method.id
 	))?);
 
 	Ok(client)

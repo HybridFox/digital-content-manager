@@ -1,5 +1,10 @@
 use crate::modules::{
-	content::{models::{content::Content, content_field::ContentField, content_revision::ContentRevision}, dto::revisions::response::ContentRevisionDTO},
+	content::{
+		models::{
+			content::Content, content_field::ContentField, content_revision::ContentRevision,
+		},
+		dto::revisions::response::ContentRevisionDTO,
+	},
 	core::models::hal::{HALLinkList, HALPage},
 	content_components::enums::data_type::DataTypeEnum,
 	sites::dto::languages::response::LanguageDTO,
@@ -46,29 +51,23 @@ fn parse_field(
 	populate: bool,
 ) -> Option<Value> {
 	match field.data_type {
-		DataTypeEnum::TEXT | DataTypeEnum::NUMBER | DataTypeEnum::BOOLEAN => {
-			field.value.clone()
-		}
+		DataTypeEnum::TEXT | DataTypeEnum::NUMBER | DataTypeEnum::BOOLEAN => field.value.clone(),
 		DataTypeEnum::REFERENCE => {
 			if field.value.is_none()
 				|| field.value.as_ref().unwrap()["contentId"]
 					.as_str()
-					.is_none()
-				|| field.value.as_ref().unwrap()["translationId"]
-					.as_str()
-					.is_none()
-				|| !populate
+					.is_none() || field.value.as_ref().unwrap()["translationId"]
+				.as_str()
+				.is_none() || !populate
 			{
 				let json = serde_json::to_string(&field.value).unwrap();
-				return serde_json::from_str(&json).unwrap()
+				return serde_json::from_str(&json).unwrap();
 			}
 
 			let referenced_fields = parse_object_fields(
 				Some(
-					Uuid::from_str(
-						field.value.as_ref().unwrap()["contentId"].as_str().unwrap(),
-					)
-					.expect("No uuid"),
+					Uuid::from_str(field.value.as_ref().unwrap()["contentId"].as_str().unwrap())
+						.expect("No uuid"),
 				),
 				Uuid::from_str(
 					field.value.as_ref().unwrap()["translationId"]
@@ -86,7 +85,8 @@ fn parse_field(
 				"contentId": field.value.as_ref().unwrap()["contentId"],
 				"translationId": field.value.as_ref().unwrap()["translationid"],
 				"fields": &referenced_fields
-			})).unwrap();
+			}))
+			.unwrap();
 			serde_json::from_str(&json).unwrap()
 		}
 		DataTypeEnum::ARRAY => {
@@ -131,9 +131,7 @@ fn parse_array_fields(
 			field.parent_id == parent_id
 				&& vec![content_id, Some(translation_id)].contains(&Some(field.source_id))
 		})
-		.map(|field| {
-			parse_field(content_id, translation_id, field, fields.clone(), populate)
-		})
+		.map(|field| parse_field(content_id, translation_id, field, fields.clone(), populate))
 		.collect();
 
 	fields
@@ -153,7 +151,8 @@ pub fn parse_object_fields(
 				&& vec![content_id, Some(translation_id)].contains(&Some(field.source_id))
 		})
 		.map(|field| {
-			let parsed_field = parse_field(content_id, translation_id, field, fields.clone(), populate);
+			let parsed_field =
+				parse_field(content_id, translation_id, field, fields.clone(), populate);
 			(field.name.clone(), parsed_field)
 		})
 		.collect::<HashMap<_, _>>();
@@ -161,7 +160,16 @@ pub fn parse_object_fields(
 	fields
 }
 
-impl From<(Content, ContentRevision, Vec<ContentField>, Language, WorkflowState, bool)> for ContentWithFieldsDTO {
+impl
+	From<(
+		Content,
+		ContentRevision,
+		Vec<ContentField>,
+		Language,
+		WorkflowState,
+		bool,
+	)> for ContentWithFieldsDTO
+{
 	fn from(
 		(content, revision, fields, language, workflow_state, populate): (
 			Content,
@@ -183,7 +191,13 @@ impl From<(Content, ContentRevision, Vec<ContentField>, Language, WorkflowState,
 			deleted: content.deleted,
 			created_at: content.created_at,
 			updated_at: content.updated_at,
-			fields: parse_object_fields(Some(revision.id), revision.revision_translation_id, None, fields, populate),
+			fields: parse_object_fields(
+				Some(revision.id),
+				revision.revision_translation_id,
+				None,
+				fields,
+				populate,
+			),
 			language: LanguageDTO::from(language),
 			current_workflow_state: WorkflowStateDTO::from(workflow_state),
 			revision_id: revision.id,
@@ -248,7 +262,13 @@ impl
 			slug: content.slug,
 			created_at: content.created_at,
 			updated_at: content.updated_at,
-			fields: parse_object_fields(Some(revision.id), revision.revision_translation_id, None, fields, populate),
+			fields: parse_object_fields(
+				Some(revision.id),
+				revision.revision_translation_id,
+				None,
+				fields,
+				populate,
+			),
 			language: language.key,
 			translations: translations
 				.into_iter()
@@ -265,7 +285,14 @@ pub struct ContentDefaultValuesDTO {
 }
 
 impl From<(Option<Uuid>, Uuid, Vec<ContentField>, bool)> for ContentDefaultValuesDTO {
-	fn from((content_id, translation_id, fields, populate): (Option<Uuid>, Uuid, Vec<ContentField>, bool)) -> Self {
+	fn from(
+		(content_id, translation_id, fields, populate): (
+			Option<Uuid>,
+			Uuid,
+			Vec<ContentField>,
+			bool,
+		),
+	) -> Self {
 		Self {
 			fields: parse_object_fields(content_id, translation_id, None, fields, populate),
 		}

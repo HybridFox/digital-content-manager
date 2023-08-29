@@ -30,7 +30,7 @@ pub async fn register(
 			status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
 			code: "ALREADY_INSTALLED".to_owned(),
 			..Default::default()
-		}))
+		}));
 	}
 
 	let (user, token) =

@@ -37,7 +37,12 @@ pub async fn find_all(
 	state: web::Data<AppState>,
 	query: web::Query<FindAllQueryParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:languages:*"), "root::languages::read")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:languages:*"),
+		"root::languages::read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
@@ -74,7 +79,12 @@ pub async fn find_one(
 	state: web::Data<AppState>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:languages:{}", params.language_id), "root::languages::read")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:languages:{}", params.language_id),
+		"root::languages::read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let language = Language::find_one(conn, params.language_id)?;
 

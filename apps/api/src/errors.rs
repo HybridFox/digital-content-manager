@@ -196,7 +196,7 @@ impl From<DieselError> for AppError {
 						code: "UNIMPLEMENTED_DIESEL_DATABASE_ERROR".to_owned(),
 						..Default::default()
 					})
-				},
+				}
 			},
 			DieselError::NotFound => AppError::NotFound(AppErrorValue {
 				message: "Resource could not be found".to_owned(),

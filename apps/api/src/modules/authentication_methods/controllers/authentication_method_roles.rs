@@ -23,7 +23,7 @@ pub struct FindOnePathParams {
 
 #[derive(Deserialize, IntoParams)]
 pub struct FindPathParams {
-	authentication_method_id: Uuid
+	authentication_method_id: Uuid,
 }
 
 #[derive(Deserialize, IntoParams)]
@@ -50,7 +50,15 @@ pub async fn create(
 	form: web::Json<request::CreateAuthenticationMethodRoleDTO>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:authentication-methods:{}", params.authentication_method_id), "root::authentication-methods:update")?;
+	ensure_permission(
+		&req,
+		None,
+		format!(
+			"urn:ibs:authentication-methods:{}",
+			params.authentication_method_id
+		),
+		"root::authentication-methods:update",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let authentication_method_role = AuthenticationMethodRole::create(
 		conn,
@@ -82,7 +90,15 @@ pub async fn find_all(
 	query: web::Query<FindAllQueryParams>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:authentication-methods:{}", params.authentication_method_id), "root::authentication-methods:update")?;
+	ensure_permission(
+		&req,
+		None,
+		format!(
+			"urn:ibs:authentication-methods:{}",
+			params.authentication_method_id
+		),
+		"root::authentication-methods:update",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
@@ -120,7 +136,15 @@ pub async fn find_one(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:authentication-methods:{}", params.authentication_method_id), "root::authentication-methods:update")?;
+	ensure_permission(
+		&req,
+		None,
+		format!(
+			"urn:ibs:authentication-methods:{}",
+			params.authentication_method_id
+		),
+		"root::authentication-methods:update",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let authentication_method_role =
 		AuthenticationMethodRole::find_one(conn, params.authentication_method_role_id)?;
@@ -148,7 +172,15 @@ pub async fn update(
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateAuthenticationMethodRoleDTO>,
 ) -> ApiResponse {
-	ensure_permission(&req, None, format!("urn:ibs:authentication-methods:{}", params.authentication_method_id), "root::authentication-methods:update")?;
+	ensure_permission(
+		&req,
+		None,
+		format!(
+			"urn:ibs:authentication-methods:{}",
+			params.authentication_method_id
+		),
+		"root::authentication-methods:update",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let authentication_method_role = AuthenticationMethodRole::update(
 		conn,
@@ -178,7 +210,15 @@ pub async fn remove(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
-	ensure_permission(&req, None, format!("urn:ibs:authentication-methods:{}", params.authentication_method_id), "root::authentication-methods:update")?;
+	ensure_permission(
+		&req,
+		None,
+		format!(
+			"urn:ibs:authentication-methods:{}",
+			params.authentication_method_id
+		),
+		"root::authentication-methods:update",
+	)?;
 	let conn = &mut state.get_conn()?;
 	AuthenticationMethodRole::remove(conn, params.authentication_method_role_id)?;
 	Ok(HttpResponse::NoContent().body(()))

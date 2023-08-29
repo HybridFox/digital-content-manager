@@ -24,7 +24,16 @@ impl Content {
 		site_id: Uuid,
 		content_item: CreateContent,
 		values: Value,
-	) -> Result<(Self, ContentRevision, Vec<ContentField>, Language, WorkflowState), AppError> {
+	) -> Result<
+		(
+			Self,
+			ContentRevision,
+			Vec<ContentField>,
+			Language,
+			WorkflowState,
+		),
+		AppError,
+	> {
 		let created_content_item = diesel::insert_into(content::table)
 			.values(&content_item)
 			.returning(Content::as_returning())
@@ -33,15 +42,20 @@ impl Content {
 		let (_content_type, fields) =
 			ContentType::find_one(conn, site_id, created_content_item.content_type_id)?;
 
-		let revision = ContentRevision::create(conn, site_id, created_content_item.id, CreateContentRevision {
-			workflow_state_id: content_item.workflow_state_id,
-			content_id: created_content_item.id,
-			published: false,
-			user_id,
-			// TODO: Check this
-			revision_translation_id: Uuid::new_v4(),
-			site_id
-		})?;
+		let revision = ContentRevision::create(
+			conn,
+			site_id,
+			created_content_item.id,
+			CreateContentRevision {
+				workflow_state_id: content_item.workflow_state_id,
+				content_id: created_content_item.id,
+				published: false,
+				user_id,
+				// TODO: Check this
+				revision_translation_id: Uuid::new_v4(),
+				site_id,
+			},
+		)?;
 
 		upsert_fields(
 			conn,
@@ -51,7 +65,6 @@ impl Content {
 			values,
 			&vec![],
 		)?;
-
 
 		let content_item = Self::find_one(conn, site_id, created_content_item.id)?;
 

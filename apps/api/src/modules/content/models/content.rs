@@ -42,12 +42,21 @@ impl Content {
 		conn: &mut PgConnection,
 		site_id: Uuid,
 		id: Uuid,
-	) -> Result<(Self, ContentRevision, Vec<ContentField>, Language, WorkflowState), AppError> {
+	) -> Result<
+		(
+			Self,
+			ContentRevision,
+			Vec<ContentField>,
+			Language,
+			WorkflowState,
+		),
+		AppError,
+	> {
 		let content_item = content::table
 			.filter(content::site_id.eq(site_id))
 			.find(id)
 			.first::<Self>(conn)?;
-	
+
 		let revision = content_revisions::table
 			.filter(content_revisions::site_id.eq(site_id))
 			.filter(content_revisions::content_id.eq(id))
@@ -82,7 +91,16 @@ impl Content {
 		content_item_id: Option<Uuid>,
 		populate: Option<bool>,
 		lang: &'a str,
-	) -> Result<(Self, ContentRevision, Vec<ContentField>, Language, Vec<(Self, Language)>), AppError> {
+	) -> Result<
+		(
+			Self,
+			ContentRevision,
+			Vec<ContentField>,
+			Language,
+			Vec<(Self, Language)>,
+		),
+		AppError,
+	> {
 		let query = {
 			let mut query = content::table
 				.filter(content::published.eq(true))
@@ -150,19 +168,19 @@ impl Content {
 						cte_fields",
 				);
 				query
-					.bind::<diesel::sql_types::Array<diesel::sql_types::Uuid>, _>(vec![revision.id, revision.revision_translation_id])
+					.bind::<diesel::sql_types::Array<diesel::sql_types::Uuid>, _>(vec![
+						revision.id,
+						revision.revision_translation_id,
+					])
 					.get_results::<ContentField>(conn)?
-			},
-			Some(false) |
-			None => {
-				content_fields::table
-					.filter(
-						content_fields::source_id
-							.eq_any(vec![revision.id, revision.revision_translation_id]),
-					)
-					.select(ContentField::as_select())
-					.load::<ContentField>(conn)?
 			}
+			Some(false) | None => content_fields::table
+				.filter(
+					content_fields::source_id
+						.eq_any(vec![revision.id, revision.revision_translation_id]),
+				)
+				.select(ContentField::as_select())
+				.load::<ContentField>(conn)?,
 		};
 
 		let translations = content::table

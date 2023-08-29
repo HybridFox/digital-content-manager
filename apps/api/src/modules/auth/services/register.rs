@@ -47,21 +47,27 @@ pub fn persist_role_assignments(
 		local_auth_method.id
 	};
 
-	let authentication_method_roles: Vec<AuthenticationMethodRole> = authentication_method_roles::table
-		.select(AuthenticationMethodRole::as_select())
-		.filter(authentication_method_roles::authentication_method_id.eq(auth_method_id))
-		.get_results::<AuthenticationMethodRole>(conn)?;
+	let authentication_method_roles: Vec<AuthenticationMethodRole> =
+		authentication_method_roles::table
+			.select(AuthenticationMethodRole::as_select())
+			.filter(authentication_method_roles::authentication_method_id.eq(auth_method_id))
+			.get_results::<AuthenticationMethodRole>(conn)?;
 
 	let _ = authentication_method_roles
 		.into_iter()
 		.map(|assignment| {
 			if assignment.site_id.is_none() {
 				UserRole::upsert(conn, user_id, assignment.role_id)?;
-				return Ok(())
+				return Ok(());
 			}
 
 			SiteUser::upsert(conn, assignment.site_id.unwrap(), user_id)?;
-			SiteUserRole::upsert(conn, user_id, assignment.site_id.unwrap(), assignment.role_id)?;
+			SiteUserRole::upsert(
+				conn,
+				user_id,
+				assignment.site_id.unwrap(),
+				assignment.role_id,
+			)?;
 
 			Ok(())
 		})
@@ -69,4 +75,3 @@ pub fn persist_role_assignments(
 
 	Ok(())
 }
-

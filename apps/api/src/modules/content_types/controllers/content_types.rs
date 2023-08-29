@@ -53,7 +53,12 @@ pub async fn create(
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	// TODO: fix this so it keeps the "kind" in mind.
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-types:*"), "sites::content-types:create")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content-types:*"),
+		"sites::content-types:create",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let content_type = ContentType::create(
 		conn,
@@ -88,7 +93,12 @@ pub async fn find_all(
 	query: web::Query<FindAllQueryParams>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-types:*"), "sites::content-types:read")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content-types:*"),
+		"sites::content-types:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
@@ -133,7 +143,12 @@ pub async fn find_one(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-types:{}", params.content_type_id), "sites::content-types:read")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content-types:{}", params.content_type_id),
+		"sites::content-types:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let content_type = ContentType::find_one(conn, params.site_id, params.content_type_id)?;
 	let res = response::ContentTypeWithFieldsDTO::from(content_type);
@@ -159,7 +174,12 @@ pub async fn update(
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateContentTypeDTO>,
 ) -> ApiResponse {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-types:{}", params.content_type_id), "sites::content-types:update")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content-types:{}", params.content_type_id),
+		"sites::content-types:update",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let content_type = ContentType::update(
 		conn,
@@ -191,7 +211,12 @@ pub async fn remove(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
-	ensure_permission(&req, Some(params.site_id), format!("urn:ibs:content-types:{}", params.content_type_id), "sites::content-types:remove")?;
+	ensure_permission(
+		&req,
+		Some(params.site_id),
+		format!("urn:ibs:content-types:{}", params.content_type_id),
+		"sites::content-types:remove",
+	)?;
 	let conn = &mut state.get_conn()?;
 	ContentType::remove(conn, params.content_type_id)?;
 	Ok(HttpResponse::NoContent().body(()))

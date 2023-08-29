@@ -98,7 +98,12 @@ pub async fn find_one(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:roles:{}", params.role_id), "root::roles:read")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:roles:{}", params.role_id),
+		"root::roles:read",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let role = Role::find_one(conn, None, params.role_id)?;
 	let policies = Role::find_policies(conn, &role)?;
@@ -125,7 +130,12 @@ pub async fn update(
 	params: web::Path<FindOnePathParams>,
 	form: web::Json<request::UpdateRoleDTO>,
 ) -> ApiResponse {
-	ensure_permission(&req, None, format!("urn:ibs:roles:{}", params.role_id), "root::roles:update")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:roles:{}", params.role_id),
+		"root::roles:update",
+	)?;
 	let conn = &mut state.get_conn()?;
 	let (role, policies) = Role::update(
 		conn,
@@ -156,7 +166,12 @@ pub async fn remove(
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
 ) -> ApiResponse {
-	ensure_permission(&req, None, format!("urn:ibs:roles:{}", params.role_id), "root::roles:remove")?;
+	ensure_permission(
+		&req,
+		None,
+		format!("urn:ibs:roles:{}", params.role_id),
+		"root::roles:remove",
+	)?;
 	let conn = &mut state.get_conn()?;
 	Role::remove(conn, params.role_id)?;
 	Ok(HttpResponse::NoContent().body(()))
