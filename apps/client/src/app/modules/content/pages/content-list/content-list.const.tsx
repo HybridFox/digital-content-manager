@@ -1,12 +1,52 @@
-import { Button, ButtonLink, ButtonSizes, ITableColumn } from '@ibs/components';
-import { TFunction } from 'i18next';
+import {Button, ButtonLink, ButtonSizes, IFiltersFilter, ITableColumn} from '@ibs/components';
+import {TFunction} from 'i18next';
 import * as yup from 'yup';
 import dayjs from 'dayjs';
+import {FIELD_KEYS, ISite} from "@ibs/shared";
 
 export const addContentComponentSchema = yup.object({
 	contentComponentId: yup.string().required(),
 	name: yup.string().required(),
 });
+
+export const CONTENT_LIST_FILTER = (t: TFunction, activeSite?: ISite): IFiltersFilter[] => [
+	{
+		name: 'Language',
+		slug: 'language',
+		contentComponent: FIELD_KEYS.SELECT,
+		config: {
+			options: (activeSite?.languages || []).map((lang) => ({ label: lang.name, value: lang.key })),
+			wrapperClassName: 'u-col-6 u-margin-bottom-none'
+		}
+	},
+	{
+		name: 'Language',
+		slug: 'language',
+		contentComponent: FIELD_KEYS.SELECT,
+		config: {
+			options: (activeSite?.languages || []).map((lang) => ({ label: lang.name, value: lang.key })),
+			wrapperClassName: 'u-col-6 u-margin-bottom-none'
+		}
+	},
+	{
+		name: 'Language',
+		slug: 'language',
+		contentComponent: FIELD_KEYS.SELECT,
+		config: {
+			options: (activeSite?.languages || []).map((lang) => ({ label: lang.name, value: lang.key })),
+			wrapperClassName: 'u-col-6 u-margin-bottom-none'
+		}
+	},
+	{
+		name: 'Language',
+		slug: 'language',
+		contentComponent: FIELD_KEYS.SELECT,
+		config: {
+			options: (activeSite?.languages || []).map((lang) => ({ label: lang.name, value: lang.key })),
+			wrapperClassName: 'u-col-6 u-margin-bottom-none'
+		}
+	},
+]
 
 export const CONTENT_LIST_COLUMNS = (t: TFunction, handleDelete: (contentItemId: string) => void): ITableColumn[] => [
 	{

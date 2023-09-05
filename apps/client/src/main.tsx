@@ -1,7 +1,6 @@
-import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import i18n from 'i18next';
-import { useTranslation, initReactI18next } from 'react-i18next';
+import { initReactI18next } from 'react-i18next';
 import Modal from 'react-modal';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';

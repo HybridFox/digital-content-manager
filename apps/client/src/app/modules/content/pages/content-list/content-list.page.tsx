@@ -1,10 +1,17 @@
 import { useEffect } from 'react';
-import { CONTENT_TYPE_KINDS_PARAMETER_MAP, getPageParams, getPaginationProps, useContentStore, useHeaderStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, HasPermission, Header, Loading, Pagination, Table } from '@ibs/components';
+import {
+	CONTENT_TYPE_KINDS_PARAMETER_MAP, getFilterProps,
+	getPageParams,
+	getPaginationProps,
+	useAuthStore,
+	useContentStore,
+	useHeaderStore
+} from '@ibs/shared';
+import {ButtonLink, ButtonTypes, Filter, HasPermission, Header, Loading, Pagination, Table} from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 
-import { CONTENT_LIST_COLUMNS } from './content-list.const';
+import {CONTENT_LIST_COLUMNS, CONTENT_LIST_FILTER} from './content-list.const';
 
 export const ContentListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -14,6 +21,7 @@ export const ContentListPage = () => {
 		state.contentLoading,
 		state.fetchContent,
 	]);
+	const [activeSite] = useAuthStore((state) => [state.activeSite]);
 	const [removeContentItemLoading, removeContentItem] = useContentStore((state) => [state.removeContentItemLoading, state.removeContentItem]);
 	const { t } = useTranslation();
 	const { kind, siteId } = useParams();
@@ -49,6 +57,7 @@ export const ContentListPage = () => {
 				}
 			></Header>
 			<Loading loading={contentLoading} text={t(`GENERAL.LOADING`)}>
+				<Filter filters={CONTENT_LIST_FILTER(t, activeSite)} siteId={siteId!} className="u-margin-bottom" {...getFilterProps(searchParams, setSearchParams)} />
 				<Table columns={CONTENT_LIST_COLUMNS(t, handleDelete)} rows={content || []}></Table>
 				<Pagination
 					className="u-margin-top"

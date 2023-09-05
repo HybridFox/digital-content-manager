@@ -4,7 +4,7 @@ import cx from 'classnames/bind';
 import { Tooltip } from 'react-tooltip';
 import { useContentTypeStore } from '@ibs/shared';
 
-import { IRenderControllerField } from '../fields.types';
+import { IRenderControllerField } from '@ibs/forms';
 
 import { IContentTypesFieldProps } from './content-types-field.types';
 import styles from './content-types-field.module.scss';

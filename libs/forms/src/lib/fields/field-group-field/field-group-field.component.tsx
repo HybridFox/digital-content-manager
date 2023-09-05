@@ -1,9 +1,8 @@
 import { FC } from 'react';
 import cx from 'classnames/bind';
 import { IField } from '@ibs/shared';
-
-import { RenderFields } from '../../renderer';
-import { FieldGroupHeader } from '../../components';
+import {FieldGroupHeader} from "@ibs/forms";
+import {RenderFields} from "@ibs/components";
 
 import { IFieldGroupFieldProps } from './field-group-field.types';
 import styles from './field-group-field.module.scss';

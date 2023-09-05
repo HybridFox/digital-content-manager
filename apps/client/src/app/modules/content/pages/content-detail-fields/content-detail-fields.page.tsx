@@ -10,9 +10,9 @@ import {
 	DATE_FORMAT,
 } from '@ibs/shared';
 import { useEffect, useMemo } from 'react';
-import { RadioField, RenderFields } from '@ibs/forms';
+import { RadioField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, ButtonSizes, ButtonTypes, Card, CardFooter, CardMeta, HTMLButtonTypes } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonSizes, ButtonTypes, Card, CardFooter, CardMeta, HTMLButtonTypes, RenderFields } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import cx from 'classnames/bind';

@@ -11,3 +11,6 @@ export * from './lib/components/resource-explorer';
 export * from './lib/components/tabs';
 export * from './lib/components/pagination';
 export * from './lib/components/select';
+export * from './lib/components/filters';
+
+export * from './lib/renderer';

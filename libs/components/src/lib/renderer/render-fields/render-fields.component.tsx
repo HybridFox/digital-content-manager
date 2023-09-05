@@ -3,10 +3,9 @@ import { FIELD_KEYS, IField } from "@ibs/shared";
 import classNames from "classnames";
 import cx from "classnames/bind";
 import { Alert, Loading } from "@ibs/components";
+import {FIELD_COMPONENTS, FIELD_VIEW_MODE} from "@ibs/forms";
 
-import { FIELD_COMPONENTS } from "../../fields";
 import { RenderMultiple } from "../render-multiple";
-import { FIELD_VIEW_MODE } from "../../fields/fields.types";
 
 import styles from './render-fields.module.scss';
 import { IRenderFieldsProps } from "./render-fields.types";

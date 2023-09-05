@@ -16,7 +16,7 @@ export enum FIELD_KEYS {
 	TOGGLE = 'TOGGLE',
 	CONTENT_REFERENCE = 'CONTENT_REFERENCE',
 	CONTENT_TYPES = 'CONTENT_TYPES',
-};
+}
 
 export interface IContentType {
 	id: string;
@@ -30,14 +30,14 @@ export interface IContentType {
 }
 
 export interface IField {
-	id: string;
+	id?: string;
 	name: string;
 	slug: string;
-	min: number;
-	max: number;
+	min?: number;
+	max?: number;
 	multiLanguage?: boolean;
 	contentComponent: IContentComponent;
-	config?: Record<string, string>;
+	config?: Record<string, any>;
 }
 
 export enum ContentTypeKinds {
@@ -68,7 +68,7 @@ export const CONTENT_TYPE_KINDS_OPTIONS: { value: string; label: string }[] = Ob
 export interface IFetchContentTypesParameters extends IPageParameters {
 	kind?: ContentTypeKinds
 	inludeOccurrences?: boolean;
-};
+}
 
 export type IContentTypesResponse = IAPIHALResponse<'contentTypes', IContentType>
 

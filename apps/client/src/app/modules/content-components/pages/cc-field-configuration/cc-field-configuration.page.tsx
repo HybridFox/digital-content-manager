@@ -1,7 +1,7 @@
 import { useContentComponentFieldStore, useContentComponentStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
-import { RenderFields } from '@ibs/forms';
+import { RenderFields } from '@ibs/components';
 
 import { CONTENT_COMPONENT_PATHS } from '../../content-components.routes';
 

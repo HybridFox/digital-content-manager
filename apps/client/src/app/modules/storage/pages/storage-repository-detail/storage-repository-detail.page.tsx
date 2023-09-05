@@ -1,11 +1,11 @@
 import { IAPIError, useHeaderStore, useStorageRepositoryStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading, RenderFields } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { RenderFields, TextField } from '@ibs/forms';
+import { TextField } from '@ibs/forms';
 
 import { STORAGE_KIND_FIELDS } from '../../storage.const';
 import { STORAGE_PATHS } from '../../storage.routes';

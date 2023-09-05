@@ -1,8 +1,8 @@
 import { IField } from "@ibs/shared";
 
-import { FIELD_VIEW_MODE } from "../../fields/fields.types";
+import { FIELD_VIEW_MODE } from "../../../../../forms/src/lib/fields/fields.types";
 
-export interface IRenderFieldsProps {
+export interface IRenderComparisonProps {
 	fields: IField[];
 	siteId: string;
 	fieldPrefix?: string;

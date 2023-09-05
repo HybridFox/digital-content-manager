@@ -1,7 +1,6 @@
 import {
 	CONTENT_TYPE_KINDS_TRANSLATIONS,
 	DATE_FORMAT,
-	IAPIError,
 	IContentItem,
 	WORKFLOW_TECHNICAL_STATES,
 	useContentRevisionStore,
@@ -11,11 +10,9 @@ import {
 	useWorkflowStore,
 } from '@ibs/shared';
 import { useEffect, useMemo, useState } from 'react';
-import { FIELD_VIEW_MODE, RadioField, RenderFields } from '@ibs/forms';
-import { Trans, useTranslation } from 'react-i18next';
+import { FIELD_VIEW_MODE, RadioField } from '@ibs/forms';
+import { useTranslation } from 'react-i18next';
 import {
-	Alert,
-	AlertTypes,
 	Button,
 	ButtonSizes,
 	ButtonTypes,
@@ -24,14 +21,13 @@ import {
 	CardMeta,
 	HTMLButtonTypes,
 	Modal,
-	ModalFooter,
+	ModalFooter, RenderFields,
 } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 import { CONTENT_PATHS } from '../../content.routes';
-import { useWorkflowStateStore } from '../../../workflow/stores/workflow-state';
 
 export const ContentDetailRevisionDetailPage = () => {
 	const [contentType] = useContentTypeStore((state) => [state.contentType]);

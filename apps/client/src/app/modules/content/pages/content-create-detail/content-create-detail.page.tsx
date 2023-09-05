@@ -1,9 +1,9 @@
 import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentStore, useContentTypeStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { generatePath, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { RenderFields, TextField } from '@ibs/forms';
+import { TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, ButtonTypes, Card, HTMLButtonTypes, Header, Loading } from '@ibs/components';
+import { Alert, AlertTypes, Button, ButtonTypes, Card, HTMLButtonTypes, Header, Loading, RenderFields } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import slugify from 'slugify';

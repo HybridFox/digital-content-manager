@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { RenderFields } from '@ibs/forms';
+import { RenderFields } from '@ibs/components';
 
 import { AUTHENTICATION_METHOD_FIELDS } from '../../authentication-methods.const';
 
