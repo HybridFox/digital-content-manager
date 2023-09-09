@@ -674,56 +674,56 @@ export const ToolbarPlugin = (): JSX.Element => {
 					>
 						<i className="las la-code" />
 					</Button>
-					<Button
-						disabled={!isEditable}
-						onClick={insertLink}
-						className={cxBind('a-toolbar__item')}
-						active={isLink}
-						aria-label="Insert link"
-						title="Insert link"
-						type={ButtonTypes.OUTLINE}
-					>
-						<i className="las la-link" />
-					</Button>
-					<Button className={cxBind('a-toolbar__color-picker', 'a-toolbar__item')} id="font-color" type={ButtonTypes.OUTLINE}>
-						<i className="las la-font" style={{ color: fontColor }}></i>
-					</Button>
-					<Tooltip anchorSelect="#font-color" className={cxBind('a-toolbar__color-picker__tooltip')} clickable>
-						<SketchPicker onChangeComplete={(value) => onFontColorSelect(value.hex)} color={fontColor} />
-					</Tooltip>
-					<Button className={cxBind('a-toolbar__color-picker', 'a-toolbar__item')} id="background-color" type={ButtonTypes.OUTLINE}>
-						<i className="las la-highlighter" style={{ color: bgColor }}></i>
-					</Button>
-					<Tooltip anchorSelect="#background-color" className={cxBind('a-toolbar__color-picker__tooltip')} clickable>
-						<SketchPicker onChangeComplete={(value) => onBgColorSelect(value.hex)} color={bgColor} />
-					</Tooltip>
-					<Select
-						placeholder="Formatting"
-						className={cxBind('a-toolbar__item', 'a-toolbar__item--format')}
-						closeMenuOnSelect={false}
-						value={null}
-						options={[
-							{
-								label: 'Strikethrough',
-								onClick: () => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough'),
-								active: isStrikethrough,
-							},
-							{
-								label: 'Subscript',
-								onClick: () => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'subscript'),
-								active: isSubscript,
-							},
-							{
-								label: 'Superscript',
-								onClick: () => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'superscript'),
-								active: isSuperscript,
-							},
-							{
-								label: 'Clear Formatting',
-								onClick: clearFormatting,
-							},
-						]}
-					/>
+					{/*<Button*/}
+					{/*	disabled={!isEditable}*/}
+					{/*	onClick={insertLink}*/}
+					{/*	className={cxBind('a-toolbar__item')}*/}
+					{/*	active={isLink}*/}
+					{/*	aria-label="Insert link"*/}
+					{/*	title="Insert link"*/}
+					{/*	type={ButtonTypes.OUTLINE}*/}
+					{/*>*/}
+					{/*	<i className="las la-link" />*/}
+					{/*</Button>*/}
+					{/*<Button className={cxBind('a-toolbar__color-picker', 'a-toolbar__item')} id="font-color" type={ButtonTypes.OUTLINE}>*/}
+					{/*	<i className="las la-font" style={{ color: fontColor }}></i>*/}
+					{/*</Button>*/}
+					{/*<Tooltip anchorSelect="#font-color" className={cxBind('a-toolbar__color-picker__tooltip')} clickable>*/}
+					{/*	<SketchPicker onChangeComplete={(value) => onFontColorSelect(value.hex)} color={fontColor} />*/}
+					{/*</Tooltip>*/}
+					{/*<Button className={cxBind('a-toolbar__color-picker', 'a-toolbar__item')} id="background-color" type={ButtonTypes.OUTLINE}>*/}
+					{/*	<i className="las la-highlighter" style={{ color: bgColor }}></i>*/}
+					{/*</Button>*/}
+					{/*<Tooltip anchorSelect="#background-color" className={cxBind('a-toolbar__color-picker__tooltip')} clickable>*/}
+					{/*	<SketchPicker onChangeComplete={(value) => onBgColorSelect(value.hex)} color={bgColor} />*/}
+					{/*</Tooltip>*/}
+					{/*<Select*/}
+					{/*	placeholder="Formatting"*/}
+					{/*	className={cxBind('a-toolbar__item', 'a-toolbar__item--format')}*/}
+					{/*	closeMenuOnSelect={false}*/}
+					{/*	value={null}*/}
+					{/*	options={[*/}
+					{/*		{*/}
+					{/*			label: 'Strikethrough',*/}
+					{/*			onClick: () => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough'),*/}
+					{/*			active: isStrikethrough,*/}
+					{/*		},*/}
+					{/*		{*/}
+					{/*			label: 'Subscript',*/}
+					{/*			onClick: () => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'subscript'),*/}
+					{/*			active: isSubscript,*/}
+					{/*		},*/}
+					{/*		{*/}
+					{/*			label: 'Superscript',*/}
+					{/*			onClick: () => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'superscript'),*/}
+					{/*			active: isSuperscript,*/}
+					{/*		},*/}
+					{/*		{*/}
+					{/*			label: 'Clear Formatting',*/}
+					{/*			onClick: clearFormatting,*/}
+					{/*		},*/}
+					{/*	]}*/}
+					{/*/>*/}
 					<Divider />
 					{rootType === 'table' && (
 						<>
@@ -779,39 +779,39 @@ export const ToolbarPlugin = (): JSX.Element => {
 				</>
 			)}
 			<Divider />
-			<Select
-				placeholder="Align"
-				disabled={!isEditable}
-				className={cxBind('a-toolbar__item', 'a-toolbar__item--format')}
-				closeMenuOnSelect={false}
-				value={null}
-				options={[
-					{
-						label: 'Left Align',
-						onClick: () => activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left'),
-					},
-					{
-						label: 'Center Align',
-						onClick: () => activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center'),
-					},
-					{
-						label: 'Right Align',
-						onClick: () => activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right'),
-					},
-					{
-						label: 'Justify Align',
-						onClick: () => activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify'),
-					},
-					{
-						label: 'Outdent',
-						onClick: () => activeEditor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined),
-					},
-					{
-						label: 'Indent',
-						onClick: () => activeEditor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined),
-					},
-				]}
-			/>
+			{/*<Select*/}
+			{/*	placeholder="Align"*/}
+			{/*	disabled={!isEditable}*/}
+			{/*	className={cxBind('a-toolbar__item', 'a-toolbar__item--format')}*/}
+			{/*	closeMenuOnSelect={false}*/}
+			{/*	value={null}*/}
+			{/*	options={[*/}
+			{/*		{*/}
+			{/*			label: 'Left Align',*/}
+			{/*			onClick: () => activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left'),*/}
+			{/*		},*/}
+			{/*		{*/}
+			{/*			label: 'Center Align',*/}
+			{/*			onClick: () => activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center'),*/}
+			{/*		},*/}
+			{/*		{*/}
+			{/*			label: 'Right Align',*/}
+			{/*			onClick: () => activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right'),*/}
+			{/*		},*/}
+			{/*		{*/}
+			{/*			label: 'Justify Align',*/}
+			{/*			onClick: () => activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify'),*/}
+			{/*		},*/}
+			{/*		{*/}
+			{/*			label: 'Outdent',*/}
+			{/*			onClick: () => activeEditor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined),*/}
+			{/*		},*/}
+			{/*		{*/}
+			{/*			label: 'Indent',*/}
+			{/*			onClick: () => activeEditor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined),*/}
+			{/*		},*/}
+			{/*	]}*/}
+			{/*/>*/}
 		</div>
 	);
 }

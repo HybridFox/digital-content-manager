@@ -19,33 +19,6 @@ export const CONTENT_LIST_FILTER = (t: TFunction, activeSite?: ISite): IFiltersF
 			wrapperClassName: 'u-col-6 u-margin-bottom-none'
 		}
 	},
-	{
-		name: 'Language',
-		slug: 'language',
-		contentComponent: FIELD_KEYS.SELECT,
-		config: {
-			options: (activeSite?.languages || []).map((lang) => ({ label: lang.name, value: lang.key })),
-			wrapperClassName: 'u-col-6 u-margin-bottom-none'
-		}
-	},
-	{
-		name: 'Language',
-		slug: 'language',
-		contentComponent: FIELD_KEYS.SELECT,
-		config: {
-			options: (activeSite?.languages || []).map((lang) => ({ label: lang.name, value: lang.key })),
-			wrapperClassName: 'u-col-6 u-margin-bottom-none'
-		}
-	},
-	{
-		name: 'Language',
-		slug: 'language',
-		contentComponent: FIELD_KEYS.SELECT,
-		config: {
-			options: (activeSite?.languages || []).map((lang) => ({ label: lang.name, value: lang.key })),
-			wrapperClassName: 'u-col-6 u-margin-bottom-none'
-		}
-	},
 ]
 
 export const CONTENT_LIST_COLUMNS = (t: TFunction, handleDelete: (contentItemId: string) => void): ITableColumn[] => [

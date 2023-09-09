@@ -87,8 +87,7 @@ impl Content {
 	pub fn find_one_public<'a>(
 		conn: &mut PgConnection,
 		site_id: Uuid,
-		slug: Option<String>,
-		content_item_id: Option<Uuid>,
+		content_id: String,
 		populate: Option<bool>,
 		lang: &'a str,
 	) -> Result<

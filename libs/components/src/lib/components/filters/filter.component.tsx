@@ -13,8 +13,9 @@ import styles from './filter.module.scss';
 const cxBind = cx.bind(styles);
 
 export const Filter: FC<IFiltersProps> = ({ className, onFiltering, filtering, filters, siteId }: IFiltersProps) => {
+	// console.log(filtering)
 	const filterFormMethods = useForm({
-		// defaultValues: filtering
+		defaultValues: filtering
 	});
 	const [filtersOpen, setFiltersOpen] = useState(false);
 

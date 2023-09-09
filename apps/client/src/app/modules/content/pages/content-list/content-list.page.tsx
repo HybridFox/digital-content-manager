@@ -56,8 +56,8 @@ export const ContentListPage = () => {
 					</HasPermission>
 				}
 			></Header>
+			<Filter filters={CONTENT_LIST_FILTER(t, activeSite)} siteId={siteId!} className="u-margin-bottom" {...getFilterProps(searchParams, setSearchParams)} />
 			<Loading loading={contentLoading} text={t(`GENERAL.LOADING`)}>
-				<Filter filters={CONTENT_LIST_FILTER(t, activeSite)} siteId={siteId!} className="u-margin-bottom" {...getFilterProps(searchParams, setSearchParams)} />
 				<Table columns={CONTENT_LIST_COLUMNS(t, handleDelete)} rows={content || []}></Table>
 				<Pagination
 					className="u-margin-top"
