@@ -11,7 +11,7 @@ import {
 	WORKFLOW_TECHNICAL_STATES,
 } from '@ibs/shared';
 import { useEffect, useMemo, useState } from 'react';
-import { FIELD_VIEW_MODE, RadioField, RenderComparison } from '@ibs/forms';
+import { FIELD_VIEW_MODE, RadioField } from '@ibs/forms';
 import { Trans, useTranslation } from 'react-i18next';
 import {
 	Alert,
@@ -26,6 +26,7 @@ import {
 	Loading,
 	Modal,
 	ModalFooter,
+	RenderComparison,
 } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';

@@ -72,7 +72,7 @@ export const CCFieldDetailPage = () => {
 			return;
 		}
 
-		updateField(siteId!, contentComponent.id, contentComponentField?.id, values).catch(
+		updateField(siteId!, contentComponent.id!, contentComponentField?.id, values).catch(
 			(error: IAPIError) => {
 				setError('root', {
 					message: error.code,

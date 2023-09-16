@@ -88,7 +88,7 @@ export const CCContentComponentsPage = () => {
 			return;
 		}
 
-		createField(siteId!, contentComponent.id, values)
+		createField(siteId!, contentComponent.id!, values)
 			.then((field) =>
 				navigate(
 					generatePath(CONTENT_COMPONENT_PATHS.FIELD_DETAIL, {
@@ -110,11 +110,11 @@ export const CCContentComponentsPage = () => {
 			return;
 		}
 
-		deleteField(siteId!, contentComponent.id, fieldId)
+		deleteField(siteId!, contentComponent.id!, fieldId)
 			.then(() => {
 				setDeleteError(null);
 				// TODO: fix this so that i dont have to reload the whole CT
-				fetchContentComponent(siteId!, contentComponent.id)
+				fetchContentComponent(siteId!, contentComponent.id!)
 
 			})
 			.catch((error: IAPIError) => setDeleteError(error.code));

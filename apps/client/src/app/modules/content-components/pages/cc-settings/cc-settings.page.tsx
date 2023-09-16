@@ -46,7 +46,7 @@ export const CCSettingsPage = () => {
 			return;
 		}
 
-		updateContentComponent(siteId!, contentComponent.id, values).catch((error: IAPIError) => {
+		updateContentComponent(siteId!, contentComponent.id!, values).catch((error: IAPIError) => {
 			setError('root', {
 				message: error.code,
 			});
