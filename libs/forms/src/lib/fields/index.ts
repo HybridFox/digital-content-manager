@@ -7,4 +7,5 @@ export * from './radio-field';
 export * from './checkbox-field';
 export * from './file-field';
 export * from './fields.const';
-export * from './fields.types'
+export * from './fields.types';
+export * from './datetime-field';

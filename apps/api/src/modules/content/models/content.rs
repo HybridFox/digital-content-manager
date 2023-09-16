@@ -2,12 +2,10 @@ use chrono::NaiveDateTime;
 use diesel::dsl::*;
 use diesel::prelude::*;
 use serde::Deserialize;
-use serde_json::Value;
 use uuid::Uuid;
 use tracing::instrument;
 
 use crate::errors::AppError;
-use crate::modules::content::helpers::upsert_fields::upsert_fields;
 use crate::modules::content_types::models::content_type::{ContentType, ContentTypeKindEnum};
 use crate::modules::languages::models::language::Language;
 use crate::modules::workflows::models::workflow_state::WorkflowState;
@@ -83,52 +81,25 @@ impl Content {
 		Ok((content_item, revision, fields, language, workflow_state))
 	}
 
-	#[instrument(skip(conn))]
-	pub fn find_one_public<'a>(
+	fn find_field_content(
 		conn: &mut PgConnection,
 		site_id: Uuid,
-		content_id: String,
-		populate: Option<bool>,
-		lang: &'a str,
-	) -> Result<
-		(
-			Self,
-			ContentRevision,
-			Vec<ContentField>,
-			Language,
-			Vec<(Self, Language)>,
-		),
-		AppError,
-	> {
-		let query = {
-			let mut query = content::table
-				.filter(content::published.eq(true))
-				.inner_join(languages::table.on(languages::id.eq(content::language_id)))
-				.filter(languages::key.eq(lang))
-				.into_boxed();
-
-			if let Some(slug) = slug {
-				query = query.filter(content::slug.eq(slug))
-			}
-
-			if let Some(content_item_id) = content_item_id {
-				query = query.filter(content::id.eq(content_item_id))
-			}
-
-			// if let Some(populate) = populate {
-			// 	query = query.filter(content::id.eq(content_item_id))
-			// }
-
-			query
-		};
-
-		let (content_item, language) = query.get_result::<(Self, Language)>(conn)?;
+		content_item: &Self,
+		populate: &Option<bool>,
+	) -> Result<(ContentRevision, Vec<ContentField>, Vec<(Self, Language)>), AppError> {
 		let revision: ContentRevision = content_revisions::table
 			.filter(content_revisions::site_id.eq(site_id))
 			.filter(content_revisions::content_id.eq(content_item.id))
 			.filter(content_revisions::published.eq(true))
 			.order(content_revisions::created_at.desc())
 			.first::<ContentRevision>(conn)?;
+
+		let translations = content::table
+			.filter(content::translation_id.eq(content_item.translation_id))
+			.filter(content::published.eq(true))
+			.inner_join(languages::table.on(languages::id.eq(content::language_id)))
+			.get_results::<(Self, Language)>(conn)?;
+
 		let fields = match populate {
 			Some(true) => {
 				let query = sql_query(
@@ -153,13 +124,20 @@ impl Content {
 							b.name,
 							b.value,
 							b.parent_id,
-							b.source_id,
+							CAST(f.value->>'contentId' as UUID),
 							b.content_component_id,
 							b.sequence_number,
 							b.data_type
 						FROM
-							content_fields b
-							INNER JOIN cte_fields f ON b.source_id::text = ANY( ARRAY [f.value->>'contentId', f.value->>'translationId'])
+							cte_fields f
+						INNER JOIN LATERAL (
+							SELECT cr.*
+							FROM content_revisions cr 
+							WHERE cr.published = true AND cr.content_id::text = f.value->>'contentId'
+							ORDER BY cr.created_at DESC
+							LIMIT 1
+						) AS cr ON cr.content_id::text = f.value->>'contentId'
+						INNER JOIN content_fields b ON b.source_id = ANY( ARRAY [cr.id, cr.revision_translation_id])
 					)
 					SELECT
 						*
@@ -182,13 +160,124 @@ impl Content {
 				.load::<ContentField>(conn)?,
 		};
 
-		let translations = content::table
-			.filter(content::translation_id.eq(&content_item.translation_id))
-			.filter(content::published.eq(true))
+		Ok((revision, fields, translations))
+	}
+
+	#[instrument(skip(conn))]
+	pub fn find_one_public<'a>(
+		conn: &mut PgConnection,
+		site_id: Uuid,
+		content_id: String,
+		populate: Option<bool>,
+		lang: &'a str,
+	) -> Result<
+		(
+			Self,
+			ContentRevision,
+			Vec<ContentField>,
+			Language,
+			Vec<(Self, Language)>,
+		),
+		AppError,
+	> {
+		let query = content::table
+			.filter(
+				content::published.eq(true).and(
+					content::slug
+						.eq(content_id.clone())
+						.or(content::id.eq(Uuid::parse_str(&content_id).unwrap_or(Uuid::new_v4()))),
+				),
+			)
 			.inner_join(languages::table.on(languages::id.eq(content::language_id)))
-			.get_results::<(Self, Language)>(conn)?;
+			.filter(languages::key.eq(lang))
+			.into_boxed();
+
+		let (content_item, language) = query.get_result::<(Self, Language)>(conn)?;
+		let (revision, fields, translations) =
+			Self::find_field_content(conn, site_id, &content_item, &populate)?;
 
 		Ok((content_item, revision, fields, language, translations))
+	}
+
+	#[instrument(skip(conn))]
+	pub fn find_public<'a>(
+		conn: &mut PgConnection,
+		site_id: Uuid,
+		page: i64,
+		pagesize: i64,
+		lang: &'a str,
+		content_types: &Option<Vec<Uuid>>,
+		populate: &Option<bool>,
+	) -> Result<
+		(
+			Vec<(
+				Self,
+				ContentRevision,
+				Vec<ContentField>,
+				Language,
+				Vec<(Self, Language)>,
+			)>,
+			i64,
+		),
+		AppError,
+	> {
+		let query = {
+			let mut query = content::table
+				.filter(content::site_id.eq(site_id))
+				.filter(languages::key.eq(lang))
+				.inner_join(languages::table.on(languages::id.eq(content::language_id)))
+				.into_boxed();
+
+			if pagesize != -1 {
+				query = query.offset((page - 1) * pagesize).limit(pagesize);
+			}
+
+			if let Some(content_types) = content_types {
+				query = query.filter(content::content_type_id.eq_any(content_types));
+			}
+
+			query
+		};
+
+		let total_query = {
+			let mut query = content::table
+				.filter(content::site_id.eq(site_id))
+				.inner_join(content_types::table.on(content_types::id.eq(content::content_type_id)))
+				.into_boxed();
+
+			if let Some(content_types) = content_types {
+				query = query.filter(content::content_type_id.eq_any(content_types));
+			}
+
+			query
+		};
+
+		let content: Vec<(Content, Language)> = query
+			.select((Content::as_select(), Language::as_select()))
+			.load::<(Content, Language)>(conn)?;
+
+		let mapped_content = content
+			.into_iter()
+			.map(|(content_item, language)| {
+				let (revision, fields, translations) =
+					Self::find_field_content(conn, site_id, &content_item, populate)?;
+
+				Ok((content_item, revision, fields, language, translations))
+			})
+			.collect::<Result<
+				Vec<(
+					Self,
+					ContentRevision,
+					Vec<ContentField>,
+					Language,
+					Vec<(Self, Language)>,
+				)>,
+				AppError,
+			>>()?;
+
+		let total_elements = total_query.count().get_result::<i64>(conn)?;
+
+		Ok((mapped_content, total_elements))
 	}
 
 	#[instrument(skip(conn))]

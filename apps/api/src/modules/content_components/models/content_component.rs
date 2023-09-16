@@ -97,7 +97,7 @@ impl ContentComponent {
 		include_hidden: bool,
 		include_internal: bool,
 	) -> Result<(Vec<ContentComponent>, i64), AppError> {
-		let site_query = {
+		let _site_query = {
 			let mut query = sites_content_components::table
 				.filter(sites_content_components::site_id.eq(site_id))
 				.inner_join(

@@ -28,6 +28,9 @@ const ContentTypesField = lazy(async () => ({
 const ContentReferenceField = lazy(async () => ({
 	default: (await import('./content-reference-field')).ContentReferenceField
 }));
+const DatetimeField = lazy(async () => ({
+	default: (await import('./datetime-field')).DatetimeField
+}));
 
 export const FIELD_COMPONENTS: Record<FIELD_KEYS, FC<any>> = {
 	[FIELD_KEYS.FIELD_GROUP]: FieldGroupField,
@@ -44,4 +47,5 @@ export const FIELD_COMPONENTS: Record<FIELD_KEYS, FC<any>> = {
 	[FIELD_KEYS.TOGGLE]: TextField,
 	[FIELD_KEYS.CONTENT_REFERENCE]: ContentReferenceField,
 	[FIELD_KEYS.CONTENT_TYPES]: ContentTypesField,
+	[FIELD_KEYS.DATETIME]: DatetimeField,
 }

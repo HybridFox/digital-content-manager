@@ -1,6 +1,6 @@
 use super::super::dto::revisions::response;
 use crate::modules::auth::helpers::permissions::ensure_permission;
-use crate::modules::content::models::content_revision::{ContentRevision, CreateContentRevision};
+use crate::modules::content::models::content_revision::ContentRevision;
 use crate::errors::AppError;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;

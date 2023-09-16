@@ -1,9 +1,6 @@
 use crate::modules::{
-	content::{
-		models::{
-			content::Content, content_field::ContentField, content_revision::ContentRevision,
-		},
-		dto::revisions::response::ContentRevisionDTO,
+	content::models::{
+		content::Content, content_field::ContentField, content_revision::ContentRevision,
 	},
 	core::models::hal::{HALLinkList, HALPage},
 	content_components::enums::data_type::DataTypeEnum,
@@ -375,6 +372,69 @@ impl
 			_links: HALLinkList::from((format!("/api/v1/sites/{}/content", site_id), &page)),
 			_embedded: ContentListEmbeddedDTO {
 				content: content.into_iter().map(ContentDTO::from).collect(),
+			},
+			_page: page,
+		}
+	}
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct PublicContentListEmbeddedDTO {
+	pub content: Vec<PublicContentDTO>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+pub struct PublicContentListDTO {
+	pub _links: HALLinkList,
+	pub _page: HALPage,
+	pub _embedded: PublicContentListEmbeddedDTO,
+}
+
+impl
+	From<(
+		Vec<(
+			Content,
+			ContentRevision,
+			Vec<ContentField>,
+			Language,
+			Vec<(Content, Language)>,
+		)>,
+		HALPage,
+		bool,
+		Uuid,
+	)> for PublicContentListDTO
+{
+	fn from(
+		(content, page, populated, site_id): (
+			Vec<(
+				Content,
+				ContentRevision,
+				Vec<ContentField>,
+				Language,
+				Vec<(Content, Language)>,
+			)>,
+			HALPage,
+			bool,
+			Uuid,
+		),
+	) -> Self {
+		Self {
+			_links: HALLinkList::from((format!("/api/v1/sites/{}/content", site_id), &page)),
+			_embedded: PublicContentListEmbeddedDTO {
+				content: content
+					.into_iter()
+					.map(|(content, revision, fields, language, translations)| {
+						PublicContentDTO::from((
+							content,
+							revision,
+							fields,
+							language,
+							translations,
+							populated,
+						))
+					})
+					.collect(),
 			},
 			_page: page,
 		}

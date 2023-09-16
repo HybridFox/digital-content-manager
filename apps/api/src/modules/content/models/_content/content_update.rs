@@ -6,10 +6,10 @@ use tracing::instrument;
 use crate::errors::AppError;
 use crate::modules::content::helpers::upsert_fields::upsert_fields;
 use crate::modules::content::models::content_revision::{ContentRevision, CreateContentRevision};
-use crate::modules::content_types::models::content_type::{ContentType, ContentTypeKindEnum};
+use crate::modules::content_types::models::content_type::ContentType;
 use crate::modules::languages::models::language::Language;
 use crate::modules::workflows::models::workflow_state::WorkflowState;
-use crate::schema::{content, content_fields};
+use crate::schema::content;
 
 use super::super::content::{Content, UpdateContent};
 use super::super::content_field::ContentField;

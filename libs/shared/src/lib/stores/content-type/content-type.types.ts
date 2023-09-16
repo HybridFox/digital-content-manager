@@ -16,6 +16,7 @@ export enum FIELD_KEYS {
 	TOGGLE = 'TOGGLE',
 	CONTENT_REFERENCE = 'CONTENT_REFERENCE',
 	CONTENT_TYPES = 'CONTENT_TYPES',
+	DATETIME = 'DATETIME',
 }
 
 export interface IContentType {
