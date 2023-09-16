@@ -53,7 +53,7 @@ export const parseQueryParams = (params?: Record<any, undefined | null | string 
 		}
 
 		if (Array.isArray(params[key])) {
-			return (params[key] as string[]).forEach((value) => searchParams.append(`${key}[]`, value))
+			return searchParams.append(key, (params[key] as unknown[] || [])?.join(','))
 		}
 
 		searchParams.append(key, params[key]!.toString())

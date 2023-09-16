@@ -12,6 +12,7 @@ use actix_web::{get, post, web, HttpResponse, delete, put, HttpRequest};
 use chrono::Utc;
 use reqwest::StatusCode;
 use serde::Deserialize;
+use serde_with::{StringWithSeparator, formats::CommaSeparator, serde_as};
 
 use utoipa::IntoParams;
 use uuid::Uuid;
@@ -33,6 +34,7 @@ pub struct DefaultValuesPathParams {
 	translation_id: Uuid,
 }
 
+#[serde_as]
 #[derive(Deserialize, IntoParams)]
 #[serde(rename_all = "camelCase")]
 pub struct FindAllQueryParams {
@@ -41,6 +43,7 @@ pub struct FindAllQueryParams {
 	kind: Option<ContentTypeKindEnum>,
 	language_id: Option<Uuid>,
 	translation_id: Option<Uuid>,
+	#[serde_as(as = "Option<StringWithSeparator::<CommaSeparator, Uuid>>")]
 	content_types: Option<Vec<Uuid>>,
 }
 

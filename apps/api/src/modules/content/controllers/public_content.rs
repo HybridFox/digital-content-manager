@@ -2,6 +2,7 @@ use super::super::dto::content::response;
 use crate::modules::core::models::hal::HALPage;
 use crate::{errors::AppError, modules::content::models::content::Content};
 use crate::modules::core::middleware::state::AppState;
+use serde_with::{StringWithSeparator, formats::CommaSeparator, serde_as};
 use actix_web::{get, web, HttpResponse};
 use serde::Deserialize;
 use utoipa::IntoParams;
@@ -25,6 +26,7 @@ pub struct FindOneQueryParams {
 	populate: Option<bool>,
 }
 
+#[serde_as]
 #[derive(Deserialize, IntoParams)]
 #[serde(rename_all = "camelCase")]
 pub struct FindQueryParams {
@@ -32,6 +34,7 @@ pub struct FindQueryParams {
 	populate: Option<bool>,
 	page: Option<i64>,
 	pagesize: Option<i64>,
+	#[serde_as(as = "Option<StringWithSeparator::<CommaSeparator, Uuid>>")]
 	content_types: Option<Vec<Uuid>>,
 }
 
@@ -95,6 +98,7 @@ pub async fn find(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
 
+	dbg!(&query.content_types);
 	let (content, total_elements) = Content::find_public(
 		conn,
 		params.site_id,
