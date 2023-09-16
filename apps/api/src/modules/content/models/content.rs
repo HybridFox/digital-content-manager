@@ -223,6 +223,7 @@ impl Content {
 	> {
 		let query = {
 			let mut query = content::table
+				.filter(content::published.eq(true))
 				.filter(content::site_id.eq(site_id))
 				.filter(languages::key.eq(lang))
 				.inner_join(languages::table.on(languages::id.eq(content::language_id)))
