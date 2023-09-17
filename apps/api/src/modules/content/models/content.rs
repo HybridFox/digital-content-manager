@@ -242,8 +242,10 @@ impl Content {
 
 		let total_query = {
 			let mut query = content::table
+				.filter(content::published.eq(true))
 				.filter(content::site_id.eq(site_id))
-				.inner_join(content_types::table.on(content_types::id.eq(content::content_type_id)))
+				.filter(languages::key.eq(lang))
+				.inner_join(languages::table.on(languages::id.eq(content::language_id)))
 				.into_boxed();
 
 			if let Some(content_types) = content_types {
