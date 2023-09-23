@@ -1,16 +1,16 @@
-import { FC } from 'react';
+import {FC} from 'react';
 import {Controller, useFormContext} from 'react-hook-form';
 import cx from 'classnames/bind';
-import { Tooltip } from 'react-tooltip'
+import {Tooltip} from 'react-tooltip'
 import ReactDatePicker from "react-datepicker";
 import dayjs from "dayjs";
 
-import { FieldLabel } from '../../field-label/field-label.component';
-import { FieldHint } from '../../field-hint/field-hint.component';
-import {FieldValue} from "../../field-value/field-value.component";
+import {FieldLabel} from '../../field-label/field-label.component';
+import {FieldHint} from '../../field-hint/field-hint.component';
 import {FIELD_VIEW_MODE, IRenderControllerField} from '../fields.types';
+import {FieldValue} from "../../field-value/field-value.component";
 
-import { IDatetimeFieldProps } from './datetime-field.types';
+import {IDatetimeFieldProps} from './datetime-field.types';
 import styles from './datetime-field.module.scss';
 
 const cxBind = cx.bind(styles);
@@ -61,6 +61,15 @@ export const DatetimeField: FC<IDatetimeFieldProps> = ({
 					)}
 				</div>
 				<FieldHint hint={fieldConfiguration?.hint as string} />
+			</div>
+		)
+	}
+
+	if (viewMode === FIELD_VIEW_MODE.VIEW) {
+		return (
+			<div className={cxBind('a-input')}>
+				<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
+				<FieldValue name={name} />
 			</div>
 		)
 	}
