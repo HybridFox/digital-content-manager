@@ -298,15 +298,16 @@ impl Content {
 	}
 
 	#[instrument(skip(conn))]
-	pub fn find(
+	pub fn find<'a>(
 		conn: &mut PgConnection,
-		site_id: Uuid,
-		page: i64,
-		pagesize: i64,
-		kind: Option<ContentTypeKindEnum>,
-		language_id: Option<Uuid>,
-		translation_id: Option<Uuid>,
-		content_types: Option<Vec<Uuid>>,
+		site_id: &Uuid,
+		page: &'a i64,
+		pagesize: &'a i64,
+		kind: &'a Option<ContentTypeKindEnum>,
+		language_id: &'a Option<Uuid>,
+		translation_id: &'a Option<Uuid>,
+		content_types: &'a Option<Vec<Uuid>>,
+		order: &'a Option<String>,
 	) -> Result<(Vec<(Self, Language, ContentType, WorkflowState)>, i64), AppError> {
 		let query = {
 			let mut query = content::table
@@ -318,8 +319,8 @@ impl Content {
 				)
 				.into_boxed();
 
-			if pagesize != -1 {
-				query = query.offset((page - 1) * pagesize).limit(pagesize);
+			if *pagesize != -1 {
+				query = query.offset((page - 1) * pagesize).limit(*pagesize);
 			};
 
 			if let Some(kind) = kind {
@@ -336,6 +337,18 @@ impl Content {
 
 			if let Some(language_id) = language_id {
 				query = query.filter(content::language_id.eq(language_id));
+			}
+
+			if let Some(order) = order {
+				query = match order.as_str() {
+					"createdAt" => query.order(content::created_at),
+					"updatedAt" => query.order(content::updated_at),
+					"published" => query.order(content::published),
+					"contentType" => query.order(content::content_type_id),
+					_ => query.order(content::updated_at),
+				};
+			} else {
+				query = query.order(content::updated_at.desc());
 			}
 
 			query

@@ -21,13 +21,17 @@
 		position: relative;
 	}
 
+	&__datepicker__wrapper {
+		width: 100%;
+	}
+
 	&__field {
 		height: 44px;
 		border: 2px solid var(--color-gray-lightest);
 		border-radius: var(--border-radius-sm);
 		padding: var(--spacer-xs) var(--spacer-sm);
 		font-size: var(--font-size-p);
-		box-shadow: 0px 0px 0px 0px var(--color-primary-light);
+		box-shadow: 0 0 0 0 var(--color-primary-light);
 		background: transparent;
 		width: 100%;
 		transition: all .2s ease;

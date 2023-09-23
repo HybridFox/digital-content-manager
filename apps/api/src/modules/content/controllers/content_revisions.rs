@@ -13,6 +13,7 @@ use uuid::Uuid;
 #[derive(Deserialize, IntoParams)]
 pub struct FindPathParams {
 	site_id: Uuid,
+	content_id: Uuid,
 }
 
 #[derive(Deserialize, IntoParams)]
@@ -66,8 +67,14 @@ pub async fn find_all(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
 
-	let (revisions, total_elements) =
-		ContentRevision::find(conn, params.site_id, page, pagesize, query.translation_id)?;
+	let (revisions, total_elements) = ContentRevision::find(
+		conn,
+		params.site_id,
+		params.content_id,
+		page,
+		pagesize,
+		query.translation_id,
+	)?;
 
 	let res = response::ContentRevisionsDTO::from((
 		revisions,

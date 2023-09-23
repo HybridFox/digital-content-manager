@@ -91,6 +91,7 @@ impl ContentRevision {
 	pub fn find(
 		conn: &mut PgConnection,
 		site_id: Uuid,
+		content_id: Uuid,
 		page: i64,
 		pagesize: i64,
 		revision_translation_id: Option<Uuid>,
@@ -98,6 +99,7 @@ impl ContentRevision {
 		let query = {
 			let mut query = content_revisions::table
 				.filter(content_revisions::site_id.eq(site_id))
+				.filter(content_revisions::content_id.eq(content_id))
 				.order(content_revisions::created_at.desc())
 				.inner_join(
 					workflow_states::table

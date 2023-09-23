@@ -45,6 +45,7 @@ pub struct FindAllQueryParams {
 	translation_id: Option<Uuid>,
 	#[serde_as(as = "Option<StringWithSeparator::<CommaSeparator, Uuid>>")]
 	content_types: Option<Vec<Uuid>>,
+	order: Option<String>,
 }
 
 #[utoipa::path(
@@ -147,13 +148,14 @@ pub async fn find_all(
 
 	let (content, total_elements) = Content::find(
 		conn,
-		params.site_id,
-		page,
-		pagesize,
-		query.kind,
-		query.language_id,
-		query.translation_id,
-		query.content_types.clone(),
+		&params.site_id,
+		&page,
+		&pagesize,
+		&query.kind,
+		&query.language_id,
+		&query.translation_id,
+		&query.content_types,
+		&query.order,
 	)?;
 
 	let res = response::ContentListDTO::from((

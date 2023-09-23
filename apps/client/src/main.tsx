@@ -12,6 +12,7 @@ import App from './app/app';
 
 import './assets/scss/main.scss';
 import 'react-tooltip/dist/react-tooltip.css';
+import "react-datepicker/dist/react-datepicker.css";
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
