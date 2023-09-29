@@ -7,18 +7,20 @@ x-default-options: &default-options
         context: .
         dockerfile: Dockerfile.dev
     volumes:
-        - ./:/app
+        - type: bind
+          source: .
+          target: /app
         - ./static:/static:delegated
         - node-modules-data:/app/node_modules
 
 name: ibs
 services:
-    client:
-        container_name: ibs-client
-        command: npm run nx run client:serve -- --verbose
-        ports:
-            - 3000:3000
-        <<: *default-options
+#    client:
+#        container_name: ibs-client
+#        command: npm run nx run client:serve -- --verbose
+#        ports:
+#            - 3000:3000
+#        <<: *default-options
 
     # api:
     #     build:

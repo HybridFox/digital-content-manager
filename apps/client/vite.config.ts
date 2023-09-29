@@ -12,8 +12,8 @@ export default defineConfig({
 		port: 3000,
 		host: '0.0.0.0',
 		proxy: {
-			'/api': 'http://host.docker.internal:8000',
-			'/admin-api': 'http://host.docker.internal:8000',
+			'/api': 'http://127.0.0.1:8000',
+			'/admin-api': 'http://127.0.0.1:8000',
 		},
 	},
 

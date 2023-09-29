@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import {
-	CONTENT_TYPE_KINDS_PARAMETER_MAP, getFilterProps,
+	CONTENT_TYPE_KINDS_PARAMETER_MAP, getFilterParams, getFilterProps,
 	getPageParams,
 	getPaginationProps,
 	useAuthStore,
@@ -36,7 +36,7 @@ export const ContentListPage = () => {
 	}, [kind]);
 
 	useEffect(() => {
-		fetchContent(siteId!, { kind: CONTENT_TYPE_KINDS_PARAMETER_MAP[kind!], ...getPageParams(searchParams) });
+		fetchContent(siteId!, { kind: CONTENT_TYPE_KINDS_PARAMETER_MAP[kind!], ...getPageParams(searchParams), ...getFilterParams(searchParams) });
 	}, [searchParams, kind]);
 
 	const handleDelete = (contentItemId: string): void => {

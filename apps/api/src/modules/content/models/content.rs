@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use chrono::NaiveDateTime;
 use diesel::dsl::*;
 use diesel::prelude::*;
@@ -308,6 +309,7 @@ impl Content {
 		translation_id: &'a Option<Uuid>,
 		content_types: &'a Option<Vec<Uuid>>,
 		order: &'a Option<String>,
+		filter: &'a Option<HashMap<String, String>>,
 	) -> Result<(Vec<(Self, Language, ContentType, WorkflowState)>, i64), AppError> {
 		let query = {
 			let mut query = content::table
@@ -349,6 +351,16 @@ impl Content {
 				};
 			} else {
 				query = query.order(content::updated_at.desc());
+			}
+
+			if let Some(filter) = filter {
+				for (key, value) in filter {
+					query = match key.as_str() {
+						"name" => query.filter(content::name.ilike(format!("%{value}%"))),
+						"language" => query.filter(languages::key.ilike(format!("%{value}%"))),
+						_ => query,
+					};
+				}
 			}
 
 			query

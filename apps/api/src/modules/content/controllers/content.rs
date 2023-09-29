@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use super::super::dto::content::{request, response};
 use crate::errors::AppErrorValue;
 use crate::modules::auth::helpers::permissions::ensure_permission;
@@ -13,6 +14,7 @@ use chrono::Utc;
 use reqwest::StatusCode;
 use serde::Deserialize;
 use serde_with::{StringWithSeparator, formats::CommaSeparator, serde_as};
+use serde_qs::actix::QsQuery;
 
 use utoipa::IntoParams;
 use uuid::Uuid;
@@ -35,7 +37,7 @@ pub struct DefaultValuesPathParams {
 }
 
 #[serde_as]
-#[derive(Deserialize, IntoParams)]
+#[derive(Deserialize, IntoParams, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct FindAllQueryParams {
 	page: Option<i64>,
@@ -46,6 +48,7 @@ pub struct FindAllQueryParams {
 	#[serde_as(as = "Option<StringWithSeparator::<CommaSeparator, Uuid>>")]
 	content_types: Option<Vec<Uuid>>,
 	order: Option<String>,
+	filter: Option<HashMap<String, String>>,
 }
 
 #[utoipa::path(
@@ -133,7 +136,7 @@ pub async fn create(
 pub async fn find_all(
 	req: HttpRequest,
 	state: web::Data<AppState>,
-	query: web::Query<FindAllQueryParams>,
+	query: QsQuery<FindAllQueryParams>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	ensure_permission(
@@ -146,6 +149,8 @@ pub async fn find_all(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
 
+	dbg!(&query.filter);
+
 	let (content, total_elements) = Content::find(
 		conn,
 		&params.site_id,
@@ -156,6 +161,7 @@ pub async fn find_all(
 		&query.translation_id,
 		&query.content_types,
 		&query.order,
+		&query.filter,
 	)?;
 
 	let res = response::ContentListDTO::from((

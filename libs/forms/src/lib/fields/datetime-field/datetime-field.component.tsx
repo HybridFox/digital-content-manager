@@ -39,8 +39,8 @@ export const DatetimeField: FC<IDatetimeFieldProps> = ({
 				<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
 				<div className={cxBind('a-input__field-wrapper')}>
 					<ReactDatePicker
-						selected={dayjs(value).toDate()}
-						onChange={(date) => onChange(date)}
+						selected={dayjs(value).isValid() ? dayjs(value).toDate() : new Date()}
+						onChange={(d) => onChange(d)}
 						timeInputLabel="Time:"
 						dateFormat="dd/MM/yyyy HH:mm"
 						showTimeInput

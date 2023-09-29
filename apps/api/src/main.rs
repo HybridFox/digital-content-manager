@@ -23,6 +23,8 @@ use dotenv::dotenv;
 
 use crate::modules::iam_actions::models::iam_action::IAMAction;
 use crate::openapi::{ApiDoc};
+use serde_qs::actix::{QsQuery, QsQueryConfig};
+use serde_qs::Config as QsConfig;
 
 pub mod constants;
 pub mod errors;
@@ -131,6 +133,19 @@ async fn main() -> std::io::Result<()> {
 				})
 				.into()
 			}))
+			.app_data(
+				QsQueryConfig::default()
+					.error_handler(|err, _| {
+						AppError::BadRequest(AppErrorValue {
+							message: err.to_string(),
+							status: StatusCode::BAD_REQUEST.as_u16(),
+							code: "QS_PARSE_FAILED".to_owned(),
+							..Default::default()
+						})
+						.into()
+					})
+					.qs_config(QsConfig::new(10, false)),
+			)
 			// .wrap(modules::core::middleware::cors::cors())
 			.wrap(modules::core::middleware::auth::Authentication)
 			.wrap(modules::core::middleware::installation::Installation)

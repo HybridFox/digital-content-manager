@@ -11,6 +11,14 @@ export const addContentComponentSchema = yup.object({
 
 export const CONTENT_LIST_FILTER = (t: TFunction, activeSite?: ISite): IFiltersFilter[] => [
 	{
+		name: 'Name',
+		slug: 'name',
+		contentComponent: FIELD_KEYS.TEXT,
+		config: {
+			wrapperClassName: 'u-col-6 u-margin-bottom-none'
+		}
+	},
+	{
 		name: 'Language',
 		slug: 'language',
 		contentComponent: FIELD_KEYS.SELECT,
