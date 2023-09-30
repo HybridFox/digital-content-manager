@@ -42,7 +42,7 @@ export const Filter: FC<IFiltersProps> = ({ className, onFiltering, filtering, f
 	}, [watch]);
 
 	useEffect(() => {
-		if (filtering) {
+		if (Object.keys(filtering).length) {
 			setFiltersOpen(true);
 		}
 	}, [])
@@ -50,7 +50,19 @@ export const Filter: FC<IFiltersProps> = ({ className, onFiltering, filtering, f
 	return (
 		<div className={classNames(cxBind('m-filter'), className)}>
 			<button className={classNames(cxBind('m-filter__header'))} onClick={() => setFiltersOpen((open) => !open)}>
-				<span className="las la-angle-down"></span> Filter
+				<span className={cxBind('m-filter__header__title')}>
+					<span className={classNames('las', {
+						'la-angle-down': !filtersOpen,
+						'la-angle-up': filtersOpen,
+					})}></span> Filters
+				</span>
+				{/*{!!Object.keys(filtering).length && (*/}
+				{/*	<span className={cxBind('m-filter__header__filters')}>*/}
+				{/*	{Object.keys(filtering).map((filterKey) => (*/}
+				{/*		<span>{filterKey}: {filtering[filterKey]}</span>*/}
+				{/*	))}*/}
+				{/*</span>*/}
+				{/*)}*/}
 			</button>
 			{filtersOpen && <div className={classNames(cxBind('m-filter__filters'))}>
 				<FormProvider {...filterFormMethods}>

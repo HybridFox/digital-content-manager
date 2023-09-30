@@ -48,7 +48,7 @@ export const SiteListPage = () => {
 				}
 			></Header>
 			<Loading loading={sitesLoading} text={t(`GENERAL.LABELS.LOADING`)}>
-				<Table columns={ROLE_LIST_COLUMNS(t, handleRemove)} rows={sites || []}></Table>
+				<Table columns={ROLE_LIST_COLUMNS(t, handleRemove)} rows={(sites || []).filter((site) => site.hasPermission)}></Table>
 				<Pagination
 					className="u-margin-top"
 					totalPages={sitesPagination?.totalPages}
