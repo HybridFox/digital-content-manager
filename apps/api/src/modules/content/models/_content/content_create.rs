@@ -39,7 +39,7 @@ impl Content {
 			.returning(Content::as_returning())
 			.get_result(conn)?;
 
-		let (_content_type, fields) =
+		let (_content_type, fields, _compartments) =
 			ContentType::find_one(conn, site_id, created_content_item.content_type_id)?;
 
 		let revision = ContentRevision::create(

@@ -1,0 +1,15 @@
+.p-content-detail {
+	display: flex;
+	height: 100%;
+
+	&__fields {
+		flex: 1;
+		padding-right: var(--spacer-lg);
+	}
+
+	&__status {
+		width: 350px;
+		border-left: 1px solid var(--color-gray-lightest);
+		padding-left: var(--spacer-lg);
+	}
+}

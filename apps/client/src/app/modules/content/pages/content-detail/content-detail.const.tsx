@@ -1,7 +1,7 @@
 import { Badge, IHeaderTab } from '@ibs/components';
 import * as yup from 'yup';
 import { generatePath } from 'react-router-dom';
-import { IContentItem } from '@ibs/shared';
+import { IContentItem, IContentType } from '@ibs/shared';
 
 import { CONTENT_PATHS } from '../../content.routes';
 
@@ -14,6 +14,7 @@ export const CONTENT_DETAIL_TABS = (
 	siteId: string,
 	kind?: string,
 	contentItem?: IContentItem,
+	contentType?: IContentType,
 ): IHeaderTab[] => [
 	{
 		to: generatePath(CONTENT_PATHS.DETAIL_SETTINGS, {
@@ -23,14 +24,22 @@ export const CONTENT_DETAIL_TABS = (
 		}),
 		label: 'Settings',
 	},
-	{
+	...(contentType?.compartments?.length ? (contentType?.compartments || []).map((compartment) => ({
+		to: generatePath(CONTENT_PATHS.DETAIL_COMPARTMENT, {
+			contentId: contentItem?.id || '',
+			kind,
+			siteId,
+			compartmentId: compartment.id
+		}),
+		label: compartment.name,
+	})) : [{
 		to: generatePath(CONTENT_PATHS.DETAIL_FIELDS, {
 			contentId: contentItem?.id || '',
 			kind,
 			siteId,
 		}),
 		label: 'Fields',
-	},
+	}]),
 	{
 		to: generatePath(CONTENT_PATHS.DETAIL_REVISIONS, {
 			contentId: contentItem?.id || '',

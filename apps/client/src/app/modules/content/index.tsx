@@ -40,6 +40,10 @@ export const CONTENT_ROUTES: RouteObject[] = [
 				lazy: async () => ({ Component: (await import('./pages/content-detail-translations/content-detail-translations.page')).ContentDetailTranslationsPage }),
 			},
 			{
+				path: CONTENT_PATHS.DETAIL_COMPARTMENT,
+				lazy: async () => ({ Component: (await import('./pages/content-detail-compartment/content-detail-compartment.page')).ContentDetailCompartmentPage }),
+			},
+			{
 				path: CONTENT_PATHS.DETAIL_STATUS,
 				lazy: async () => ({ Component: (await import('./pages/content-detail-status/content-detail-status.page')).ContentDetailStatusPage }),
 			},

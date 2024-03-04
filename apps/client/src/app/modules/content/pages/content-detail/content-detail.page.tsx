@@ -1,13 +1,16 @@
 import { useContentStore, useContentTypeStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
 import { useEffect } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
+import { generatePath, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { Header, Loading } from '@ibs/components';
+
+import { CONTENT_PATHS } from '../../content.routes';
 
 import { CONTENT_DETAIL_TABS } from './content-detail.const';
 
 export const ContentDetailPage = () => {
-	const [contentTypeLoading, fetchContentType] = useContentTypeStore((state) => [
+	const [contentTypeLoading, contentType, fetchContentType] = useContentTypeStore((state) => [
 		state.contentTypeLoading,
+		state.contentType,
 		state.fetchContentType,
 	]);
 	const [workflowLoading, fetchWorkflow] = useWorkflowStore((state) => [
@@ -17,6 +20,7 @@ export const ContentDetailPage = () => {
 	const [contentItem, contentItemLoading, fetchContentItem] = useContentStore((state) => [state.contentItem, state.contentItemLoading, state.fetchContentItem]);
 	const [breadcrumbs,] = useHeaderStore((state) => [state.breadcrumbs]);
 	const { kind, siteId, contentId } = useParams();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!contentId) {
@@ -25,7 +29,18 @@ export const ContentDetailPage = () => {
 
 		fetchContentItem(siteId!, contentId)
 			.then((contentItem) => fetchContentType(siteId!, contentItem.contentTypeId))
-			.then((contentType) => fetchWorkflow(siteId!, contentType.workflowId))
+			.then((contentType) => {
+				if (contentType.compartments.length) {
+					navigate(generatePath(CONTENT_PATHS.DETAIL_COMPARTMENT, {
+						contentId: contentItem?.id || '',
+						kind,
+						siteId,
+						compartmentId: contentType.compartments[0].id
+					}))
+				}
+
+				return fetchWorkflow(siteId!, contentType.workflowId);
+			})
 	}, [contentId]);
 
 	return (
@@ -37,7 +52,7 @@ export const ContentDetailPage = () => {
 						Edit content <i>"{contentItem?.name || '...'}"</i>
 					</>
 				}
-				tabs={CONTENT_DETAIL_TABS(siteId!, kind, contentItem)}
+				tabs={CONTENT_DETAIL_TABS(siteId!, kind, contentItem, contentType)}
 				metaInfo={contentItem?.language.key.toUpperCase()}
 			></Header>
 			<div className="u-margin-top">

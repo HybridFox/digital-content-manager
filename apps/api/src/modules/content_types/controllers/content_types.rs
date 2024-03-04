@@ -71,7 +71,7 @@ pub async fn create(
 			kind: form.kind.clone(),
 		},
 	)?;
-	let res = response::ContentTypeWithFieldsDTO::from((content_type, Vec::new()));
+	let res = response::ContentTypeWithFieldsDTO::from((content_type, Vec::new(), Vec::new()));
 	Ok(HttpResponse::Ok().json(res))
 }
 

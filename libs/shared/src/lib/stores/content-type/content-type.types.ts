@@ -1,4 +1,5 @@
 import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types/paging.types";
+import { ICompartment } from "../compartment";
 import { IContentComponent } from "../content-component";
 
 export enum FIELD_KEYS {
@@ -28,6 +29,7 @@ export interface IContentType {
 	createdAt: string;
 	updatedAt: string;
 	fields: IField[];
+	compartments: ICompartment[];
 }
 
 export interface IField {

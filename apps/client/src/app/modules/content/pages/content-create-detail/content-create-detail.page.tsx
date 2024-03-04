@@ -94,6 +94,7 @@ export const ContentCreateDetailPage = () => {
 
 		createContentItem(siteId!, {
 			...values,
+			fields: {},
 			workflowStateId: workflow?.defaultWorkflowStateId,
 			contentTypeId: contentType?.id,
 			languageId: searchParams.get('languageId') || '',
@@ -134,9 +135,9 @@ export const ContentCreateDetailPage = () => {
 									</div>
 								</div>
 							</Card>
-							<div className="u-margin-bottom">
+							{/* <div className="u-margin-bottom">
 								<RenderFields siteId={siteId!} fieldPrefix="fields." fields={contentType?.fields || []} />
-							</div>
+							</div> */}
 							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{createContentItemLoading && <i className="las la-redo-alt la-spin"></i>} Save
 							</Button>

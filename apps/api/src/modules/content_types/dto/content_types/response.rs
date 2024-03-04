@@ -1,6 +1,10 @@
 use crate::modules::{
-	content_types::models::content_type::{
-		ContentType, ContentTypeKindEnum, PopulatedContentTypeField,
+	content_types::{
+		models::{
+			content_type::{ContentType, ContentTypeKindEnum, PopulatedContentTypeField},
+			compartment::CompartmentModel,
+		},
+		dto::compartments::response::CompartmentDTO,
 	},
 	core::models::hal::{HALLinkList, HALPage},
 	content_components::dto::content_components::response::FieldWithContentComponentDTO,
@@ -23,10 +27,23 @@ pub struct ContentTypeWithFieldsDTO {
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 	pub fields: Vec<FieldWithContentComponentDTO>,
+	pub compartments: Vec<CompartmentDTO>,
 }
 
-impl From<(ContentType, Vec<PopulatedContentTypeField>)> for ContentTypeWithFieldsDTO {
-	fn from((content_type, fields): (ContentType, Vec<PopulatedContentTypeField>)) -> Self {
+impl
+	From<(
+		ContentType,
+		Vec<PopulatedContentTypeField>,
+		Vec<CompartmentModel>,
+	)> for ContentTypeWithFieldsDTO
+{
+	fn from(
+		(content_type, fields, compartments): (
+			ContentType,
+			Vec<PopulatedContentTypeField>,
+			Vec<CompartmentModel>,
+		),
+	) -> Self {
 		Self {
 			id: content_type.id,
 			name: content_type.name,
@@ -38,6 +55,7 @@ impl From<(ContentType, Vec<PopulatedContentTypeField>)> for ContentTypeWithFiel
 				.into_iter()
 				.map(FieldWithContentComponentDTO::from)
 				.collect(),
+			compartments: compartments.into_iter().map(CompartmentDTO::from).collect(),
 			created_at: content_type.created_at,
 			updated_at: content_type.updated_at,
 		}

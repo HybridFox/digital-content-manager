@@ -40,7 +40,8 @@ impl Content {
 			.returning(Content::as_returning())
 			.get_result::<Self>(conn)?;
 
-		let (_content_type, fields) = ContentType::find_one(conn, site_id, content_type_id)?;
+		let (_content_type, fields, _compartments) =
+			ContentType::find_one(conn, site_id, content_type_id)?;
 		// TODO: check this
 		// let content_fields = content_fields::table
 		// 	.filter(content_fields::source_id.eq_any(vec![content_id, updated_content_item.translation_id]))

@@ -21,6 +21,7 @@ use crate::schema::{
 	content_types, sites_content_types, content_components, sql_types::ContentTypeKinds,
 };
 
+use super::compartment::CompartmentModel;
 use super::field::FieldModel;
 use super::field_config::{FieldConfig, FieldConfigContent};
 use super::site_content_type::SiteContentType;
@@ -101,11 +102,12 @@ impl ContentType {
 		conn: &mut PgConnection,
 		_site_id: Uuid,
 		id: Uuid,
-	) -> Result<(Self, Vec<PopulatedContentTypeField>), AppError> {
+	) -> Result<(Self, Vec<PopulatedContentTypeField>, Vec<CompartmentModel>), AppError> {
 		let content_type = content_types::table.find(id).first::<Self>(conn)?;
 		let fields_with_config = Self::find_fields(conn, &vec![content_type.clone()])?;
+		let compartments = Self::find_compartments(conn, &content_type)?;
 
-		Ok((content_type, fields_with_config))
+		Ok((content_type, fields_with_config, compartments))
 	}
 
 	#[instrument(skip(conn))]
@@ -167,7 +169,7 @@ impl ContentType {
 		site_id: Uuid,
 		id: Uuid,
 		changeset: UpdateContentType,
-	) -> Result<(Self, Vec<PopulatedContentTypeField>), AppError> {
+	) -> Result<(Self, Vec<PopulatedContentTypeField>, Vec<CompartmentModel>), AppError> {
 		let target = content_types::table.find(id);
 		diesel::update(target)
 			.set(changeset)
@@ -232,6 +234,18 @@ impl ContentType {
 			.collect::<Result<Vec<PopulatedContentTypeField>, AppError>>()?;
 
 		Ok(fields_with_config)
+	}
+
+	#[instrument(skip(conn))]
+	pub fn find_compartments(
+		conn: &mut PgConnection,
+		content_type: &Self,
+	) -> Result<Vec<CompartmentModel>, AppError> {
+		let compartments = CompartmentModel::belonging_to(content_type)
+			.select(CompartmentModel::as_select())
+			.load::<CompartmentModel>(conn)?;
+
+		Ok(compartments)
 	}
 }
 
