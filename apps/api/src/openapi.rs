@@ -60,6 +60,8 @@ impl Modify for SecurityAddon {
 		super::modules::content_types::controllers::fields::update,
 		super::modules::content_types::controllers::fields::remove,
 
+		super::modules::content_types::controllers::field_order::update_order,
+
 		super::modules::content::controllers::content::create,
 		super::modules::content::controllers::content::find_all,
 		super::modules::content::controllers::content::find_one,

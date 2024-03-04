@@ -40,6 +40,7 @@ fn get_config(config: &Value) -> FsStorageEngineConfig {
 		.region(region)
 		.endpoint_url(s3_endpoint)
 		.credentials_provider(credentials)
+		.force_path_style(true)
 		.build();
 
 	let client = Client::from_conf(s3_config);

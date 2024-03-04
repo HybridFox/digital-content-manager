@@ -31,6 +31,9 @@ export interface IContentTypeFieldStoreState {
 
 	deleteField: (siteId: string, contentTypeId: string, fieldId: string) => Promise<void>;
 	deleteFieldLoading: boolean;
+
+	updateFieldOrder: (siteId: string, contentTypeId: string, fieldIds: string[]) => Promise<void>;
+	updateFieldOrderLoading: boolean;
 }
 
 export interface IContentTypeFieldCreateDTO {

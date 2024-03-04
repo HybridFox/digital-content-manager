@@ -190,6 +190,7 @@ pub async fn update(
 			max: form.max.clone(),
 			hidden: form.hidden.clone(),
 			multi_language: form.multi_language.clone(),
+			sequence_number: form.sequence_number.clone(),
 		},
 	)?;
 

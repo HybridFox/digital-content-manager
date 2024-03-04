@@ -249,6 +249,7 @@ impl From<&str> for AppError {
 
 impl<T> From<SdkError<T>> for AppError {
 	fn from(err: SdkError<T>) -> Self {
+		println!("{}", &err);
 		AppError::InternalServerError(AppErrorValue {
 			message: err.to_string(),
 			status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),

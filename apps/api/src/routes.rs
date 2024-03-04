@@ -79,6 +79,10 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 										.service(modules::content_types::controllers::fields::update)
 										.service(modules::content_types::controllers::fields::remove),
 								)
+								.service(
+									web::scope("/{content_type_id}/field-order")
+										.service(modules::content_types::controllers::field_order::update_order),
+								)
 						)
 						.service(
 							web::scope("/{site_id}/content")

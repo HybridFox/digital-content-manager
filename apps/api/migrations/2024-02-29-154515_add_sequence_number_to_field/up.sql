@@ -1,0 +1,2 @@
+ALTER TABLE fields
+ADD COLUMN sequence_number INTEGER DEFAULT 0;

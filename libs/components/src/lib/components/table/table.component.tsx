@@ -1,7 +1,8 @@
 import { FC, ReactNode } from 'react';
 import cx from 'classnames/bind';
 import classNames from 'classnames';
-import { path } from 'rambda';
+import { or, path } from 'rambda';
+import { arrayMove } from '@ibs/shared'
 
 import { ITableColumn, ITableProps } from './table.types';
 import styles from './table.module.scss';
@@ -75,6 +76,15 @@ export const Table: FC<ITableProps> = ({
 		return true;
 	}
 
+	const handleOrderChange = (currentIndex: number, newIndex: number): void => {
+		if (!onOrderChange) {
+			return console.warn('Please define "onOrderChange" on the Table element');
+		}
+		
+		const orderedArray = arrayMove(rows, currentIndex, newIndex);
+		onOrderChange(orderedArray);
+	}
+
 	const renderRows = () => {
 		return rows.map((row, i) => (
 			<tr
@@ -92,7 +102,7 @@ export const Table: FC<ITableProps> = ({
 			>
 				{orderable && (
 					<td className={cxBind('a-table__row__cell')} style={{ width: '50px' }}>
-						<TableOrder totalRows={rows.length} currentIndex={i} onOrder={console.log} />
+						<TableOrder totalRows={rows.length} currentIndex={i} onOrder={handleOrderChange} />
 					</td>
 				)}
 				{selectable && (selectablePredicate ? selectablePredicate(row) : true) && (

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
 	CONTENT_TYPE_KINDS_TRANSLATIONS,
 	IAPIError,
+	IField,
 	useContentComponentStore,
 	useContentTypeFieldStore,
 	useContentTypeStore,
@@ -51,6 +52,11 @@ export const CTContentComponentsPage = () => {
 			state.createFieldLoading,
 			state.createField,
 			state.deleteField,
+		]);
+	const [updateFieldOrderLoading, updateFieldOrder] =
+		useContentTypeFieldStore((state) => [
+			state.updateFieldOrderLoading,
+			state.updateFieldOrder,
 		]);
 	const params = useParams();
 	const navigate = useNavigate();
@@ -124,6 +130,10 @@ export const CTContentComponentsPage = () => {
 			.catch((error: IAPIError) => setDeleteError(error.code));
 	};
 
+	const onOrderChange = (orderedRows: IField[]) => {
+		updateFieldOrder(siteId!, contentType!.id, orderedRows.map((row) => row.id!))
+	}
+
 	return (
 		<>
 			<div className="u-margin-top u-margin-bottom">
@@ -131,6 +141,8 @@ export const CTContentComponentsPage = () => {
 					{deleteError}
 				</Alert>
 				<Table
+					orderable={true}
+					onOrderChange={onOrderChange}
 					columns={CONTENT_TYPE_DETAIL_COLUMNS(onDeleteField)}
 					rows={contentType?.fields || []}
 				></Table>

@@ -16,7 +16,7 @@ use crate::modules::content::models::content::Content;
 use crate::modules::content_components::models::content_component::{
 	ContentComponent, PopulatedContentComponent,
 };
-use crate::schema::content;
+use crate::schema::{content, fields};
 use crate::schema::{
 	content_types, sites_content_types, content_components, sql_types::ContentTypeKinds,
 };
@@ -199,6 +199,7 @@ impl ContentType {
 			.load::<ContentComponent>(conn)?;
 
 		let fields = FieldModel::belonging_to(content_types)
+			.order(fields::sequence_number)
 			.select(FieldModel::as_select())
 			.load::<FieldModel>(conn)?;
 

@@ -71,6 +71,7 @@ pub struct FieldModel {
 	pub field_type: FieldTypeEnum,
 	pub parent_id: Uuid,
 	pub content_component_id: Uuid,
+	pub sequence_number: Option<i32>,
 }
 
 impl FieldModel {
@@ -250,6 +251,25 @@ impl FieldModel {
 
 		Ok(())
 	}
+
+	#[instrument(skip(conn))]
+	pub fn update_order(
+		conn: &mut PgConnection,
+		site_id: Uuid,
+		changes: Vec<UpdateFieldOrder>,
+	) -> Result<(), AppError> {
+		changes
+			.into_iter()
+			.map(|changeset| {
+				let target = fields::table.find(changeset.id);
+				diesel::update(target).set(changeset).execute(conn)?;
+
+				Ok(())
+			})
+			.collect::<Result<(), AppError>>()?;
+
+		Ok(())
+	}
 }
 
 #[derive(Insertable, Debug, Deserialize)]
@@ -272,4 +292,12 @@ pub struct UpdateField {
 	pub max: Option<i32>,
 	pub hidden: Option<bool>,
 	pub multi_language: Option<bool>,
+	pub sequence_number: Option<i32>,
+}
+
+#[derive(AsChangeset, Debug, Deserialize)]
+#[diesel(table_name = fields)]
+pub struct UpdateFieldOrder {
+	pub id: Uuid,
+	pub sequence_number: Option<i32>,
 }

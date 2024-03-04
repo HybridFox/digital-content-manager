@@ -72,6 +72,15 @@ diesel::table! {
 }
 
 diesel::table! {
+	compartments (id) {
+		id -> Uuid,
+		name -> Text,
+		description -> Nullable<Text>,
+		content_type_id -> Uuid,
+	}
+}
+
+diesel::table! {
 	content (id) {
 		id -> Uuid,
 		name -> Text,
@@ -186,6 +195,7 @@ diesel::table! {
 		field_type -> FieldTypes,
 		parent_id -> Uuid,
 		content_component_id -> Uuid,
+		sequence_number -> Nullable<Int4>,
 	}
 }
 
@@ -439,6 +449,7 @@ diesel::joinable!(asset_metadata -> assets (asset_id));
 diesel::joinable!(authentication_method_roles -> authentication_methods (authentication_method_id));
 diesel::joinable!(authentication_method_roles -> roles (role_id));
 diesel::joinable!(authentication_method_roles -> sites (site_id));
+diesel::joinable!(compartments -> content_types (content_type_id));
 diesel::joinable!(content -> content_types (content_type_id));
 diesel::joinable!(content -> sites (site_id));
 diesel::joinable!(content -> workflow_states (workflow_state_id));
@@ -478,6 +489,7 @@ diesel::allow_tables_to_appear_in_same_query!(
 	assets,
 	authentication_method_roles,
 	authentication_methods,
+	compartments,
 	content,
 	content_components,
 	content_fields,
