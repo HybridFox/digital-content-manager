@@ -166,8 +166,6 @@ function BlockFormatDropDown({
 	};
 
 	const formatBulletList = () => {
-		console.log('fBullet');
-		console.log(blockType)
 		if (blockType !== 'bullet') {
 			editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
 		} else {
@@ -672,17 +670,17 @@ export const ToolbarPlugin = (): JSX.Element => {
 					>
 						<i className="las la-code" />
 					</Button>
-					{/*<Button*/}
-					{/*	disabled={!isEditable}*/}
-					{/*	onClick={insertLink}*/}
-					{/*	className={cxBind('a-toolbar__item')}*/}
-					{/*	active={isLink}*/}
-					{/*	aria-label="Insert link"*/}
-					{/*	title="Insert link"*/}
-					{/*	type={ButtonTypes.OUTLINE}*/}
-					{/*>*/}
-					{/*	<i className="las la-link" />*/}
-					{/*</Button>*/}
+					<Button
+						disabled={!isEditable}
+						onClick={insertLink}
+						className={cxBind('a-toolbar__item')}
+						active={isLink}
+						aria-label="Insert link"
+						title="Insert link"
+						type={ButtonTypes.OUTLINE}
+					>
+						<i className="las la-link" />
+					</Button>
 					{/*<Button className={cxBind('a-toolbar__color-picker', 'a-toolbar__item')} id="font-color" type={ButtonTypes.OUTLINE}>*/}
 					{/*	<i className="las la-font" style={{ color: fontColor }}></i>*/}
 					{/*</Button>*/}
