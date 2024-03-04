@@ -32,7 +32,7 @@ export const ContentDetailPage = () => {
 			.then((contentType) => {
 				if (contentType.compartments.length) {
 					navigate(generatePath(CONTENT_PATHS.DETAIL_COMPARTMENT, {
-						contentId: contentItem?.id || '',
+						contentId,
 						kind,
 						siteId,
 						compartmentId: contentType.compartments[0].id
