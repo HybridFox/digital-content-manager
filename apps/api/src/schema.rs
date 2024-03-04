@@ -196,6 +196,7 @@ diesel::table! {
 		parent_id -> Uuid,
 		content_component_id -> Uuid,
 		sequence_number -> Nullable<Int4>,
+		compartment_id -> Nullable<Uuid>,
 	}
 }
 

@@ -38,6 +38,8 @@ export interface IField {
 	max?: number;
 	multiLanguage?: boolean;
 	contentComponent: IContentComponent;
+	compartmentId?: string;
+	sequenceNumber?: number;
 	config?: Record<string, any>;
 }
 

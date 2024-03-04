@@ -10,6 +10,7 @@ use uuid::Uuid;
 pub struct CreateFieldDTO {
 	pub name: String,
 	pub content_component_id: Uuid,
+	pub compartment_id: Option<Uuid>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
@@ -21,6 +22,7 @@ pub struct UpdateFieldDTO {
 	pub max: Option<i32>,
 	pub hidden: Option<bool>,
 	pub multi_language: Option<bool>,
+	pub compartment_id: Option<Uuid>,
 	pub sequence_number: Option<i32>,
 	pub config: HashMap<String, Value>,
 }

@@ -79,9 +79,9 @@ export const useContentTypeFieldStore = create<IContentTypeFieldStoreState>()(de
 		},
 		deleteFieldLoading: false,
 
-		updateFieldOrder: async (siteId, contentTypeId, fieldIds) => {
+		updateFieldOrder: async (siteId, contentTypeId, fields) => {
 			set(() => ({ updateFieldOrderLoading: true }));
-			const [, error] = await wrapApi(kyInstance.patch(`/admin-api/v1/sites/${siteId}/content-types/${contentTypeId}/field-order`, { json: { fieldIds } }));
+			const [, error] = await wrapApi(kyInstance.patch(`/admin-api/v1/sites/${siteId}/content-types/${contentTypeId}/field-order`, { json: { fields } }));
 
 			if (error) {
 				set(() => ({ updateFieldOrderLoading: false }));

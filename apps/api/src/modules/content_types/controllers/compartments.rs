@@ -1,9 +1,8 @@
+use super::super::dto::compartments::{request, response};
 use crate::modules::auth::helpers::permissions::ensure_permission;
-use crate::modules::content_types::dto::fields::{request, response};
-use crate::modules::content_components::dto::content_components::response::FieldWithContentComponentDTO;
-use crate::modules::content_types::models::field::{UpdateField, FieldTypeEnum};
-use crate::modules::content_types::models::field_config::FieldConfig;
-use crate::{errors::AppError, modules::content_types::models::field::FieldModel};
+use crate::modules::content_types::dto::compartments::response::CompartmentDTO;
+use crate::modules::content_types::models::compartment::UpdateCompartment;
+use crate::{errors::AppError, modules::content_types::models::compartment::CompartmentModel};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
@@ -15,14 +14,14 @@ use uuid::Uuid;
 #[derive(Deserialize, IntoParams)]
 pub struct FindPathParams {
 	site_id: Uuid,
-	content_component_id: Uuid,
+	content_type_id: Uuid,
 }
 
 #[derive(Deserialize, IntoParams)]
 pub struct FindOnePathParams {
 	site_id: Uuid,
-	field_id: Uuid,
-	content_component_id: Uuid,
+	compartment_id: Uuid,
+	content_type_id: Uuid,
 }
 
 #[derive(Deserialize, IntoParams)]
@@ -32,10 +31,10 @@ pub struct FindAllQueryParams {
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/sites/{site_id}/content-components/{content_component_id}/fields",
-    request_body = CreateFieldDTO,
+	context_path = "/api/v1/sites/{site_id}/content-types/{content_type_id}/compartments",
+    request_body = CreateCompartmentDTO,
 	responses(
-		(status = 200, body = FieldDTO),
+		(status = 200, body = CompartmentDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
 	),
     security(
@@ -47,34 +46,27 @@ pub struct FindAllQueryParams {
 pub async fn create(
 	req: HttpRequest,
 	state: web::Data<AppState>,
-	form: web::Json<request::CreateFieldDTO>,
+	form: web::Json<request::CreateCompartmentDTO>,
 	params: web::Path<FindPathParams>,
 ) -> Result<HttpResponse, AppError> {
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-components:{}", params.content_component_id),
-		"sites::content-components:update",
+		format!("urn:ibs:content-types:{}", params.content_type_id),
+		"sites::content-types:update",
 	)?;
 	let conn = &mut state.get_conn()?;
-	let field = FieldModel::create(
-		conn,
-		params.site_id,
-		params.content_component_id,
-		form.content_component_id,
-		None,
-		FieldTypeEnum::ContentCompentField,
-		&form.name,
-	)?;
+	let compartment =
+		CompartmentModel::create(conn, params.site_id, params.content_type_id, &form.name)?;
 
-	let res = FieldWithContentComponentDTO::from(field);
+	let res = CompartmentDTO::from(compartment);
 	Ok(HttpResponse::Ok().json(res))
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/sites/{site_id}/content-components/{content_component_id}/fields",
+	context_path = "/api/v1/sites/{site_id}/content-types/{content_type_id}/compartments",
 	responses(
-		(status = 200, body = FieldsDTO),
+		(status = 200, body = CompartmentsDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
 	),
     security(
@@ -92,23 +84,18 @@ pub async fn find_all(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-components:{}", params.content_component_id),
-		"sites::content-components:update",
+		format!("urn:ibs:content-types:{}", params.content_type_id),
+		"sites::content-types:update",
 	)?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
 
-	let (fields, total_elements) = FieldModel::find(
-		conn,
-		params.site_id,
-		params.content_component_id,
-		page,
-		pagesize,
-	)?;
+	let (compartments, total_elements) =
+		CompartmentModel::find(conn, params.site_id, params.content_type_id, page, pagesize)?;
 
-	let res = response::FieldsDTO::from((
-		fields,
+	let res = response::CompartmentsDTO::from((
+		compartments,
 		HALPage {
 			number: page,
 			size: pagesize,
@@ -116,16 +103,16 @@ pub async fn find_all(
 			total_pages: (total_elements / pagesize + (total_elements % pagesize).signum()).max(1),
 		},
 		params.site_id,
-		params.content_component_id,
+		params.content_type_id,
 	));
 
 	Ok(HttpResponse::Ok().json(res))
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/sites/{site_id}/content-components/{content_component_id}/fields",
+	context_path = "/api/v1/sites/{site_id}/content-types/{content_type_id}/compartments",
 	responses(
-		(status = 200, body = FieldModelDTO),
+		(status = 200, body = CompartmentModelDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
 	),
     security(
@@ -133,7 +120,7 @@ pub async fn find_all(
     ),
 	params(FindPathParams)
 )]
-#[get("/{field_id}")]
+#[get("/{compartment_id}")]
 pub async fn find_one(
 	req: HttpRequest,
 	state: web::Data<AppState>,
@@ -142,21 +129,21 @@ pub async fn find_one(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-components:{}", params.content_component_id),
-		"sites::content-components:update",
+		format!("urn:ibs:content-types:{}", params.content_type_id),
+		"sites::content-types:update",
 	)?;
 	let conn = &mut state.get_conn()?;
-	let field = FieldModel::find_one(conn, params.site_id, params.field_id)?;
+	let compartment = CompartmentModel::find_one(conn, params.site_id, params.compartment_id)?;
 
-	let res = FieldWithContentComponentDTO::from(field);
+	let res = CompartmentDTO::from(compartment);
 	Ok(HttpResponse::Ok().json(res))
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/sites/{site_id}/content-components/{content_component_id}/fields",
-    request_body = UpdateFieldDTO,
+	context_path = "/api/v1/sites/{site_id}/content-types/{content_type_id}/compartments",
+    request_body = UpdateCompartmentDTO,
 	responses(
-		(status = 200, body = FieldWithContentComponentDTO),
+		(status = 200, body = CompartmentDTO),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
 	),
     security(
@@ -164,44 +151,37 @@ pub async fn find_one(
     ),
 	params(FindPathParams)
 )]
-#[put("/{field_id}")]
+#[put("/{compartment_id}")]
 pub async fn update(
 	req: HttpRequest,
 	state: web::Data<AppState>,
 	params: web::Path<FindOnePathParams>,
-	form: web::Json<request::UpdateFieldDTO>,
+	form: web::Json<request::UpdateCompartmentDTO>,
 ) -> ApiResponse {
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-components:{}", params.content_component_id),
-		"sites::content-components:update",
+		format!("urn:ibs:content-types:{}", params.content_type_id),
+		"sites::content-types:update",
 	)?;
 	let conn = &mut state.get_conn()?;
 
-	FieldConfig::upsert(conn, params.field_id, form.config.clone())?;
-	let field = FieldModel::update(
+	let compartment = CompartmentModel::update(
 		conn,
 		params.site_id,
-		params.field_id,
-		UpdateField {
+		params.compartment_id,
+		UpdateCompartment {
 			name: form.name.clone(),
 			description: form.description.clone(),
-			min: form.min.clone(),
-			max: form.max.clone(),
-			hidden: form.hidden.clone(),
-			multi_language: form.multi_language.clone(),
-			sequence_number: form.sequence_number.clone(),
-			compartment_id: None,
 		},
 	)?;
 
-	let res = FieldWithContentComponentDTO::from(field);
+	let res = CompartmentDTO::from(compartment);
 	Ok(HttpResponse::Ok().json(res))
 }
 
 #[utoipa::path(
-	context_path = "/api/v1/sites/{site_id}/content-components/{content_component_id}/fields",
+	context_path = "/api/v1/sites/{site_id}/content-types/{content_type_id}/compartments",
 	responses(
 		(status = 204),
 		(status = 401, body = AppErrorValue, description = "Unauthorized")
@@ -211,7 +191,7 @@ pub async fn update(
     ),
 	params(FindPathParams)
 )]
-#[delete("/{field_id}")]
+#[delete("/{compartment_id}")]
 pub async fn remove(
 	req: HttpRequest,
 	state: web::Data<AppState>,
@@ -220,10 +200,10 @@ pub async fn remove(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-components:{}", params.content_component_id),
-		"sites::content-components:update",
+		format!("urn:ibs:content-types:{}", params.content_type_id),
+		"sites::content-types:update",
 	)?;
 	let conn = &mut state.get_conn()?;
-	FieldModel::remove(conn, params.field_id)?;
+	CompartmentModel::remove(conn, params.compartment_id)?;
 	Ok(HttpResponse::NoContent().body(()))
 }

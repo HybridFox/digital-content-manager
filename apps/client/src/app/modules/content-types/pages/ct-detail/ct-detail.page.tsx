@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useContentTypeStore, useHeaderStore } from '@ibs/shared';
+import { useCompartmentStore, useContentTypeStore, useHeaderStore } from '@ibs/shared';
 import { Header, Loading } from '@ibs/components';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
@@ -7,6 +7,11 @@ import { CONTENT_TYPE_DETAIL_TABS } from './ct-detail.const';
 
 export const CTDetailPage = () => {
 	const [contentType, contentTypeLoading, fetchContentType] = useContentTypeStore((state) => [state.contentType, state.contentTypeLoading, state.fetchContentType]);
+	const [compartmentsLoading, fetchCompartments] =
+		useCompartmentStore((state) => [
+			state.compartmentsLoading,
+			state.fetchCompartments
+		]);
 	const [breadcrumbs] = useHeaderStore((state) => [state.breadcrumbs]);
 	const { siteId, contentTypeId, } = useParams();
 	const navigate = useNavigate();
@@ -16,6 +21,7 @@ export const CTDetailPage = () => {
 			return navigate('/not-found');
 		}
 
+		fetchCompartments(siteId!, contentTypeId, { pagesize: -1 });
 		fetchContentType(siteId!, contentTypeId);
 	}, []);
 
@@ -26,7 +32,7 @@ export const CTDetailPage = () => {
 				tabs={CONTENT_TYPE_DETAIL_TABS}
 				breadcrumbs={breadcrumbs}
 			></Header>
-			<Loading text='Content type loading...' loading={contentTypeLoading}>
+			<Loading text='Content type loading...' loading={contentTypeLoading || compartmentsLoading}>
 				<Outlet />
 			</Loading>
 		</>

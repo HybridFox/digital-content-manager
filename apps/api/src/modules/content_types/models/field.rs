@@ -72,6 +72,7 @@ pub struct FieldModel {
 	pub parent_id: Uuid,
 	pub content_component_id: Uuid,
 	pub sequence_number: Option<i32>,
+	pub compartment_id: Option<Uuid>,
 }
 
 impl FieldModel {
@@ -81,6 +82,7 @@ impl FieldModel {
 		site_id: Uuid,
 		parent_id: Uuid,
 		content_component_id: Uuid,
+		compartment_id: Option<Uuid>,
 		field_type: FieldTypeEnum,
 		name: &String,
 	) -> Result<
@@ -98,6 +100,7 @@ impl FieldModel {
 				parent_id,
 				content_component_id,
 				field_type,
+				compartment_id,
 			})
 			.returning(FieldModel::as_returning())
 			.get_result(conn)?;
@@ -279,6 +282,7 @@ pub struct CreateField {
 	slug: String,
 	parent_id: Uuid,
 	content_component_id: Uuid,
+	compartment_id: Option<Uuid>,
 	field_type: FieldTypeEnum,
 }
 
@@ -292,6 +296,7 @@ pub struct UpdateField {
 	pub max: Option<i32>,
 	pub hidden: Option<bool>,
 	pub multi_language: Option<bool>,
+	pub compartment_id: Option<Uuid>,
 	pub sequence_number: Option<i32>,
 }
 
@@ -300,4 +305,5 @@ pub struct UpdateField {
 pub struct UpdateFieldOrder {
 	pub id: Uuid,
 	pub sequence_number: Option<i32>,
+	pub compartment_id: Option<Uuid>,
 }

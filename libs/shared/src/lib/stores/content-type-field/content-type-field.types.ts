@@ -32,7 +32,7 @@ export interface IContentTypeFieldStoreState {
 	deleteField: (siteId: string, contentTypeId: string, fieldId: string) => Promise<void>;
 	deleteFieldLoading: boolean;
 
-	updateFieldOrder: (siteId: string, contentTypeId: string, fieldIds: string[]) => Promise<void>;
+	updateFieldOrder: (siteId: string, contentTypeId: string, fields: IContentTypeFieldOrderUpdateDTO[]) => Promise<void>;
 	updateFieldOrderLoading: boolean;
 }
 
@@ -43,4 +43,10 @@ export interface IContentTypeFieldCreateDTO {
 
 export interface IContentTypeFieldUpdateDTO {
 	name: string;
+}
+
+export interface IContentTypeFieldOrderUpdateDTO {
+	compartmentId?: string;
+	sequenceNumber?: number;
+	id?: string;
 }

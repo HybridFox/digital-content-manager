@@ -62,6 +62,7 @@ pub async fn create(
 		params.site_id,
 		params.content_type_id,
 		form.content_component_id,
+		form.compartment_id,
 		FieldTypeEnum::ContentTypeField,
 		&form.name,
 	)?;
@@ -186,6 +187,7 @@ pub async fn update(
 			hidden: form.hidden.clone(),
 			multi_language: form.multi_language.clone(),
 			sequence_number: form.sequence_number.clone(),
+			compartment_id: form.compartment_id.clone(),
 		},
 	)?;
 

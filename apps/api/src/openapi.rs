@@ -60,6 +60,13 @@ impl Modify for SecurityAddon {
 		super::modules::content_types::controllers::fields::update,
 		super::modules::content_types::controllers::fields::remove,
 
+		super::modules::content_types::controllers::compartments::create,
+		super::modules::content_types::controllers::compartments::find_all,
+		super::modules::content_types::controllers::compartments::find_one,
+		super::modules::content_types::controllers::compartments::update,
+		super::modules::content_types::controllers::compartments::update,
+		super::modules::content_types::controllers::compartments::remove,
+
 		super::modules::content_types::controllers::field_order::update_order,
 
 		super::modules::content::controllers::content::create,
@@ -153,6 +160,13 @@ impl Modify for SecurityAddon {
 			super::modules::content_types::dto::fields::request::CreateFieldDTO,
 			super::modules::content_types::dto::fields::response::FieldsDTO,
 			super::modules::content_types::dto::fields::response::FieldsEmbeddedDTO,
+
+			// Compartments
+			super::modules::content_types::dto::compartments::request::CreateCompartmentDTO,
+			super::modules::content_types::dto::compartments::request::UpdateCompartmentDTO,
+			super::modules::content_types::dto::compartments::response::CompartmentsDTO,
+			super::modules::content_types::dto::compartments::response::CompartmentDTO,
+			super::modules::content_types::dto::compartments::response::CompartmentsEmbeddedDTO,
 
 			// Content
 			super::modules::content::dto::content::response::ContentDTO,

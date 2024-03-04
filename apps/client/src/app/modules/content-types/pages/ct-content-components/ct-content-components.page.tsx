@@ -3,6 +3,7 @@ import {
 	CONTENT_TYPE_KINDS_TRANSLATIONS,
 	IAPIError,
 	IField,
+	useCompartmentStore,
 	useContentComponentStore,
 	useContentTypeFieldStore,
 	useContentTypeStore,
@@ -27,14 +28,21 @@ import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 import {
 	CONTENT_TYPE_DETAIL_COLUMNS,
 	addContentComponentSchema,
+	addCompartmentSchema,
 } from './ct-content-components.const';
 
 interface IAddContentComponentForm {
 	contentComponentId: string;
 	name: string;
+	compartmentId?: string;
+}
+
+interface IAddCompartmentForm {
+	name: string;
 }
 
 export const CTContentComponentsPage = () => {
+	const [fieldRows, setFieldRows] = useState<IField[]>([]);
 	const [contentComponents, fetchContentComponents] =
 		useContentComponentStore((state) => [
 			state.contentComponents,
@@ -53,6 +61,15 @@ export const CTContentComponentsPage = () => {
 			state.createField,
 			state.deleteField,
 		]);
+	const [createCompartmentLoading, createCompartment] =
+		useCompartmentStore((state) => [
+			state.createCompartmentLoading,
+			state.createCompartment,
+		]);
+	const [compartments] =
+		useCompartmentStore((state) => [
+			state.compartments
+		]);
 	const [updateFieldOrderLoading, updateFieldOrder] =
 		useContentTypeFieldStore((state) => [
 			state.updateFieldOrderLoading,
@@ -60,15 +77,12 @@ export const CTContentComponentsPage = () => {
 		]);
 	const params = useParams();
 	const navigate = useNavigate();
-	const formMethods = useForm<IAddContentComponentForm>({
+	const fieldFormMethods = useForm<IAddContentComponentForm>({
 		resolver: yupResolver(addContentComponentSchema),
 	});
-
-	const {
-		handleSubmit,
-		setError,
-		formState: { errors },
-	} = formMethods;
+	const compartmentFormMethods = useForm<IAddCompartmentForm>({
+		resolver: yupResolver(addCompartmentSchema),
+	});
 
 	useEffect(() => {
 		setBreadcrumbs([
@@ -84,6 +98,10 @@ export const CTContentComponentsPage = () => {
 			{ label: 'Content Components' },
 		]);
 	}, [contentType]);
+
+	useEffect(() => {
+		setFieldRows(contentType?.fields || [])
+	}, [contentType?.fields])
 
 	useEffect(() => {
 		if (!params.contentTypeId) {
@@ -109,7 +127,23 @@ export const CTContentComponentsPage = () => {
 				)
 			)
 			.catch((error: IAPIError) => {
-				setError('root', {
+				fieldFormMethods.setError('root', {
+					message: error.code,
+				});
+			});
+	};
+
+	const onCreateCompartment = (values: IAddCompartmentForm) => {
+		if (!contentType) {
+			return;
+		}
+
+		createCompartment(siteId!, contentType.id, values)
+			.then((field) => {
+				compartmentFormMethods.reset();
+			})
+			.catch((error: IAPIError) => {
+				compartmentFormMethods.setError('root', {
 					message: error.code,
 				});
 			});
@@ -131,7 +165,8 @@ export const CTContentComponentsPage = () => {
 	};
 
 	const onOrderChange = (orderedRows: IField[]) => {
-		updateFieldOrder(siteId!, contentType!.id, orderedRows.map((row) => row.id!))
+		setFieldRows(orderedRows)
+		updateFieldOrder(siteId!, contentType!.id, orderedRows)
 	}
 
 	return (
@@ -144,20 +179,22 @@ export const CTContentComponentsPage = () => {
 					orderable={true}
 					onOrderChange={onOrderChange}
 					columns={CONTENT_TYPE_DETAIL_COLUMNS(onDeleteField)}
-					rows={contentType?.fields || []}
+					rows={fieldRows}
+					groups={compartments}
+					rowGroupIdentifier='compartmentId'
 				></Table>
 			</div>
 			<Card title="Add content component">
-				<FormProvider {...formMethods}>
-					<form onSubmit={handleSubmit(onCreateField)}>
+				<FormProvider {...fieldFormMethods}>
+					<form onSubmit={fieldFormMethods.handleSubmit(onCreateField)}>
 						<Alert
 							className="u-margin-bottom"
 							type={AlertTypes.DANGER}
 						>
-							{errors?.root?.message}
+							{fieldFormMethods.formState.errors?.root?.message}
 						</Alert>
 						<div className="u-row">
-							<div className="u-col-md-5">
+							<div className={`u-col-md-${compartments.length ? '3' : '5'}`}>
 								<SelectField
 									name="contentComponentId"
 									label="Content Component"
@@ -167,15 +204,52 @@ export const CTContentComponentsPage = () => {
 									})) }}
 								></SelectField>
 							</div>
-							<div className="u-col-md-5">
+							<div className={`u-col-md-${compartments.length ? '4' : '5'}`}>
 								<TextField name="name" label="Name"></TextField>
 							</div>
+							{!!compartments.length && (
+								<div className="u-col-md-3">
+									<SelectField
+										name="compartmentId"
+										label="Compartment"
+										fieldConfiguration={{ options: compartments.map((cc) => ({
+											label: cc.name,
+											value: cc.id,
+										})) }}
+									></SelectField>
+								</div>
+							)}
 							<div className="u-col-md-2 u-col--align-end">
 								<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT} block>
 									{createFieldLoading && (
 										<i className="las la-redo-alt la-spin"></i>
 									)}{' '}
 									Add field
+								</Button>
+							</div>
+						</div>
+					</form>
+				</FormProvider>
+			</Card>
+			<Card title="Add compartment" className='u-margin-top'>
+				<FormProvider {...compartmentFormMethods}>
+					<form onSubmit={compartmentFormMethods.handleSubmit(onCreateCompartment)}>
+						<Alert
+							className="u-margin-bottom"
+							type={AlertTypes.DANGER}
+						>
+							{compartmentFormMethods.formState.errors?.root?.message}
+						</Alert>
+						<div className="u-row">
+							<div className="u-col-md-10">
+								<TextField name="name" label="Name"></TextField>
+							</div>
+							<div className="u-col-md-2 u-col--align-end">
+								<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT} block>
+									{createCompartmentLoading && (
+										<i className="las la-redo-alt la-spin"></i>
+									)}{' '}
+									Add compartment
 								</Button>
 							</div>
 						</div>

@@ -12,6 +12,10 @@ export const addContentComponentSchema = yup.object({
 	name: yup.string().required(),
 });
 
+export const addCompartmentSchema = yup.object({
+	name: yup.string().required(),
+});
+
 export const CONTENT_TYPE_DETAIL_COLUMNS = (
 	onDeleteField: (fieldId: string) => void
 ): ITableColumn[] => [

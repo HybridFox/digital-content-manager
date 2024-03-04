@@ -13,6 +13,11 @@ export interface ITableColumn<T = Record<string, unknown>> {
 	component?: ReactNode;
 }
 
+export interface ITableGroup {
+	name: string;
+	id: string;
+}
+
 
 export interface ITableProps {
 	className?: string;
@@ -28,4 +33,6 @@ export interface ITableProps {
 	maxSelection?: number;
 	orderable?: boolean;
 	noDataText?: ReactNode;
+	groups?: ITableGroup[];
+	rowGroupIdentifier?: string;
 }

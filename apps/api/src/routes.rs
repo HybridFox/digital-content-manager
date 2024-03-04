@@ -80,6 +80,14 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 										.service(modules::content_types::controllers::fields::remove),
 								)
 								.service(
+									web::scope("/{content_type_id}/compartments")
+										.service(modules::content_types::controllers::compartments::create)
+										.service(modules::content_types::controllers::compartments::find_all)
+										.service(modules::content_types::controllers::compartments::find_one)
+										.service(modules::content_types::controllers::compartments::update)
+										.service(modules::content_types::controllers::compartments::remove),
+								)
+								.service(
 									web::scope("/{content_type_id}/field-order")
 										.service(modules::content_types::controllers::field_order::update_order),
 								)

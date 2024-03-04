@@ -18,3 +18,4 @@ export * from './language';
 export * from './iam-action';
 export * from './theme';
 export * from './content';
+export * from './compartment';

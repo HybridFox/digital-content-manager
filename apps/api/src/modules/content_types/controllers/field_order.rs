@@ -1,6 +1,6 @@
-use super::super::dto::field_order::{request};
+use super::super::dto::field_order::request;
 use crate::modules::auth::helpers::permissions::ensure_permission;
-use crate::modules::content_types::models::field::{FieldTypeEnum, UpdateFieldOrder};
+use crate::modules::content_types::models::field::UpdateFieldOrder;
 use crate::{errors::AppError, modules::content_types::models::field::FieldModel};
 use crate::modules::core::middleware::state::AppState;
 use actix_web::{patch, web, HttpResponse, HttpRequest};
@@ -42,13 +42,13 @@ pub async fn update_order(
 	let conn = &mut state.get_conn()?;
 
 	let changes: Vec<UpdateFieldOrder> = form
-		.field_ids
+		.fields
 		.clone()
 		.into_iter()
-		.enumerate()
-		.map(|(i, change_id)| UpdateFieldOrder {
-			id: change_id.clone(),
-			sequence_number: Some(i.try_into().unwrap()),
+		.map(|change| UpdateFieldOrder {
+			id: change.id.clone(),
+			sequence_number: Some(change.sequence_number),
+			compartment_id: change.compartment_id,
 		})
 		.collect();
 

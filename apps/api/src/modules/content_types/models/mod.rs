@@ -1,3 +1,4 @@
+pub mod compartment;
 pub mod content_type;
 pub mod field;
 pub mod field_config;
