@@ -7,6 +7,8 @@ import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
+import { ListPlugin } from '@lexical/react/LexicalListPlugin';
+import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { $getRoot, EditorState, LexicalEditor } from 'lexical';
 import { $generateNodesFromDOM } from '@lexical/html';
@@ -82,6 +84,8 @@ export const RichtextField: FC<IRichtextFieldProps> = ({
 
 				<LexicalComposer initialConfig={initialConfig}>
 					<ToolbarPlugin />
+					<ListPlugin />
+					<CheckListPlugin />
 					<OnChangePlugin onChange={handleChange} ignoreSelectionChange />
 					<RichTextPlugin
 						contentEditable={<ContentEditable className={cxBind('a-input__field')} />}

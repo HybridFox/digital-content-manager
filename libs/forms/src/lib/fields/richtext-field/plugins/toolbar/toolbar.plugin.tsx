@@ -7,7 +7,7 @@
  */
 
 import type { LexicalEditor, NodeKey } from 'lexical';
-import { $createCodeNode, $isCodeNode, CODE_LANGUAGE_FRIENDLY_NAME_MAP, CODE_LANGUAGE_MAP, getLanguageFriendlyName } from '@lexical/code';
+import { $createCodeNode, $isCodeNode, CODE_LANGUAGE_FRIENDLY_NAME_MAP, CODE_LANGUAGE_MAP } from '@lexical/code';
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import {
 	$isListNode,
@@ -17,7 +17,6 @@ import {
 	ListNode,
 	REMOVE_LIST_COMMAND,
 } from '@lexical/list';
-import { INSERT_EMBED_COMMAND } from '@lexical/react/LexicalAutoEmbedPlugin';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $isDecoratorBlockNode } from '@lexical/react/LexicalDecoratorBlockNode';
 import { INSERT_HORIZONTAL_RULE_COMMAND } from '@lexical/react/LexicalHorizontalRuleNode';
@@ -28,7 +27,6 @@ import { $findMatchingParent, $getNearestBlockElementAncestorOrThrow, $getNeares
 import {
 	$createParagraphNode,
 	$getNodeByKey,
-	$getRoot,
 	$getSelection,
 	$isRangeSelection,
 	$isRootOrShadowRoot,
@@ -38,11 +36,8 @@ import {
 	COMMAND_PRIORITY_CRITICAL,
 	COMMAND_PRIORITY_NORMAL,
 	DEPRECATED_$isGridSelection,
-	FORMAT_ELEMENT_COMMAND,
 	FORMAT_TEXT_COMMAND,
-	INDENT_CONTENT_COMMAND,
 	KEY_MODIFIER_COMMAND,
-	OUTDENT_CONTENT_COMMAND,
 	REDO_COMMAND,
 	SELECTION_CHANGE_COMMAND,
 	UNDO_COMMAND,
@@ -50,7 +45,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import * as React from 'react';
 import cx from 'classnames/bind';
-import { Button, ButtonSizes, ButtonTypes, Select } from '@ibs/components';
+import { Button, ButtonTypes, Select } from '@ibs/components';
 import classNames from 'classnames';
 import { SketchPicker } from 'react-color';
 import { Tooltip } from 'react-tooltip';
@@ -159,6 +154,7 @@ function BlockFormatDropDown({
 	};
 
 	const formatHeading = (headingSize: HeadingTagType) => {
+		console.log('fHeading')
 		if (blockType !== headingSize) {
 			editor.update(() => {
 				const selection = $getSelection();
@@ -170,6 +166,8 @@ function BlockFormatDropDown({
 	};
 
 	const formatBulletList = () => {
+		console.log('fBullet');
+		console.log(blockType)
 		if (blockType !== 'bullet') {
 			editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
 		} else {
@@ -252,31 +250,31 @@ function BlockFormatDropDown({
 		{
 			label: 'Bullet list',
 			value: 'bullet',
-			onClick: () => formatBulletList,
+			onClick: () => formatBulletList(),
 			active: blockType === 'bullet',
 		},
 		{
 			label: 'Numbered list',
 			value: 'number',
-			onClick: () => formatNumberedList,
+			onClick: () => formatNumberedList(),
 			active: blockType === 'number',
 		},
 		{
 			label: 'Check list',
 			value: 'check',
-			onClick: () => formatCheckList,
+			onClick: () => formatCheckList(),
 			active: blockType === 'check',
 		},
 		{
 			label: 'Quote',
 			value: 'quote',
-			onClick: () => formatQuote,
+			onClick: () => formatQuote(),
 			active: blockType === 'quote',
 		},
 		{
 			label: 'Code Block',
 			value: 'code',
-			onClick: () => formatCode,
+			onClick: () => formatCode(),
 			active: blockType === 'code',
 		},
 	];
