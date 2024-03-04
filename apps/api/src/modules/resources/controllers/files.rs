@@ -72,15 +72,6 @@ pub async fn read_file(
 	query: web::Query<FilesQueryParams>,
 	params: web::Path<SharedParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(
-		&req,
-		Some(params.site_id),
-		format!(
-			"urn:ibs:storage-repositories:{}:resources:*",
-			params.storage_repository_id
-		),
-		"sites::resources:read",
-	)?;
 	let conn = &mut state.get_conn()?;
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
 	let file = engine.download_file(&query.path).await?;

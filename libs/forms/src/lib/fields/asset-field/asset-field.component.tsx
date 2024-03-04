@@ -53,13 +53,13 @@ export const AssetField: FC<IAssetFieldProps> = ({ name, label, fieldConfigurati
 				})}
 			>
 				<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} name={name} />
-				{value && (
+				{(Array.isArray(value) ? !!value.length : !!value) && (
 					<div className={cxBind('a-input__images')}>
 						{value && !Array.isArray(value) && renderImage(value.storageRepositoryId, value.path)}
 						{value && Array.isArray(value) && value.map((item) => renderImage(item.storageRepositoryId, item.path))}
 					</div>
 				)}
-				{!value && (
+				{(Array.isArray(value) ? !value.length : !value) && (
 					<div className={cxBind('a-input__add')} onClick={() => setModalOpen(true)}>
 						<span className="las la-plus"></span>
 						<p>Add asset</p>
