@@ -40,7 +40,7 @@ export const SetupPage = () => {
 			<div className={cxBind('p-setup__content')}>
 				<div className={cxBind('p-setup__form')}>
 					<div className={classNames("u-margin-bottom-lg", cxBind('p-setup__logo'))}>
-						<i className="las la-sms"></i> Inhoud Beheer Systeem
+						<i className="las la-sms"></i> Digital Content Manager
 					</div>
 					<h1 className="u-margin-bottom">Initial Account Setup</h1>
 					<Alert className="u-margin-bottom" type={AlertTypes.DANGER}>{errors?.root?.message}</Alert>
