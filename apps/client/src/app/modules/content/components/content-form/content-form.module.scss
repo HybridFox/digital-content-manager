@@ -4,12 +4,12 @@
 
 	&__fields {
 		flex: 1;
-		padding-right: var(--spacer-lg);
 	}
 
 	&__status {
 		width: 350px;
 		border-left: 1px solid var(--color-gray-lightest);
+		margin-left: var(--spacer-lg);
 		padding-left: var(--spacer-lg);
 	}
 }
