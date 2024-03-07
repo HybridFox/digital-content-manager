@@ -1,11 +1,14 @@
-import { useContentStore, useContentTypeStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { generatePath, Outlet, useNavigate, useParams } from 'react-router-dom';
-import { Header, Loading } from '@ibs/components';
+
+
+import { Header, Loading } from '~components';
 
 import { CONTENT_PATHS } from '../../content.routes';
 
 import { CONTENT_DETAIL_TABS } from './content-detail.const';
+
+import { useContentStore, useContentTypeStore, useHeaderStore, useWorkflowStore } from '~shared';
 
 export const ContentDetailPage = () => {
 	const [contentTypeLoading, contentType, fetchContentType] = useContentTypeStore((state) => [

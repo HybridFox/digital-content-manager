@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { useFieldArray } from 'react-hook-form';
 import cx from 'classnames/bind';
-import { Button, ButtonSizes } from '@ibs/components';
+import { Button, ButtonSizes } from '~components';
 import { useTranslation } from 'react-i18next';
-import { SelectField, TextField } from '@ibs/forms';
+import { SelectField, TextField } from '~forms';
 import classNames from 'classnames';
 
 import { IPermissionManagerProps } from './permission-manager.types';
@@ -68,7 +68,7 @@ export const PermissionManager: FC<IPermissionManagerProps> = ({ name, iamAction
 					</div>
 				))}
 			</div>
-			<button type='button' className={cxBind('o-permission-manager__add')} onClick={() => append({ effect: 'grant', resources: ['urn:ibs:*'] })}>
+			<button type='button' className={cxBind('o-permission-manager__add')} onClick={() => append({ effect: 'grant', resources: ['urn:dcm:*'] })}>
 				<i className="las la-plus"></i>
 				<p>
 					{t('PERMISSIONS.ADD')}

@@ -50,7 +50,7 @@ pub async fn create(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:workflow-states:*"),
+		format!("urn:dcm:workflow-states:*"),
 		"sites::workflow-states:create",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -89,7 +89,7 @@ pub async fn find_all(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:workflow-states:*"),
+		format!("urn:dcm:workflow-states:*"),
 		"sites::workflow-states:read",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -132,7 +132,7 @@ pub async fn find_one(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:workflow-states:{}", params.workflow_id),
+		format!("urn:dcm:workflow-states:{}", params.workflow_id),
 		"sites::workflow-states:read",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -164,7 +164,7 @@ pub async fn update(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:workflow-states:{}", params.workflow_id),
+		format!("urn:dcm:workflow-states:{}", params.workflow_id),
 		"sites::workflow-states:update",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -202,7 +202,7 @@ pub async fn remove(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:workflow-states:{}", params.workflow_id),
+		format!("urn:dcm:workflow-states:{}", params.workflow_id),
 		"sites::workflow-states:remove",
 	)?;
 	let conn = &mut state.get_conn()?;

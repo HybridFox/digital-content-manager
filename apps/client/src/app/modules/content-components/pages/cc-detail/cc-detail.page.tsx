@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
-import { useContentComponentStore, useHeaderStore } from '@ibs/shared';
-import { Header, Loading } from '@ibs/components';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
+import { Header, Loading } from '~components';
+
 import { CONTENT_TYPE_DETAIL_TABS } from './cc-detail.const';
+
+import { useContentComponentStore, useHeaderStore } from '~shared';
 
 export const CCDetailPage = () => {
 	const [contentComponent, contentComponentLoading, fetchContentComponent] = useContentComponentStore((state) => [

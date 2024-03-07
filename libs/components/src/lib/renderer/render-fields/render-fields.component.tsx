@@ -1,14 +1,17 @@
 import { FC, Suspense } from "react";
-import { FIELD_KEYS, IField } from "@ibs/shared";
 import classNames from "classnames";
 import cx from "classnames/bind";
-import { Alert, Loading } from "@ibs/components";
-import {FIELD_COMPONENTS, FIELD_VIEW_MODE} from "@ibs/forms";
+
+import { Alert, Loading } from "~components";
+
 
 import { RenderMultiple } from "../render-multiple";
 
 import styles from './render-fields.module.scss';
 import { IRenderFieldsProps } from "./render-fields.types";
+
+import {FIELD_COMPONENTS, FIELD_VIEW_MODE} from "~forms";
+import { FIELD_KEYS, IField } from "~shared";
 const cxBind = cx.bind(styles);
 
 export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix = '', siteId, viewMode = FIELD_VIEW_MODE.EDIT }: IRenderFieldsProps) => {

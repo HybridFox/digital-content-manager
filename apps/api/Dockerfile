@@ -11,13 +11,13 @@ RUN ls -al
 # build for release
 RUN cargo build --bins --release
 
-RUN ldd /app/target/release/ibs-api
+RUN ldd /app/target/release/dcm-api
 
 # our final base
 FROM debian:bullseye-slim
 
 RUN apt-get update && apt-get install libpq5 libssl-dev ca-certificates -y
-COPY --from=builder /app/target/release/ibs-api /
+COPY --from=builder /app/target/release/dcm-api /
 
 # set the startup command to run your binary
-CMD ["./ibs-api"]
+CMD ["./dcm-api"]

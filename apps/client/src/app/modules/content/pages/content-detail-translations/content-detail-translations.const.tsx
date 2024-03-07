@@ -1,10 +1,13 @@
-import { ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
 import { TFunction } from 'i18next';
 import { generatePath } from 'react-router-dom';
 import * as yup from 'yup';
-import { IContentType } from '@ibs/shared';
+
+
+import { ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '~components';
 
 import { CONTENT_PATHS } from '../../content.routes';
+
+import { IContentType } from '~shared';
 
 export const addContentComponentSchema = yup.object({
 	contentComponentId: yup.string().required(),

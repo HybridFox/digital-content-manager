@@ -1,6 +1,5 @@
 import { Outlet, useParams } from "react-router-dom"
 import cx from 'classnames/bind';
-import { useThemeStore } from "@ibs/shared";
 import classNames from "classnames";
 
 import { Menu } from "../../components/menu/menu.component";
@@ -8,6 +7,8 @@ import { RootMenu } from "../../components/menu/root-menu.component";
 import { TopBar } from "../../components/top-bar/top-bar.component";
 
 import styles from './authenticated.module.scss';
+
+import { useThemeStore } from "~shared";
 const cxBind = cx.bind(styles);
 
 export const AuthenticatedView = () => {

@@ -1,8 +1,10 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
-import { DEFAULT_PAGINATION_OPTIONS, IWorkflowState, kyInstance, wrapApi } from '@ibs/shared';
 
 import { IWorkflowStateStoreState, IWorkflowStatesResponse } from './workflow-state.types';
+
+import { DEFAULT_PAGINATION_OPTIONS, IWorkflowState, kyInstance, wrapApi } from '~shared';
+
 
 export const useWorkflowStateStore = create<IWorkflowStateStoreState>()(devtools(
 	(set) => ({

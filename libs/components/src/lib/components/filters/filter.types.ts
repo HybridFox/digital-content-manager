@@ -1,4 +1,4 @@
-import {FIELD_KEYS} from "@ibs/shared";
+import {FIELD_KEYS} from "~shared";
 
 export interface IFiltersProps {
 	className?: string;

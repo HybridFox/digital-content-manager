@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom"
 import { useEffect } from "react";
-import { IAPIError, useAuthStore } from "@ibs/shared";
+
+import { IAPIError, useAuthStore } from "~shared";
 
 export const RootView = () => {
 	const [fetchUser] = useAuthStore((state) => [state.fetchUser]);

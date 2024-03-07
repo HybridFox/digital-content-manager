@@ -50,7 +50,7 @@ pub async fn create(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:storage-repositories:*"),
+		format!("urn:dcm:storage-repositories:*"),
 		"sites::storage-repositories:create",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -89,7 +89,7 @@ pub async fn find_all(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:storage-repositories:*"),
+		format!("urn:dcm:storage-repositories:*"),
 		"sites::storage-repositories:read",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -134,7 +134,7 @@ pub async fn find_one(
 		&req,
 		Some(params.site_id),
 		format!(
-			"urn:ibs:storage-repositories:{}",
+			"urn:dcm:storage-repositories:{}",
 			params.storage_repository_id
 		),
 		"sites::storage-repositories:read",
@@ -169,7 +169,7 @@ pub async fn update(
 		&req,
 		Some(params.site_id),
 		format!(
-			"urn:ibs:storage-repositories:{}",
+			"urn:dcm:storage-repositories:{}",
 			params.storage_repository_id
 		),
 		"sites::storage-repositories:update",
@@ -209,7 +209,7 @@ pub async fn remove(
 		&req,
 		Some(params.site_id),
 		format!(
-			"urn:ibs:storage-repositories:{}",
+			"urn:dcm:storage-repositories:{}",
 			params.storage_repository_id
 		),
 		"sites::storage-repositories:remove",

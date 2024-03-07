@@ -1,11 +1,3 @@
-import {
-	CONTENT_TYPE_KINDS_TRANSLATIONS,
-	IContentItem,
-	useContentStore,
-	useContentTypeStore,
-	useHeaderStore,
-	useWorkflowStore,
-} from '@ibs/shared';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -13,6 +5,15 @@ import { useParams } from 'react-router-dom';
 import { CONTENT_PATHS } from '../../content.routes';
 import { useWorkflowStateStore } from '../../../workflow/stores/workflow-state';
 import { ContentForm, ContentFormMode } from '../../components';
+
+import {
+	CONTENT_TYPE_KINDS_TRANSLATIONS,
+	IContentItem,
+	useContentStore,
+	useContentTypeStore,
+	useHeaderStore,
+	useWorkflowStore,
+} from '~shared';
 
 export const ContentDetailCompartmentPage = () => {
 	const [workflowStates, fetchWorkflowStates] = useWorkflowStateStore((state) => [state.workflowStates, state.fetchWorkflowStates]);

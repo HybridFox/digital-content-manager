@@ -1,11 +1,13 @@
 import { FC } from 'react';
 import cx from 'classnames/bind';
-import { IField } from '@ibs/shared';
-import {FieldGroupHeader} from "@ibs/forms";
-import {RenderFields} from "@ibs/components";
+
+import {RenderFields} from "~components";
 
 import { IFieldGroupFieldProps } from './field-group-field.types';
 import styles from './field-group-field.module.scss';
+
+import {FieldGroupHeader} from "~forms";
+import { IField } from '~shared';
 
 const cxBind = cx.bind(styles);
 

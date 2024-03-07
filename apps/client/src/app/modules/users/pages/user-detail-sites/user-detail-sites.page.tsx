@@ -1,8 +1,8 @@
-import { getPageParams, getPaginationProps } from '@ibs/shared';
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
+
+import { Loading, Pagination, Table } from '~components';
 
 import { useUserStore } from '../../stores/user';
 import { useSiteStore } from '../../../sites/stores/site';
@@ -10,6 +10,8 @@ import { SelectRolesModal } from '../../components';
 import { useSiteUserStore } from '../../../site-users/stores/site-user';
 
 import { USER_SITES_COLUMNS } from './user-detail-sites.const';
+
+import { getPageParams, getPaginationProps } from '~shared';
 
 export const UserDetailSitesPage = () => {
 	const { t } = useTranslation();

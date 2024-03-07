@@ -1,6 +1,8 @@
-import { Badge, Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
-import { IRole, ISite, IUser } from '@ibs/shared';
 import { TFunction } from 'i18next';
+
+import { Badge, Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '~components';
+
+import { IRole, ISite, IUser } from '~shared';
 
 export const USER_SITES_COLUMNS = (
 	t: TFunction,

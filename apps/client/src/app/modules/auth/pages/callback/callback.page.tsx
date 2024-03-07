@@ -1,11 +1,13 @@
-import { Alert, AlertTypes, ButtonLink, ButtonTypes, Loading } from '@ibs/components';
 import cx from 'classnames/bind';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { IAPIError, useAuthStore, useThemeStore } from '@ibs/shared';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 
+import { Alert, AlertTypes, ButtonLink, ButtonTypes, Loading } from '~components';
+
 import styles from './callback.module.scss';
+
+import { IAPIError, useAuthStore, useThemeStore } from '~shared';
 const cxBind = cx.bind(styles);
 
 export const CallbackPage = () => {

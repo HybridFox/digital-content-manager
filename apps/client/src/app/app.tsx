@@ -1,6 +1,8 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { Suspense } from 'react';
-import { Loading } from '@ibs/components';
+
+
+import { Loading } from '~components';
 
 import { Root } from './modules/core/components/root/root.component';
 import { AUTH_ROUTES } from './modules/auth';

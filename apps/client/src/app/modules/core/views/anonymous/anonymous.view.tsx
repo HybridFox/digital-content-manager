@@ -1,9 +1,10 @@
 import { Outlet } from "react-router-dom"
 import cx from 'classnames/bind';
-import { useThemeStore } from "@ibs/shared";
 import classNames from "classnames";
 
 import styles from './anonymous.module.scss';
+
+import { useThemeStore } from "~shared";
 const cxBind = cx.bind(styles);
 
 export const AnonymousView = () => {

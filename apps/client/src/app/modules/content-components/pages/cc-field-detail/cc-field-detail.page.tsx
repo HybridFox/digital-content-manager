@@ -1,10 +1,8 @@
 import { useEffect } from 'react';
-import {
-	IAPIError,
-	useContentComponentFieldStore,
-	useContentComponentStore,
-	useHeaderStore,
-} from '@ibs/shared';
+import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
+
 import {
 	Alert,
 	AlertTypes,
@@ -13,12 +11,16 @@ import {
 	HTMLButtonTypes,
 	Header,
 	Loading,
-} from '@ibs/components';
-import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+} from '~components';
 
 import { FIELD_DETAIL_TABS, editFieldSchema } from './cc-field-detail.const';
+
+import {
+	IAPIError,
+	useContentComponentFieldStore,
+	useContentComponentStore,
+	useHeaderStore,
+} from '~shared';
 
 interface IEditFieldForm {
 	name: string;

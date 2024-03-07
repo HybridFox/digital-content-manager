@@ -1,7 +1,9 @@
-import { Badge, Button, ButtonLink, ButtonSizes, ITableColumn } from '@ibs/components';
-import { CONTENT_TYPE_KINDS_TRANSLATIONS, ContentTypeKinds } from '@ibs/shared';
 import { TFunction } from 'i18next';
 import * as yup from 'yup';
+
+import { Badge, Button, ButtonLink, ButtonSizes, ITableColumn } from '~components';
+
+import { CONTENT_TYPE_KINDS_TRANSLATIONS, ContentTypeKinds } from '~shared';
 
 export const addContentComponentSchema = yup.object({
 	contentComponentId: yup.string().required(),

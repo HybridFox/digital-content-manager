@@ -1,16 +1,19 @@
-import { IAPIError, useHeaderStore, useSiteRoleStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { Trans, useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { CheckboxField, TextField } from '@ibs/forms';
+
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
+
 
 import { useSiteUserStore } from '../../stores/site-user';
 import { SITE_USER_PATHS } from '../../site-users.routes';
 
 import { editUserSchema } from './user-detail.const';
+
+import { CheckboxField, TextField } from '~forms';
+import { IAPIError, useHeaderStore, useSiteRoleStore } from '~shared';
 
 interface EditUserForm {
 	roles: string[];

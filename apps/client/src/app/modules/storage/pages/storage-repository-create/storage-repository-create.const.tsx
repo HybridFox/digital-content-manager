@@ -1,5 +1,6 @@
-import { STORAGE_KINDS } from '@ibs/shared';
 import * as yup from 'yup';
+
+import { STORAGE_KINDS } from '~shared';
 
 export const createStorageRepositorySchema = yup.object({
 	name: yup.string().required(),

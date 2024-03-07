@@ -1,4 +1,4 @@
-import { PERMISSION_EFFECT } from "@ibs/shared";
+import { PERMISSION_EFFECT } from "~shared";
 
 export const PERMISSION_EFFECT_OPTIONS = [
 	{

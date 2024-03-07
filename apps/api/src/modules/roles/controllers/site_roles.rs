@@ -49,10 +49,10 @@ pub async fn create(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:roles:*"),
+		format!("urn:dcm:roles:*"),
 		"sites::roles:create",
 	)
-	.or_else(|_| ensure_permission(&req, None, format!("urn:ibs:roles:*"), "root::roles:create"))?;
+	.or_else(|_| ensure_permission(&req, None, format!("urn:dcm:roles:*"), "root::roles:create"))?;
 	let conn = &mut state.get_conn()?;
 	let (role, policies) = Role::create(
 		conn,
@@ -85,10 +85,10 @@ pub async fn find_all(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:roles:*"),
+		format!("urn:dcm:roles:*"),
 		"sites::roles:read",
 	)
-	.or_else(|_| ensure_permission(&req, None, format!("urn:ibs:roles:*"), "root::roles:read"))?;
+	.or_else(|_| ensure_permission(&req, None, format!("urn:dcm:roles:*"), "root::roles:read"))?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
@@ -129,14 +129,14 @@ pub async fn find_one(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:roles:{}", params.role_id),
+		format!("urn:dcm:roles:{}", params.role_id),
 		"sites::roles:read",
 	)
 	.or_else(|_| {
 		ensure_permission(
 			&req,
 			None,
-			format!("urn:ibs:roles:{}", params.role_id),
+			format!("urn:dcm:roles:{}", params.role_id),
 			"root::roles:read",
 		)
 	})?;
@@ -170,14 +170,14 @@ pub async fn update(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:roles:{}", params.role_id),
+		format!("urn:dcm:roles:{}", params.role_id),
 		"sites::roles:update",
 	)
 	.or_else(|_| {
 		ensure_permission(
 			&req,
 			None,
-			format!("urn:ibs:roles:{}", params.role_id),
+			format!("urn:dcm:roles:{}", params.role_id),
 			"root::roles:update",
 		)
 	})?;
@@ -214,14 +214,14 @@ pub async fn remove(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:roles:{}", params.role_id),
+		format!("urn:dcm:roles:{}", params.role_id),
 		"sites::roles:remove",
 	)
 	.or_else(|_| {
 		ensure_permission(
 			&req,
 			None,
-			format!("urn:ibs:roles:{}", params.role_id),
+			format!("urn:dcm:roles:{}", params.role_id),
 			"root::roles:remove",
 		)
 	})?;

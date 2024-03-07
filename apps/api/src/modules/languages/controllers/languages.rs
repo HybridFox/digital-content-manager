@@ -40,7 +40,7 @@ pub async fn find_all(
 	ensure_permission(
 		&req,
 		None,
-		format!("urn:ibs:languages:*"),
+		format!("urn:dcm:languages:*"),
 		"root::languages::read",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -82,7 +82,7 @@ pub async fn find_one(
 	ensure_permission(
 		&req,
 		None,
-		format!("urn:ibs:languages:{}", params.language_id),
+		format!("urn:dcm:languages:{}", params.language_id),
 		"root::languages::read",
 	)?;
 	let conn = &mut state.get_conn()?;

@@ -1,5 +1,6 @@
-import { Badge, Button, ButtonLink, ButtonSizes, ITableColumn } from '@ibs/components';
 import { TFunction } from 'i18next';
+
+import { Badge, Button, ButtonLink, ButtonSizes, ITableColumn } from '~components';
 
 export const AUTHENTICATION_METHODS_LIST_COLUMNS = (t: TFunction): ITableColumn[] => [
 	{

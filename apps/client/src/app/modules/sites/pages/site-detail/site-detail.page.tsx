@@ -1,20 +1,22 @@
-import {
-	IAPIError,
-	useHeaderStore,
-	useLanguageStore
-} from '@ibs/shared';
 import { useEffect } from 'react';
-import { SelectField, TextField } from '@ibs/forms';
 import { Trans, useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useParams } from 'react-router-dom';
+
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
 
 import { SITE_PATHS } from '../../sites.routes';
 import { useSiteStore } from '../../stores/site';
 
 import { updateSiteSchema } from './site-detail.const';
+
+import { SelectField, TextField } from '~forms';
+import {
+	IAPIError,
+	useHeaderStore,
+	useLanguageStore
+} from '~shared';
 
 interface UpdateSiteForm {
 	name: string;

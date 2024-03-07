@@ -1,10 +1,12 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import cx from 'classnames/bind';
-import { useAuthStore, useThemeStore } from '@ibs/shared';
+
 
 import { Avatar } from '../avatar/avatar.component';
 
 import styles from './top-bar.module.scss';
+
+import { useAuthStore, useThemeStore } from '~shared';
 const cxBind = cx.bind(styles);
 
 const navLinkBinding = {

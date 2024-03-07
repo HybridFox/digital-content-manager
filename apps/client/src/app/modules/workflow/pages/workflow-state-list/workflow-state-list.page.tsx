@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
-import { getPageParams, getPaginationProps, useHeaderStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
+
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '~components';
 
 import { useWorkflowStateStore } from '../../stores/workflow-state';
 
 import { WORKFLOW_LIST_COLUMNS } from './workflow-state-list.const';
+
+import { getPageParams, getPaginationProps, useHeaderStore } from '~shared';
 
 export const WorkflowStateListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();

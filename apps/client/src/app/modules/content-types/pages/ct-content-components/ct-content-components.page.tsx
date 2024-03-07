@@ -1,4 +1,28 @@
 import { useEffect, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
+
+import {
+	Alert,
+	AlertTypes,
+	Button,
+	ButtonTypes,
+	Card,
+	HTMLButtonTypes,
+	Table,
+} from '~components';
+
+
+import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
+
+import {
+	CONTENT_TYPE_DETAIL_COLUMNS,
+	addContentComponentSchema,
+	addCompartmentSchema,
+} from './ct-content-components.const';
+
+import { SelectField, TextField } from '~forms';
 import {
 	CONTENT_TYPE_KINDS_TRANSLATIONS,
 	IAPIError,
@@ -8,28 +32,7 @@ import {
 	useContentTypeFieldStore,
 	useContentTypeStore,
 	useHeaderStore,
-} from '@ibs/shared';
-import {
-	Alert,
-	AlertTypes,
-	Button,
-	ButtonTypes,
-	Card,
-	HTMLButtonTypes,
-	Table,
-} from '@ibs/components';
-import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { SelectField, TextField } from '@ibs/forms';
-
-import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
-
-import {
-	CONTENT_TYPE_DETAIL_COLUMNS,
-	addContentComponentSchema,
-	addCompartmentSchema,
-} from './ct-content-components.const';
+} from '~shared';
 
 interface IAddContentComponentForm {
 	contentComponentId: string;

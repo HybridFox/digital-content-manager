@@ -3,15 +3,17 @@ import { Controller, useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
 import { Tooltip } from 'react-tooltip';
 import classNames from 'classnames';
-import { Select } from '@ibs/components';
-import { useContentStore } from '@ibs/shared';
 import { useParams } from 'react-router-dom';
+
+import { Select } from '~components';
 
 import { IRenderControllerField } from '../fields.types';
 import { FieldLabel } from '../../field-label/field-label.component';
 
 import { IContentReferenceFieldProps } from './content-reference-field.types';
 import styles from './content-reference-field.module.scss';
+
+import { useContentStore } from '~shared';
 
 const cxBind = cx.bind(styles);
 

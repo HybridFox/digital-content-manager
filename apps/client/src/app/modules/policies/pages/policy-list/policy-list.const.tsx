@@ -1,6 +1,8 @@
-import { Badge, Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
-import { IIAMPolicy, IPermission } from '@ibs/shared';
 import { TFunction } from 'i18next';
+
+import { Badge, Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '~components';
+
+import { IIAMPolicy, IPermission } from '~shared';
 
 export const POLICY_LIST_COLUMNS = (t: TFunction, handleRemove: (policyId: string) => void): ITableColumn<IIAMPolicy>[] => [
 	{

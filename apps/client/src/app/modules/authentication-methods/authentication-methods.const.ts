@@ -1,4 +1,4 @@
-import { AUTHENTICATION_METHOD_KINDS, FIELD_KEYS, IField } from "@ibs/shared"
+import { AUTHENTICATION_METHOD_KINDS, FIELD_KEYS, IField } from "~shared"
 
 export const AUTHENTICATION_METHOD_OPTIONS = [
 	{

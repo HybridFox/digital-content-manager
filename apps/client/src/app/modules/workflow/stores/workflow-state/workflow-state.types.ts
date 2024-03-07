@@ -1,4 +1,4 @@
-import { IAPIHALResponse, IAPIPagination, IPageParameters, IWorkflowState } from "@ibs/shared";
+import { IAPIHALResponse, IAPIPagination, IPageParameters, IWorkflowState } from "~shared";
 
 export type IWorkflowStatesResponse = IAPIHALResponse<'workflowStates', IWorkflowState>
 

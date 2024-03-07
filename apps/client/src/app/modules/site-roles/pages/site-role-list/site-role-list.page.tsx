@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
-import { getPageParams, getPaginationProps, useHeaderStore, useSiteRoleStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '~components';
+
 import { ROLE_LIST_COLUMNS } from './site-role-list.const';
+
+import { getPageParams, getPaginationProps, useHeaderStore, useSiteRoleStore } from '~shared';
 
 export const SiteRoleListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();

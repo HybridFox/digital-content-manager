@@ -1,4 +1,4 @@
-import { IContentItem, IContentType, IField, IWorkflow, IWorkflowState } from "@ibs/shared";
+import { IContentItem, IContentType, IField, IWorkflow, IWorkflowState } from "~shared";
 
 export enum ContentFormMode {
 	EDIT,

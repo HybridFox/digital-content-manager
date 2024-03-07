@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
-import { getPageParams, getPaginationProps, useHeaderStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
+
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '~components';
 
 import { useUserStore } from '../../stores/user';
 
 import { USER_LIST_COLUMNS } from './user-list.const';
+
+import { getPageParams, getPaginationProps, useHeaderStore } from '~shared';
 
 export const UserListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();

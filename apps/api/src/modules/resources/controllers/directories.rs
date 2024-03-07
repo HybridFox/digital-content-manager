@@ -45,7 +45,7 @@ pub async fn read_directory(
 		&req,
 		Some(params.site_id),
 		format!(
-			"urn:ibs:storage-repositories:{}:resources:*",
+			"urn:dcm:storage-repositories:{}:resources:*",
 			params.storage_repository_id
 		),
 		"sites::resources:read",
@@ -96,7 +96,7 @@ pub async fn create_directory(
 		&req,
 		Some(params.site_id),
 		format!(
-			"urn:ibs:storage-repositories:{}:resources:*",
+			"urn:dcm:storage-repositories:{}:resources:*",
 			params.storage_repository_id
 		),
 		"sites::resources:create-directory",
@@ -130,7 +130,7 @@ pub async fn remove_directory(
 		&req,
 		Some(params.site_id),
 		format!(
-			"urn:ibs:storage-repositories:{}:resources:*",
+			"urn:dcm:storage-repositories:{}:resources:*",
 			params.storage_repository_id
 		),
 		"sites::resources:remove-directory",

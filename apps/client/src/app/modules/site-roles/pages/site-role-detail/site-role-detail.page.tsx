@@ -1,20 +1,22 @@
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
+
+import { SITE_ROLE_PATHS } from '../../site-roles.routes';
+
+import { updateRoleSchema } from './site-role-detail.const';
+
+import { CheckboxField, TextField } from '~forms';
 import {
 	IAPIError,
 	useHeaderStore,
 	useSitePolicyStore,
 	useSiteRoleStore,
-} from '@ibs/shared';
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { CheckboxField, TextField } from '@ibs/forms';
-import { useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
-import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-
-import { SITE_ROLE_PATHS } from '../../site-roles.routes';
-
-import { updateRoleSchema } from './site-role-detail.const';
+} from '~shared';
 
 interface UpdateRoleForm {
 	name: string;

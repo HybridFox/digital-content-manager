@@ -73,7 +73,7 @@ pub async fn create(
 	let user_id = ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content:*"),
+		format!("urn:dcm:content:*"),
 		"sites::content:create",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -142,7 +142,7 @@ pub async fn find_all(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content:*"),
+		format!("urn:dcm:content:*"),
 		"sites::content:read",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -198,7 +198,7 @@ pub async fn find_one(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content:{}", params.content_id),
+		format!("urn:dcm:content:{}", params.content_id),
 		"sites::content:read",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -238,7 +238,7 @@ pub async fn update(
 	let user_id = ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content:{}", params.content_id),
+		format!("urn:dcm:content:{}", params.content_id),
 		"sites::content:update",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -315,7 +315,7 @@ pub async fn remove(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content:{}", params.content_id),
+		format!("urn:dcm:content:{}", params.content_id),
 		"sites::content:remove",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -343,7 +343,7 @@ pub async fn default_values(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content:*"),
+		format!("urn:dcm:content:*"),
 		"sites::content:read",
 	)?;
 	let conn = &mut state.get_conn()?;

@@ -54,7 +54,7 @@ pub async fn create(
 		&req,
 		None,
 		format!(
-			"urn:ibs:authentication-methods:{}",
+			"urn:dcm:authentication-methods:{}",
 			params.authentication_method_id
 		),
 		"root::authentication-methods:update",
@@ -94,7 +94,7 @@ pub async fn find_all(
 		&req,
 		None,
 		format!(
-			"urn:ibs:authentication-methods:{}",
+			"urn:dcm:authentication-methods:{}",
 			params.authentication_method_id
 		),
 		"root::authentication-methods:update",
@@ -140,7 +140,7 @@ pub async fn find_one(
 		&req,
 		None,
 		format!(
-			"urn:ibs:authentication-methods:{}",
+			"urn:dcm:authentication-methods:{}",
 			params.authentication_method_id
 		),
 		"root::authentication-methods:update",
@@ -176,7 +176,7 @@ pub async fn update(
 		&req,
 		None,
 		format!(
-			"urn:ibs:authentication-methods:{}",
+			"urn:dcm:authentication-methods:{}",
 			params.authentication_method_id
 		),
 		"root::authentication-methods:update",
@@ -214,7 +214,7 @@ pub async fn remove(
 		&req,
 		None,
 		format!(
-			"urn:ibs:authentication-methods:{}",
+			"urn:dcm:authentication-methods:{}",
 			params.authentication_method_id
 		),
 		"root::authentication-methods:update",

@@ -1,5 +1,6 @@
-import { IHeaderBreadcrumb } from "@ibs/shared";
 import { ReactNode } from "react";
+
+import { IHeaderBreadcrumb } from "~shared";
 
 export interface IHeaderTab {
 	to: string;

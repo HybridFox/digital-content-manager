@@ -1,15 +1,17 @@
-import { CONTENT_TYPE_KINDS_OPTIONS, IAPIError, useContentTypeStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
-import { Alert, AlertTypes, Button, ButtonTypes, Card, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { generatePath, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { SelectField, TextField, TextareaField } from '@ibs/forms';
 import { Trans, useTranslation } from 'react-i18next';
+
+import { Alert, AlertTypes, Button, ButtonTypes, Card, HTMLButtonTypes, Header, Loading } from '~components';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 
 import { createContentTypeForm } from './ct-create.const';
+
+import { SelectField, TextField, TextareaField } from '~forms';
+import { CONTENT_TYPE_KINDS_OPTIONS, IAPIError, useContentTypeStore, useHeaderStore, useWorkflowStore } from '~shared';
 
 interface ICreateContentTypeForm {
 	name: string;

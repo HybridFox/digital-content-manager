@@ -2,13 +2,15 @@ import { FC, ReactNode } from 'react';
 import cx from 'classnames/bind';
 import classNames from 'classnames';
 import { compose, lensPath, path, set } from 'rambda';
-import { arrayMove } from '@ibs/shared';
+
 
 import { ITableColumn, ITableProps } from './table.types';
 import styles from './table.module.scss';
 import { TableCheckbox } from './components/table-checkbox/table-checkbox.component';
 import { TableOrder } from './components/table-order/table-order.component';
 import { ChangeGroupLocation } from './components/table-order/table-order.types';
+
+import { arrayMove } from '~shared';
 
 const cxBind = cx.bind(styles);
 

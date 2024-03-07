@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
-import { getPageParams, getPaginationProps, useHeaderStore, usePolicyStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '~components';
+
 import { POLICY_LIST_COLUMNS } from './policy-list.const';
+
+import { getPageParams, getPaginationProps, useHeaderStore, usePolicyStore } from '~shared';
 
 export const PolicyListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();

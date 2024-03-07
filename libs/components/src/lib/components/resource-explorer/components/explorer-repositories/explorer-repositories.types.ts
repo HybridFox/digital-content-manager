@@ -1,4 +1,4 @@
-import { IStorageRepository } from "@ibs/shared";
+import { IStorageRepository } from "~shared";
 
 export interface IExplorerRepositoriesProps {
 	className?: string;

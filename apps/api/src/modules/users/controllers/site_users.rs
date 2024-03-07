@@ -48,10 +48,10 @@ pub async fn find_all(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:users:*"),
+		format!("urn:dcm:users:*"),
 		"sites::users:read",
 	)
-	.or_else(|_| ensure_permission(&req, None, format!("urn:ibs:users:*"), "root::users:read"))?;
+	.or_else(|_| ensure_permission(&req, None, format!("urn:dcm:users:*"), "root::users:read"))?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
@@ -92,14 +92,14 @@ pub async fn find_one(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:users:{}", params.user_id),
+		format!("urn:dcm:users:{}", params.user_id),
 		"sites::users:read",
 	)
 	.or_else(|_| {
 		ensure_permission(
 			&req,
 			None,
-			format!("urn:ibs:users:{}", params.user_id),
+			format!("urn:dcm:users:{}", params.user_id),
 			"root::users:read",
 		)
 	})?;
@@ -132,14 +132,14 @@ pub async fn update(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:users:{}", params.user_id),
+		format!("urn:dcm:users:{}", params.user_id),
 		"sites::users:update",
 	)
 	.or_else(|_| {
 		ensure_permission(
 			&req,
 			None,
-			format!("urn:ibs:users:{}", params.user_id),
+			format!("urn:dcm:users:{}", params.user_id),
 			"root::users:update",
 		)
 	})?;

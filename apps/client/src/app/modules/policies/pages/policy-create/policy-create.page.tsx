@@ -1,22 +1,24 @@
+import { useEffect } from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
+
+import { POLICY_PATHS } from '../../policies.routes';
+import { PermissionManager } from '../../components/permission-manager';
+
+import { createPolicySchema } from './policy-create.const';
+
+import { TextField } from '~forms';
 import {
 	IAPIError,
 	PERMISSION_EFFECT,
 	useHeaderStore,
 	useIAMActionStore,
 	usePolicyStore,
-} from '@ibs/shared';
-import { useEffect } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
-import { TextField } from '@ibs/forms';
-import { useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
-import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-
-import { POLICY_PATHS } from '../../policies.routes';
-import { PermissionManager } from '../../components/permission-manager';
-
-import { createPolicySchema } from './policy-create.const';
+} from '~shared';
 
 interface CreatePolicyForm {
 	name: string;

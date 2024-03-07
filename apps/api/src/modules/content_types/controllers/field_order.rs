@@ -35,7 +35,7 @@ pub async fn update_order(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-types:{}", params.content_type_id),
+		format!("urn:dcm:content-types:{}", params.content_type_id),
 		"sites::content-types:update",
 	)?;
 

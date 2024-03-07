@@ -60,7 +60,7 @@ pub async fn find_all(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content:*"),
+		format!("urn:dcm:content:*"),
 		"sites::content:read",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -110,7 +110,7 @@ pub async fn find_one(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content:{}", params.content_id),
+		format!("urn:dcm:content:{}", params.content_id),
 		"sites::content:read",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -140,7 +140,7 @@ pub async fn restore(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content:{}", params.content_id),
+		format!("urn:dcm:content:{}", params.content_id),
 		"sites::content:update",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -169,7 +169,7 @@ pub async fn compare(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content:{}", params.content_id),
+		format!("urn:dcm:content:{}", params.content_id),
 		"sites::content:read",
 	)?;
 	let conn = &mut state.get_conn()?;

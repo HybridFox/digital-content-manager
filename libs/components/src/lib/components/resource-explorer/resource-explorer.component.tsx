@@ -1,5 +1,4 @@
 import { FC, useEffect } from 'react';
-import { IResource, ResourceKind, useAuthStore, useResourceStore, useStorageRepositoryStore } from '@ibs/shared';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -10,6 +9,8 @@ import { ExplorerPath } from './components/explorer-path/explorer-path.component
 import { ExplorerRepositories } from './components/explorer-repositories/explorer-repositories.component';
 import { RESOURCE_COLUMNS } from './resource-explorer.const';
 import { IResourceExplorerProps, ResourceExplorerAction } from './resource-explorer.types';
+
+import { IResource, ResourceKind, useAuthStore, useResourceStore, useStorageRepositoryStore } from '~shared';
 
 export const ResourceExplorer: FC<IResourceExplorerProps> = ({
 	onChangeConfiguration,

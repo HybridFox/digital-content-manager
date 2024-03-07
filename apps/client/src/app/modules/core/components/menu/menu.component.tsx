@@ -1,7 +1,8 @@
 import { NavLink, generatePath, useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
-import { HasPermission } from '@ibs/components';
-import { useThemeStore } from '@ibs/shared';
+
+
+import { HasPermission } from '~components';
 
 import { DASHBOARD_PATHS } from '../../../dashboard';
 import { RESOURCE_PATHS } from '../../../resources';
@@ -15,6 +16,8 @@ import { SITE_POLICY_PATHS } from '../../../site-policies';
 import { STORAGE_PATHS } from '../../../storage';
 
 import styles from './menu.module.scss';
+
+import { useThemeStore } from '~shared';
 const cxBind = cx.bind(styles);
 
 const navLinkBinding = {

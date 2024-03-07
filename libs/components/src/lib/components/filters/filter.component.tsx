@@ -3,13 +3,17 @@ import cx from 'classnames/bind';
 import classNames from 'classnames';
 import {pick} from "rambda";
 import {FormProvider, useForm} from "react-hook-form";
-import {IField} from "@ibs/shared";
+import debounce from "lodash.debounce";
 
 import {RenderFields} from "../../renderer";
 
+
+
 import { IFiltersProps } from './filter.types';
 import styles from './filter.module.scss';
-import debounce from "lodash.debounce";
+
+import {IField} from "~shared";
+
 
 const cxBind = cx.bind(styles);
 

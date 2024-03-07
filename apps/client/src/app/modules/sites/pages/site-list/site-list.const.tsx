@@ -1,6 +1,8 @@
-import { Badge, Button, ButtonLink, ButtonSizes, ButtonTypes, HasPermission, ITableColumn } from '@ibs/components';
-import { ILanguage, ISite } from '@ibs/shared';
 import { TFunction } from 'i18next';
+
+import { Badge, Button, ButtonLink, ButtonSizes, ButtonTypes, HasPermission, ITableColumn } from '~components';
+
+import { ILanguage, ISite } from '~shared';
 
 export const ROLE_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: string) => void): ITableColumn<ISite>[] => [
 	{
@@ -22,12 +24,12 @@ export const ROLE_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: 
 						<i className="las la-eye"></i> {t(`GENERAL.LABELS.VIEW`)}
 					</ButtonLink>
 				)}
-				<HasPermission resource={`urn:ibs:sites::${item.id}`} action='root::sites:update'>
+				<HasPermission resource={`urn:dcm:sites::${item.id}`} action='root::sites:update'>
 					<ButtonLink to={`${item.id}`} size={ButtonSizes.SMALL} className="u-margin-left-sm">
 						<i className="las la-pen"></i> {t(`GENERAL.LABELS.EDIT`)}
 					</ButtonLink>
 				</HasPermission>
-				<HasPermission resource={`urn:ibs:sites::${item.id}`} action='root::sites:remove'>
+				<HasPermission resource={`urn:dcm:sites::${item.id}`} action='root::sites:remove'>
 					<Button size={ButtonSizes.SMALL} className="u-margin-left-sm" onClick={() => handleRemove(item.id as string)}>
 						<i className="las la-trash"></i>
 					</Button>

@@ -2,7 +2,7 @@ version: '3'
 
 x-default-options: &default-options
     networks:
-        - ibs
+        - dcm
     build:
         context: .
         dockerfile: Dockerfile.dev
@@ -13,10 +13,10 @@ x-default-options: &default-options
         - ./static:/static:delegated
         - node-modules-data:/app/node_modules
 
-name: ibs
+name: dcm
 services:
 #    client:
-#        container_name: ibs-client
+#        container_name: dcm-client
 #        command: npm run nx run client:serve -- --verbose
 #        ports:
 #            - 3000:3000
@@ -41,14 +41,14 @@ services:
 
     postgres:
         image: postgres:15-alpine
-        container_name: ibs-postgres
+        container_name: dcm-postgres
         restart: always
         environment:
-            POSTGRES_PASSWORD: ibs
-            POSTGRES_USER: ibs
-            POSTGRES_DB: ibs
+            POSTGRES_PASSWORD: dcm
+            POSTGRES_USER: dcm
+            POSTGRES_DB: dcm
         networks:
-            - ibs
+            - dcm
         ports:
             - 5432:5432
         volumes:
@@ -56,14 +56,14 @@ services:
 
     minio:
         image: quay.io/minio/minio
-        container_name: ibs-minio
+        container_name: dcm-minio
         command: server /data --console-address ":9001"
         restart: always
         environment:
-            MINIO_ROOT_USER: ibs
-            MINIO_ROOT_PASSWORD: ibs-password
+            MINIO_ROOT_USER: dcm
+            MINIO_ROOT_PASSWORD: dcm-password
         networks:
-            - ibs
+            - dcm
         ports:
             - 9000:9000
             - 9001:9001
@@ -72,7 +72,7 @@ services:
 
     jaeger:
         image: jaegertracing/all-in-one:latest
-        container_name: ibs-jaeger
+        container_name: dcm-jaeger
         ports:
           - 16686:16686
           - 4317:4317
@@ -80,10 +80,10 @@ services:
         environment:
           - COLLECTOR_OTLP_ENABLED=true
         networks:
-          - ibs
+          - dcm
 
 networks:
-    ibs: {}
+    dcm: {}
 
 volumes:
     node-modules-data:

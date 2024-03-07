@@ -1,5 +1,6 @@
-import { PERMISSION_EFFECT } from '@ibs/shared';
 import * as yup from 'yup';
+
+import { PERMISSION_EFFECT } from '~shared';
 
 export const createPolicySchema = yup.object({
 	name: yup.string().required(),

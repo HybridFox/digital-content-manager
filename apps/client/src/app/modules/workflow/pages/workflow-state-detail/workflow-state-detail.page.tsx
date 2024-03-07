@@ -1,17 +1,20 @@
-import { IAPIError, WORKFLOW_TECHNICAL_STATES, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { Trans, useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { SelectField, TextField, TextareaField } from '@ibs/forms';
+
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
+
 
 import { useWorkflowStateStore } from '../../stores/workflow-state';
 import { WORKFLOW_PATHS } from '../../workflow.routes';
 import { WORKFLOW_STATE_TECHNICAL_STATE_OPTIONS } from '../../workflow.const';
 
 import { editWorkflowStateSchema } from './workflow-state-detail.const';
+
+import { SelectField, TextField, TextareaField } from '~forms';
+import { IAPIError, WORKFLOW_TECHNICAL_STATES, useHeaderStore } from '~shared';
 
 interface EditWorkflowStateForm {
 	name: string;

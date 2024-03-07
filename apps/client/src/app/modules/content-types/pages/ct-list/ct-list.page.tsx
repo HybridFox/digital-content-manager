@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
-import { getPageParams, getPaginationProps, useContentTypeStore, useHeaderStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '~components';
+
 import { CONTENT_TYPE_LIST_COLUMNS } from './ct-list.const';
+
+import { getPageParams, getPaginationProps, useContentTypeStore, useHeaderStore } from '~shared';
 
 export const CTListPage = () => {
 	const { t } = useTranslation();

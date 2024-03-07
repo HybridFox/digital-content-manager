@@ -1,15 +1,17 @@
-import { IWorkflowTransition, generateUuid, useHeaderStore, useWorkflowStore } from '@ibs/shared';
 import { useEffect, useState } from 'react';
-import { Button, ButtonTypes, Card, HTMLButtonTypes, Loading, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { SelectField } from '@ibs/forms';
 import { useParams } from 'react-router-dom';
+
+import { Button, ButtonTypes, Card, HTMLButtonTypes, Loading, Table } from '~components';
 
 import { WORKFLOW_PATHS } from '../../workflow.routes';
 import { useWorkflowStateStore } from '../../stores/workflow-state';
 
 import { WORKFLOW_TRANSITIONS_COLUMNS } from './workflow-detail-transitions.const';
+
+import { SelectField } from '~forms';
+import { IWorkflowTransition, generateUuid, useHeaderStore, useWorkflowStore } from '~shared';
 
 interface AddWorkflowTransitionForm {
 	fromStateId: string;

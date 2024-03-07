@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { Button, ButtonTypes, HTMLButtonTypes, Modal, ModalFooter } from '@ibs/components';
+import { Button, ButtonTypes, HTMLButtonTypes, Modal, ModalFooter } from '~components';
 import { FormProvider, useForm } from 'react-hook-form';
-import { TextField } from '@ibs/forms';
+import { TextField } from '~forms';
 
 import { ICreateDirectoryModalProps } from './create-directory-modal.types';
 

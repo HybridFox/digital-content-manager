@@ -1,8 +1,10 @@
 import { FC, useMemo } from 'react';
 import classNames from 'classnames';
-import { hasPermission, useAuthStore } from '@ibs/shared';
 
 import { IPermissionProp } from './permission.types';
+
+import { hasPermission, useAuthStore } from '~shared';
+
 
 export const HasPermission: FC<IPermissionProp> = ({
 	className,

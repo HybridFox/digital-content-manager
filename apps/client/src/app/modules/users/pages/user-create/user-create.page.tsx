@@ -1,16 +1,19 @@
-import { IAPIError, useHeaderStore, useRoleStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { Trans, useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { CheckboxField, TextField, TextFieldTypes } from '@ibs/forms';
+
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
+
 
 import { useUserStore } from '../../stores/user';
 import { USER_PATHS } from '../../users.routes';
 
 import { editUserSchema } from './user-create.const';
+
+import { CheckboxField, TextField, TextFieldTypes } from '~forms';
+import { IAPIError, useHeaderStore, useRoleStore } from '~shared';
 
 interface CreateUserForm {
 	email: string;

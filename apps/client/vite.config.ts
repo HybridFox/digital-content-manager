@@ -24,7 +24,7 @@ export default defineConfig({
 
 	plugins: [
 		federation({
-			name: 'ibs',
+			name: 'dcm',
 			remotes: {},
 			shared: ['react']
 		}),

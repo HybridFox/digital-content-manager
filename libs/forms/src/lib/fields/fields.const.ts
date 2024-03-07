@@ -1,5 +1,6 @@
 import { FC, lazy } from "react";
-import { FIELD_KEYS } from "@ibs/shared";
+
+import { FIELD_KEYS } from "~shared";
 
 const TextField = lazy(async () => ({
 	default: (await import('./text-field')).TextField

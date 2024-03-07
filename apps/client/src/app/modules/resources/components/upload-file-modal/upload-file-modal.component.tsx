@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { Button, ButtonTypes, HTMLButtonTypes, Modal, ModalFooter } from '@ibs/components';
+import { Button, ButtonTypes, HTMLButtonTypes, Modal, ModalFooter } from '~components';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FileField } from '@ibs/forms';
+import { FileField } from '~forms';
 
 import { IUploadFileModalProps } from './upload-file-modal.types';
 

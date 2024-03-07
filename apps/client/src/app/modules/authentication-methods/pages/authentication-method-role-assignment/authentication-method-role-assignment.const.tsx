@@ -1,7 +1,9 @@
-import { Button, ButtonSizes, ITableColumn } from '@ibs/components';
-import { IAuthenticationMethodRoleAssignment } from '@ibs/shared';
 import { TFunction } from 'i18next';
 import * as yup from 'yup';
+
+import { Button, ButtonSizes, ITableColumn } from '~components';
+
+import { IAuthenticationMethodRoleAssignment } from '~shared';
 
 export const addRoleAssignmentSchema = yup.object({
 	siteId: yup.string().optional(),

@@ -34,7 +34,7 @@ pub async fn setup_initial_user(
 	let permission = Permission::create(
 		conn,
 		policy.id,
-		vec!["urn:ibs:*".to_string()],
+		vec!["urn:dcm:*".to_string()],
 		"grant".to_owned(),
 	)?;
 	PermissionIAMAction::create(conn, permission.id, vec!["root::*".to_string()])?;

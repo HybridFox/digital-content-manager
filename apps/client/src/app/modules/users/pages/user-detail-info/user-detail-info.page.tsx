@@ -1,13 +1,16 @@
-import { IAPIError } from '@ibs/shared';
 import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { TextField, TextFieldTypes } from '@ibs/forms';
+
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '~components';
+
 
 import { useUserStore } from '../../stores/user';
 
 import { editUserSchema } from './user-detail-info.const';
+
+import { TextField, TextFieldTypes } from '~forms';
+import { IAPIError } from '~shared';
 
 interface EditUserForm {
 	name: string;

@@ -1,16 +1,19 @@
-import { IAPIError, useAuthenticationMethodStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { SelectField, TextField } from '@ibs/forms';
+
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header } from '~components';
+
 
 import { AUTHENTICATION_METHOD_OPTIONS } from '../../authentication-methods.const';
 import { AUTHENTICATION_METHOD_PATHS } from '../../authentication-methods.routes';
 
 import { editAuthenticationMethodSchema } from './authentication-method-create.const';
+
+import { SelectField, TextField } from '~forms';
+import { IAPIError, useAuthenticationMethodStore, useHeaderStore } from '~shared';
 
 interface CreateAuthenticationMethodForm {
 	name: string;

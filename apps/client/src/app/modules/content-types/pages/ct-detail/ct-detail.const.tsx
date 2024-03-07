@@ -1,4 +1,4 @@
-import { IHeaderTab } from '@ibs/components';
+import { IHeaderTab } from '~components';
 
 export const CONTENT_TYPE_DETAIL_TABS: IHeaderTab[] = [
 	{

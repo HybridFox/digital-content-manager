@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
-import { getPageParams, getPaginationProps, useAuthenticationMethodStore, useHeaderStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '~components';
+
 import { AUTHENTICATION_METHODS_LIST_COLUMNS } from './authentication-method-list.const';
+
+import { getPageParams, getPaginationProps, useAuthenticationMethodStore, useHeaderStore } from '~shared';
 
 export const AuthenticationMethodListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();

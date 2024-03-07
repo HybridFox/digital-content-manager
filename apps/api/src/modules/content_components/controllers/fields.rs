@@ -53,7 +53,7 @@ pub async fn create(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-components:{}", params.content_component_id),
+		format!("urn:dcm:content-components:{}", params.content_component_id),
 		"sites::content-components:update",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -92,7 +92,7 @@ pub async fn find_all(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-components:{}", params.content_component_id),
+		format!("urn:dcm:content-components:{}", params.content_component_id),
 		"sites::content-components:update",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -142,7 +142,7 @@ pub async fn find_one(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-components:{}", params.content_component_id),
+		format!("urn:dcm:content-components:{}", params.content_component_id),
 		"sites::content-components:update",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -174,7 +174,7 @@ pub async fn update(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-components:{}", params.content_component_id),
+		format!("urn:dcm:content-components:{}", params.content_component_id),
 		"sites::content-components:update",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -220,7 +220,7 @@ pub async fn remove(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-components:{}", params.content_component_id),
+		format!("urn:dcm:content-components:{}", params.content_component_id),
 		"sites::content-components:update",
 	)?;
 	let conn = &mut state.get_conn()?;

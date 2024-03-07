@@ -1,5 +1,6 @@
-import { Badge, Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
 import { TFunction } from 'i18next';
+
+import { Badge, Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '~components';
 
 export const WORKFLOW_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: string) => void): ITableColumn[] => [
 	{

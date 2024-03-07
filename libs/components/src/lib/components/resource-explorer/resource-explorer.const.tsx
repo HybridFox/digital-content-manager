@@ -1,6 +1,5 @@
 import * as yup from 'yup';
 import dayjs from 'dayjs';
-import { ResourceKind } from '@ibs/shared';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -9,6 +8,8 @@ import { ITableColumn, TableCheckbox, TableIcon, TableImagePreview } from '../ta
 import { Button, ButtonSizes, ButtonTypes } from '../button';
 
 import { ResourceExplorerAction } from './resource-explorer.types';
+
+import { ResourceKind } from '~shared';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);

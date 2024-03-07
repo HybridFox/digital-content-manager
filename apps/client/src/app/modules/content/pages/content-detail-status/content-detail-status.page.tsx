@@ -1,12 +1,14 @@
 import { useEffect, useMemo } from 'react';
-import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, IContentItem, useContentStore, useContentTypeStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { RadioField } from '@ibs/forms';
 import { useParams } from 'react-router-dom';
 
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '~components';
+
 import { CONTENT_PATHS } from '../../content.routes';
+
+import { RadioField } from '~forms';
+import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, IContentItem, useContentStore, useContentTypeStore, useHeaderStore, useWorkflowStore } from '~shared';
 
 export const ContentDetailStatusPage = () => {
 	const [updateContentItem, updateContentItemLoading] = useContentStore((state) => [state.updateContentItem, state.updateContentItemLoading]);

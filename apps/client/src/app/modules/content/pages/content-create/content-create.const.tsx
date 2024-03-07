@@ -1,6 +1,8 @@
-import { Button, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
-import { IField } from '@ibs/shared';
 import * as yup from 'yup';
+
+import { Button, ButtonSizes, ButtonTypes, ITableColumn } from '~components';
+
+import { IField } from '~shared';
 
 export const selectLanguageSchema = yup.object({
 	language: yup.string().required()

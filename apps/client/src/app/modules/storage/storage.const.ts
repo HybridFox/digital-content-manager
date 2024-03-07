@@ -1,4 +1,4 @@
-import { FIELD_KEYS, IField, STORAGE_KINDS } from "@ibs/shared"
+import { FIELD_KEYS, IField, STORAGE_KINDS } from "~shared"
 
 export const STORAGE_KIND_OPTIONS = [
 	{

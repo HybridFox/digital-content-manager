@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import cx from 'classnames/bind';
-import { Badge, BadgeSizes } from '@ibs/components';
+
+
+import { Badge, BadgeSizes } from '~components';
 
 import { FIELD_VIEW_MODE } from '../../fields';
 

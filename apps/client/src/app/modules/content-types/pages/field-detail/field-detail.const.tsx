@@ -1,9 +1,11 @@
-import { IHeaderTab } from '@ibs/components';
-import { IContentType, IContentTypeField } from '@ibs/shared';
 import * as yup from 'yup';
 import { generatePath } from 'react-router-dom';
 
+import { IHeaderTab } from '~components';
+
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
+
+import { IContentType, IContentTypeField } from '~shared';
 
 export const editFieldSchema = yup.object({
 	name: yup.string().required(),

@@ -1,4 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { generatePath, useParams, useSearchParams } from 'react-router-dom';
+
+import { Button, ButtonLink, ButtonTypes, Loading, Pagination, Table } from '~components';
+
+import { CONTENT_PATHS } from '../../content.routes';
+
+import { CONTENT_TRANSLATIONS_LIST_COLUMNS } from './content-detail-revisions.const';
+
 import {
 	CONTENT_TYPE_KINDS_TRANSLATIONS,
 	getPageParams,
@@ -8,14 +17,7 @@ import {
 	useContentStore,
 	useContentTypeStore,
 	useHeaderStore,
-} from '@ibs/shared';
-import { Button, ButtonLink, ButtonTypes, Loading, Pagination, Table } from '@ibs/components';
-import { useTranslation } from 'react-i18next';
-import { generatePath, useParams, useSearchParams } from 'react-router-dom';
-
-import { CONTENT_PATHS } from '../../content.routes';
-
-import { CONTENT_TRANSLATIONS_LIST_COLUMNS } from './content-detail-revisions.const';
+} from '~shared';
 
 export const ContentDetailRevisionsPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();

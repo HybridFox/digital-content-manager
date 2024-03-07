@@ -1,8 +1,8 @@
 import { FC, Suspense } from 'react';
-import { FIELD_KEYS, IField } from '@ibs/shared';
 import classNames from 'classnames';
 import cx from 'classnames/bind';
-import { Alert, Loading } from '@ibs/components';
+
+import { Alert, Loading } from '~components';
 
 import { FIELD_COMPONENTS } from '../../../../../forms/src/lib/fields';
 import { RenderMultiple } from '../render-multiple';
@@ -10,6 +10,8 @@ import { FIELD_VIEW_MODE } from '../../../../../forms/src/lib/fields/fields.type
 
 import styles from './render-comparison.module.scss';
 import { IRenderComparisonProps } from './render-comparison.types';
+
+import { FIELD_KEYS, IField } from '~shared';
 const cxBind = cx.bind(styles);
 
 export const RenderComparison: FC<IRenderComparisonProps> = ({

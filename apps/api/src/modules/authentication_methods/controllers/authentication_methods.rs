@@ -47,7 +47,7 @@ pub async fn create(
 	ensure_permission(
 		&req,
 		None,
-		format!("urn:ibs:authentication-methods:*"),
+		format!("urn:dcm:authentication-methods:*"),
 		"root::authentication-methods:create",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -122,7 +122,7 @@ pub async fn find_one(
 		&req,
 		None,
 		format!(
-			"urn:ibs:authentication-methods:{}",
+			"urn:dcm:authentication-methods:{}",
 			params.authentication_method_id
 		),
 		"root::authentication-methods:read",
@@ -158,7 +158,7 @@ pub async fn update(
 		&req,
 		None,
 		format!(
-			"urn:ibs:authentication-methods:{}",
+			"urn:dcm:authentication-methods:{}",
 			params.authentication_method_id
 		),
 		"root::authentication-methods:update",
@@ -199,7 +199,7 @@ pub async fn remove(
 		&req,
 		None,
 		format!(
-			"urn:ibs:authentication-methods:{}",
+			"urn:dcm:authentication-methods:{}",
 			params.authentication_method_id
 		),
 		"root::authentication-methods:remove",

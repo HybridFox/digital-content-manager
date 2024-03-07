@@ -1,8 +1,9 @@
 import { FC } from 'react';
 import { useFieldArray } from 'react-hook-form';
 import cx from 'classnames/bind';
-import { Button, ButtonSizes, ButtonTypes } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
+
+import { Button, ButtonSizes, ButtonTypes } from '~components';
 
 import { FieldGroupHeader } from '../../../../../forms/src/lib/components';
 import { FIELD_VIEW_MODE } from '../../../../../forms/src/lib/fields';

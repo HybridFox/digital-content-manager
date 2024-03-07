@@ -44,14 +44,14 @@ pub async fn create(
 	state: web::Data<AppState>,
 	form: web::Json<request::CreateSiteDTO>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:sites:*"), "root::sites:create")?;
+	ensure_permission(&req, None, format!("urn:dcm:sites:*"), "root::sites:create")?;
 	let conn = &mut state.get_conn()?;
 	let site = Site::create(conn, &form.name)?;
 	let policy = IAMPolicy::create(conn, Some(site.id), "Default Admin Policy")?;
 	let permission = Permission::create(
 		conn,
 		policy.id,
-		vec!["urn:ibs:*".to_string()],
+		vec!["urn:dcm:*".to_string()],
 		"grant".to_owned(),
 	)?;
 	PermissionIAMAction::create(conn, permission.id, vec!["sites::*".to_string()])?;
@@ -86,7 +86,7 @@ pub async fn find_all(
 	state: web::Data<AppState>,
 	query: web::Query<FindAllQueryParams>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:sites:*"), "root::sites:read")?;
+	ensure_permission(&req, None, format!("urn:dcm:sites:*"), "root::sites:read")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
@@ -127,7 +127,7 @@ pub async fn find_one(
 	ensure_permission(
 		&req,
 		None,
-		format!("urn:ibs:sites:{}", params.site_id),
+		format!("urn:dcm:sites:{}", params.site_id),
 		"root::sites:read",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -159,7 +159,7 @@ pub async fn update(
 	ensure_permission(
 		&req,
 		None,
-		format!("urn:ibs:sites:{}", params.site_id),
+		format!("urn:dcm:sites:{}", params.site_id),
 		"root::sites:update",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -195,7 +195,7 @@ pub async fn remove(
 	ensure_permission(
 		&req,
 		None,
-		format!("urn:ibs:sites:{}", params.site_id),
+		format!("urn:dcm:sites:{}", params.site_id),
 		"root::sites:remove",
 	)?;
 	let conn = &mut state.get_conn()?;

@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-import {
-	IAPIError,
-	useContentComponentFieldStore,
-	useContentComponentStore,
-	useHeaderStore,
-} from '@ibs/shared';
+import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
+
 import {
 	Alert,
 	AlertTypes,
@@ -13,11 +11,8 @@ import {
 	Card,
 	HTMLButtonTypes,
 	Table,
-} from '@ibs/components';
-import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { SelectField, TextField } from '@ibs/forms';
+} from '~components';
+
 
 import { CONTENT_COMPONENT_PATHS } from '../../content-components.routes';
 
@@ -25,6 +20,14 @@ import {
 	CONTENT_TYPE_DETAIL_COLUMNS,
 	addContentComponentSchema,
 } from './cc-content-components.const';
+
+import { SelectField, TextField } from '~forms';
+import {
+	IAPIError,
+	useContentComponentFieldStore,
+	useContentComponentStore,
+	useHeaderStore,
+} from '~shared';
 
 interface IAddContentComponentForm {
 	contentComponentId: string;

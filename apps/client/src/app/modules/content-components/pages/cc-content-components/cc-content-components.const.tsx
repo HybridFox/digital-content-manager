@@ -1,11 +1,12 @@
+import * as yup from 'yup';
+
 import {
 	Button,
 	ButtonLink,
 	ButtonSizes,
 	ButtonTypes,
 	ITableColumn,
-} from '@ibs/components';
-import * as yup from 'yup';
+} from '~components';
 
 export const addContentComponentSchema = yup.object({
 	contentComponentId: yup.string().required(),

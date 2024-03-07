@@ -1,15 +1,18 @@
-import { IAPIError, useHeaderStore, useWorkflowStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { TextField } from '@ibs/forms';
+
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '~components';
+
 
 import { WORKFLOW_PATHS } from '../../workflow.routes';
 
 import { editWorkflowSchema } from './workflow-detail-settings.const';
+
+import { TextField } from '~forms';
+import { IAPIError, useHeaderStore, useWorkflowStore } from '~shared';
 
 interface EditWorkflowForm {
 	name: string;

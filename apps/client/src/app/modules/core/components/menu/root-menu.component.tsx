@@ -1,7 +1,8 @@
 import { NavLink, generatePath } from 'react-router-dom';
 import cx from 'classnames/bind';
-import { HasPermission } from '@ibs/components';
-import { useThemeStore } from '@ibs/shared';
+
+
+import { HasPermission } from '~components';
 
 import { AUTHENTICATION_METHOD_PATHS } from '../../../authentication-methods';
 import { SITE_PATHS } from '../../../sites';
@@ -10,6 +11,8 @@ import { POLICY_PATHS } from '../../../policies';
 import { ROLE_PATHS } from '../../../roles';
 
 import styles from './menu.module.scss';
+
+import { useThemeStore } from '~shared';
 const cxBind = cx.bind(styles);
 
 const navLinkBinding = {

@@ -1,8 +1,10 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
-import { kyInstance, wrapApi } from '@ibs/shared';
 
 import { IStorageRepository, IStorageRepositoryStoreState, IStorageRepositoriesResponse } from './storage-repository.types';
+
+import { kyInstance, wrapApi } from '~shared';
+
 
 export const useStorageRepositoryStore = create<IStorageRepositoryStoreState>()(devtools(
 	(set) => ({

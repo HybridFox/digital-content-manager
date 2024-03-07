@@ -1,7 +1,9 @@
 import { FC, useEffect, useState } from 'react';
-import { Button, IResourceExplorerSelection, Modal, ModalFooter, ResourceExplorer, ResourceExplorerAction } from '@ibs/components';
+
+import { Button, IResourceExplorerSelection, Modal, ModalFooter, ResourceExplorer, ResourceExplorerAction } from '~components';
 
 import { ISelectAssetModalProps } from './select-asset-modal.types';
+
 
 export const SelectAssetModal: FC<ISelectAssetModalProps> = ({
 	onSubmit,

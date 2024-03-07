@@ -1,8 +1,11 @@
-import {Button, ButtonLink, ButtonSizes, IFiltersFilter, ITableColumn} from '@ibs/components';
 import {TFunction} from 'i18next';
 import * as yup from 'yup';
 import dayjs from 'dayjs';
-import {FIELD_KEYS, ISite} from "@ibs/shared";
+
+import {Button, ButtonLink, ButtonSizes, IFiltersFilter, ITableColumn} from '~components';
+
+import {FIELD_KEYS, ISite} from "~shared";
+
 
 export const addContentComponentSchema = yup.object({
 	contentComponentId: yup.string().required(),

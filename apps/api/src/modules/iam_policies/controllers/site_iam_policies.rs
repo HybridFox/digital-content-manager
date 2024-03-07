@@ -51,7 +51,7 @@ pub async fn create(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:policies:*"),
+		format!("urn:dcm:policies:*"),
 		"sites::policies:create",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -94,7 +94,7 @@ pub async fn find_all(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:policies:*"),
+		format!("urn:dcm:policies:*"),
 		"sites::policies:read",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -137,7 +137,7 @@ pub async fn find_one(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:policies:{}", params.iam_policy_id),
+		format!("urn:dcm:policies:{}", params.iam_policy_id),
 		"sites::policies:read",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -170,7 +170,7 @@ pub async fn update(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:policies:{}", params.iam_policy_id),
+		format!("urn:dcm:policies:{}", params.iam_policy_id),
 		"sites::policies:update",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -220,7 +220,7 @@ pub async fn remove(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:policies:{}", params.iam_policy_id),
+		format!("urn:dcm:policies:{}", params.iam_policy_id),
 		"sites::policies:remove",
 	)?;
 	let conn = &mut state.get_conn()?;

@@ -1,15 +1,17 @@
-import { IAPIError, getPageParams, getPaginationProps, useAuthenticationMethodRoleAssignmentStore, useAuthenticationMethodStore, useRoleStore, useSiteRoleStore } from '@ibs/shared';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, ButtonTypes, Card, HTMLButtonTypes, Loading, Pagination, Table, Tabs } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { SelectField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
+
+import { Alert, AlertTypes, Button, ButtonTypes, Card, HTMLButtonTypes, Loading, Pagination, Table, Tabs } from '~components';
 
 import { useSiteStore } from '../../../sites/stores/site';
 
 import { AUTHENTICATION_METHOD_ROLE_ASSIGNMENTS_COLUMNS, addRoleAssignmentSchema } from './authentication-method-role-assignment.const';
+
+import { SelectField } from '~forms';
+import { IAPIError, getPageParams, getPaginationProps, useAuthenticationMethodRoleAssignmentStore, useAuthenticationMethodStore, useRoleStore, useSiteRoleStore } from '~shared';
 
 interface AddAssignmentForm {
 	siteId: string | undefined;

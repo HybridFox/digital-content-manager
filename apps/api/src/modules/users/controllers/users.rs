@@ -39,7 +39,7 @@ pub async fn create(
 	state: web::Data<AppState>,
 	form: web::Json<request::CreateUserDTO>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:ibs:users:*"), "root::users:create")?;
+	ensure_permission(&req, None, format!("urn:dcm:users:*"), "root::users:create")?;
 	let conn = &mut state.get_conn()?;
 
 	let local_auth_method = AuthenticationMethod::find_local(conn)?;
@@ -75,7 +75,7 @@ pub async fn find_all(
 	ensure_permission(
 		&req,
 		None,
-		format!("urn:ibs:languages:*"),
+		format!("urn:dcm:languages:*"),
 		"root::users:read",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -119,7 +119,7 @@ pub async fn find_one(
 	ensure_permission(
 		&req,
 		None,
-		format!("urn:ibs:languages:{}", params.user_id),
+		format!("urn:dcm:languages:{}", params.user_id),
 		"root::users:read",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -151,7 +151,7 @@ pub async fn update(
 	ensure_permission(
 		&req,
 		None,
-		format!("urn:ibs:languages:{}", params.user_id),
+		format!("urn:dcm:languages:{}", params.user_id),
 		"root::users:update",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -191,7 +191,7 @@ pub async fn remove(
 	ensure_permission(
 		&req,
 		None,
-		format!("urn:ibs:languages:{}", params.user_id),
+		format!("urn:dcm:languages:{}", params.user_id),
 		"root::users:remove",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -219,7 +219,7 @@ pub async fn find_sites(
 	ensure_permission(
 		&req,
 		None,
-		format!("urn:ibs:languages:{}", params.user_id),
+		format!("urn:dcm:languages:{}", params.user_id),
 		"root::users:read",
 	)?;
 	let conn = &mut state.get_conn()?;

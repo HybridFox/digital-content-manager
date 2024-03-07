@@ -2,12 +2,13 @@ import { FC, useEffect } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
 import { Tooltip } from 'react-tooltip';
-import { useContentTypeStore } from '@ibs/shared';
-
-import { IRenderControllerField } from '@ibs/forms';
 
 import { IContentTypesFieldProps } from './content-types-field.types';
 import styles from './content-types-field.module.scss';
+
+import { useContentTypeStore } from '~shared';
+import { IRenderControllerField } from '~forms';
+
 
 const cxBind = cx.bind(styles);
 

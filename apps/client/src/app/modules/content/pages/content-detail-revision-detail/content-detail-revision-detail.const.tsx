@@ -1,9 +1,12 @@
-import { IHeaderTab } from '@ibs/components';
 import * as yup from 'yup';
 import { generatePath } from 'react-router-dom';
-import { IContentItem } from '@ibs/shared';
+
+
+import { IHeaderTab } from '~components';
 
 import { CONTENT_PATHS } from '../../content.routes';
+
+import { IContentItem } from '~shared';
 
 export const editContentItemSchema = yup.object({
 	name: yup.string().required(),

@@ -1,14 +1,16 @@
-import { IContentItem, WORKFLOW_TECHNICAL_STATES } from '@ibs/shared';
 import { FC, useEffect, useMemo } from 'react';
-import { RadioField, TextField } from '@ibs/forms';
-import { Alert, AlertTypes, Button, ButtonTypes, Card, CardFooter, CardMeta, HTMLButtonTypes, RenderFields } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
 import slugify from 'slugify';
 
+import { Alert, AlertTypes, Button, ButtonTypes, Card, CardFooter, CardMeta, HTMLButtonTypes, RenderFields } from '~components';
+
 import styles from './content-form.module.scss';
 import { ContentFormMode, IContentFormProps } from './content-form.types';
+
+import { RadioField, TextField } from '~forms';
+import { IContentItem, WORKFLOW_TECHNICAL_STATES } from '~shared';
 
 const cxBind = cx.bind(styles);
 

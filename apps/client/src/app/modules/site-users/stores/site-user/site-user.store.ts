@@ -1,8 +1,10 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
-import { DEFAULT_PAGINATION_OPTIONS, IUser, kyInstance, wrapApi } from '@ibs/shared';
 
 import { ISiteUserStoreState, ISiteUsersResponse } from './site-user.types';
+
+import { DEFAULT_PAGINATION_OPTIONS, IUser, kyInstance, wrapApi } from '~shared';
+
 
 export const useSiteUserStore = create<ISiteUserStoreState>()(devtools(
 	(set) => ({

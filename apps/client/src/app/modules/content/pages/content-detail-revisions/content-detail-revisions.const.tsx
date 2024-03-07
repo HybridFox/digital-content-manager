@@ -1,11 +1,13 @@
-import { Badge, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
 import { TFunction } from 'i18next';
 import { generatePath } from 'react-router-dom';
 import * as yup from 'yup';
-import { DATE_FORMAT, IContentRevision } from '@ibs/shared';
 import dayjs from 'dayjs';
 
+import { Badge, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '~components';
+
 import { CONTENT_PATHS } from '../../content.routes';
+
+import { DATE_FORMAT, IContentRevision } from '~shared';
 
 export const addContentComponentSchema = yup.object({
 	contentComponentId: yup.string().required(),

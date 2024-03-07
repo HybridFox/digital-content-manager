@@ -1,4 +1,4 @@
-import { WORKFLOW_TECHNICAL_STATES } from "@ibs/shared";
+import { WORKFLOW_TECHNICAL_STATES } from "~shared";
 
 export const WORKFLOW_STATE_TECHNICAL_STATE_OPTIONS = [
 	{

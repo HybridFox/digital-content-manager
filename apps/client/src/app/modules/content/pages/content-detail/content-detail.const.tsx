@@ -1,9 +1,12 @@
-import { Badge, IHeaderTab } from '@ibs/components';
 import * as yup from 'yup';
 import { generatePath } from 'react-router-dom';
-import { IContentItem, IContentType } from '@ibs/shared';
+
+
+import { Badge, IHeaderTab } from '~components';
 
 import { CONTENT_PATHS } from '../../content.routes';
+
+import { IContentItem, IContentType } from '~shared';
 
 export const editContentType = yup.object({
 	name: yup.string().required(),

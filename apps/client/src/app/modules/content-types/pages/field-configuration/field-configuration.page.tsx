@@ -1,9 +1,12 @@
-import { CONTENT_TYPE_KINDS_TRANSLATIONS, useContentTypeFieldStore, useContentTypeStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
-import { RenderFields } from '@ibs/components';
+
+import { RenderFields } from '~components';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
+
+import { CONTENT_TYPE_KINDS_TRANSLATIONS, useContentTypeFieldStore, useContentTypeStore, useHeaderStore } from '~shared';
+
 
 export const FieldConfigurationPage = () => {
 	const { siteId } = useParams();

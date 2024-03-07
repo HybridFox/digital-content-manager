@@ -1,12 +1,14 @@
-import { AUTHENTICATION_METHOD_KINDS, useAuthenticationMethodStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
-import { Header, Loading } from '@ibs/components';
 import { Trans, useTranslation } from 'react-i18next';
+
+import { Header, Loading } from '~components';
 
 import { AUTHENTICATION_METHOD_PATHS } from '../../authentication-methods.routes';
 
 import { AUTHENTICATION_METHOD_DETAIL_TABS } from './authentication-method-detail.const';
+
+import { AUTHENTICATION_METHOD_KINDS, useAuthenticationMethodStore, useHeaderStore } from '~shared';
 
 export const AuthenticationMethodDetailPage = () => {
 	const { t } = useTranslation();

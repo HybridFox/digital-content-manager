@@ -15,9 +15,9 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
-			"@ibs/components": ["libs/components/src/index.ts"],
-			"@ibs/forms": ["libs/forms/src/index.ts"],
-			"@ibs/shared": ["libs/shared/src/index.ts"]
+			"~components": ["libs/components/src/index.ts"],
+			"~forms": ["libs/forms/src/index.ts"],
+			"~shared": ["libs/shared/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

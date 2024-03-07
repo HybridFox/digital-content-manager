@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useHeaderStore } from '@ibs/shared';
-import { Button, ButtonTypes, Header, ResourceExplorer, ResourceExplorerAction } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
+
+import { Button, ButtonTypes, Header, ResourceExplorer, ResourceExplorerAction } from '~components';
 
 import { useResourceStore } from '../../stores/resource';
 import { CreateDirectoryModal } from '../../components/create-directory-modal/create-directory-modal.component';
 import { UploadFileModal } from '../../components/upload-file-modal/upload-file-modal.component';
+
+import { useHeaderStore } from '~shared';
 
 export const ResourceListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();

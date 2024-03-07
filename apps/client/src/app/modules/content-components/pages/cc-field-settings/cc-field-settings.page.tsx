@@ -1,9 +1,10 @@
-import { useContentComponentFieldStore, useContentComponentStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
-import { NumberField, TextField, TextareaField, ToggleField } from '@ibs/forms';
 
 import { CONTENT_COMPONENT_PATHS } from '../../content-components.routes';
+
+import { NumberField, TextField, TextareaField, ToggleField } from '~forms';
+import { useContentComponentFieldStore, useContentComponentStore, useHeaderStore } from '~shared';
 
 export const CCFieldSettingsPage = () => {
 	const { siteId } = useParams();

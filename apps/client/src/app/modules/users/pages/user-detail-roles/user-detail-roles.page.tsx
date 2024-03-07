@@ -1,14 +1,17 @@
-import { IAPIError, useRoleStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { CheckboxField } from '@ibs/forms';
+
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Loading } from '~components';
+
 
 import { useUserStore } from '../../stores/user';
 
 import { editUserSchema } from './user-detail-roles.const';
+
+import { CheckboxField } from '~forms';
+import { IAPIError, useRoleStore } from '~shared';
 
 interface EditUserForm {
 	roles: string[];

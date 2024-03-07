@@ -1,10 +1,13 @@
 import { FC, useEffect } from 'react';
-import { Button, ButtonTypes, HTMLButtonTypes, Loading, Modal, ModalFooter } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
-import { CheckboxField } from '@ibs/forms';
-import { useSiteRoleStore } from '@ibs/shared';
+
+import { Button, ButtonTypes, HTMLButtonTypes, Loading, Modal, ModalFooter } from '~components';
 
 import { ISelectRolesModalProps } from './select-roles-modal.types';
+
+import { CheckboxField } from '~forms';
+import { useSiteRoleStore } from '~shared';
+
 
 export const SelectRolesModal: FC<ISelectRolesModalProps> = ({ onSubmit, modalOpen, onClose, siteId, updateLoading }: ISelectRolesModalProps) => {
 	const formMethods = useForm();

@@ -1,14 +1,17 @@
-import { FIELD_KEYS, IAPIError, useContentComponentStore, useHeaderStore, useWorkflowStore } from '@ibs/shared';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { TextField, TextareaField } from '@ibs/forms';
+
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
+
 
 import { CONTENT_COMPONENT_PATHS } from '../../content-components.routes';
 
 import { createContentComponentForm } from './cc-create.const';
+
+import { TextField, TextareaField } from '~forms';
+import { FIELD_KEYS, IAPIError, useContentComponentStore, useHeaderStore, useWorkflowStore } from '~shared';
 
 interface ICreateContentComponent {
 	name: string;

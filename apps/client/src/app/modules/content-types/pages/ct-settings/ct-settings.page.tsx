@@ -1,20 +1,22 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect } from 'react';
+import { generatePath, useParams } from 'react-router-dom';
+
 import {
 	Alert,
 	AlertTypes,
 	Button,
 	ButtonTypes,
 	HTMLButtonTypes,
-} from '@ibs/components';
-import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentTypeStore, useHeaderStore } from '@ibs/shared';
-import { useEffect } from 'react';
-import { generatePath, useParams } from 'react-router-dom';
-import { TextField, TextareaField } from '@ibs/forms';
+} from '~components';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 
 import { editContentType } from './ct-settings.const';
+
+import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentTypeStore, useHeaderStore } from '~shared';
+import { TextField, TextareaField } from '~forms';
 
 interface IEditContentTypeForm {
 	name: string;

@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
-import { getPageParams, getPaginationProps, useHeaderStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, HasPermission, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
+
+import { ButtonLink, ButtonTypes, HasPermission, Header, Loading, Pagination, Table } from '~components';
 
 import { useSiteStore } from '../../stores/site';
 
 import { ROLE_LIST_COLUMNS } from './site-list.const';
+
+import { getPageParams, getPaginationProps, useHeaderStore } from '~shared';
 
 export const SiteListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();

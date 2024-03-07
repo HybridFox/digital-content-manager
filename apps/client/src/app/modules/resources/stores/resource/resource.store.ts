@@ -1,8 +1,10 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
-import { kyInstance, useAuthStore, wrapApi } from '@ibs/shared';
 
 import { IResourceStoreState, IResourcesResponse } from './resource.types';
+
+import { kyInstance, useAuthStore, wrapApi } from '~shared';
+
 
 const fetchResources = (set: any) => async (siteId: string, contentRepositoryId: any, params?: any) => {
 	set(() => ({ resourcesLoading: true }));

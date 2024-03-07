@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
-import { getPageParams, getPaginationProps, useHeaderStore, useStorageRepositoryStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '~components';
+
 import { STORAGE_REPOSITORIES_LIST_COLUMNS } from './storage-repository-list.const';
+
+import { getPageParams, getPaginationProps, useHeaderStore, useStorageRepositoryStore } from '~shared';
 
 export const StorageRepositoryListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();

@@ -1,4 +1,4 @@
-import { IIAMAction } from "@ibs/shared";
+import { IIAMAction } from "~shared";
 
 export interface IPermissionManagerProps {
 	// field: IField;

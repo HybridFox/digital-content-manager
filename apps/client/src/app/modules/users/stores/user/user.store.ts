@@ -1,10 +1,12 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
-import { DEFAULT_PAGINATION_OPTIONS, IUser, kyInstance, wrapApi } from '@ibs/shared';
+
 
 import { ISitesResponse } from '../../../sites/stores/site';
 
 import { IUserStoreState, IUsersResponse } from './user.types';
+
+import { DEFAULT_PAGINATION_OPTIONS, IUser, kyInstance, wrapApi } from '~shared';
 
 export const useUserStore = create<IUserStoreState>()(devtools(
 	(set) => ({

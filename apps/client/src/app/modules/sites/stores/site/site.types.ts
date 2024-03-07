@@ -1,4 +1,4 @@
-import { IAPIHALResponse, IAPIPagination, IPageParameters, ISite } from "@ibs/shared";
+import { IAPIHALResponse, IAPIPagination, IPageParameters, ISite } from "~shared";
 
 export type ISitesResponse = IAPIHALResponse<'sites', ISite>
 

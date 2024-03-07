@@ -52,7 +52,7 @@ pub async fn create(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-types:{}", params.content_type_id),
+		format!("urn:dcm:content-types:{}", params.content_type_id),
 		"sites::content-types:update",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -84,7 +84,7 @@ pub async fn find_all(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-types:{}", params.content_type_id),
+		format!("urn:dcm:content-types:{}", params.content_type_id),
 		"sites::content-types:update",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -129,7 +129,7 @@ pub async fn find_one(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-types:{}", params.content_type_id),
+		format!("urn:dcm:content-types:{}", params.content_type_id),
 		"sites::content-types:update",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -161,7 +161,7 @@ pub async fn update(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-types:{}", params.content_type_id),
+		format!("urn:dcm:content-types:{}", params.content_type_id),
 		"sites::content-types:update",
 	)?;
 	let conn = &mut state.get_conn()?;
@@ -200,7 +200,7 @@ pub async fn remove(
 	ensure_permission(
 		&req,
 		Some(params.site_id),
-		format!("urn:ibs:content-types:{}", params.content_type_id),
+		format!("urn:dcm:content-types:{}", params.content_type_id),
 		"sites::content-types:update",
 	)?;
 	let conn = &mut state.get_conn()?;

@@ -1,12 +1,14 @@
-import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, IContentItem, useContentStore, useContentTypeStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
-import { TextField } from '@ibs/forms';
 import { useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '~components';
+
 import { CONTENT_PATHS } from '../../content.routes';
+
+import { TextField } from '~forms';
+import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, IContentItem, useContentStore, useContentTypeStore, useHeaderStore } from '~shared';
 
 export const ContentDetailSettingsPage = () => {
 	const [contentType] = useContentTypeStore((state) => [state.contentType]);

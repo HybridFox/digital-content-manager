@@ -1,20 +1,22 @@
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { generatePath, useNavigate } from 'react-router-dom';
+
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
+
+import { ROLE_PATHS } from '../../roles.routes';
+
+import { createRoleSchema } from './role-create.const';
+
+import { CheckboxField, TextField } from '~forms';
 import {
 	IAPIError,
 	useHeaderStore,
 	usePolicyStore,
 	useRoleStore,
-} from '@ibs/shared';
-import { useEffect } from 'react';
-import { CheckboxField, TextField } from '@ibs/forms';
-import { useTranslation } from 'react-i18next';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '@ibs/components';
-import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { generatePath, useNavigate } from 'react-router-dom';
-
-import { ROLE_PATHS } from '../../roles.routes';
-
-import { createRoleSchema } from './role-create.const';
+} from '~shared';
 
 interface CreateRoleForm {
 	name: string;

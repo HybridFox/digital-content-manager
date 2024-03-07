@@ -1,10 +1,12 @@
-import { useHeaderStore, useWorkflowStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
-import { Header, Loading } from '@ibs/components';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { Header, Loading } from '~components';
+
 import { WORKFLOW_DETAIL_TABS } from './workflow-detail.constant';
+
+import { useHeaderStore, useWorkflowStore } from '~shared';
 
 
 export const WorkflowDetailPage = () => {

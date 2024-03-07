@@ -1,5 +1,6 @@
-import { WORKFLOW_TECHNICAL_STATES } from '@ibs/shared';
 import * as yup from 'yup';
+
+import { WORKFLOW_TECHNICAL_STATES } from '~shared';
 
 export const createWorkflowStateSchema = yup.object({
 	name: yup.string().required(),

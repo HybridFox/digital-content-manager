@@ -1,18 +1,10 @@
-import {
-	CONTENT_TYPE_KINDS_TRANSLATIONS,
-	DATE_FORMAT,
-	IAPIError,
-	IContentRevision,
-	useContentRevisionStore,
-	useContentStore,
-	useContentTypeStore,
-	useHeaderStore,
-	useWorkflowStore,
-	WORKFLOW_TECHNICAL_STATES,
-} from '@ibs/shared';
 import { useEffect, useMemo, useState } from 'react';
-import { FIELD_VIEW_MODE, RadioField } from '@ibs/forms';
 import { Trans, useTranslation } from 'react-i18next';
+import { FormProvider, useForm } from 'react-hook-form';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import cx from 'classnames/bind';
+import dayjs from 'dayjs';
+
 import {
 	Alert,
 	AlertTypes,
@@ -27,15 +19,25 @@ import {
 	Modal,
 	ModalFooter,
 	RenderComparison,
-} from '@ibs/components';
-import { FormProvider, useForm } from 'react-hook-form';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import cx from 'classnames/bind';
-import dayjs from 'dayjs';
+} from '~components';
 
 import { CONTENT_PATHS } from '../../content.routes';
 
 import styles from './content-detail-revision.compare.module.scss';
+
+import { FIELD_VIEW_MODE, RadioField } from '~forms';
+import {
+	CONTENT_TYPE_KINDS_TRANSLATIONS,
+	DATE_FORMAT,
+	IAPIError,
+	IContentRevision,
+	useContentRevisionStore,
+	useContentStore,
+	useContentTypeStore,
+	useHeaderStore,
+	useWorkflowStore,
+	WORKFLOW_TECHNICAL_STATES,
+} from '~shared';
 
 const cxBind = cx.bind(styles);
 

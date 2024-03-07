@@ -1,4 +1,4 @@
-import { IResourceExplorerSelection } from "@ibs/components";
+import { IResourceExplorerSelection } from "~components";
 
 export interface ISelectAssetModalProps {
 	onSubmit: (values: any) => void;

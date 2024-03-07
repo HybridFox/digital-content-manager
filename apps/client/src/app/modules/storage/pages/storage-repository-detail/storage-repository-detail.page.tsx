@@ -1,16 +1,19 @@
-import { IAPIError, useHeaderStore, useStorageRepositoryStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading, RenderFields } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { TextField } from '@ibs/forms';
+
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading, RenderFields } from '~components';
+
 
 import { STORAGE_KIND_FIELDS } from '../../storage.const';
 import { STORAGE_PATHS } from '../../storage.routes';
 
 import { editStorageRepositorySchema } from './storage-repository-detail.const';
+
+import { TextField } from '~forms';
+import { IAPIError, useHeaderStore, useStorageRepositoryStore } from '~shared';
 
 interface EditStorageRepositoryForm {
 	name: string;

@@ -1,9 +1,10 @@
-import { CONTENT_TYPE_KINDS_TRANSLATIONS, useContentTypeFieldStore, useContentTypeStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
-import { NumberField, TextField, TextareaField, ToggleField } from '@ibs/forms';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
+
+import { NumberField, TextField, TextareaField, ToggleField } from '~forms';
+import { CONTENT_TYPE_KINDS_TRANSLATIONS, useContentTypeFieldStore, useContentTypeStore, useHeaderStore } from '~shared';
 
 export const FieldSettingsPage = () => {
 	const { siteId } = useParams();

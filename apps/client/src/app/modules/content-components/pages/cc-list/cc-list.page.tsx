@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
-import { getPageParams, getPaginationProps, useContentComponentStore, useHeaderStore } from '@ibs/shared';
-import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '@ibs/components';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 
+import { ButtonLink, ButtonTypes, Header, Loading, Pagination, Table } from '~components';
+
 import { CONTENT_COMPONENTS_LIST_COLUMNS } from './cc-list.const';
+
+import { getPageParams, getPaginationProps, useContentComponentStore, useHeaderStore } from '~shared';
 
 export const CCListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();

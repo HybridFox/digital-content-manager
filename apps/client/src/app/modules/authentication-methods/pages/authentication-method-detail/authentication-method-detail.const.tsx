@@ -1,10 +1,13 @@
 import { TFunction } from 'i18next';
 import { generatePath } from 'react-router-dom';
-import { IHeaderTab } from '@ibs/components';
-import { AUTHENTICATION_METHOD_KINDS } from '@ibs/shared';
+
+
+import { IHeaderTab } from '~components';
 
 import { AUTHENTICATION_METHOD_PATHS } from '../../authentication-methods.routes';
 import { AUTHENTICATION_METHOD_FIELDS } from '../../authentication-methods.const';
+
+import { AUTHENTICATION_METHOD_KINDS } from '~shared';
 
 export const AUTHENTICATION_METHOD_DETAIL_TABS = (t: TFunction, authenticationMethodId: string, authenticationMethodKind: AUTHENTICATION_METHOD_KINDS): IHeaderTab[] => [
 	{

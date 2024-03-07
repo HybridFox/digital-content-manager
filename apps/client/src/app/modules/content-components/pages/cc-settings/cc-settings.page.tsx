@@ -1,20 +1,22 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect } from 'react';
+import { generatePath, useParams } from 'react-router-dom';
+
 import {
 	Alert,
 	AlertTypes,
 	Button,
 	ButtonTypes,
 	HTMLButtonTypes,
-} from '@ibs/components';
-import { IAPIError, useContentComponentStore, useHeaderStore } from '@ibs/shared';
-import { useEffect } from 'react';
-import { generatePath, useParams } from 'react-router-dom';
-import { TextField, TextareaField } from '@ibs/forms';
+} from '~components';
 
 import { CONTENT_COMPONENT_PATHS } from '../../content-components.routes';
 
 import { editContentComponent } from './cc-settings.const';
+
+import { IAPIError, useContentComponentStore, useHeaderStore } from '~shared';
+import { TextField, TextareaField } from '~forms';
 
 interface IEditContentComponentForm {
 	name: string;

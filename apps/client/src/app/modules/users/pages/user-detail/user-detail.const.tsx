@@ -1,7 +1,8 @@
-import { IHeaderTab } from '@ibs/components';
 import { generatePath } from 'react-router-dom';
 import * as yup from 'yup';
 import { TFunction } from 'i18next';
+
+import { IHeaderTab } from '~components';
 
 import { USER_PATHS } from '../../users.routes';
 

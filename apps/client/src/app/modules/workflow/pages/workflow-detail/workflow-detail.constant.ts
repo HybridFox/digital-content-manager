@@ -1,9 +1,12 @@
-import { IHeaderTab } from "@ibs/components";
 import { TFunction } from "i18next";
 import { generatePath } from "react-router-dom";
-import { IWorkflow } from "@ibs/shared";
+
+
+import { IHeaderTab } from "~components";
 
 import { WORKFLOW_PATHS } from "../../workflow.routes";
+
+import { IWorkflow } from "~shared";
 
 export const WORKFLOW_DETAIL_TABS = (t: TFunction, siteId: string, workflow?: IWorkflow): IHeaderTab[] => [
 	{

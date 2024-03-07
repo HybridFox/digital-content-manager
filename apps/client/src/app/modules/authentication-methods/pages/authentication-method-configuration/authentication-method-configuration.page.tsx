@@ -1,13 +1,15 @@
-import { IAPIError, useAuthenticationMethodStore } from '@ibs/shared';
 import { useParams } from 'react-router-dom';
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '@ibs/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { RenderFields } from '@ibs/components';
+
+import { RenderFields } from '~components';
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '~components';
 
 import { AUTHENTICATION_METHOD_FIELDS } from '../../authentication-methods.const';
 
 import { editAuthenticationMethodSchema } from './authentication-method-configuration.const';
+
+import { IAPIError, useAuthenticationMethodStore } from '~shared';
 
 interface EditAuthenticationMethodForm {
 	configuration: Record<string, string> | undefined;

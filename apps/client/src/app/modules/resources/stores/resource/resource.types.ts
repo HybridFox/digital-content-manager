@@ -1,4 +1,4 @@
-import { IAPIHALResponse, IPageParameters } from "@ibs/shared";
+import { IAPIHALResponse, IPageParameters } from "~shared";
 
 export enum ResourceKind {
 	DIRECTORY = 'DIRECTORY',

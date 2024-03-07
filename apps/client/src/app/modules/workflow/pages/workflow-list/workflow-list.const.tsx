@@ -1,6 +1,8 @@
-import { Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
-import { IWorkflowTransition } from '@ibs/shared';
 import { TFunction } from 'i18next';
+
+import { Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '~components';
+
+import { IWorkflowTransition } from '~shared';
 
 export const WORKFLOW_LIST_COLUMNS = (t: TFunction): ITableColumn[] => [
 	{

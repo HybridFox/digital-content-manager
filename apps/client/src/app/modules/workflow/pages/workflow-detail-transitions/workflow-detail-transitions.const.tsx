@@ -1,6 +1,8 @@
-import { Badge, Button, ButtonSizes, ITableColumn } from "@ibs/components";
-import { IWorkflowTransition } from "@ibs/shared";
 import { TFunction } from "i18next";
+
+import { Badge, Button, ButtonSizes, ITableColumn } from "~components";
+
+import { IWorkflowTransition } from "~shared";
 
 export const WORKFLOW_TRANSITIONS_COLUMNS = (t: TFunction, handleRemove: (workflowTransitionId: string) => void): ITableColumn<IWorkflowTransition>[] => [
 	{

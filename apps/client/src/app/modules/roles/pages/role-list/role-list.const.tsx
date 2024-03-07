@@ -1,6 +1,8 @@
-import { Badge, Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '@ibs/components';
-import { IIAMPolicy, IRole } from '@ibs/shared';
 import { TFunction } from 'i18next';
+
+import { Badge, Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '~components';
+
+import { IIAMPolicy, IRole } from '~shared';
 
 export const ROLE_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: string) => void): ITableColumn<IRole>[] => [
 	{

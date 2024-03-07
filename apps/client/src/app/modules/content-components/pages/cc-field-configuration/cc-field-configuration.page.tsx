@@ -1,9 +1,12 @@
-import { useContentComponentFieldStore, useContentComponentStore, useHeaderStore } from '@ibs/shared';
 import { useEffect } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
-import { RenderFields } from '@ibs/components';
+
+import { RenderFields } from '~components';
 
 import { CONTENT_COMPONENT_PATHS } from '../../content-components.routes';
+
+import { useContentComponentFieldStore, useContentComponentStore, useHeaderStore } from '~shared';
+
 
 export const CCFieldConfigurationPage = () => {
 	const [contentComponent] =

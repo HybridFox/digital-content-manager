@@ -1,6 +1,8 @@
-import { Badge, Button, ButtonLink, ButtonSizes, ITableColumn } from '@ibs/components';
-import { IAuthenticationMethod, IRole, IUser } from '@ibs/shared';
 import { TFunction } from 'i18next';
+
+import { Badge, Button, ButtonLink, ButtonSizes, ITableColumn } from '~components';
+
+import { IAuthenticationMethod, IRole, IUser } from '~shared';
 
 export const USER_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: string) => void): ITableColumn<IUser>[] => [
 	{

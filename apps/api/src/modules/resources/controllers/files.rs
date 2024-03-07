@@ -42,7 +42,7 @@ pub async fn upload_file(
 		&req,
 		Some(params.site_id),
 		format!(
-			"urn:ibs:storage-repositories:{}:resources:*",
+			"urn:dcm:storage-repositories:{}:resources:*",
 			params.storage_repository_id
 		),
 		"sites::resources:upload-file",
@@ -101,7 +101,7 @@ pub async fn remove_file(
 		&req,
 		Some(params.site_id),
 		format!(
-			"urn:ibs:storage-repositories:{}:resources:*",
+			"urn:dcm:storage-repositories:{}:resources:*",
 			params.storage_repository_id
 		),
 		"sites::resources:remove-file",

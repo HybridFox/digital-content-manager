@@ -1,15 +1,17 @@
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from "@ibs/components"
 import cx from 'classnames/bind';
 import classNames from "classnames";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useNavigate } from "react-router-dom";
-import { IAPIError, useAuthStore } from "@ibs/shared";
-import { TextField, TextFieldTypes } from "@ibs/forms";
 import { useTranslation } from "react-i18next";
+
+import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from "~components"
 
 import styles from './setup.module.scss';
 import { setupSchema } from "./setup.const";
+
+import { TextField, TextFieldTypes } from "~forms";
+import { IAPIError, useAuthStore } from "~shared";
 const cxBind = cx.bind(styles);
 
 interface ISetupForm {

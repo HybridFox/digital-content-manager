@@ -1,4 +1,11 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams, useSearchParams } from 'react-router-dom';
+
+import {ButtonLink, ButtonTypes, Filter, HasPermission, Header, Loading, Pagination, Table} from '~components';
+
+import {CONTENT_LIST_COLUMNS, CONTENT_LIST_FILTER} from './content-list.const';
+
 import {
 	CONTENT_TYPE_KINDS_PARAMETER_MAP, getFilterParams, getFilterProps,
 	getPageParams,
@@ -6,12 +13,7 @@ import {
 	useAuthStore,
 	useContentStore,
 	useHeaderStore
-} from '@ibs/shared';
-import {ButtonLink, ButtonTypes, Filter, HasPermission, Header, Loading, Pagination, Table} from '@ibs/components';
-import { useTranslation } from 'react-i18next';
-import { useParams, useSearchParams } from 'react-router-dom';
-
-import {CONTENT_LIST_COLUMNS, CONTENT_LIST_FILTER} from './content-list.const';
+} from '~shared';
 
 export const ContentListPage = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -49,7 +51,7 @@ export const ContentListPage = () => {
 				breadcrumbs={breadcrumbs}
 				title={t(`CONTENT.TITLES.LIST_${kind?.toUpperCase()}`)}
 				action={
-					<HasPermission siteId={siteId} resource="urn:ibs:*" action={`sites::${kind}:create`}>
+					<HasPermission siteId={siteId} resource="urn:dcm:*" action={`sites::${kind}:create`}>
 						<ButtonLink to="create" type={ButtonTypes.PRIMARY}>
 							<span className="las la-plus"></span> {t(`CONTENT.ACTIONS.CREATE_${kind?.toUpperCase()}`)}
 						</ButtonLink>
