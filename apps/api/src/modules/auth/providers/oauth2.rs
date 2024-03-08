@@ -6,6 +6,7 @@ use crate::modules::auth::dto::request::LoginUserDTO;
 use crate::modules::auth::helpers::permissions::get_user_permissions;
 use async_trait::async_trait;
 use diesel::PgConnection;
+use reqwest::header::AUTHORIZATION;
 use crate::errors::AppError;
 use crate::modules::auth::dto::response;
 use crate::modules::auth::services::dynamic_login::AuthProvider;
@@ -119,7 +120,10 @@ impl AuthProvider for OAuth2AuthProvider {
 		let client = reqwest::Client::new();
 		let userinfo_result = client
 			.get(config.userinfo_url)
-			.query(&[("access_token", token_result.access_token().secret())])
+			.header(
+				AUTHORIZATION,
+				format!("Bearer {}", token_result.access_token().secret()),
+			)
 			.send()
 			.await?
 			.text()
