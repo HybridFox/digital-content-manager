@@ -14,6 +14,6 @@ export const FieldValue: FC<IFieldValueProps> = ({ name }: IFieldValueProps) => 
 	const value = watch(name);
 
 	return (
-		<div className={cxBind('a-input__value')}>{value ?? <span className='u-text--light'>{t('GENERAL.LABELS.NO_DATA')}</span>}</div>
+		<div className={cxBind('a-input__value')}>{value ? <div dangerouslySetInnerHTML={{ __html: value }}></div> : <span className='u-text--light'>{t('GENERAL.LABELS.NO_DATA')}</span>}</div>
 	);
 };

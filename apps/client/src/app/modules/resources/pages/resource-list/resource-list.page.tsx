@@ -4,14 +4,15 @@ import { useParams, useSearchParams } from 'react-router-dom';
 
 import { Button, ButtonTypes, Header, ResourceExplorer, ResourceExplorerAction } from '~components';
 
-import { useResourceStore } from '../../stores/resource';
 import { CreateDirectoryModal } from '../../components/create-directory-modal/create-directory-modal.component';
 import { UploadFileModal } from '../../components/upload-file-modal/upload-file-modal.component';
 
-import { useHeaderStore } from '~shared';
+import { useHeaderStore, useResourceStore } from '~shared';
 
 export const ResourceListPage = () => {
-	const [fetchResources] = useResourceStore((state) => [
+	const [resources, resourcesLoading, fetchResources] = useResourceStore((state) => [
+		state.resources,
+		state.resourcesLoading,
 		state.fetchResources,
 	]);
 	const [searchParams, setSearchParams] = useSearchParams();

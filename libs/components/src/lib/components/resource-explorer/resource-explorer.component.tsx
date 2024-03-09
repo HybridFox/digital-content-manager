@@ -29,6 +29,7 @@ export const ResourceExplorer: FC<IResourceExplorerProps> = ({
 		state.fetchResources,
 	]);
 	const [removeDirectoryLoading, removeDirectory] = useResourceStore((state) => [state.removeDirectoryLoading, state.removeDirectory]);
+	const [removeFileLoading, removeFile] = useResourceStore((state) => [state.removeFileLoading, state.removeFile]);
 	const [storageRepositories, storageRepositoriesLoading, fetchStorageRepositories] = useStorageRepositoryStore((state) => [
 		state.storageRepositories,
 		state.storageRepositoriesLoading,
@@ -99,7 +100,7 @@ export const ResourceExplorer: FC<IResourceExplorerProps> = ({
 			return;
 		}
 
-		await removeDirectory(siteId!, repositoryId, path, name);
+		await removeFile(siteId!, repositoryId, path, name);
 	};
 
 	const mapResource = (resource: IResource) => ({
@@ -107,6 +108,7 @@ export const ResourceExplorer: FC<IResourceExplorerProps> = ({
 		...resource,
 	});
 
+	console.log(resources)
 	return (
 		<>
 			<ExplorerRepositories

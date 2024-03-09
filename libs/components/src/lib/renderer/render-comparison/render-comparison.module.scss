@@ -1,10 +1,13 @@
 .o-comparison {
 	&__wrapper {
 		display: flex;
+		gap: var(--spacer);
+		border-bottom: 1px solid var(--color-gray-lightest);
+		padding-bottom: var(--spacer);
+		margin-bottom: var(--spacer);
 	}
 
 	&__field {
 		flex: 1;
-		margin-bottom: var(--spacer);
 	}
 }

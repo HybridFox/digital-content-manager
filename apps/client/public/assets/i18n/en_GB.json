@@ -96,5 +96,6 @@
     "WORKFLOW_STATES.ACTIONS.CREATE": "Creatie Workflow State",
     "WORKFLOW_STATES.TITLES.CREATE": "Creating Workflow State",
     "WORKFLOW_STATES.TITLES.EDIT": "Editing Workflow State <i>\"{{workflowStateName}}\"</i>",
-    "WORKFLOW_STATES.TITLES.LIST": "Workflow States Overview"
+    "WORKFLOW_STATES.TITLES.LIST": "Workflow States Overview",
+    "GENERAL.LABELS.NO_DATA": "No data found"
 }

@@ -29,6 +29,9 @@ export interface IResourceStoreState {
 	removeDirectory: (siteId: string, contentRepositoryId: string, path: string, name: string) => Promise<void>;
 	removeDirectoryLoading: boolean;
 
+	removeFile: (siteId: string, contentRepositoryId: string, path: string, name: string) => Promise<void>;
+	removeFileLoading: boolean;
+
 	uploadFile: (siteId: string, contentRepositoryId: string, path: string, file: File) => Promise<void>;
 	uploadFileLoading: boolean;
 

@@ -121,13 +121,14 @@ export const CTContentComponentsPage = () => {
 
 		createField(siteId!, contentType.id, values)
 			.then((field) =>
-				navigate(
-					generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL, {
-						contentTypeId: contentType.id,
-						fieldId: field.id,
-						siteId,
-					})
-				)
+				fetchContentType(siteId!, contentType.id)
+				// navigate(
+				// 	generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL, {
+				// 		contentTypeId: contentType.id,
+				// 		fieldId: field.id,
+				// 		siteId,
+				// 	})
+				// )
 			)
 			.catch((error: IAPIError) => {
 				fieldFormMethods.setError('root', {

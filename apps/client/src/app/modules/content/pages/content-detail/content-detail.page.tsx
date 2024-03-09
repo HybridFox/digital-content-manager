@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { generatePath, Outlet, useNavigate, useParams } from 'react-router-dom';
 
 
@@ -11,6 +11,7 @@ import { CONTENT_DETAIL_TABS } from './content-detail.const';
 import { useContentStore, useContentTypeStore, useHeaderStore, useWorkflowStore } from '~shared';
 
 export const ContentDetailPage = () => {
+	const [initialLoading, setInitialLoading] = useState(true);
 	const [contentTypeLoading, contentType, fetchContentType] = useContentTypeStore((state) => [
 		state.contentTypeLoading,
 		state.contentType,
@@ -42,6 +43,7 @@ export const ContentDetailPage = () => {
 					}))
 				}
 
+				setInitialLoading(false);
 				return fetchWorkflow(siteId!, contentType.workflowId);
 			})
 	}, [contentId]);
@@ -59,7 +61,7 @@ export const ContentDetailPage = () => {
 				metaInfo={contentItem?.language.key.toUpperCase()}
 			></Header>
 			<div className="u-margin-top">
-				<Loading loading={contentItemLoading || contentTypeLoading || workflowLoading} text="Loading data...">
+				<Loading loading={initialLoading || contentItemLoading || contentTypeLoading || workflowLoading} text="Loading data...">
 					<Outlet />
 				</Loading>
 			</div>

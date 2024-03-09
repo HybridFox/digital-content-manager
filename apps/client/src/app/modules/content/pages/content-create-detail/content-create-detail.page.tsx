@@ -77,7 +77,7 @@ export const ContentCreateDetailPage = () => {
 
 		createContentItem(siteId!, {
 			...values,
-			fields: {},
+			fields: values.fields,
 			workflowStateId: workflow?.defaultWorkflowStateId,
 			contentTypeId: contentType?.id,
 			languageId: searchParams.get('languageId') || '',

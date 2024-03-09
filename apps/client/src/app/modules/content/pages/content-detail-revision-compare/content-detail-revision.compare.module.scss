@@ -1,9 +1,9 @@
 .p-revision-compare {
 	display: flex;
+	gap: var(--spacer);
 
 	&__left {
 		flex: 50%;
-		padding-right: var(--spacer);
 	}
 
 	&__right {

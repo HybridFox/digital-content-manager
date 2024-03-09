@@ -16,6 +16,8 @@ import { $generateNodesFromDOM } from '@lexical/html';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 
 import { FieldLabel } from '../../field-label/field-label.component';
+import { FIELD_VIEW_MODE } from '../fields.types';
+import { FieldValue } from '../../field-value/field-value.component';
 
 import styles from './richtext-field.module.scss';
 import { IRichtextFieldProps } from './richtext-field.types';
@@ -50,6 +52,7 @@ export const RichtextField: FC<IRichtextFieldProps> = ({
 	fieldOptions,
 	fieldConfiguration,
 	field,
+	viewMode,
 }: IRichtextFieldProps) => {
 	const { control } = useFormContext();
 
@@ -101,9 +104,17 @@ export const RichtextField: FC<IRichtextFieldProps> = ({
 		);
 	};
 
+	const renderValue = () => (
+		<div className={cxBind('a-input')}>
+			<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
+			<FieldValue name={name} />
+		</div>
+	)
+
 	return (
 		<div className={cxBind('a-input__field-wrapper')}>
-			<Controller control={control} name={name} render={renderField} />
+			{viewMode === FIELD_VIEW_MODE.EDIT && <Controller control={control} name={name} render={renderField} />}
+			{viewMode === FIELD_VIEW_MODE.VIEW && renderValue()}
 		</div>
 	);
 };

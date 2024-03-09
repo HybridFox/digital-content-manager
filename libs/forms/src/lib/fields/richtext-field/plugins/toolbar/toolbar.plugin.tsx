@@ -577,7 +577,7 @@ export const ToolbarPlugin = (): JSX.Element => {
 
 	return (
 		<div className={cxBind('a-toolbar')}>
-			<Button
+			{/* <Button
 				disabled={!canUndo || !isEditable}
 				onClick={() => {
 					activeEditor.dispatchCommand(UNDO_COMMAND, undefined);
@@ -600,8 +600,8 @@ export const ToolbarPlugin = (): JSX.Element => {
 				aria-label="Redo"
 			>
 				<i className="las la-redo" />
-			</Button>
-			<Divider />
+			</Button> */}
+			{/* <Divider /> */}
 			{blockType in blockTypeToBlockName && activeEditor === editor && (
 				<>
 					<BlockFormatDropDown disabled={!isEditable} blockType={blockType} rootType={rootType} editor={editor} />
@@ -721,26 +721,8 @@ export const ToolbarPlugin = (): JSX.Element => {
 					{/*		},*/}
 					{/*	]}*/}
 					{/*/>*/}
-					<Divider />
-					{rootType === 'table' && (
-						<>
-							{/* <DropDown
-								disabled={!isEditable}
-								buttonClassName="toolbar-item spaced"
-								buttonLabel="Table"
-								buttonAriaLabel="Open table toolkit"
-								buttonIconClassName="icon table secondary"
-							>
-								<DropDownItem
-									className="item"
-								>
-									<span className="text">TODO</span>
-								</DropDownItem>
-							</DropDown> */}
-							<Divider />
-						</>
-					)}
-					<Select
+					{/* <Divider /> */}
+					{/* <Select
 						placeholder="Insert"
 						disabled={!isEditable}
 						className={cxBind('a-toolbar__item', 'a-toolbar__item--format')}
@@ -772,10 +754,10 @@ export const ToolbarPlugin = (): JSX.Element => {
 							// 	onClick: () => activeEditor.dispatchCommand(INSERT_EXCALIDRAW_COMMAND, undefined)
 							// },
 						]}
-					/>
+					/> */}
 				</>
 			)}
-			<Divider />
+			{/* <Divider /> */}
 			{/*<Select*/}
 			{/*	placeholder="Align"*/}
 			{/*	disabled={!isEditable}*/}

@@ -5,7 +5,7 @@ import { Tooltip } from 'react-tooltip'
 
 import { FieldLabel } from '../../field-label/field-label.component';
 import { FieldHint } from '../../field-hint/field-hint.component';
-import {FieldValue} from "../../field-value/field-value.component";
+import { FieldValue } from "../../field-value/field-value.component";
 import { FIELD_VIEW_MODE } from '../fields.types';
 
 import { ITextFieldProps } from './text-field.types';
