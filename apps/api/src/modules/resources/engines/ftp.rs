@@ -1,15 +1,15 @@
 use actix_multipart::form::tempfile::TempFile;
-use suppaftp::{FtpStream, ImplFtpStream};
+
 use chrono::NaiveDateTime;
 use serde_json::Value;
-use std::time::Duration;
+
 use std::{str::FromStr, time::UNIX_EPOCH};
 use async_trait::async_trait;
 use crate::errors::AppError;
 use std::path::Path;
 use std::fs;
-use suppaftp::{list::File, NativeTlsFtpStream, NativeTlsConnector};
-use suppaftp::native_tls::{TlsConnector, TlsStream};
+use suppaftp::{list::File, NativeTlsFtpStream};
+
 use path_slash::PathExt as _;
 
 use super::lib::{StorageEngine, ResourceItem, ResourceItemKind};

@@ -41,7 +41,7 @@ impl StorageEngine for FsStorageEngine {
 			.into_iter()
 			.map(|item| {
 				let resource = item?;
-				let name = (&resource).clone().file_name().to_str().unwrap().to_owned();
+				let name = (&resource).file_name().to_str().unwrap().to_owned();
 
 				let guess = mime_guess::from_path(&name);
 				let mime_type = if guess.is_empty() {

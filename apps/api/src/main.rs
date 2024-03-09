@@ -23,7 +23,7 @@ use dotenv::dotenv;
 
 use crate::modules::iam_actions::models::iam_action::IAMAction;
 use crate::openapi::{ApiDoc};
-use serde_qs::actix::{QsQuery, QsQueryConfig};
+use serde_qs::actix::{QsQueryConfig};
 use serde_qs::Config as QsConfig;
 
 pub mod constants;

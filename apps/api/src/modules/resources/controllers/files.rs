@@ -67,7 +67,7 @@ pub async fn upload_file(
 )]
 #[get("")]
 pub async fn read_file(
-	req: HttpRequest,
+	_req: HttpRequest,
 	state: web::Data<AppState>,
 	query: web::Query<FilesQueryParams>,
 	params: web::Path<SharedParams>,
