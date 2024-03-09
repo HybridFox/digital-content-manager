@@ -96,7 +96,7 @@ export const RootMenu = () => {
 			</HasPermission>
 			<div className={cxBind('o-menu__version')}>
 				<span className='las la-cookie'></span>{' '}
-				<span className={cxBind('o-menu__version-number')}>{(import.meta.env.VITE_APP_VERSION || 'unknown')?.replace('v', '')} / {status?.version || 'unknown'}</span>
+				<span className={cxBind('o-menu__version-number')}>{(import.meta.env.VITE_APP_VERSION || 'unknown')?.replace('v', '')} / {(status?.version || 'unknown')?.replace('v', '')}</span>
 			</div>
 		</div>
 	);
