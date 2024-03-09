@@ -20,7 +20,7 @@ dayjs.extend(timezone);
 
 Modal.setAppElement('#root');
 
-console.log('RUNNING APP VERSION', import.meta.env.VERSION)
+console.log('RUNNING APP VERSION', import.meta.env.VITE_APP_VERSION)
 
 // ISO 639-1 + '_' + ISO 3166-1
 // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes

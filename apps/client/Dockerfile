@@ -9,7 +9,7 @@ COPY package.json package-lock.json* ./
 RUN npm ci
 COPY . .
 RUN echo $APP_VERSION
-ENV VERSION=$APP_VERSION
+ENV VITE_APP_VERSION=$APP_VERSION
 RUN npm run nx run client:build
 
 # Stage 1: Serve React

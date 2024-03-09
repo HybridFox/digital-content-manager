@@ -1,7 +1,6 @@
 import { NavLink, generatePath, useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
 
-
 import { HasPermission } from '~components';
 
 import { DASHBOARD_PATHS } from '../../../dashboard';
@@ -200,6 +199,7 @@ export const Menu = () => {
 					</ul>
 				</div>
 			</HasPermission>
+			{import.meta.env.VITE_APP_VERSION}
 		</div>
 	);
 };
