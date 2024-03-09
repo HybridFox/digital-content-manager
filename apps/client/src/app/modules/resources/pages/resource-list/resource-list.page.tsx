@@ -11,6 +11,9 @@ import { UploadFileModal } from '../../components/upload-file-modal/upload-file-
 import { useHeaderStore } from '~shared';
 
 export const ResourceListPage = () => {
+	const [fetchResources] = useResourceStore((state) => [
+		state.fetchResources,
+	]);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [createDirectoryModalOpen, setCreateDirectoryModalOpen] = useState(false);
 	const [uploadFileModalOpen, setUploadFileModalOpen] = useState(false);
@@ -38,6 +41,7 @@ export const ResourceListPage = () => {
 		}
 
 		await createDirectory(siteId!, repositoryId, path, values.name);
+		fetchResources(siteId!, repositoryId, { path });
 		setCreateDirectoryModalOpen(false);
 	};
 
@@ -47,6 +51,7 @@ export const ResourceListPage = () => {
 		}
 
 		await uploadFile(siteId!, repositoryId, path, values.file[0]);
+		fetchResources(siteId!, repositoryId, { path });
 		setUploadFileModalOpen(false);
 	};
 
@@ -81,8 +86,9 @@ export const ResourceListPage = () => {
 				onSubmit={handleCreateDirectory}
 				modalOpen={createDirectoryModalOpen}
 				onClose={() => setCreateDirectoryModalOpen(false)}
-			/>
-			<UploadFileModal onSubmit={handleUploadFile} modalOpen={uploadFileModalOpen} onClose={() => setUploadFileModalOpen(false)} />
+				loading={createDirectoryLoading}
+			/>	
+			<UploadFileModal onSubmit={handleUploadFile} modalOpen={uploadFileModalOpen} onClose={() => setUploadFileModalOpen(false)} loading={uploadFileLoading} />
 		</>
 	);
 };
