@@ -1,7 +1,6 @@
-ARG APP_VERSION
-
 # Stage 0: Build Angular
 FROM node:hydrogen-alpine AS build
+ARG APP_VERSION
 
 RUN apk add --no-cache python3 build-base
 
