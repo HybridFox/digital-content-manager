@@ -68,7 +68,7 @@ fn init_telemetry() {
 
 	// Filter based on level - trace, debug, info, warn, error
 	// Tunable via `RUST_LOG` env variable
-	let env_filter = EnvFilter::try_from_default_env().unwrap_or(EnvFilter::new("info"));
+	let env_filter = EnvFilter::try_from_default_env().unwrap_or(EnvFilter::new("debug"));
 	// Create a `tracing` layer using the Jaeger tracer
 	let telemetry = tracing_opentelemetry::layer().with_tracer(tracer);
 	// Create a `tracing` layer to emit spans as structured logs to stdout

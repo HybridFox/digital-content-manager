@@ -2,6 +2,7 @@ use actix_multipart::form::tempfile::TempFile;
 use suppaftp::{FtpStream, ImplFtpStream};
 use chrono::NaiveDateTime;
 use serde_json::Value;
+use std::time::Duration;
 use std::{str::FromStr, time::UNIX_EPOCH};
 use async_trait::async_trait;
 use crate::errors::AppError;
@@ -9,6 +10,7 @@ use std::path::Path;
 use std::fs;
 use suppaftp::{list::File, NativeTlsFtpStream, NativeTlsConnector};
 use suppaftp::native_tls::{TlsConnector, TlsStream};
+use path_slash::PathExt as _;
 
 use super::lib::{StorageEngine, ResourceItem, ResourceItemKind};
 
@@ -26,28 +28,26 @@ pub struct FtpStorageEngineConfig {
 	pub client: NativeTlsFtpStream,
 }
 
-fn get_config(config: &Value) -> FtpStorageEngineConfig {
+fn get_config(config: &Value) -> Result<FtpStorageEngineConfig, AppError> {
 	let ftp_server = config["server"].as_str().unwrap().to_string();
 	let ftp_username = config["ftp_username"].as_str().unwrap().to_string();
 	let ftp_password = config["ftp_password"].as_str().unwrap().to_string();
 
-	let client = NativeTlsFtpStream::connect(&ftp_server).unwrap();
-	let mut client = client
-		.into_secure(
-			NativeTlsConnector::from(TlsConnector::new().unwrap()),
-			&ftp_server,
-		)
-		.unwrap();
-	let _ = client.login(ftp_username, ftp_password).unwrap();
+	let mut client = NativeTlsFtpStream::connect(&ftp_server)?;
+	let _ = client.login(ftp_username, ftp_password)?;
+	// let client = client
+	// 	.into_secure(
+	// 		NativeTlsConnector::from(TlsConnector::new().unwrap()),
+	// 		&ftp_server,
+	// 	)?;
 
-	dbg!(&client);
-	FtpStorageEngineConfig { client }
+	Ok(FtpStorageEngineConfig { client })
 }
 
 #[async_trait]
 impl StorageEngine for FtpStorageEngine {
 	async fn find_all(&self, path: &str) -> Result<(Vec<ResourceItem>, i64), AppError> {
-		let mut config = get_config(&self.config);
+		let mut config = get_config(&self.config)?;
 		let objects: Vec<String> = config.client.list(Some(path))?;
 
 		let resource_items = objects
@@ -92,47 +92,41 @@ impl StorageEngine for FtpStorageEngine {
 		Ok((resource_items.clone(), resource_items.len() as i64))
 	}
 
-	async fn upload_file(&self, path: &str, file: TempFile) -> Result<(), AppError> {
-		let key = Path::new(clean_path(path)).join(file.file_name.unwrap());
-		let mut config = get_config(&self.config);
-		let mut file = fs::File::open(&key)?;
+	async fn upload_file(&self, path: &str, local_file: TempFile) -> Result<(), AppError> {
+		let key = Path::new(clean_path(path)).join(local_file.file_name.unwrap());
+		let mut config = get_config(&self.config)?;
+		let mut file = fs::File::open(local_file.file.path().to_str().unwrap())?;
 
-		let _ = config
-			.client
-			.put_file(key.to_str().unwrap_or("/"), &mut file)?;
+		let _ = config.client.put_file(key.to_slash().unwrap(), &mut file)?;
 
 		Ok(())
 	}
 
 	async fn download_file(&self, path: &str) -> Result<Vec<u8>, AppError> {
-		let mut config = get_config(&self.config);
+		let mut config = get_config(&self.config)?;
 		let object = config.client.retr_as_buffer(path)?;
 
 		Ok(object.into_inner())
 	}
 
 	async fn remove_file(&self, path: &str) -> Result<(), AppError> {
-		let mut config = get_config(&self.config);
-		// config
-		// 	.client
-		// 	.rm(path)?;
+		let mut config = get_config(&self.config)?;
+		config.client.rm(path)?;
 
 		Ok(())
 	}
 
 	async fn create_directory(&self, path: &str, name: &str) -> Result<(), AppError> {
 		let key = Path::new(clean_path(path)).join(name);
-		let mut config = get_config(&self.config);
-		config.client.mkdir(key.to_str().unwrap_or("/"))?;
+		let mut config = get_config(&self.config)?;
+		config.client.mkdir(key.to_slash().unwrap())?;
 
 		Ok(())
 	}
 
 	async fn remove_directory(&self, path: &str) -> Result<(), AppError> {
-		let mut config = get_config(&self.config);
-		// config
-		// 	.client
-		// 	.rmdir(path)?;
+		let mut config = get_config(&self.config)?;
+		config.client.rmdir(path)?;
 
 		Ok(())
 	}

@@ -46,9 +46,13 @@ itertools = { version = "0.11.0" }
 serde_with = "3.3.0"
 serde_qs =  { version = "0.12.0", features = ["actix4"] }
 suppaftp = { version = "5.3.1", features = ["secure", "native-tls"] }
+path-slash = "0.2.1"
 
 # [dev-dependencies]
 # rusty-hook = "0.11.2"
 
 [profile.release]
 opt-level = 'z' # Optimize for size
+
+[profile.dev]
+opt-level = 1

@@ -295,6 +295,7 @@ impl From<std::time::SystemTimeError> for AppError {
 
 impl From<FtpError> for AppError {
 	fn from(err: FtpError) -> Self {
+		dbg!(&err);
 		AppError::InternalServerError(AppErrorValue {
 			message: err.to_string(),
 			status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
