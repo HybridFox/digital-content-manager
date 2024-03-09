@@ -125,4 +125,19 @@
 			}
 		}
 	}
+
+	&__version {
+		margin-top: auto;
+		padding: var(--spacer-lg);
+		font-size: 1.5rem;
+		color: var(--color-gray-lighter);
+		display: flex;
+		align-items: center;
+	}
+
+	&__version-number {
+		margin-left: var(--spacer-sm);
+		font-size: 0.8rem;
+		font-family: 'IBM Plex Mono', monospace;
+	}
 }

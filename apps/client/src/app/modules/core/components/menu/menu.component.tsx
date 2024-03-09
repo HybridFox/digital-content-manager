@@ -16,7 +16,7 @@ import { STORAGE_PATHS } from '../../../storage';
 
 import styles from './menu.module.scss';
 
-import { useThemeStore } from '~shared';
+import { useStatusStore, useThemeStore } from '~shared';
 const cxBind = cx.bind(styles);
 
 const navLinkBinding = {
@@ -31,6 +31,7 @@ const navLinkBinding = {
 export const Menu = () => {
 	const { siteId } = useParams();
 	const [theme] = useThemeStore((state) => [state.theme]);
+	const [status] = useStatusStore((state) => [state.status]);
 
 	return (
 		<div className={cxBind('o-menu')}>
@@ -199,7 +200,10 @@ export const Menu = () => {
 					</ul>
 				</div>
 			</HasPermission>
-			{import.meta.env.VITE_APP_VERSION}
+			<div className={cxBind('o-menu__version')}>
+				<span className='las la-cookie'></span>{' '}
+				<span className={cxBind('o-menu__version-number')}>{(import.meta.env.VITE_APP_VERSION || 'unknown')?.replace('v', '')} / {status?.version || 'unknown'}</span>
+			</div>
 		</div>
 	);
 };

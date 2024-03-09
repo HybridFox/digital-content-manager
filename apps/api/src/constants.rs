@@ -7,4 +7,5 @@ pub mod env_key {
 	pub const ENV: &str = "ENV";
 	pub const OTEL_ENDPOINT: &str = "OTEL_ENDPOINT";
 	pub const FRONTEND_URL: &str = "FRONTEND_URL";
+	pub const VERSION: &str = "VERSION";
 }

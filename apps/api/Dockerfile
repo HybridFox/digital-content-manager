@@ -15,6 +15,8 @@ RUN ldd /app/target/release/dcm-api
 
 # our final base
 FROM debian:bullseye-slim
+ARG APP_VERSION
+ENV VERSION=$APP_VERSION
 
 RUN apt-get update && apt-get install libpq5 libssl-dev ca-certificates -y
 COPY --from=builder /app/target/release/dcm-api /

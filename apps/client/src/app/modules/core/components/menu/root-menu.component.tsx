@@ -12,7 +12,7 @@ import { ROLE_PATHS } from '../../../roles';
 
 import styles from './menu.module.scss';
 
-import { useThemeStore } from '~shared';
+import { useStatusStore, useThemeStore } from '~shared';
 const cxBind = cx.bind(styles);
 
 const navLinkBinding = {
@@ -26,6 +26,7 @@ const navLinkBinding = {
 
 export const RootMenu = () => {
 	const [theme] = useThemeStore((state) => [state.theme]);
+	const [status] = useStatusStore((state) => [state.status]);
 
 	return (
 		<div className={cxBind('o-menu')}>
@@ -93,6 +94,10 @@ export const RootMenu = () => {
 					</ul>
 				</div>
 			</HasPermission>
+			<div className={cxBind('o-menu__version')}>
+				<span className='las la-cookie'></span>{' '}
+				<span className={cxBind('o-menu__version-number')}>{(import.meta.env.VITE_APP_VERSION || 'unknown')?.replace('v', '')} / {status?.version || 'unknown'}</span>
+			</div>
 		</div>
 	);
 };
