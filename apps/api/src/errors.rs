@@ -11,6 +11,7 @@ use core::fmt;
 use std::convert::From;
 use std::env::VarError;
 use std::num::TryFromIntError;
+use suppaftp::FtpError;
 use thiserror::Error;
 use uuid::{Error as UuidError, Uuid};
 
@@ -292,6 +293,17 @@ impl From<std::time::SystemTimeError> for AppError {
 	}
 }
 
+impl From<FtpError> for AppError {
+	fn from(err: FtpError) -> Self {
+		AppError::InternalServerError(AppErrorValue {
+			message: err.to_string(),
+			status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+			code: "FTP_ERROR".to_owned(),
+			..Default::default()
+		})
+	}
+}
+
 impl From<VarError> for AppError {
 	fn from(_err: VarError) -> Self {
 		AppError::InternalServerError(AppErrorValue {
@@ -306,9 +318,10 @@ impl From<VarError> for AppError {
 impl<RE: std::error::Error, TR: oauth2::ErrorResponse> From<RequestTokenError<RE, TR>>
 	for AppError
 {
-	fn from(_err: RequestTokenError<RE, TR>) -> Self {
+	fn from(err: RequestTokenError<RE, TR>) -> Self {
+		dbg!(&err);
 		AppError::InternalServerError(AppErrorValue {
-			message: _err.to_string(),
+			message: err.to_string(),
 			status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
 			code: "OAUTH2_REQUEST_ERROR".to_owned(),
 			..Default::default()

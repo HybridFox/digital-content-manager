@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 use async_trait::async_trait;
 use uuid::Uuid;
 
-use super::{fs::FsStorageEngine, s3::S3StorageEngine};
+use super::{fs::FsStorageEngine, s3::S3StorageEngine, ftp::FtpStorageEngine};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub enum ResourceItemKind {
@@ -54,6 +54,11 @@ pub fn get_storage_engine(
 		})),
 		"S3_BUCKET" => Ok(Box::new({
 			S3StorageEngine {
+				config: storage_repository.configuration,
+			}
+		})),
+		"FTP" => Ok(Box::new({
+			FtpStorageEngine {
 				config: storage_repository.configuration,
 			}
 		})),

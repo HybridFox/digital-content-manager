@@ -34,12 +34,3 @@ jobs:
                   imageName: hybridfox/ibs-client
                   context: .
                   file: ./apps/client/Dockerfile
-
-    deploy:
-        needs: [push_api_to_registry, push_client_to_registry]
-        runs-on: ubuntu-latest
-        steps:
-            - name: curl
-              uses: wei/curl@v1
-              with:
-                  args: -X POST ${{ secrets.RANCHER_DEPLOY_URL }}
