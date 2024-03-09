@@ -44,7 +44,7 @@ export const CTCreatePage = () => {
 
 	useEffect(() => {
 		fetchWorkflows(siteId!, { pagesize: -1 });
-		setBreadcrumbs([{ label: 'Content Types', to: CONTENT_TYPES_PATHS.ROOT }, { label: 'Create' }]);
+		setBreadcrumbs([{ label: 'Content Types', to: generatePath(CONTENT_TYPES_PATHS.ROOT, { siteId }) }, { label: 'Create' }]);
 	}, []);
 
 	const onSubmit = (values: ICreateContentTypeForm) => {

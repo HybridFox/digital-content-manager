@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 
 import { CONTENT_PATHS } from '../../content.routes';
 import { useWorkflowStateStore } from '../../../workflow/stores/workflow-state';
@@ -22,7 +22,7 @@ export const ContentDetailCompartmentPage = () => {
 	const [contentItem] = useContentStore((state) => [state.contentItem]);
 	const [workflow] = useWorkflowStore((state) => [state.workflow]);
 	const { t } = useTranslation();
-	const { siteId, compartmentId } = useParams();
+	const { siteId, compartmentId, kind } = useParams();
 	const [setBreadcrumbs] = useHeaderStore((state) => [state.setBreadcrumbs]);
 
 	useEffect(() => {
@@ -31,7 +31,7 @@ export const ContentDetailCompartmentPage = () => {
 
 	useEffect(() => {
 		setBreadcrumbs([
-			{ label: t(`BREADCRUMBS.${contentType?.kind?.toUpperCase()}`), to: CONTENT_PATHS.ROOT },
+			{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`), to: generatePath(CONTENT_PATHS.ROOT, { siteId, kind }) },
 			{
 				label: contentType?.name,
 				badge: contentType && CONTENT_TYPE_KINDS_TRANSLATIONS[contentType.kind],

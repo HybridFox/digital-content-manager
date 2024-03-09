@@ -16,7 +16,7 @@ function getFileJSON(resPath) {
 	}
 }
 
-const handleNamespace = (parser, namespaces, lng, ns) => {
+const handleNamespace = (parser, namespaces, lng, ns, push) => {
 	const { options } = parser;
 	const { jsonIndent } = options.resource;
 	const lineEnding = String(options.resource.lineEnding).toLowerCase();
@@ -59,7 +59,7 @@ const handleNamespace = (parser, namespaces, lng, ns) => {
 		text = eol.lf(text);
 	}
 
-	this.push && this.push(
+	push(
 		new VirtualFile({
 			path: resPath,
 			contents: Buffer.from(text),
@@ -68,14 +68,14 @@ const handleNamespace = (parser, namespaces, lng, ns) => {
 }
 
 
-const handleLanguage = (parser, lng) => {
+const handleLanguage = (parser, lng, push) => {
 	const { options } = parser;
 
 	// Flush to resource store
 	const resStore = parser.get({ sort: options.sort });
 	const namespaces = resStore[lng];
 
-	Object.keys(namespaces).forEach((ns) => handleNamespace(parser, namespaces, lng, ns));
+	Object.keys(namespaces).forEach((ns) => handleNamespace(parser, namespaces, lng, ns, push));
 }
 
 function flush(done) {
@@ -85,7 +85,7 @@ function flush(done) {
 	// Flush to resource store
 	const resStore = parser.get({ sort: options.sort });
 
-	Object.keys(resStore).forEach((lng) => handleLanguage(parser, lng));
+	Object.keys(resStore).forEach((lng) => handleLanguage(parser, lng, this.push));
 
 	done();
 }

@@ -42,7 +42,7 @@ export const CCCreatePage = () => {
 
 	useEffect(() => {
 		fetchWorkflows(siteId!, { pagesize: -1 });
-		setBreadcrumbs([{ label: 'Content Components', to: CONTENT_COMPONENT_PATHS.ROOT }, { label: 'Create' }]);
+		setBreadcrumbs([{ label: 'Content Components', to: generatePath(CONTENT_COMPONENT_PATHS.ROOT, { siteId }) }, { label: 'Create' }]);
 	}, []);
 
 	const onSubmit = (values: ICreateContentComponent) => {

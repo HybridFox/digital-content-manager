@@ -68,7 +68,7 @@ export const PolicyDetailPage = () => {
 		fetchIAMActions({ pagesize: -1, kind: 'root' });
 		setBreadcrumbs([
 			{ label: t(`BREADCRUMBS.POLICIES`), to: POLICY_PATHS.ROOT },
-			{ label: t(`BREADCRUMBS.CREATE`) },
+			{ label: t(`BREADCRUMBS.EDIT`) },
 		]);
 	}, []);
 

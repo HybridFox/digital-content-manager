@@ -64,7 +64,7 @@ export const RoleDetailPage = () => {
 		fetchRole(roleId);
 		setBreadcrumbs([
 			{ label: t(`BREADCRUMBS.ROLES`), to: ROLE_PATHS.ROOT },
-			{ label: t(`BREADCRUMBS.CREATE`) },
+			{ label: t(`BREADCRUMBS.EDIT`) },
 		]);
 	}, []);
 

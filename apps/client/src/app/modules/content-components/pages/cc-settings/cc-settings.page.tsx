@@ -57,7 +57,7 @@ export const CCSettingsPage = () => {
 
 	useEffect(() => {
 		setBreadcrumbs([
-			{ label: 'Content Components', to: CONTENT_COMPONENT_PATHS.ROOT },
+			{ label: 'Content Components', to: generatePath(CONTENT_COMPONENT_PATHS.ROOT, { siteId }) },
 			{
 				label: contentComponent?.name,
 				to: generatePath(CONTENT_COMPONENT_PATHS.DETAIL, {

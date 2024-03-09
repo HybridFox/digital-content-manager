@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '~components';
 
@@ -15,7 +15,7 @@ export const ContentDetailSettingsPage = () => {
 	const [updateContentItem, updateContentItemLoading] = useContentStore((state) => [state.updateContentItem, state.updateContentItemLoading]);
 	const [contentItem] = useContentStore((state) => [state.contentItem]);
 	const { t } = useTranslation();
-	const { siteId } = useParams();
+	const { siteId, kind } = useParams();
 	const [setBreadcrumbs] = useHeaderStore((state) => [state.setBreadcrumbs]);
 	const formMethods = useForm<IContentItem>({
 		// resolver: yupResolver(editFieldSchema),
@@ -30,7 +30,7 @@ export const ContentDetailSettingsPage = () => {
 
 	useEffect(() => {
 		setBreadcrumbs([
-			{ label: t(`BREADCRUMBS.${contentType?.kind?.toUpperCase()}`), to: CONTENT_PATHS.ROOT },
+			{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`), to: generatePath(CONTENT_PATHS.ROOT, { siteId, kind }) },
 			{
 				label: contentType?.name,
 				badge: contentType && CONTENT_TYPE_KINDS_TRANSLATIONS[contentType.kind],

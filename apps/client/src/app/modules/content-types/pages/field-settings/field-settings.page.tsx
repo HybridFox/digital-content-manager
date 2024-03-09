@@ -20,7 +20,7 @@ export const FieldSettingsPage = () => {
 
 	useEffect(() => {
 		setBreadcrumbs([
-			{ label: 'Content Types', to: CONTENT_TYPES_PATHS.ROOT },
+			{ label: 'Content Types', to: generatePath(CONTENT_TYPES_PATHS.ROOT, { siteId }) },
 			{
 				label: contentType?.name,
 				badge: contentType && CONTENT_TYPE_KINDS_TRANSLATIONS[contentType.kind],

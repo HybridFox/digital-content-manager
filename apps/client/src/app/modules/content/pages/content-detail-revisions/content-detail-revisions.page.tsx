@@ -37,7 +37,7 @@ export const ContentDetailRevisionsPage = () => {
 
 	useEffect(() => {
 		setBreadcrumbs([
-			{ label: t(`BREADCRUMBS.${contentType?.kind?.toUpperCase()}`), to: CONTENT_PATHS.ROOT },
+			{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`), to: generatePath(CONTENT_PATHS.ROOT, { siteId, kind }) },
 			{
 				label: contentType?.name,
 				badge: contentType && CONTENT_TYPE_KINDS_TRANSLATIONS[contentType.kind],

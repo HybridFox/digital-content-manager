@@ -43,7 +43,7 @@ export const ContentCreatePage = () => {
 		}
 
 		fetchContentTypes(siteId!, { pagesize: -1, kind: CONTENT_TYPE_KINDS_PARAMETER_MAP[kind], inludeOccurrences: true });
-		setBreadcrumbs([{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`), to: CONTENT_PATHS.ROOT }, { label: t(`BREADCRUMBS.CREATE`) }]);
+		setBreadcrumbs([{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`), to: generatePath(CONTENT_PATHS.ROOT, { siteId, kind: 'content' }) }, { label: t(`BREADCRUMBS.CREATE`) }]);
 	}, []);
 
 	const onSelectContentType = (contentTypeId: string) => {

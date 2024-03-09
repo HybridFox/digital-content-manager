@@ -57,7 +57,7 @@ export const ContentCreateDetailPage = () => {
 
 	useEffect(() => {
 		setBreadcrumbs([
-			{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`), to: CONTENT_PATHS.ROOT },
+			{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`), to: generatePath(CONTENT_PATHS.ROOT, { siteId, kind }) },
 			{ label: t(`BREADCRUMBS.CREATE`), to: generatePath(CONTENT_PATHS.CREATE, { kind, siteId }) },
 			{
 				label: contentType?.name,

@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '~components';
 
@@ -16,7 +16,7 @@ export const ContentDetailStatusPage = () => {
 	const [workflow] = useWorkflowStore((state) => [state.workflow]);
 	const [contentType] = useContentTypeStore((state) => [state.contentType]);
 	const { t } = useTranslation();
-	const { siteId } = useParams();
+	const { siteId, kind } = useParams();
 	const [setBreadcrumbs] = useHeaderStore((state) => [state.setBreadcrumbs]);
 	const formMethods = useForm<IContentItem>({
 		values: contentItem
@@ -24,7 +24,7 @@ export const ContentDetailStatusPage = () => {
 
 	useEffect(() => {
 		setBreadcrumbs([
-			{ label: t(`BREADCRUMBS.${contentType?.kind?.toUpperCase()}`), to: CONTENT_PATHS.ROOT },
+			{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`), to: generatePath(CONTENT_PATHS.ROOT, { siteId, kind }) },
 			{
 				label: contentType?.name,
 				badge: contentType && CONTENT_TYPE_KINDS_TRANSLATIONS[contentType.kind],

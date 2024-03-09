@@ -1,13 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
 import dayjs from 'dayjs';
 
 import {
-	Alert,
-	AlertTypes,
 	Button,
 	ButtonSizes,
 	ButtonTypes,
@@ -29,7 +27,6 @@ import { FIELD_VIEW_MODE, RadioField } from '~forms';
 import {
 	CONTENT_TYPE_KINDS_TRANSLATIONS,
 	DATE_FORMAT,
-	IAPIError,
 	IContentRevision,
 	useContentRevisionStore,
 	useContentStore,
@@ -73,7 +70,7 @@ export const ContentDetailRevisionComparePage = () => {
 
 	useEffect(() => {
 		setBreadcrumbs([
-			{ label: t(`BREADCRUMBS.${contentType?.kind?.toUpperCase()}`), to: CONTENT_PATHS.ROOT },
+			{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`), to: generatePath(CONTENT_PATHS.ROOT, { siteId, kind }) },
 			{
 				label: contentType?.name,
 				badge: contentType && CONTENT_TYPE_KINDS_TRANSLATIONS[contentType.kind],
