@@ -19,14 +19,6 @@ export const CONTENT_DETAIL_TABS = (
 	contentItem?: IContentItem,
 	contentType?: IContentType,
 ): IHeaderTab[] => [
-	{
-		to: generatePath(CONTENT_PATHS.DETAIL_SETTINGS, {
-			contentId: contentItem?.id || '',
-			kind,
-			siteId,
-		}),
-		label: 'Settings',
-	},
 	...(contentType?.compartments?.length ? (contentType?.compartments || []).map((compartment) => ({
 		to: generatePath(CONTENT_PATHS.DETAIL_COMPARTMENT, {
 			contentId: contentItem?.id || '',
@@ -43,28 +35,36 @@ export const CONTENT_DETAIL_TABS = (
 		}),
 		label: 'Fields',
 	}]),
+];
+
+export const CONTENT_DETAIL_META_TABS = (
+	siteId: string,
+	kind?: string,
+	contentItem?: IContentItem,
+	contentType?: IContentType,
+): IHeaderTab[] => [
+	{
+		to: generatePath(CONTENT_PATHS.DETAIL_SETTINGS, {
+			contentId: contentItem?.id || '',
+			kind,
+			siteId,
+		}),
+		label: <span className="las la-cog"></span>,
+	},
 	{
 		to: generatePath(CONTENT_PATHS.DETAIL_REVISIONS, {
 			contentId: contentItem?.id || '',
 			kind,
 			siteId,
 		}),
-		label: 'Revisions',
+		label: <span className="las la-history"></span>,
 	},
-	// {
-	// 	to: generatePath(CONTENT_PATHS.DETAIL_STATUS, {
-	// 		contentId: contentItem?.id || '',
-	// 		kind,
-	// 		siteId,
-	// 	}),
-	// 	label: <>Status <Badge>{contentItem?.currentWorkflowState?.name}</Badge></>,
-	// },
 	{
 		to: generatePath(CONTENT_PATHS.DETAIL_TRANSLATIONS, {
 			contentId: contentItem?.id || '',
 			kind,
 			siteId,
 		}),
-		label: 'Translations',
+		label: <span className="las la-language"></span>,
 	},
 ];

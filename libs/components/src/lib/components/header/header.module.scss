@@ -27,6 +27,12 @@
 	}
 
 	&__tabs {
+		margin-right: auto;
+
+		&--meta {
+			margin-right: unset;
+		}
+
 		&__link {
 			display: inline-block;
 			padding: var(--spacer);
@@ -51,7 +57,7 @@
 	}
 
 	&__meta {
-		margin-left: auto;
+		margin-left: var(--spacer-sm);
 		background-color: var(--color-white);
 		margin-bottom: -1px;
 		margin-right: var(--spacer-sm);

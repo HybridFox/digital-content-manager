@@ -32,6 +32,7 @@ export const Header: FC<IHeaderProps> = ({
 	action,
 	tabs = [],
 	breadcrumbs = [],
+	metaTabs = [],
 	metaInfo,
 	subText,
 }: IHeaderProps) => {
@@ -69,6 +70,15 @@ export const Header: FC<IHeaderProps> = ({
 				{!!tabs?.length && (
 					<div className={cxBind('m-header__tabs')}>
 						{tabs.map((tab) => (
+							<NavLink {...navLinkBinding(!!tab.disabled)} to={tab.to} key={tab.to}>
+								{tab.label}
+							</NavLink>
+						))}
+					</div>
+				)}
+				{!!metaTabs?.length && (
+					<div className={cxBind('m-header__tabs', 'm-header__tabs--meta')}>
+						{metaTabs.map((tab) => (
 							<NavLink {...navLinkBinding(!!tab.disabled)} to={tab.to} key={tab.to}>
 								{tab.label}
 							</NavLink>

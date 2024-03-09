@@ -6,7 +6,7 @@ import { Header, Loading } from '~components';
 
 import { CONTENT_PATHS } from '../../content.routes';
 
-import { CONTENT_DETAIL_TABS } from './content-detail.const';
+import { CONTENT_DETAIL_META_TABS, CONTENT_DETAIL_TABS } from './content-detail.const';
 
 import { useContentStore, useContentTypeStore, useHeaderStore, useWorkflowStore } from '~shared';
 
@@ -58,6 +58,7 @@ export const ContentDetailPage = () => {
 					</>
 				}
 				tabs={CONTENT_DETAIL_TABS(siteId!, kind, contentItem, contentType)}
+				metaTabs={CONTENT_DETAIL_META_TABS(siteId!, kind, contentItem, contentType)}
 				metaInfo={contentItem?.language.key.toUpperCase()}
 			></Header>
 			<div className="u-margin-top">

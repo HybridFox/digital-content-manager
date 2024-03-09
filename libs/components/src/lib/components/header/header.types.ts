@@ -13,6 +13,7 @@ export interface IHeaderProps {
 	action?: ReactNode;
 	className?: string;
 	tabs?: IHeaderTab[];
+	metaTabs?: IHeaderTab[];
 	breadcrumbs?: IHeaderBreadcrumb[];
 	metaInfo?: string;
 	subText?: ReactNode;

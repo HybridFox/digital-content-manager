@@ -6,7 +6,6 @@ import { kyInstance, wrapApi } from '../../services';
 import { IResourceStoreState, IResourcesResponse } from './resource.types';
 
 const fetchResources = (set: any) => async (siteId: string, contentRepositoryId: any, params?: any) => {
-	console.log('FETCH resources')
 	set(() => ({ resourcesLoading: true }));
 	const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/sites/${siteId}/storage-repositories/${contentRepositoryId}/directories`, {
 		searchParams: {
@@ -14,12 +13,10 @@ const fetchResources = (set: any) => async (siteId: string, contentRepositoryId:
 		}
 	}).json<IResourcesResponse>());
 
-	console.log('A', error)
 	if (error) {
 		return set(() => ({ resources: [], resourcesLoading: false }))
 	}
 	
-	console.log('saving resources', result._embedded.resources)
 	set(() => ({ resources: result._embedded.resources, resourcesLoading: false }));
 };
 

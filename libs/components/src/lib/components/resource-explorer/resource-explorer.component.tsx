@@ -108,7 +108,6 @@ export const ResourceExplorer: FC<IResourceExplorerProps> = ({
 		...resource,
 	});
 
-	console.log(resources)
 	return (
 		<>
 			<ExplorerRepositories
