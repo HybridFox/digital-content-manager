@@ -59,7 +59,7 @@ const handleNamespace = (parser, namespaces, lng, ns) => {
 		text = eol.lf(text);
 	}
 
-	this.push(
+	this.push && this.push(
 		new VirtualFile({
 			path: resPath,
 			contents: Buffer.from(text),
