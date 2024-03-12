@@ -1,13 +1,12 @@
 import { SetURLSearchParams } from "react-router-dom";
-import {omit} from "rambda/immutable";
+import { anyPass, isEmpty, isNil, reject } from "rambda";
 
 import { IPageParameters } from "../types";
-import {anyPass, isEmpty, isNil, reject} from "rambda";
 
 export const getFilterParams = (searchParams: URLSearchParams): IPageParameters => {
 	const currentSearchParams: Record<string, string> = [...searchParams.keys()].reduce((acc, key) => ({ ...acc, [key]: searchParams.get(key) }), {});
 	return Object.keys(currentSearchParams).reduce((acc, filterKey) => {
-		if (!filterKey.match(/filter\[([a-z]*)]/)) {
+		if (!filterKey.match(/filter\[([a-zA-Z]*)]/)) {
 			return acc;
 		}
 
@@ -23,20 +22,20 @@ export const getFilterProps = (searchParams: URLSearchParams, setSearchParams: S
 	const currentSearchParams: Record<string, string> = [...searchParams.keys()].reduce((acc, key) => ({ ...acc, [key]: searchParams.get(key) }), {});
 	return {
 		filtering: Object.keys(currentSearchParams).reduce((acc, filterKey) => {
-			if (!filterKey.match(/filter\[([a-z]*)]/) || !currentSearchParams[filterKey]) {
+			if (!filterKey.match(/filter\[([a-zA-Z]*)]/) || !currentSearchParams[filterKey]) {
 				return acc;
 			}
 
 			return {
 				...acc,
-				[filterKey.match(/filter\[([a-z]*)]/)?.[1]!]: currentSearchParams[filterKey]
+				[filterKey.match(/filter\[([a-zA-Z]*)]/)?.[1]!]: currentSearchParams[filterKey]
 			}
 		}, {}),
 		onFiltering: (filterValues) => setSearchParams(reject(anyPass([isEmpty, isNil]))({ ...currentSearchParams, ...Object.keys(filterValues).reduce((acc, filterKey) => {
-				return {
-					...acc,
-					[`filter[${filterKey}]`]: filterValues[filterKey]
-				}
-			}, {}) } as any) as unknown as Record<string, string>),
+			return {
+				...acc,
+				[`filter[${filterKey}]`]: filterValues[filterKey]
+			}
+		}, {}) } as any) as unknown as Record<string, string>),
 	}
 }

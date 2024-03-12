@@ -4,7 +4,6 @@ import cx from 'classnames/bind';
 import { Tooltip } from 'react-tooltip';
 import classNames from 'classnames';
 
-
 import { Select } from '~components';
 
 import { IRenderControllerField } from '../fields.types';

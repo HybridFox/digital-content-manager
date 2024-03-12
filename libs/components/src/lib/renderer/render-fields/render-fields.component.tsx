@@ -4,7 +4,6 @@ import cx from "classnames/bind";
 
 import { Alert, Loading } from "~components";
 
-
 import { RenderMultiple } from "../render-multiple";
 
 import styles from './render-fields.module.scss';
@@ -30,7 +29,7 @@ export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix = '',
 			],
 			multiLanguage: field.multiLanguage,
 		};
-
+ 
 		if (field.min === 1 && field.max === 1 || [FIELD_KEYS.MEDIA, FIELD_KEYS.CONTENT_REFERENCE, FIELD_KEYS.SELECT].includes(field.contentComponent.componentName)) {
 			return <Component viewMode={viewMode} siteId={siteId} name={`${fieldPrefix}${field.slug}`} label={field.name} fieldConfiguration={fieldConfiguration} field={field} />
 		}

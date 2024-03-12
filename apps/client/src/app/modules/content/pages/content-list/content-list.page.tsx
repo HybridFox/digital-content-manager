@@ -7,11 +7,13 @@ import {ButtonLink, ButtonTypes, Filter, HasPermission, Header, Loading, Paginat
 import {CONTENT_LIST_COLUMNS, CONTENT_LIST_FILTER} from './content-list.const';
 
 import {
+	ContentTypeKinds,
 	CONTENT_TYPE_KINDS_PARAMETER_MAP, getFilterParams, getFilterProps,
 	getPageParams,
 	getPaginationProps,
 	useAuthStore,
 	useContentStore,
+	useContentTypeStore,
 	useHeaderStore
 } from '~shared';
 
@@ -23,8 +25,12 @@ export const ContentListPage = () => {
 		state.contentLoading,
 		state.fetchContent,
 	]);
+	const [contentTypes, fetchContentTypes] = useContentTypeStore((state) => [
+		state.contentTypes,
+		state.fetchContentTypes
+	]);
 	const [activeSite] = useAuthStore((state) => [state.activeSite]);
-	const [removeContentItemLoading, removeContentItem] = useContentStore((state) => [state.removeContentItemLoading, state.removeContentItem]);
+	const [_, removeContentItem] = useContentStore((state) => [state.removeContentItemLoading, state.removeContentItem]);
 	const { t } = useTranslation();
 	const { kind, siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
@@ -34,6 +40,7 @@ export const ContentListPage = () => {
 			return;
 		}
 
+		fetchContentTypes(siteId!, { pagesize: -1, kind: CONTENT_TYPE_KINDS_PARAMETER_MAP[kind!] })
 		setBreadcrumbs([{ label: t(`BREADCRUMBS.${kind?.toUpperCase()}`) }]);
 	}, [kind]);
 
@@ -58,7 +65,7 @@ export const ContentListPage = () => {
 					</HasPermission>
 				}
 			></Header>
-			<Filter filters={CONTENT_LIST_FILTER(t, activeSite)} siteId={siteId!} className="u-margin-bottom" {...getFilterProps(searchParams, setSearchParams)} />
+			<Filter filters={CONTENT_LIST_FILTER(t, activeSite, contentTypes)} siteId={siteId!} className="u-margin-bottom" {...getFilterProps(searchParams, setSearchParams)} />
 			<Loading loading={contentLoading} text={t(`GENERAL.LOADING`)}>
 				<Table columns={CONTENT_LIST_COLUMNS(t, handleDelete)} rows={content || []}></Table>
 				<Pagination

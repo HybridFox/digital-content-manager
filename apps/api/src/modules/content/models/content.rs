@@ -358,6 +358,9 @@ impl Content {
 					query = match key.as_str() {
 						"name" => query.filter(content::name.ilike(format!("%{value}%"))),
 						"language" => query.filter(languages::key.ilike(format!("%{value}%"))),
+						"contentTypeId" => {
+							query.filter(content::content_type_id.eq(Uuid::parse_str(value)?))
+						}
 						_ => query,
 					};
 				}

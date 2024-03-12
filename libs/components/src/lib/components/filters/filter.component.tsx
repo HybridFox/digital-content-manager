@@ -37,11 +37,17 @@ export const Filter: FC<IFiltersProps> = ({ className, onFiltering, filtering, f
 				fields: []
 			}
 		}))
-	}, []);
+	}, [filters, filtering]);
 
 	const { watch } = filterFormMethods;
 	useEffect(() => {
-		const subscription = watch((values) => debouncedFilter(values))
+		const subscription = watch((values, e) => {
+			if (e.type !== 'change') {
+				return;
+			}
+
+			debouncedFilter(values)
+		})
 		return () => subscription.unsubscribe()
 	}, [watch]);
 
@@ -49,7 +55,11 @@ export const Filter: FC<IFiltersProps> = ({ className, onFiltering, filtering, f
 		if (Object.keys(filtering).length) {
 			setFiltersOpen(true);
 		}
-	}, [])
+	}, []);
+
+	useEffect(() => {
+		filterFormMethods.reset(filtering);
+	}, [filtering]);
 
 	return (
 		<div className={classNames(cxBind('m-filter'), className)}>
