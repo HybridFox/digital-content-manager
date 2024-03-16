@@ -124,6 +124,7 @@ export const ContentDetailRevisionChangesPage = () => {
 							disabled={contentRevisionComparison?.[0]?.id === contentItem?.revisionId}
 							size={ButtonSizes.SMALL}
 							type={ButtonTypes.SECONDARY}
+							onClick={() => setRestoreModalVisible(true)}
 						>
 							<span className="las la-undo"></span> Restore
 						</Button>

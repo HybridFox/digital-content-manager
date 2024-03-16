@@ -149,8 +149,6 @@ pub async fn find_all(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
 
-	dbg!(&query.filter);
-
 	let (content, total_elements) = Content::find(
 		conn,
 		&params.site_id,

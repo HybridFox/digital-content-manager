@@ -41,7 +41,6 @@ pub fn ensure_permission<'a>(
 		}))?;
 	let conn = &mut app_state.get_conn()?;
 	let permissions = get_user_permissions(conn, user.id, site_id)?;
-	dbg!(&permissions);
 
 	let result =
 		permissions
@@ -65,10 +64,6 @@ pub fn ensure_permission<'a>(
 				let compare_r_resource = Regex::new(&resource.replace("*", "(\\w*)"))?
 					.is_match(permission.resources.0.first().unwrap());
 
-				dbg!(
-					(compare_l_action || compare_r_action)
-						&& (compare_l_resource || compare_r_resource)
-				);
 				Ok((compare_l_action || compare_r_action)
 					&& (compare_l_resource || compare_r_resource))
 			})

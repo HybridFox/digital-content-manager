@@ -62,8 +62,6 @@ impl Content {
 			.order(content_revisions::created_at.desc())
 			.first::<ContentRevision>(conn)?;
 
-		dbg!(&revision);
-
 		let fields = content_fields::table
 			.filter(
 				content_fields::source_id

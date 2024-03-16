@@ -64,8 +64,6 @@ pub async fn find_one(
 		&query.lang,
 	)?;
 
-	dbg!(&fields);
-
 	let res = response::PublicContentDTO::from((
 		content,
 		revision,
@@ -98,7 +96,6 @@ pub async fn find(
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
 
-	dbg!(&query.content_types);
 	let (content, total_elements) = Content::find_public(
 		conn,
 		params.site_id,
