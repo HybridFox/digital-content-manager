@@ -37,6 +37,9 @@ export interface IContentComponentStoreState {
 
 	updateContentComponent: (siteId: string, contentComponentId: string, values: IContentComponentUpdateDTO) => Promise<IContentComponent>;
 	updateContentComponentLoading: boolean;
+
+	removeContentComponent: (siteId: string, contentComponentId: string) => Promise<void>;
+	removeContentComponentLoading: boolean;
 }
 
 export interface IContentComponentCreateDTO {

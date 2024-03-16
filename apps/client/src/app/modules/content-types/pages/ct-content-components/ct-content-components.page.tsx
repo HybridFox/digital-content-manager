@@ -73,6 +73,10 @@ export const CTContentComponentsPage = () => {
 		useCompartmentStore((state) => [
 			state.compartments
 		]);
+	const [removeCompartment] =
+		useCompartmentStore((state) => [
+			state.removeCompartment
+		]);
 	const [updateFieldOrderLoading, updateFieldOrder] =
 		useContentTypeFieldStore((state) => [
 			state.updateFieldOrderLoading,
@@ -173,6 +177,10 @@ export const CTContentComponentsPage = () => {
 		updateFieldOrder(siteId!, contentType!.id, orderedRows)
 	}
 
+	const handleRemoveCompartment = (compartmentId: string) => {
+		removeCompartment(siteId!, contentType!.id, compartmentId)
+	}
+
 	return (
 		<>
 			<div className="u-margin-top u-margin-bottom">
@@ -184,7 +192,15 @@ export const CTContentComponentsPage = () => {
 					onOrderChange={onOrderChange}
 					columns={CONTENT_TYPE_DETAIL_COLUMNS(onDeleteField)}
 					rows={fieldRows}
-					groups={compartments}
+					groups={compartments.map((compartment) => ({
+						...compartment,
+						onRemove: handleRemoveCompartment,
+						editPath: generatePath(CONTENT_TYPES_PATHS.COMPARTMENT_DETAIL, {
+							contentTypeId: contentType!.id,
+							compartmentId: compartment.id,
+							siteId,
+						}),
+					}))}
 					rowGroupIdentifier='compartmentId'
 				></Table>
 			</div>

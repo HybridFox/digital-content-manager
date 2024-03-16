@@ -19,6 +19,11 @@ export const CTListPage = () => {
 			state.contentTypesLoading,
 			state.fetchContentTypes,
 		]);
+	const [removeContentTypeLoading, removeContentType] =
+		useContentTypeStore((state) => [
+			state.removeContentTypeLoading,
+			state.removeContentType,
+		]);
 	const [breadcrumbs, setBreadcrumbs] =
 		useHeaderStore((state) => [
 			state.breadcrumbs,
@@ -31,7 +36,11 @@ export const CTListPage = () => {
 
 	useEffect(() => {
 		fetchContentTypes(siteId!, { ...getPageParams(searchParams) });
-	}, [searchParams])
+	}, [searchParams]);
+
+	const handleDelete = (contentItemId: string): void => {
+		removeContentType(siteId!, contentItemId).then(() => fetchContentTypes(siteId!, { ...getPageParams(searchParams) }));
+	};
 
 	return (
 		<>
@@ -48,7 +57,7 @@ export const CTListPage = () => {
 				loading={contentTypesLoading}
 			>
 				<Table
-					columns={CONTENT_TYPE_LIST_COLUMNS(t)}
+					columns={CONTENT_TYPE_LIST_COLUMNS(t, handleDelete, removeContentTypeLoading)}
 					rows={contentTypes}
 				></Table>
 				<Pagination

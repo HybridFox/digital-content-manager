@@ -14,4 +14,8 @@ export interface IButtonProps {
 	disabled?: boolean;
 	active?: boolean;
 	id?: string;
+	confirmable?: boolean;
+	confirmText?: string;
+	confirmTitle?: string;
+	confirmLoading?: boolean;
 }

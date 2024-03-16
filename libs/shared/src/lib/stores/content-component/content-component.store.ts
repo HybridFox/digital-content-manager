@@ -80,6 +80,20 @@ export const useContentComponentStore = create<IContentComponentStoreState>()(
 				return result;
 			},
 			updateContentComponentLoading: false,
+	
+			removeContentComponent: async (siteId, contentComponentId) => {
+				set(() => ({ removeContentComponentLoading: true }));
+				const [_, error] = await wrapApi(kyInstance.delete(`/admin-api/v1/sites/${siteId}/content-components/${contentComponentId}`).json<void>());
+	
+				if (error) {
+					set(() => ({ removeContentComponentLoading: false }));
+					throw error;
+				}
+				
+				set(() => ({ removeContentComponentLoading: false }));
+				return;
+			},
+			removeContentComponentLoading: false,
 		}),
 		{ name: 'contentComponentStore' }
 	)

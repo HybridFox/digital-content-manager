@@ -67,7 +67,7 @@ export const RichtextField: FC<IRichtextFieldProps> = ({
 	fieldOptions,
 	fieldConfiguration,
 	field,
-	viewMode,
+	viewMode = FIELD_VIEW_MODE.EDIT,
 }: IRichtextFieldProps) => {
 	const { control } = useFormContext();
 

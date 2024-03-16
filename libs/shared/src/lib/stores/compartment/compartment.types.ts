@@ -23,8 +23,8 @@ export interface ICompartmentStoreState {
 	updateCompartment: (siteId: string, contentTypeId: string, compartmentId: string, compartment: ICompartmentUpdateDTO) => Promise<ICompartment>;
 	updateCompartmentLoading: boolean;
 
-	deleteCompartment: (siteId: string, contentTypeId: string, compartmentId: string) => Promise<void>;
-	deleteCompartmentLoading: boolean;
+	removeCompartment: (siteId: string, contentTypeId: string, compartmentId: string) => Promise<void>;
+	removeCompartmentLoading: boolean;
 }
 
 export interface ICompartmentCreateDTO {

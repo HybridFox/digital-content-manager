@@ -92,6 +92,9 @@ export interface IContentTypeStoreState {
 
 	updateContentType: (siteId: string, contentTypeId: string, values: IContentTypeUpdateDTO) => Promise<IContentType>;
 	updateContentTypeLoading: boolean;
+
+	removeContentType: (siteId: string, contentTypeId: string) => Promise<void>;
+	removeContentTypeLoading: boolean;
 }
 
 export interface IContentTypeCreateDTO {

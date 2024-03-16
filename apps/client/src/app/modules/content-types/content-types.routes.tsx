@@ -5,6 +5,7 @@ import { APP_SITE_ROOT_PATH } from "../core/routes.const"
 const ROOT_PATH = `${APP_SITE_ROOT_PATH}/content-types`;
 const DETAIL_PATH = `${ROOT_PATH}/:contentTypeId`;
 const FIELD_DETAIL_PATH = `${DETAIL_PATH}/fields/:fieldId`;
+const COMPARTMENT_DETAIL_PATH = `${DETAIL_PATH}/compartments/:compartmentId`;
 
 export const CONTENT_TYPES_PATHS = {
 	ROOT: `${ROOT_PATH}`,
@@ -18,6 +19,8 @@ export const CONTENT_TYPES_PATHS = {
 	FIELD_DETAIL_CONFIGURATION: `${FIELD_DETAIL_PATH}/configuration`,
 	FIELD_DETAIL_VALIDATION: `${FIELD_DETAIL_PATH}/validation`,
 	FIELD_DETAIL_DEFAULT_VALUE: `${FIELD_DETAIL_PATH}/default-value`,
+
+	COMPARTMENT_DETAIL: `${COMPARTMENT_DETAIL_PATH}`,
 }
 
 export const CONTENT_TYPE_ROUTES: RouteObject[] = [
@@ -67,6 +70,10 @@ export const CONTENT_TYPE_ROUTES: RouteObject[] = [
 						lazy: async () => ({ Component: (await import('./pages/field-configuration/field-configuration.page')).FieldConfigurationPage }),
 					}
 				]
+			},
+			{
+				path: CONTENT_TYPES_PATHS.COMPARTMENT_DETAIL,
+				lazy: async () => ({ Component: (await import('./pages/compartment-detail/compartment-detail.page')).CompartmentDetailPage }),
 			},
 		],
 	},

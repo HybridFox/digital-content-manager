@@ -16,8 +16,9 @@ export interface ITableColumn<T = Record<string, unknown>> {
 export interface ITableGroup {
 	name: string;
 	id: string;
+	onRemove?: (groupId: string) => void;
+	editPath?: string;
 }
-
 
 export interface ITableProps {
 	className?: string;

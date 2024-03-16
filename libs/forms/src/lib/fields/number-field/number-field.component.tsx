@@ -20,7 +20,7 @@ export const NumberField: FC<INumberFieldProps> = ({
 	placeholder,
 	fieldOptions,
 	fieldConfiguration,
-	viewMode
+	viewMode = FIELD_VIEW_MODE.EDIT
 }: INumberFieldProps) => {
 	const { register, formState: { errors } } = useFormContext();
 	const error = errors?.[name];

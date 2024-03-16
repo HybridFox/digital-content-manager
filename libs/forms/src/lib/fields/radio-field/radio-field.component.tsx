@@ -14,7 +14,7 @@ import { IRadioFieldProps, IRadioOption } from './radio-field.types';
 
 const cxBind = cx.bind(styles);
 
-export const RadioField: FC<IRadioFieldProps> = ({ name, label, viewMode, fieldConfiguration, fieldOptions }: IRadioFieldProps) => {
+export const RadioField: FC<IRadioFieldProps> = ({ name, label, viewMode = FIELD_VIEW_MODE.EDIT, fieldConfiguration, fieldOptions }: IRadioFieldProps) => {
 	const {
 		register,
 		formState: { errors },

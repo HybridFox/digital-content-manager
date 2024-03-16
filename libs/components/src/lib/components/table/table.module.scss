@@ -28,6 +28,10 @@
 			}
 		}
 
+		&--group {
+			background-color: var(--color-gray-accent);
+		}
+
 		&__cell {
 			border-top: 1px solid var(--color-gray-accent);
 			padding: var(--spacer);

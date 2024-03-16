@@ -16,6 +16,10 @@ export const CCListPage = () => {
 		state.contentComponentsLoading,
 		state.fetchContentComponents,
 	]);
+	const [removeContentComponentLoading, removeContentComponent] = useContentComponentStore((state) => [
+		state.removeContentComponentLoading,
+		state.removeContentComponent
+	]);
 	const { t } = useTranslation();
 	const { kind, siteId } = useParams();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
@@ -27,6 +31,10 @@ export const CCListPage = () => {
 	useEffect(() => {
 		fetchContentComponents(siteId!, { ...getPageParams(searchParams) });
 	}, [searchParams]);
+
+	const handleDelete = (contentItemId: string): void => {
+		removeContentComponent(siteId!, contentItemId).then(() => fetchContentComponents(siteId!, { ...getPageParams(searchParams) }));
+	};
 
 	return (
 		<>
@@ -40,7 +48,7 @@ export const CCListPage = () => {
 				}
 			></Header>
 			<Loading loading={contentComponentsLoading} text={t(`GENERAL.LOADING`)}>
-				<Table columns={CONTENT_COMPONENTS_LIST_COLUMNS(t)} rows={contentComponents}></Table>
+				<Table columns={CONTENT_COMPONENTS_LIST_COLUMNS(t, handleDelete, removeContentComponentLoading)} rows={contentComponents}></Table>
 				<Pagination
 					className="u-margin-top"
 					totalPages={contentComponentsPagination?.totalPages}

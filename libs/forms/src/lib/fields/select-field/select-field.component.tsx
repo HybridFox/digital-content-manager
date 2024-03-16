@@ -16,7 +16,7 @@ import styles from './select-field.module.scss';
 
 const cxBind = cx.bind(styles);
 
-export const SelectField: FC<ISelectFieldProps> = ({ name, label, viewMode, fieldConfiguration, field, disabled }: ISelectFieldProps) => {
+export const SelectField: FC<ISelectFieldProps> = ({ name, label, viewMode = FIELD_VIEW_MODE.EDIT, fieldConfiguration, field, disabled }: ISelectFieldProps) => {
 	const { control } = useFormContext();
 
 	const getMappedValue = (value: string | string[]): ISelectOptions | ISelectOptions[] | undefined => {

@@ -74,5 +74,19 @@ export const useContentTypeStore = create<IContentTypeStoreState>()(devtools(
 			return result;
 		},
 		updateContentTypeLoading: false,
+
+		removeContentType: async (siteId, contentTypeId) => {
+			set(() => ({ removeContentTypeLoading: true }));
+			const [, error] = await wrapApi(kyInstance.delete(`/admin-api/v1/sites/${siteId}/content-types/${contentTypeId}`).json<void>());
+
+			if (error) {
+				set(() => ({ removeContentTypeLoading: false }));
+				throw error;
+			}
+			
+			set(() => ({ removeContentTypeLoading: false }));
+			return;
+		},
+		removeContentTypeLoading: false,
 	}), { name: 'contentTypeStore' }
 ))

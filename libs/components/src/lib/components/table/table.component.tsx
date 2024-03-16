@@ -4,6 +4,8 @@ import classNames from 'classnames';
 import { compose, lensPath, path, set } from 'rambda';
 
 
+import { Button, ButtonLink, ButtonSizes } from '../button';
+
 import { ITableColumn, ITableProps } from './table.types';
 import styles from './table.module.scss';
 import { TableCheckbox } from './components/table-checkbox/table-checkbox.component';
@@ -132,7 +134,30 @@ export const Table: FC<ITableProps> = ({
 						key={group.id}
 						className={cxBind('a-table__row', 'a-table__row--group')}
 					>
-						<td className={cxBind('a-table__row__cell', 'a-table__row__cell--group')} colSpan={columns.length + 2}>{group.name}</td>
+						<td className={cxBind('a-table__row__cell', 'a-table__row__cell--group')} colSpan={columns.length + 1}>{group.name}</td>
+						<td className={cxBind('a-table__row__cell', 'a-table__row__cell--group')}>
+							<div className="u-display-flex">
+								{group.editPath && (
+									<ButtonLink
+										to={group.editPath}
+										size={ButtonSizes.SMALL}
+										className="u-margin-left-auto"
+									>
+										<i className="las la-pen"></i> Edit
+									</ButtonLink>
+								)}
+								{group.onRemove && (
+									<Button
+										confirmable
+										size={ButtonSizes.SMALL}
+										className="u-margin-left-sm"
+										onClick={() => group.onRemove!(group.id as string)}
+									>
+										<i className="las la-trash"></i>
+									</Button>
+								)}
+							</div>
+						</td>
 					</tr>
 					{groupedRows.map((row, rowIndex) => renderRow(row, rowIndex, groupedRows.length, group.id))}
 				</>

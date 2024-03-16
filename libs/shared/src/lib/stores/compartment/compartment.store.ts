@@ -41,7 +41,7 @@ export const useCompartmentStore = create<ICompartmentStoreState>()(devtools(
 			const [result, error] = await wrapApi(kyInstance.post(`/admin-api/v1/sites/${siteId}/content-types/${contentTypeId}/compartments`, {
 				json: compartment,
 			}).json<ICompartment>());
-			set(() => ({ createCompartmentLoading: false }));
+			set(({ compartments }) => ({ createCompartmentLoading: false, compartments: [...compartments, result!] }));
 
 			if (error) {
 				throw error;
@@ -67,18 +67,18 @@ export const useCompartmentStore = create<ICompartmentStoreState>()(devtools(
 		},
 		updateCompartmentLoading: false,
 
-		deleteCompartment: async (siteId, contentTypeId, compartmentId) => {
-			set(() => ({ deleteCompartmentLoading: true }));
+		removeCompartment: async (siteId, contentTypeId, compartmentId) => {
+			set(() => ({ removeCompartmentLoading: true }));
 			const [, error] = await wrapApi(kyInstance.delete(`/admin-api/v1/sites/${siteId}/content-types/${contentTypeId}/compartments/${compartmentId}`));
 
 			if (error) {
-				set(() => ({ deleteCompartmentLoading: false }));
+				set(() => ({ removeCompartmentLoading: false }));
 				throw error;
 			}
 			
-			set(({ compartments }) => ({ deleteCompartmentLoading: false, compartments: compartments.filter((compartment) => compartment.id === compartmentId) }));
+			set(({ compartments }) => ({ removeCompartmentLoading: false, compartments: compartments.filter((compartment) => compartment.id !== compartmentId) }));
 			return;
 		},
-		deleteCompartmentLoading: false,
+		removeCompartmentLoading: false,
 	}), { name: 'compartmentStore' }
 ))
