@@ -9,6 +9,7 @@ import {FieldLabel} from '../../field-label/field-label.component';
 import {FieldHint} from '../../field-hint/field-hint.component';
 import {FIELD_VIEW_MODE, IRenderControllerField} from '../fields.types';
 import {FieldValue} from "../../field-value/field-value.component";
+import { FieldDiff } from '../../field-diff/field-diff.component';
 
 import {IDatetimeFieldProps} from './datetime-field.types';
 import styles from './datetime-field.module.scss';
@@ -70,6 +71,15 @@ export const DatetimeField: FC<IDatetimeFieldProps> = ({
 			<div className={cxBind('a-input')}>
 				<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
 				<FieldValue name={name} />
+			</div>
+		)
+	}
+
+	if (viewMode === FIELD_VIEW_MODE.DIFF) {
+		return (
+			<div className={cxBind('a-input')}>
+				<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
+				<FieldDiff name={name} />
 			</div>
 		)
 	}

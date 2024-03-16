@@ -11,13 +11,14 @@ import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { $getRoot, EditorState, LexicalEditor } from 'lexical';
+import { $getRoot, $setSelection, EditorState, LexicalEditor } from 'lexical';
 import { $generateNodesFromDOM } from '@lexical/html';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 
 import { FieldLabel } from '../../field-label/field-label.component';
 import { FIELD_VIEW_MODE } from '../fields.types';
 import { FieldValue } from '../../field-value/field-value.component';
+import { FieldDiff } from '../../field-diff/field-diff.component';
 
 import styles from './richtext-field.module.scss';
 import { IRichtextFieldProps } from './richtext-field.types';
@@ -35,14 +36,28 @@ const InitializeDataPlugin = ({ value }: { value: any }) => {
 		editor.update(() => {
 			const parser = new DOMParser();
 			const document = parser.parseFromString(value, 'text/html');
-			const nodes = $generateNodesFromDOM(editor, document);
 
-			const root = $getRoot().select();
-			root.insertNodes(nodes);
+			if (!value) {
+				return;
+			}
+
+			const nodes = $generateNodesFromDOM(editor, document);
+			const root = $getRoot();
+			root.clear();
+			root.append(...nodes);
+			$setSelection(null)
 		})
 	}, []);
 
 	return null;
+}
+
+const urlRegExp = new RegExp(
+	/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/,
+);
+
+export function validateUrl(url: string): boolean {
+	return url === 'https://' || urlRegExp.test(url);
 }
 
 export const RichtextField: FC<IRichtextFieldProps> = ({
@@ -85,11 +100,10 @@ export const RichtextField: FC<IRichtextFieldProps> = ({
 				})}
 			>
 				<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} name={name} />
-
 				<LexicalComposer initialConfig={initialConfig}>
 					<ToolbarPlugin />
 					<ListPlugin />
-					<LinkPlugin />
+					<LinkPlugin validateUrl={validateUrl} />
 					<CheckListPlugin />
 					<OnChangePlugin onChange={handleChange} ignoreSelectionChange />
 					<RichTextPlugin
@@ -111,10 +125,18 @@ export const RichtextField: FC<IRichtextFieldProps> = ({
 		</div>
 	)
 
+	const renderDiff = () => (
+		<div className={cxBind('a-input')}>
+			<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
+			<FieldDiff name={name} />
+		</div>
+	)
+
 	return (
 		<div className={cxBind('a-input__field-wrapper')}>
 			{viewMode === FIELD_VIEW_MODE.EDIT && <Controller control={control} name={name} render={renderField} />}
 			{viewMode === FIELD_VIEW_MODE.VIEW && renderValue()}
+			{viewMode === FIELD_VIEW_MODE.DIFF && renderDiff()}
 		</div>
 	);
 };

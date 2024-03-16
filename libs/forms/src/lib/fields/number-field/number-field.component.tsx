@@ -5,9 +5,12 @@ import { Tooltip } from 'react-tooltip'
 
 import { FieldLabel } from '../../field-label/field-label.component';
 import { FieldHint } from '../../field-hint/field-hint.component';
+import { FIELD_VIEW_MODE } from '../fields.types';
+import { FieldValue } from '../../field-value/field-value.component';
+import { FieldDiff } from '../../field-diff/field-diff.component';
 
-import { INumberFieldProps } from './number-field.types';
 import styles from './number-field.module.scss';
+import { INumberFieldProps } from './number-field.types';
 
 const cxBind = cx.bind(styles);
 
@@ -16,38 +19,53 @@ export const NumberField: FC<INumberFieldProps> = ({
 	label,
 	placeholder,
 	fieldOptions,
-	fieldConfiguration
+	fieldConfiguration,
+	viewMode
 }: INumberFieldProps) => {
 	const { register, formState: { errors } } = useFormContext();
 	const error = errors?.[name];
+
+	const renderField = () => (
+		<div className={cxBind('a-input__field-wrapper')}>
+			<input
+				type="number"
+				className={cxBind('a-input__field')}
+				id={name}
+				placeholder={placeholder}
+				{...register(name, {
+					...fieldOptions,
+				})}
+			/>
+			{error && (
+				<>
+					<Tooltip anchorSelect={`#${name}-err-tooltip`}>
+						{error.message?.toString()}
+					</Tooltip>
+					<div className={cxBind('a-input__error')} id={`${name}-err-tooltip`}>
+						<i className="las la-exclamation-triangle"></i>
+					</div>
+				</>
+				
+			)}
+		</div>
+	);
+
+	const renderValue = () => (
+		<FieldValue name={name} />
+	)
+
+	const renderDiff = () => (
+		<FieldDiff name={name} />
+	)
 
 	return (
 		<div className={cxBind('a-input', {
 			'a-input--has-error': !!error
 		})}>
 			<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} name={name} />
-			<div className={cxBind('a-input__field-wrapper')}>
-				<input
-					type="number"
-					className={cxBind('a-input__field')}
-					id={name}
-					placeholder={placeholder}
-					{...register(name, {
-						...fieldOptions,
-					})}
-				/>
-				{error && (
-					<>
-						<Tooltip anchorSelect={`#${name}-err-tooltip`}>
-							{error.message?.toString()}
-						</Tooltip>
-						<div className={cxBind('a-input__error')} id={`${name}-err-tooltip`}>
-							<i className="las la-exclamation-triangle"></i>
-						</div>
-					</>
-					
-				)}
-			</div>
+			{viewMode === FIELD_VIEW_MODE.EDIT && renderField()}
+			{viewMode === FIELD_VIEW_MODE.VIEW && renderValue()}
+			{viewMode === FIELD_VIEW_MODE.DIFF && renderDiff()}
 			<FieldHint hint={fieldConfiguration?.hint as string} />
 		</div>
 	);

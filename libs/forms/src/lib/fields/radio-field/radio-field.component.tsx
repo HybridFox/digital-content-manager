@@ -3,17 +3,58 @@ import { useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
 import { Tooltip } from 'react-tooltip';
 
-import { IRadioFieldProps, IRadioOption } from './radio-field.types';
+import { FieldLabel } from '../../field-label/field-label.component';
+import { FieldHint } from '../../field-hint/field-hint.component';
+import { FIELD_VIEW_MODE } from '../fields.types';
+import { FieldValue } from '../../field-value/field-value.component';
+import { FieldDiff } from '../../field-diff/field-diff.component';
+
 import styles from './radio-field.module.scss';
+import { IRadioFieldProps, IRadioOption } from './radio-field.types';
 
 const cxBind = cx.bind(styles);
 
-export const RadioField: FC<IRadioFieldProps> = ({ name, label, placeholder, fieldConfiguration, fieldOptions }: IRadioFieldProps) => {
+export const RadioField: FC<IRadioFieldProps> = ({ name, label, viewMode, fieldConfiguration, fieldOptions }: IRadioFieldProps) => {
 	const {
 		register,
 		formState: { errors },
 	} = useFormContext();
 	const error = errors?.[name];
+
+	const renderField = () => (
+		<div className={cxBind('a-input__field-wrapper')}>
+			{((fieldConfiguration?.options as IRadioOption[]) || []).map((option, i) => (
+				<div className={cxBind('a-input__field')} key={option.value}>
+					<input
+						type="radio"
+						id={option.value}
+						value={option.value}
+						{...register(name, {
+							...fieldOptions,
+						})}
+						className={cxBind('a-input__radio')}
+					/>
+					<label htmlFor={option.value}>{option.label}</label>
+				</div>
+			))}
+			{error && (
+				<>
+					<Tooltip anchorSelect={`#${name}-err-tooltip`}>{error.message?.toString()}</Tooltip>
+					<div className={cxBind('a-input__error')} id={`${name}-err-tooltip`}>
+						<i className="las la-exclamation-triangle"></i>
+					</div>
+				</>
+			)}
+		</div>
+	);
+
+	const renderValue = () => (
+		<FieldValue name={name} />
+	)
+
+	const renderDiff = () => (
+		<FieldDiff name={name} />
+	)
 
 	return (
 		<div
@@ -21,35 +62,11 @@ export const RadioField: FC<IRadioFieldProps> = ({ name, label, placeholder, fie
 				'a-input--has-error': !!error,
 			})}
 		>
-			{label && (
-				<label className={cxBind('a-input__label')}>
-					{label}
-				</label>
-			)}
-			<div className={cxBind('a-input__field-wrapper')}>
-				{((fieldConfiguration?.options as IRadioOption[]) || []).map((option, i) => (
-					<div className={cxBind('a-input__field')} key={option.value}>
-						<input
-							type="radio"
-							id={option.value}
-							value={option.value}
-							{...register(name, {
-								...fieldOptions,
-							})}
-							className={cxBind('a-input__radio')}
-						/>
-						<label htmlFor={option.value}>{option.label}</label>
-					</div>
-				))}
-				{error && (
-					<>
-						<Tooltip anchorSelect={`#${name}-err-tooltip`}>{error.message?.toString()}</Tooltip>
-						<div className={cxBind('a-input__error')} id={`${name}-err-tooltip`}>
-							<i className="las la-exclamation-triangle"></i>
-						</div>
-					</>
-				)}
-			</div>
+			<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
+			{viewMode === FIELD_VIEW_MODE.EDIT && renderField()}
+			{viewMode === FIELD_VIEW_MODE.VIEW && renderValue()}
+			{viewMode === FIELD_VIEW_MODE.DIFF && renderDiff()}
+			<FieldHint hint={fieldConfiguration?.hint as string} />
 		</div>
 	);
 };

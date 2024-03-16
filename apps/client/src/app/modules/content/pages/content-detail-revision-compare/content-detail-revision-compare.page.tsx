@@ -161,7 +161,7 @@ export const ContentDetailRevisionComparePage = () => {
 					</div>
 				</div>
 				<FormProvider {...compareFormMethods}>
-					<RenderComparison viewMode={FIELD_VIEW_MODE.VIEW} siteId={siteId!} fieldPrefix="fields." fields={contentType?.fields || []} />
+					<RenderComparison viewMode={FIELD_VIEW_MODE.DIFF} siteId={siteId!} fieldPrefix="fields." fields={contentType?.fields || []} />
 				</FormProvider>
 			</Loading>
 			<Modal modalOpen={restoreModalVisible} title="Restore as..." onClose={() => setRestoreModalVisible(false)}>

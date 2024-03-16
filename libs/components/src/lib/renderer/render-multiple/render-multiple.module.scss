@@ -1,7 +1,9 @@
 .o-render-multiple {
 	// border: 1px solid blue;
 	// padding: var(--spacer-xs);
-	margin-bottom: var(--spacer);
+	// margin-bottom: var(--spacer);
+	// margin-top: calc(#{var(--spacer-sm)} * -1);
+	
 	// border-radius: var(--border-radius-sm);
 	
 	&__title {
@@ -21,13 +23,17 @@
 
 	&__field {
 		display: flex;
-		align-items: flex-end;
+		align-items: flex-start;
 		margin-bottom: var(--spacer);
+
+		&__actions {
+			margin-right: var(--spacer-sm);
+		}
 
 		&__order {
 			display: flex;
 			flex-direction: column;
-			margin-right: var(--spacer-sm);
+			margin-bottom: var(--spacer-sm);
 
 			& :first-child {
 				border-bottom-left-radius: 0;
@@ -43,10 +49,6 @@
 
 		&__content {
 			flex: 1;
-		}
-
-		&__actions {
-			margin-left: var(--spacer-sm);
 		}
 	}
 	

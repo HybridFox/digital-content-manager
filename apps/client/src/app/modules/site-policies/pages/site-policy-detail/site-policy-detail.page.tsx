@@ -90,7 +90,7 @@ export const SitePolicyDetailPage = () => {
 		<>
 			<Header
 				breadcrumbs={breadcrumbs}
-				title={t('SITE_POLICIES.TITLES.CREATE')}
+				title={t('SITE_POLICIES.TITLES.EDIT')}
 			></Header>
 			<div className="u-margin-top">
 				<Loading loading={iamActionsLoading || policyLoading}>

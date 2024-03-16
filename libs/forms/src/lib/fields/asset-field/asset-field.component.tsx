@@ -6,13 +6,15 @@ import { useParams } from 'react-router-dom';
 
 import { FieldLabel } from '../../field-label/field-label.component';
 import { SelectAssetModal } from '../../modals';
+import { FIELD_VIEW_MODE } from '../fields.types';
+import { FieldValue } from '../../field-value/field-value.component';
 
 import { IAssetFieldProps } from './asset-field.types';
 import styles from './asset-field.module.scss';
 
 const cxBind = cx.bind(styles);
 
-export const AssetField: FC<IAssetFieldProps> = ({ name, label, fieldConfiguration, field }: IAssetFieldProps) => {
+export const AssetField: FC<IAssetFieldProps> = ({ name, label, fieldConfiguration, field, viewMode }: IAssetFieldProps) => {
 	const { control } = useFormContext();
 	const [modalOpen, setModalOpen] = useState(false);
 	const { siteId } = useParams();
@@ -78,9 +80,17 @@ export const AssetField: FC<IAssetFieldProps> = ({ name, label, fieldConfigurati
 		);
 	};
 
+	const renderValue = () => (
+		<div className={cxBind('a-input')}>
+			<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
+			<FieldValue name={name} />
+		</div>
+	)
+
 	return (
 		<div className={cxBind('a-input__field-wrapper')}>
-			<Controller control={control} name={name} render={renderField} />
+			{viewMode === FIELD_VIEW_MODE.EDIT && <Controller control={control} name={name} render={renderField} />}
+			{viewMode === FIELD_VIEW_MODE.VIEW && renderValue()}
 		</div>
 	);
 };

@@ -7,6 +7,7 @@ import { FieldLabel } from '../../field-label/field-label.component';
 import { FieldHint } from '../../field-hint/field-hint.component';
 import { FieldValue } from "../../field-value/field-value.component";
 import { FIELD_VIEW_MODE } from '../fields.types';
+import { FieldDiff } from '../../field-diff/field-diff.component';
 
 import { ITextFieldProps } from './text-field.types';
 import styles from './text-field.module.scss';
@@ -29,6 +30,10 @@ export const TextField: FC<ITextFieldProps> = ({
 
 	const renderValue = () => (
 		<FieldValue name={name} />
+	)
+
+	const renderDiff = () => (
+		<FieldDiff name={name} />
 	)
 
 	const renderField = () => (
@@ -64,6 +69,7 @@ export const TextField: FC<ITextFieldProps> = ({
 			<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
 			{viewMode === FIELD_VIEW_MODE.EDIT && renderField()}
 			{viewMode === FIELD_VIEW_MODE.VIEW && renderValue()}
+			{viewMode === FIELD_VIEW_MODE.DIFF && renderDiff()}
 			<FieldHint hint={fieldConfiguration?.hint as string} />
 		</div>
 	);

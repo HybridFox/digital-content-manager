@@ -6,30 +6,33 @@ import classNames from 'classnames';
 
 import { Select } from '~components';
 
-import { IRenderControllerField } from '../fields.types';
+import { FIELD_VIEW_MODE, IRenderControllerField } from '../fields.types';
+import { FieldLabel } from '../../field-label/field-label.component';
+import { FieldValue } from '../../field-value/field-value.component';
+import { FieldDiff } from '../../field-diff/field-diff.component';
 
 import { ISelectFieldProps, ISelectOptions } from './select-field.types';
 import styles from './select-field.module.scss';
 
 const cxBind = cx.bind(styles);
 
-export const SelectField: FC<ISelectFieldProps> = ({ name, label, placeholder, fieldConfiguration, field, disabled }: ISelectFieldProps) => {
+export const SelectField: FC<ISelectFieldProps> = ({ name, label, viewMode, fieldConfiguration, field, disabled }: ISelectFieldProps) => {
 	const { control } = useFormContext();
 
 	const getMappedValue = (value: string | string[]): ISelectOptions | ISelectOptions[] | undefined => {
 		const flattenedFields = ((fieldConfiguration?.options as ISelectOptions[]) || []).reduce((acc, option: ISelectOptions) => {
 			if (option.options) {
-				return [...acc, ...option.options]
+				return [...acc, ...option.options];
 			}
 
 			return [...acc, option];
-		}, [] as ISelectOptions[])
+		}, [] as ISelectOptions[]);
 		if (Array.isArray(value)) {
 			return flattenedFields.filter(({ value: optionValue }) => value.includes(optionValue));
 		}
 
 		return flattenedFields.find(({ value: optionValue }) => optionValue === value);
-	}
+	};
 
 	const renderField = ({ field: { onChange, value }, formState: { errors } }: IRenderControllerField) => {
 		const mappedValue = getMappedValue(value);
@@ -49,7 +52,7 @@ export const SelectField: FC<ISelectFieldProps> = ({ name, label, placeholder, f
 					<Select
 						disabled={disabled}
 						min={field?.min ?? 1}
-						max={field?.max ?? 1} 
+						max={field?.max ?? 1}
 						hasError={!!errors?.[name]}
 						onChange={onChange}
 						value={mappedValue}
@@ -68,5 +71,25 @@ export const SelectField: FC<ISelectFieldProps> = ({ name, label, placeholder, f
 		);
 	};
 
-	return <Controller control={control} name={name} render={renderField} />;
+	const renderValue = () => (
+		<div className={cxBind('a-input')}>
+			<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
+			<FieldValue name={name} />
+		</div>
+	)
+
+	const renderDiff = () => (
+		<div className={cxBind('a-input')}>
+			<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
+			<FieldDiff name={name} />
+		</div>
+	)
+
+	return (
+		<div className={cxBind('a-input__field-wrapper')}>
+			{viewMode === FIELD_VIEW_MODE.EDIT && <Controller control={control} name={name} render={renderField} />}
+			{viewMode === FIELD_VIEW_MODE.VIEW && renderValue()}
+			{viewMode === FIELD_VIEW_MODE.DIFF && renderDiff()}
+		</div>
+	);
 };

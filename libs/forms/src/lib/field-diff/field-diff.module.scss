@@ -1,0 +1,12 @@
+.a-input {
+	&__value {
+		&--added {
+			color: var(--color-state-success);
+		}
+	
+		&--removed {
+			color: var(--color-state-danger);
+			text-decoration: line-through;
+		}
+	}
+}

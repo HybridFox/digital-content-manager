@@ -59,7 +59,7 @@ export const Menu = () => {
 					</li>
 				</ul>
 			</div>
-			<HasPermission siteId={siteId} resource="*" action={['sites::content:read', 'sites::pages:read', 'sites::content-blocks:read']}>
+			<HasPermission siteId={siteId} resource="*" action={'sites::content:read'}>
 				<div className={cxBind('o-menu__links')}>
 					<p className={cxBind('o-menu__links__name')}>
 						<span>Content</span>
@@ -74,7 +74,7 @@ export const Menu = () => {
 							</HasPermission>
 						</li>
 						<li>
-							<HasPermission siteId={siteId} resource="*" action="sites::pages:read">
+							<HasPermission siteId={siteId} resource="*" action="sites::content:read">
 								<NavLink {...navLinkBinding} to={generatePath(CONTENT_PATHS.ROOT, { siteId, kind: 'pages' })}>
 									<i className="las la-file"></i>
 									<span>Pages</span>
@@ -82,7 +82,7 @@ export const Menu = () => {
 							</HasPermission>
 						</li>
 						<li>
-							<HasPermission siteId={siteId} resource="*" action="sites::content-blocks:read">
+							<HasPermission siteId={siteId} resource="*" action="sites::content:read">
 								<NavLink {...navLinkBinding} to={generatePath(CONTENT_PATHS.ROOT, { siteId, kind: 'content-blocks' })}>
 									<i className="las la-cubes"></i>
 									<span>Blocks</span>

@@ -22,7 +22,7 @@ export const FieldGroupField: FC<IFieldGroupFieldProps> = ({
 		<div className={cxBind('o-field-group')}>
 			<FieldGroupHeader viewMode={viewMode} label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} badge='Group' />
 			<div className={cxBind("o-field-group__fields")}>
-				<RenderFields siteId={siteId || ''} fieldPrefix={`${name}.`} fields={fieldConfiguration?.fields as IField[] || []} />
+				<RenderFields siteId={siteId || ''} fieldPrefix={`${name}.`} fields={fieldConfiguration?.fields as IField[] || []} viewMode={viewMode} />
 			</div>
 		</div>
 	);

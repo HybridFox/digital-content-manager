@@ -8,84 +8,60 @@ const flattenObjectKeys = require('i18next-scanner/lib/flatten-object-keys').def
 const omitEmptyObject = require('i18next-scanner/lib/omit-empty-object').default;
 const typescriptTransform = require('i18next-scanner-typescript');
 
-function getFileJSON(resPath) {
-	try {
-		return JSON.parse(fs.readFileSync(fs.realpathSync(path.join(__dirname, 'public/assets', resPath))).toString('utf-8'));
-	} catch (e) {
-		return {};
-	}
-}
-
-const handleNamespace = (parser, namespaces, lng, ns, push) => {
-	const { options } = parser;
-	const { jsonIndent } = options.resource;
-	const lineEnding = String(options.resource.lineEnding).toLowerCase();
-
-	let obj = namespaces[ns];
-
-	const resPath = parser.formatResourceSavePath(lng, ns);
-
-	// if not defaultLng then Get, Merge & removeUnusedKeys of old JSON content
-	if (lng !== options.defaultLng) {
-		let resContent = getFileJSON(resPath);
-
-		if (!options.removeUnusedKeys) {
-			const namespaceKeys = flattenObjectKeys(obj);
-			const resContentKeys = flattenObjectKeys(resContent);
-			const unusedKeys = _.differenceWith(resContentKeys, namespaceKeys, _.isEqual);
-
-			for (let i = 0; i < unusedKeys.length; ++i) {
-				_.unset(resContent, unusedKeys[i]);
-			}
-
-			resContent = omitEmptyObject(resContent);
-		}
-
-		obj = { ...obj, ...resContent };
-	}
-
-	let text = `${JSON.stringify(obj, null, jsonIndent)}\n`;
-
-	if (lineEnding === 'auto') {
-		text = eol.auto(text);
-	} else if (lineEnding === '\r\n' || lineEnding === 'crlf') {
-		text = eol.crlf(text);
-	} else if (lineEnding === '\n' || lineEnding === 'lf') {
-		text = eol.lf(text);
-	} else if (lineEnding === '\r' || lineEnding === 'cr') {
-		text = eol.cr(text);
-	} else {
-		// Defaults to LF
-		text = eol.lf(text);
-	}
-
-	push(
-		new VirtualFile({
-			path: resPath,
-			contents: Buffer.from(text),
-		})
-	);
-}
-
-
-const handleLanguage = (parser, lng, push) => {
-	const { options } = parser;
-
-	// Flush to resource store
-	const resStore = parser.get({ sort: options.sort });
-	const namespaces = resStore[lng];
-
-	Object.keys(namespaces).forEach((ns) => handleNamespace(parser, namespaces, lng, ns, push));
-}
-
 function flush(done) {
 	const { parser } = this;
 	const { options } = parser;
 
 	// Flush to resource store
 	const resStore = parser.get({ sort: options.sort });
+	const { jsonIndent } = options.resource;
+	const lineEnding = String(options.resource.lineEnding).toLowerCase();
 
-	Object.keys(resStore).forEach((lng) => handleLanguage(parser, lng, this.push));
+	Object.keys(resStore).forEach((lng) => {
+		const namespaces = resStore[lng];
+
+		Object.keys(namespaces).forEach((ns) => {
+			const resPath = parser.formatResourceSavePath(lng, ns);
+			let resContent;
+			try {
+				resContent = JSON.parse(fs.readFileSync(fs.realpathSync(path.join(__dirname, 'public/assets', resPath))).toString('utf-8'));
+			} catch (e) {
+				resContent = {};
+			}
+			const obj = { ...namespaces[ns], ...resContent };
+			let text = JSON.stringify(obj, null, jsonIndent) + '\n';
+
+			if (lineEnding === 'auto') {
+				text = eol.auto(text);
+			} else if (lineEnding === '\r\n' || lineEnding === 'crlf') {
+				text = eol.crlf(text);
+			} else if (lineEnding === '\n' || lineEnding === 'lf') {
+				text = eol.lf(text);
+			} else if (lineEnding === '\r' || lineEnding === 'cr') {
+				text = eol.cr(text);
+			} else {
+				// Defaults to LF
+				text = eol.lf(text);
+			}
+
+			let contents = null;
+
+			try {
+				// "Buffer.from(string[, encoding])" is added in Node.js v5.10.0
+				contents = Buffer.from(text);
+			} catch (e) {
+				// Fallback to "new Buffer(string[, encoding])" which is deprecated since Node.js v6.0.0
+				contents = new Buffer(text);
+			}
+
+			this.push(
+				new VirtualFile({
+					path: resPath,
+					contents: contents,
+				})
+			);
+		});
+	});
 
 	done();
 }

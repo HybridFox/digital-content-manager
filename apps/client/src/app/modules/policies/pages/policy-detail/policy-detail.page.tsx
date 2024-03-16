@@ -90,7 +90,7 @@ export const PolicyDetailPage = () => {
 		<>
 			<Header
 				breadcrumbs={breadcrumbs}
-				title={t('POLICIES.TITLES.CREATE')}
+				title={t('POLICIES.TITLES.EDIT')}
 			></Header>
 			<div className="u-margin-top">
 				<Loading loading={iamActionsLoading || policyLoading}>
