@@ -46,7 +46,7 @@ export const WorkflowStateCreatePage = () => {
 
 	useEffect(() => {
 		setBreadcrumbs([
-			{ label: t(`BREADCRUMBS.WORKFLOW_STATES`), to: WORKFLOW_PATHS.WORKFLOW_STATES_ROOT },
+			{ label: t(`BREADCRUMBS.WORKFLOW_STATES`), to: generatePath(WORKFLOW_PATHS.WORKFLOW_STATES_ROOT, { siteId }) },
 			{ label: t(`BREADCRUMBS.CREATE`) },
 		]);
 	}, []);

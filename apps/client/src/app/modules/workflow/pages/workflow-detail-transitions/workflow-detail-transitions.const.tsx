@@ -8,7 +8,7 @@ export const WORKFLOW_TRANSITIONS_COLUMNS = (t: TFunction, handleRemove: (workfl
 	{
 		id: 'fromState.name',
 		label: 'From State',
-		format: (value, key, item) => <>{value} <Badge>{item.fromState.technicalState}</Badge></>
+		format: (value, key, item) => <>{value} <Badge className="u-margin-left-xs">{item.fromState.technicalState}</Badge></>
 	},
 	{
 		id: 'accent',
@@ -19,7 +19,7 @@ export const WORKFLOW_TRANSITIONS_COLUMNS = (t: TFunction, handleRemove: (workfl
 	{
 		id: 'toState.name',
 		label: 'To State',
-		format: (value, key, item) => <>{value} <Badge>{item.toState.technicalState}</Badge></>
+		format: (value, key, item) => <>{value} <Badge className="u-margin-left-xs">{item.toState.technicalState}</Badge></>
 	},
 	{
 		id: 'actions',

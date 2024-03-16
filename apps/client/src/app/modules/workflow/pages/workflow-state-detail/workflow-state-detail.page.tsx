@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
-
 
 import { useWorkflowStateStore } from '../../stores/workflow-state';
 import { WORKFLOW_PATHS } from '../../workflow.routes';
@@ -48,7 +47,10 @@ export const WorkflowStateDetailPage = () => {
 	} = formMethods;
 
 	useEffect(() => {
-		setBreadcrumbs([{ label: t(`BREADCRUMBS.WORKFLOW_STATES`), to: WORKFLOW_PATHS.WORKFLOW_STATES_ROOT }, { label: t(`BREADCRUMBS.EDIT`) }]);
+		setBreadcrumbs([
+			{ label: t(`BREADCRUMBS.WORKFLOW_STATES`), to: generatePath(WORKFLOW_PATHS.WORKFLOW_STATES_ROOT, { siteId }) },
+			{ label: t(`BREADCRUMBS.EDIT`) },
+		]);
 	}, [workflowState]);
 
 	useEffect(() => {
@@ -75,9 +77,7 @@ export const WorkflowStateDetailPage = () => {
 		<>
 			<Header
 				breadcrumbs={breadcrumbs}
-				title={
-					<Trans t={t} i18nKey="WORKFLOW_STATES.TITLES.EDIT" values={{ workflowStateName: workflowState?.name }} />
-				}
+				title={<Trans t={t} i18nKey="WORKFLOW_STATES.TITLES.EDIT" values={{ workflowStateName: workflowState?.name }} />}
 			></Header>
 			<div className="u-margin-top">
 				<Loading loading={workflowStateLoading} text="Loading data...">
@@ -93,7 +93,11 @@ export const WorkflowStateDetailPage = () => {
 								<TextareaField name="description" label="Description" />
 							</div>
 							<div className="u-margin-bottom">
-								<SelectField name="technicalState" label="Technical State" fieldConfiguration={{ options: WORKFLOW_STATE_TECHNICAL_STATE_OPTIONS }} />
+								<SelectField
+									name="technicalState"
+									label="Technical State"
+									fieldConfiguration={{ options: WORKFLOW_STATE_TECHNICAL_STATE_OPTIONS }}
+								/>
 							</div>
 							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
 								{updateWorkflowStateLoading && <i className="las la-redo-alt la-spin"></i>} Save

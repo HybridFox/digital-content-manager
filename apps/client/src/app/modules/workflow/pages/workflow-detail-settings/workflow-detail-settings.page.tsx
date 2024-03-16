@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -39,7 +39,7 @@ export const WorkflowDetailSettingsPage = () => {
 
 	useEffect(() => {
 		setBreadcrumbs([
-			{ label: t(`BREADCRUMBS.WORKFLOWS`), to: WORKFLOW_PATHS.WORKFLOWS_ROOT },
+			{ label: t(`BREADCRUMBS.WORKFLOWS`), to: generatePath(WORKFLOW_PATHS.WORKFLOWS_ROOT, { siteId }) },
 			{ label: workflow?.name },
 			{ label: t('BREADCRUMBS.SETTINGS') },
 		]);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 
 import { Button, ButtonTypes, Card, HTMLButtonTypes, Loading, Table } from '~components';
 
@@ -40,7 +40,7 @@ export const WorkflowDetailTransitionsPage = () => {
 	useEffect(() => {
 		setTransitions(workflow?.transitions || []);
 		setBreadcrumbs([
-			{ label: t(`BREADCRUMBS.WORKFLOWS`), to: WORKFLOW_PATHS.WORKFLOWS_ROOT },
+			{ label: t(`BREADCRUMBS.WORKFLOWS`), to: generatePath(WORKFLOW_PATHS.WORKFLOWS_ROOT, { siteId }) },
 			{ label: workflow?.name },
 			{ label: t('BREADCRUMBS.TRANSITIONS') },
 		]);

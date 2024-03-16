@@ -1,13 +1,13 @@
 import { TFunction } from 'i18next';
 
-import { Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '~components';
+import { Button, ButtonLink, ButtonSizes, ITableColumn } from '~components';
 
 import { IWorkflowTransition } from '~shared';
 
 export const WORKFLOW_LIST_COLUMNS = (t: TFunction): ITableColumn[] => [
 	{
 		id: 'name',
-		label: 'Name',
+		label: 'Name'
 	},
 	{
 		id: 'transitions',

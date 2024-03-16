@@ -1,16 +1,21 @@
 import { TFunction } from 'i18next';
 
-import { Badge, Button, ButtonLink, ButtonSizes, ButtonTypes, ITableColumn } from '~components';
+import { Badge, BadgeSizes, Button, ButtonLink, ButtonSizes, ITableColumn } from '~components';
 
 export const WORKFLOW_LIST_COLUMNS = (t: TFunction, handleRemove: (workflowStateId: string) => void): ITableColumn[] => [
 	{
 		id: 'name',
 		label: 'Name',
+		format: (value, key, item) => (
+			<div className="u-display-flex u-align-items-center">
+				<span>{value as string}</span> <Badge className='u-margin-left-xs' size={BadgeSizes.SMALL}>{item.slug as string}</Badge>
+			</div>
+		),
 	},
 	{
 		id: 'technicalState',
 		label: 'Technical State',
-		format: (value) => <Badge>{value as string}</Badge>
+		format: (value) => <Badge>{value as string}</Badge>,
 	},
 	{
 		id: 'actions',
