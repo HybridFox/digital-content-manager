@@ -15,7 +15,7 @@ export const FieldDiff: FC<IFieldDiffProps> = ({ name }: IFieldDiffProps) => {
 
 	const value = watch(name);
 
-	if (name.startsWith('0.')) {
+	if (name.startsWith('1.')) {
 		return (
 			<div className={cxBind('a-input__diff')}>
 				{value ? <div dangerouslySetInnerHTML={{ __html: value }}></div> : <span className="u-text--light">{t('GENERAL.LABELS.NO_DATA')}</span>}
@@ -23,7 +23,7 @@ export const FieldDiff: FC<IFieldDiffProps> = ({ name }: IFieldDiffProps) => {
 		);
 	}
 
-	const oldValue = watch(name.replace('1.', '0.'));
+	const oldValue = watch(name.replace('0.', '1.'));
 	const charDiff = diffChars(oldValue || '', value || '');
 	return (
 		<div className={cxBind('a-input__diff')}>

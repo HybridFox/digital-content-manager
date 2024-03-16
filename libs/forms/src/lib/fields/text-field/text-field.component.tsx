@@ -28,14 +28,6 @@ export const TextField: FC<ITextFieldProps> = ({
 	const { register, formState: { errors } } = useFormContext();
 	const error = errors?.[name];
 
-	const renderValue = () => (
-		<FieldValue name={name} />
-	)
-
-	const renderDiff = () => (
-		<FieldDiff name={name} />
-	)
-
 	const renderField = () => (
 		<div className={cxBind('a-input__field-wrapper')}>
 			<input
@@ -60,6 +52,14 @@ export const TextField: FC<ITextFieldProps> = ({
 				
 			)}
 		</div>
+	)
+
+	const renderValue = () => (
+		<FieldValue name={name} />
+	)
+
+	const renderDiff = () => (
+		<FieldDiff name={name} />
 	)
 
 	return (
