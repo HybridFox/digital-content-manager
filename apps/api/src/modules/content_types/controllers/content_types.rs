@@ -98,7 +98,15 @@ pub async fn find_all(
 		Some(params.site_id),
 		format!("urn:dcm:content-types:*"),
 		"sites::content-types:read",
-	)?;
+	)
+	.or_else(|_| {
+		ensure_permission(
+			&req,
+			Some(params.site_id),
+			format!("urn:dcm:content:*"),
+			"sites::content:read",
+		)
+	})?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
@@ -148,7 +156,15 @@ pub async fn find_one(
 		Some(params.site_id),
 		format!("urn:dcm:content-types:{}", params.content_type_id),
 		"sites::content-types:read",
-	)?;
+	)
+	.or_else(|_| {
+		ensure_permission(
+			&req,
+			Some(params.site_id),
+			format!("urn:dcm:content:*"),
+			"sites::content:read",
+		)
+	})?;
 	let conn = &mut state.get_conn()?;
 	let content_type = ContentType::find_one(conn, params.site_id, params.content_type_id)?;
 	let res = response::ContentTypeWithFieldsDTO::from(content_type);

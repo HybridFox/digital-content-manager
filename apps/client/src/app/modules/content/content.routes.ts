@@ -16,5 +16,6 @@ export const CONTENT_PATHS = {
 	DETAIL_REVISIONS: `${DETAIL_PATH}/revisions`,
 	DETAIL_REVISION_PREVIEW: `${DETAIL_PATH}/revisions/:revisionId`,
 	DETAIL_REVISION_COMPARE: `${DETAIL_PATH}/revisions/:firstRevisionId/compare/:secondRevisionId`,
+	DETAIL_REVISION_CHANGES: `${DETAIL_PATH}/revisions/:firstRevisionId/changes/:secondRevisionId`,
 	DETAIL_STATUS: `${DETAIL_PATH}/status`,
 }

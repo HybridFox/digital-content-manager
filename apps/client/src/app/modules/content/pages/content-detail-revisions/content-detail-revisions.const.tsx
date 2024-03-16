@@ -14,7 +14,7 @@ export const addContentComponentSchema = yup.object({
 	name: yup.string().required(),
 });
 
-export const CONTENT_TRANSLATIONS_LIST_COLUMNS = (siteId: string, kind: string, contentId: string, revisionSelection: string[], t: TFunction): ITableColumn<IContentRevision>[] => [
+export const CONTENT_TRANSLATIONS_LIST_COLUMNS = (siteId: string, kind: string, contentId: string, revisions: IContentRevision[], t: TFunction): ITableColumn<IContentRevision>[] => [
 	// {
 	// 	id: 'language.key',
 	// 	label: 'Language',
@@ -55,7 +55,7 @@ export const CONTENT_TRANSLATIONS_LIST_COLUMNS = (siteId: string, kind: string, 
 		id: 'actions',
 		label: '',
 		// width: '150px',
-		format: (value, key, item) => {
+		format: (value, key, item, index) => {
 			// if (item.id) {
 			// 	return (
 			// 		<div className="u-display-flex">
@@ -70,19 +70,24 @@ export const CONTENT_TRANSLATIONS_LIST_COLUMNS = (siteId: string, kind: string, 
 			// 	);
 			// }
 
+			if (!revisions[index + 1]?.id) {
+				return <></>
+			};
+			
 			return (
 				<div className="u-display-flex">
 					<ButtonLink
-						to={generatePath(CONTENT_PATHS.DETAIL_REVISION_PREVIEW, {
+						to={generatePath(CONTENT_PATHS.DETAIL_REVISION_CHANGES, {
 							siteId,
 							contentId,
-							revisionId: item.id,
+							firstRevisionId: item.id,
+							secondRevisionId: revisions[index + 1]?.id,
 							kind
 						})}
 						size={ButtonSizes.SMALL}
 						className="u-margin-left-auto"
 					>
-						<i className="las la-eye"></i> View
+						<i className="las la-eye"></i> View changes
 					</ButtonLink>
 				</div>
 			);

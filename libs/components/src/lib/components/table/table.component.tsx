@@ -201,8 +201,8 @@ export const Table: FC<ITableProps> = ({
 			{selectable && !(selectablePredicate ? selectablePredicate(row) : true) && (
 				<td className={cxBind('a-table__row__cell')} style={{ width: '50px' }}></td>
 			)}
-			{columns.map((column, i) => (
-				<td key={`${row[idKey]}-${i}`} className={cxBind('a-table__row__cell')} style={column.width ? { width: column.width } : {}}>
+			{columns.map((column, cIndex) => (
+				<td key={`${row[idKey]}-${cIndex}`} className={cxBind('a-table__row__cell')} style={column.width ? { width: column.width } : {}}>
 					{renderCell(i, row, column)}
 				</td>
 			))}

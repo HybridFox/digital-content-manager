@@ -1,12 +1,18 @@
 .a-input {
 	&__value {
 		&--added {
+			background-color: var(--color-state-success-light);
 			color: var(--color-state-success);
+			padding: 5px;
+			margin: -5px;
 		}
 	
 		&--removed {
 			color: var(--color-state-danger);
+			background-color: var(--color-state-danger-light);
 			text-decoration: line-through;
+			padding: 5px;
+			margin: -5px;
 		}
 	}
 }

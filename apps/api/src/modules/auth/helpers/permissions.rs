@@ -4,7 +4,6 @@ use regex::Regex;
 use reqwest::StatusCode;
 use uuid::Uuid;
 use actix_web::HttpMessage;
-use itertools::Itertools;
 
 use crate::{
 	modules::{
@@ -42,6 +41,7 @@ pub fn ensure_permission<'a>(
 		}))?;
 	let conn = &mut app_state.get_conn()?;
 	let permissions = get_user_permissions(conn, user.id, site_id)?;
+	dbg!(&permissions);
 
 	let result =
 		permissions
@@ -65,23 +65,19 @@ pub fn ensure_permission<'a>(
 				let compare_r_resource = Regex::new(&resource.replace("*", "(\\w*)"))?
 					.is_match(permission.resources.0.first().unwrap());
 
+				dbg!(
+					(compare_l_action || compare_r_action)
+						&& (compare_l_resource || compare_r_resource)
+				);
 				Ok((compare_l_action || compare_r_action)
 					&& (compare_l_resource || compare_r_resource))
 			})
 			.collect::<Result<Vec<bool>, AppError>>()?
 			.into_iter()
 			.filter(|result| result.to_owned() == true)
-			.at_most_one()
-			.map_err(|_| {
-				AppError::Forbidden(AppErrorValue {
-					message: format!("Missing permission: {resource}/{action}"),
-					status: StatusCode::FORBIDDEN.as_u16(),
-					code: "MISSING_PERMISSION".to_owned(),
-					..Default::default()
-				})
-			})?;
+			.collect::<Vec<bool>>();
 
-	if result.is_none() {
+	if result.is_empty() {
 		return Err(AppError::Forbidden(AppErrorValue {
 			message: format!("Missing permission: {resource}/{action}"),
 			status: StatusCode::FORBIDDEN.as_u16(),

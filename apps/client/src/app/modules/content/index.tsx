@@ -58,6 +58,10 @@ export const CONTENT_ROUTES: RouteObject[] = [
 			{
 				path: CONTENT_PATHS.DETAIL_REVISION_COMPARE,
 				lazy: async () => ({ Component: (await import('./pages/content-detail-revision-compare/content-detail-revision-compare.page')).ContentDetailRevisionComparePage }),
+			},
+			{
+				path: CONTENT_PATHS.DETAIL_REVISION_CHANGES,
+				lazy: async () => ({ Component: (await import('./pages/content-detail-revision-changes/content-detail-revision-changes.page')).ContentDetailRevisionChangesPage }),
 			}
 		]
 	},

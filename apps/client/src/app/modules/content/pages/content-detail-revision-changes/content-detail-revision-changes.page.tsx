@@ -17,11 +17,10 @@ import {
 	Modal,
 	ModalFooter,
 	RenderComparison,
+	RenderFields,
 } from '~components';
 
 import { CONTENT_PATHS } from '../../content.routes';
-
-import styles from './content-detail-revision.compare.module.scss';
 
 import { FIELD_VIEW_MODE, RadioField } from '~forms';
 import {
@@ -36,9 +35,7 @@ import {
 	WORKFLOW_TECHNICAL_STATES,
 } from '~shared';
 
-const cxBind = cx.bind(styles);
-
-export const ContentDetailRevisionComparePage = () => {
+export const ContentDetailRevisionChangesPage = () => {
 	const [contentType] = useContentTypeStore((state) => [state.contentType]);
 	const [contentRevisionComparison, contentRevisionComparisonLoading, fetchContentRevisionComparison] = useContentRevisionStore((state) => [
 		state.contentRevisionComparison,
@@ -111,57 +108,29 @@ export const ContentDetailRevisionComparePage = () => {
 	return (
 		<>
 			<Loading loading={contentRevisionComparisonLoading}>
-				<div className={cxBind('p-revision-compare')}>
-					<div className={cxBind('p-revision-compare__left')}>
-						<Card className="u-margin-bottom">
-							<CardMeta
-								items={[
-									{
-										label: 'Created at',
-										value: dayjs(contentRevisionComparison?.[0]?.createdAt).format(DATE_FORMAT),
-									},
-									{ label: 'Status', value: contentRevisionComparison?.[0]?.workflowState?.name },
-									{ label: 'Editor', value: contentRevisionComparison?.[0]?.user?.name },
-								]}
-							/>
-							<CardFooter>
-								<Button
-									disabled={contentRevisionComparison?.[0]?.id === contentItem?.revisionId}
-									size={ButtonSizes.SMALL}
-									type={ButtonTypes.SECONDARY}
-								>
-									<span className="las la-undo"></span> Restore
-								</Button>
-							</CardFooter>
-						</Card>
-					</div>
-					<div className={cxBind('p-revision-compare__right')}>
-						<Card className="u-margin-bottom">
-							<CardMeta
-								items={[
-									{
-										label: 'Created at',
-										value: dayjs(contentRevisionComparison?.[1]?.createdAt).format(DATE_FORMAT),
-									},
-									{ label: 'Status', value: contentRevisionComparison?.[1]?.workflowState?.name },
-									{ label: 'Editor', value: contentRevisionComparison?.[1]?.user?.name },
-								]}
-							/>
-							<CardFooter>
-								<Button
-									disabled={contentRevisionComparison?.[1]?.id === contentItem?.revisionId}
-									size={ButtonSizes.SMALL}
-									type={ButtonTypes.SECONDARY}
-									onClick={() => setRestoreModalVisible(true)}
-								>
-									<span className="las la-undo"></span> Restore
-								</Button>
-							</CardFooter>
-						</Card>
-					</div>
-				</div>
+				<Card className="u-margin-bottom">
+					<CardMeta
+						items={[
+							{
+								label: 'Created at',
+								value: dayjs(contentRevisionComparison?.[0]?.createdAt).format(DATE_FORMAT),
+							},
+							{ label: 'Status', value: contentRevisionComparison?.[0]?.workflowState?.name },
+							{ label: 'Editor', value: contentRevisionComparison?.[0]?.user?.name },
+						]}
+					/>
+					<CardFooter>
+						<Button
+							disabled={contentRevisionComparison?.[0]?.id === contentItem?.revisionId}
+							size={ButtonSizes.SMALL}
+							type={ButtonTypes.SECONDARY}
+						>
+							<span className="las la-undo"></span> Restore
+						</Button>
+					</CardFooter>
+				</Card>
 				<FormProvider {...compareFormMethods}>
-					<RenderComparison viewMode={FIELD_VIEW_MODE.VIEW} siteId={siteId!} fieldPrefix="fields." fields={contentType?.fields || []} />
+					<RenderFields viewMode={FIELD_VIEW_MODE.DIFF} siteId={siteId!} fieldPrefix="0.fields." fields={contentType?.fields || []} />
 				</FormProvider>
 			</Loading>
 			<Modal modalOpen={restoreModalVisible} title="Restore as..." onClose={() => setRestoreModalVisible(false)}>

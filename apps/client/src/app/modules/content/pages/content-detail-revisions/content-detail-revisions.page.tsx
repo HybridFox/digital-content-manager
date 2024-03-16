@@ -80,7 +80,7 @@ export const ContentDetailRevisionsPage = () => {
 				{/*</ButtonLink>*/}
 			</div>
 			<Table
-				columns={CONTENT_TRANSLATIONS_LIST_COLUMNS(siteId!, kind!, contentId!, revisionSelection, t)}
+				columns={CONTENT_TRANSLATIONS_LIST_COLUMNS(siteId!, kind!, contentId!, contentRevisions, t)}
 				rows={contentRevisions}
 				selectable={true}
 				onSelection={(selection) => setRevisionSelection(selection)}

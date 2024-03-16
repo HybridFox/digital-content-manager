@@ -92,7 +92,15 @@ pub async fn find_all(
 		Some(params.site_id),
 		format!("urn:dcm:workflows:*"),
 		"sites::workflows:read",
-	)?;
+	)
+	.or_else(|_| {
+		ensure_permission(
+			&req,
+			Some(params.site_id),
+			format!("urn:dcm:content:*"),
+			"sites::content:read",
+		)
+	})?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
 	let pagesize = query.pagesize.unwrap_or(10);
@@ -135,7 +143,15 @@ pub async fn find_one(
 		Some(params.site_id),
 		format!("urn:dcm:workflows:{}", params.workflow_id),
 		"sites::workflows:read",
-	)?;
+	)
+	.or_else(|_| {
+		ensure_permission(
+			&req,
+			Some(params.site_id),
+			format!("urn:dcm:content:*"),
+			"sites::content:read",
+		)
+	})?;
 	let conn = &mut state.get_conn()?;
 	let workflow = Workflow::find_one(conn, params.site_id, params.workflow_id)?;
 
