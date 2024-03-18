@@ -65,7 +65,7 @@ pub async fn find_all(
 	ensure_permission(&req, None, format!("urn:dcm:roles:*"), "root::roles:read")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
-	let pagesize = query.pagesize.unwrap_or(10);
+	let pagesize = query.pagesize.unwrap_or(20);
 
 	let (roles, total_elements) = Role::find(conn, None, page, pagesize)?;
 

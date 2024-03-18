@@ -54,7 +54,7 @@ pub async fn read_directory(
 	let engine = get_storage_engine(conn, params.storage_repository_id)?;
 
 	let page = query.page.unwrap_or(1);
-	let pagesize = query.pagesize.unwrap_or(10);
+	let pagesize = query.pagesize.unwrap_or(20);
 
 	let (resources, total_elements) = engine.find_all(&query.path).await?;
 

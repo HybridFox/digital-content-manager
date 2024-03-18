@@ -147,7 +147,7 @@ pub async fn find_all(
 	)?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
-	let pagesize = query.pagesize.unwrap_or(10);
+	let pagesize = query.pagesize.unwrap_or(20);
 
 	let (content, total_elements) = Content::find(
 		conn,

@@ -89,7 +89,7 @@ pub async fn find_all(
 	ensure_permission(&req, None, format!("urn:dcm:sites:*"), "root::sites:read")?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
-	let pagesize = query.pagesize.unwrap_or(10);
+	let pagesize = query.pagesize.unwrap_or(20);
 	let user_id = get_user_id_from_req(&req)?;
 
 	let (sites, total_elements) = Site::find(conn, page, pagesize, user_id)?;

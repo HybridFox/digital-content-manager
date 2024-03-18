@@ -89,7 +89,7 @@ pub async fn find_all(
 	)?;
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
-	let pagesize = query.pagesize.unwrap_or(10);
+	let pagesize = query.pagesize.unwrap_or(20);
 
 	let (compartments, total_elements) =
 		CompartmentModel::find(conn, params.site_id, params.content_type_id, page, pagesize)?;

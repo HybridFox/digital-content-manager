@@ -83,7 +83,7 @@ pub async fn find_all(
 ) -> Result<HttpResponse, AppError> {
 	let conn = &mut state.get_conn()?;
 	let page = query.page.unwrap_or(1);
-	let pagesize = query.pagesize.unwrap_or(10);
+	let pagesize = query.pagesize.unwrap_or(20);
 
 	let (authentication_methods, total_elements) =
 		AuthenticationMethod::find(conn, page, pagesize, query.all)?;
