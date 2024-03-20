@@ -12,8 +12,10 @@ export default defineConfig({
 		port: 3000,
 		host: '0.0.0.0',
 		proxy: {
-			'/api': 'http://localhost:8000',
-			'/admin-api': 'http://localhost:8000',
+			// '/api': 'http://localhost:8000',
+			// '/admin-api': 'http://localhost:8000',
+			'/api': 'https://dcm.reffurence.com',
+			'/admin-api': 'https://dcm.reffurence.com',
 		},
 	},
 

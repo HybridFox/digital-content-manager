@@ -23,6 +23,7 @@ import { FieldDiff } from '../../field-diff/field-diff.component';
 import styles from './richtext-field.module.scss';
 import { IRichtextFieldProps } from './richtext-field.types';
 import { RICHTEXT_NODES } from './nodes';
+import { CustomLinkPlugin } from './commands/link';
 
 const ToolbarPlugin = lazy(async () => ({
 	default: (await import('./plugins/toolbar/toolbar.plugin')).ToolbarPlugin
@@ -103,6 +104,7 @@ export const RichtextField: FC<IRichtextFieldProps> = ({
 				<LexicalComposer initialConfig={initialConfig}>
 					<ToolbarPlugin />
 					<ListPlugin />
+					<CustomLinkPlugin />
 					<LinkPlugin validateUrl={validateUrl} />
 					<CheckListPlugin />
 					<OnChangePlugin onChange={handleChange} ignoreSelectionChange />

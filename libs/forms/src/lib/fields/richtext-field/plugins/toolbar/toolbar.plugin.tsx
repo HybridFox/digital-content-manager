@@ -1,14 +1,5 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
 import type { LexicalEditor, NodeKey } from 'lexical';
 import { $createCodeNode, $isCodeNode, CODE_LANGUAGE_FRIENDLY_NAME_MAP, CODE_LANGUAGE_MAP } from '@lexical/code';
-import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import {
 	$isListNode,
 	INSERT_CHECK_LIST_COMMAND,
@@ -18,19 +9,16 @@ import {
 	REMOVE_LIST_COMMAND,
 } from '@lexical/list';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { $isDecoratorBlockNode } from '@lexical/react/LexicalDecoratorBlockNode';
-import { INSERT_HORIZONTAL_RULE_COMMAND } from '@lexical/react/LexicalHorizontalRuleNode';
-import { $createHeadingNode, $createQuoteNode, $isHeadingNode, $isQuoteNode, HeadingTagType } from '@lexical/rich-text';
+import { $createHeadingNode, $createQuoteNode, $isHeadingNode, HeadingTagType } from '@lexical/rich-text';
 import { $getSelectionStyleValueForProperty, $isParentElementRTL, $patchStyleText, $setBlocksType } from '@lexical/selection';
 import { $isTableNode } from '@lexical/table';
-import { $findMatchingParent, $getNearestBlockElementAncestorOrThrow, $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
+import { $findMatchingParent, $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
 import {
 	$createParagraphNode,
 	$getNodeByKey,
 	$getSelection,
 	$isRangeSelection,
 	$isRootOrShadowRoot,
-	$isTextNode,
 	CAN_REDO_COMMAND,
 	CAN_UNDO_COMMAND,
 	COMMAND_PRIORITY_CRITICAL,
@@ -38,18 +26,13 @@ import {
 	DEPRECATED_$isGridSelection,
 	FORMAT_TEXT_COMMAND,
 	KEY_MODIFIER_COMMAND,
-	REDO_COMMAND,
 	SELECTION_CHANGE_COMMAND,
-	UNDO_COMMAND,
 } from 'lexical';
 import { useCallback, useEffect, useState } from 'react';
-import * as React from 'react';
 import cx from 'classnames/bind';
-import classNames from 'classnames';
-import { SketchPicker } from 'react-color';
-import { Tooltip } from 'react-tooltip';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { Button, ButtonTypes, Select } from '~components';
+import { Button, ButtonTypes, HTMLButtonTypes, Modal, ModalFooter, Select } from '~components';
 
 import { getSelectedNode } from '../../utils/getSelectNode';
 import { sanitizeUrl } from '../../utils/url';
@@ -71,6 +54,11 @@ import { IS_APPLE } from '../../utils/dom';
 // import { INSERT_PAGE_BREAK } from '../PageBreakPlugin';
 // import { InsertPollDialog } from '../PollPlugin';
 // import { InsertNewTableDialog, InsertTableDialog } from '../TablePlugin';
+import { TextField } from '../../../text-field';
+import { SelectField } from '../../../select-field';
+import { $getAncestor, SET_LINK_COMMAND } from '../../commands/link';
+import { $isLinkNode } from '../../helpers/link.helper';
+
 import styles from './toolbar.module.scss';
 const cxBind = cx.bind(styles);
 
@@ -105,34 +93,6 @@ function getCodeLanguageOptions(): [string, string][] {
 }
 
 const CODE_LANGUAGE_OPTIONS = getCodeLanguageOptions();
-
-const FONT_FAMILY_OPTIONS: [string, string][] = [
-	['Arial', 'Arial'],
-	['Courier New', 'Courier New'],
-	['Georgia', 'Georgia'],
-	['Times New Roman', 'Times New Roman'],
-	['Trebuchet MS', 'Trebuchet MS'],
-	['Verdana', 'Verdana'],
-];
-
-const FONT_SIZE_OPTIONS: [string, string][] = [
-	['10px', '10px'],
-	['11px', '11px'],
-	['12px', '12px'],
-	['13px', '13px'],
-	['14px', '14px'],
-	['15px', '15px'],
-	['16px', '16px'],
-	['17px', '17px'],
-	['18px', '18px'],
-	['19px', '19px'],
-	['20px', '20px'],
-];
-
-function dropDownActiveClass(active: boolean) {
-	if (active) return 'active dropdown-item-active';
-	else return '';
-}
 
 function BlockFormatDropDown({
 	editor,
@@ -293,46 +253,6 @@ function Divider(): JSX.Element {
 	return <div className={cxBind('a-toolbar__divider')} />;
 }
 
-function FontDropDown({
-	editor,
-	value,
-	style,
-	disabled = false,
-}: {
-	editor: LexicalEditor;
-	value: string;
-	style: string;
-	disabled?: boolean;
-}): JSX.Element {
-	const handleClick = useCallback(
-		(option: string) => {
-			editor.update(() => {
-				const selection = $getSelection();
-				if ($isRangeSelection(selection)) {
-					$patchStyleText(selection, {
-						[style]: option,
-					});
-				}
-			});
-		},
-		[editor, style]
-	);
-
-	const item = (style === 'font-family' ? FONT_FAMILY_OPTIONS : FONT_SIZE_OPTIONS).find(([option]) => option === value);
-
-	return (
-		<Select
-			className={cxBind('a-toolbar__item')}
-			value={item ? { value, label: item?.[0] } : undefined}
-			options={(style === 'font-family' ? FONT_FAMILY_OPTIONS : FONT_SIZE_OPTIONS).map(([option, text]) => ({
-				label: text,
-				value: option,
-				onClick: () => handleClick(option),
-			}))}
-		/>
-	);
-}
-
 export const ToolbarPlugin = (): JSX.Element => {
 	const [editor] = useLexicalComposerContext();
 	const [activeEditor, setActiveEditor] = useState(editor);
@@ -357,6 +277,9 @@ export const ToolbarPlugin = (): JSX.Element => {
 	const [isRTL, setIsRTL] = useState(false);
 	const [codeLanguage, setCodeLanguage] = useState<string>('');
 	const [isEditable, setIsEditable] = useState(() => editor.isEditable());
+	const [linkModalVisible, setLinkModalVisible] = useState(false);
+
+	const linkModalFormMethods = useForm();
 
 	const $updateToolbar = useCallback(() => {
 		const selection = $getSelection();
@@ -479,7 +402,8 @@ export const ToolbarPlugin = (): JSX.Element => {
 
 				if (code === 'KeyK' && (ctrlKey || metaKey)) {
 					event.preventDefault();
-					return activeEditor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl('https://'));
+					setLinkModalVisible(true);
+					return true;
 				}
 				return false;
 			},
@@ -487,79 +411,38 @@ export const ToolbarPlugin = (): JSX.Element => {
 		);
 	}, [activeEditor, isLink]);
 
-	const applyStyleText = useCallback(
-		(styles: Record<string, string>) => {
-			activeEditor.update(() => {
-				const selection = $getSelection();
-				if ($isRangeSelection(selection)) {
-					$patchStyleText(selection, styles);
-				}
-			});
-		},
-		[activeEditor]
-	);
-
-	const clearFormatting = useCallback(() => {
-		activeEditor.update(() => {
-			const selection = $getSelection();
-			if ($isRangeSelection(selection)) {
-				const anchor = selection.anchor;
-				const focus = selection.focus;
-				const nodes = selection.getNodes();
-
-				if (anchor.key === focus.key && anchor.offset === focus.offset) {
-					return;
-				}
-
-				nodes.forEach((node, idx) => {
-					// We split the first and last node by the selection
-					// So that we don't format unselected text inside those nodes
-					if ($isTextNode(node)) {
-						if (idx === 0 && anchor.offset !== 0) {
-							node = node.splitText(anchor.offset)[1] || node;
-						}
-						if (idx === nodes.length - 1) {
-							node = node.splitText(focus.offset)[0] || node;
-						}
-
-						if (node.__style !== '') {
-							node.setStyle('');
-						}
-						if (node.__format !== 0) {
-							node.setFormat(0);
-							$getNearestBlockElementAncestorOrThrow(node).setFormat('');
-						}
-					} else if ($isHeadingNode(node) || $isQuoteNode(node)) {
-						node.replace($createParagraphNode(), true);
-					} else if ($isDecoratorBlockNode(node)) {
-						node.setFormat('');
-					}
-				});
-			}
-		});
-	}, [activeEditor]);
-
-	const onFontColorSelect = useCallback(
-		(value: string) => {
-			applyStyleText({ color: value });
-		},
-		[applyStyleText]
-	);
-
-	const onBgColorSelect = useCallback(
-		(value: string) => {
-			applyStyleText({ 'background-color': value });
-		},
-		[applyStyleText]
-	);
-
 	const insertLink = useCallback(() => {
 		if (!isLink) {
-			editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl('https://'));
+			editor.update(() => {
+				linkModalFormMethods.reset({ linkText: $getSelection()?.getTextContent(), target: '_self' })
+				setLinkModalVisible(true);
+			})
 		} else {
-			editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+			editor.update(() => {
+				const selection = $getSelection();
+				const node = getSelectedNode(selection as any);
+				const linkNode = $getAncestor(node, $isLinkNode);
+				
+				editor.update(() => {
+					linkModalFormMethods.reset({ text: linkNode?.getTextContent(), url: linkNode?.getURL(), target: linkNode?.getTarget() || '_self' })
+					setLinkModalVisible(true);
+				})
+			})
 		}
 	}, [editor, isLink]);
+
+	const onSubmitLink = useCallback((values: any) => {
+		setLinkModalVisible(false);
+		editor.dispatchCommand(SET_LINK_COMMAND, {
+			url: sanitizeUrl(values.url),
+			target: values.target
+		});
+	}, [isLink])
+
+	const onRemoveLink = useCallback(() => {
+		editor.dispatchCommand(SET_LINK_COMMAND, null);
+		setLinkModalVisible(false);
+	}, [])
 
 	const onCodeLanguageSelect = useCallback(
 		(value: string) => {
@@ -577,31 +460,6 @@ export const ToolbarPlugin = (): JSX.Element => {
 
 	return (
 		<div className={cxBind('a-toolbar')}>
-			{/* <Button
-				disabled={!canUndo || !isEditable}
-				onClick={() => {
-					activeEditor.dispatchCommand(UNDO_COMMAND, undefined);
-				}}
-				title={IS_APPLE ? 'Undo (⌘Z)' : 'Undo (Ctrl+Z)'}
-				type={ButtonTypes.PRIMARY}
-				className={cxBind('a-toolbar__item')}
-				aria-label="Undo"
-			>
-				<i className="las la-undo" />
-			</Button>
-			<Button
-				disabled={!canRedo || !isEditable}
-				onClick={() => {
-					activeEditor.dispatchCommand(REDO_COMMAND, undefined);
-				}}
-				title={IS_APPLE ? 'Redo (⌘Y)' : 'Redo (Ctrl+Y)'}
-				type={ButtonTypes.PRIMARY}
-				className={cxBind('a-toolbar__item')}
-				aria-label="Redo"
-			>
-				<i className="las la-redo" />
-			</Button> */}
-			{/* <Divider /> */}
 			{blockType in blockTypeToBlockName && activeEditor === editor && (
 				<>
 					<BlockFormatDropDown disabled={!isEditable} blockType={blockType} rootType={rootType} editor={editor} />
@@ -616,9 +474,6 @@ export const ToolbarPlugin = (): JSX.Element => {
 				/>
 			) : (
 				<>
-					{/* <FontDropDown disabled={!isEditable} style={'font-family'} value={fontFamily} editor={editor} />
-					<FontDropDown disabled={!isEditable} style={'font-size'} value={fontSize} editor={editor} /> */}
-					{/* <Divider /> */}
 					<Button
 						disabled={!isEditable}
 						onClick={() => {
@@ -682,115 +537,51 @@ export const ToolbarPlugin = (): JSX.Element => {
 					>
 						<i className="las la-link" />
 					</Button>
-					{/*<Button className={cxBind('a-toolbar__color-picker', 'a-toolbar__item')} id="font-color" type={ButtonTypes.OUTLINE}>*/}
-					{/*	<i className="las la-font" style={{ color: fontColor }}></i>*/}
-					{/*</Button>*/}
-					{/*<Tooltip anchorSelect="#font-color" className={cxBind('a-toolbar__color-picker__tooltip')} clickable>*/}
-					{/*	<SketchPicker onChangeComplete={(value) => onFontColorSelect(value.hex)} color={fontColor} />*/}
-					{/*</Tooltip>*/}
-					{/*<Button className={cxBind('a-toolbar__color-picker', 'a-toolbar__item')} id="background-color" type={ButtonTypes.OUTLINE}>*/}
-					{/*	<i className="las la-highlighter" style={{ color: bgColor }}></i>*/}
-					{/*</Button>*/}
-					{/*<Tooltip anchorSelect="#background-color" className={cxBind('a-toolbar__color-picker__tooltip')} clickable>*/}
-					{/*	<SketchPicker onChangeComplete={(value) => onBgColorSelect(value.hex)} color={bgColor} />*/}
-					{/*</Tooltip>*/}
-					{/*<Select*/}
-					{/*	placeholder="Formatting"*/}
-					{/*	className={cxBind('a-toolbar__item', 'a-toolbar__item--format')}*/}
-					{/*	closeMenuOnSelect={false}*/}
-					{/*	value={null}*/}
-					{/*	options={[*/}
-					{/*		{*/}
-					{/*			label: 'Strikethrough',*/}
-					{/*			onClick: () => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough'),*/}
-					{/*			active: isStrikethrough,*/}
-					{/*		},*/}
-					{/*		{*/}
-					{/*			label: 'Subscript',*/}
-					{/*			onClick: () => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'subscript'),*/}
-					{/*			active: isSubscript,*/}
-					{/*		},*/}
-					{/*		{*/}
-					{/*			label: 'Superscript',*/}
-					{/*			onClick: () => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'superscript'),*/}
-					{/*			active: isSuperscript,*/}
-					{/*		},*/}
-					{/*		{*/}
-					{/*			label: 'Clear Formatting',*/}
-					{/*			onClick: clearFormatting,*/}
-					{/*		},*/}
-					{/*	]}*/}
-					{/*/>*/}
-					{/* <Divider /> */}
-					{/* <Select
-						placeholder="Insert"
-						disabled={!isEditable}
-						className={cxBind('a-toolbar__item', 'a-toolbar__item--format')}
-						closeMenuOnSelect={false}
-						value={null}
-						options={[
-							{
-								label: 'Horizontal Rule',
-								onClick: () => activeEditor.dispatchCommand(INSERT_HORIZONTAL_RULE_COMMAND, undefined),
-							},
-							// {
-							// 	label: 'Page Break',
-							// 	onClick: () => activeEditor.dispatchCommand(INSERT_PAGE_BREAK, undefined)
-							// },
-							{
-								label: 'Image',
-								onClick: () => console.log('show modal'),
-							},
-							{
-								label: 'Inline Image',
-								onClick: () => console.log('inline image'),
-							},
-							// {
-							// 	label: 'Excalidraw',
-							// 	onClick: () => activeEditor.dispatchCommand(INSERT_EXCALIDRAW_COMMAND, undefined)
-							// },
-							// {
-							// 	label: 'Excalidraw',
-							// 	onClick: () => activeEditor.dispatchCommand(INSERT_EXCALIDRAW_COMMAND, undefined)
-							// },
-						]}
-					/> */}
 				</>
 			)}
-			{/* <Divider /> */}
-			{/*<Select*/}
-			{/*	placeholder="Align"*/}
-			{/*	disabled={!isEditable}*/}
-			{/*	className={cxBind('a-toolbar__item', 'a-toolbar__item--format')}*/}
-			{/*	closeMenuOnSelect={false}*/}
-			{/*	value={null}*/}
-			{/*	options={[*/}
-			{/*		{*/}
-			{/*			label: 'Left Align',*/}
-			{/*			onClick: () => activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left'),*/}
-			{/*		},*/}
-			{/*		{*/}
-			{/*			label: 'Center Align',*/}
-			{/*			onClick: () => activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center'),*/}
-			{/*		},*/}
-			{/*		{*/}
-			{/*			label: 'Right Align',*/}
-			{/*			onClick: () => activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right'),*/}
-			{/*		},*/}
-			{/*		{*/}
-			{/*			label: 'Justify Align',*/}
-			{/*			onClick: () => activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify'),*/}
-			{/*		},*/}
-			{/*		{*/}
-			{/*			label: 'Outdent',*/}
-			{/*			onClick: () => activeEditor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined),*/}
-			{/*		},*/}
-			{/*		{*/}
-			{/*			label: 'Indent',*/}
-			{/*			onClick: () => activeEditor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined),*/}
-			{/*		},*/}
-			{/*	]}*/}
-			{/*/>*/}
+			<Modal modalOpen={linkModalVisible} title={isLink ? "Update link" : "Create link"} onClose={() => setLinkModalVisible(false)}>
+				<FormProvider {...linkModalFormMethods}>
+					<form onSubmit={linkModalFormMethods.handleSubmit(onSubmitLink)}>
+						{/* <TextField
+							name="text"
+							label="Link Text"
+						></TextField> */}
+						<div className="u-margin-top">
+							<SelectField
+								name="target"
+								label="Link Target"
+								fieldConfiguration={{ options: [{
+									label: '_self',
+									value: '_self'
+								}, {
+									label: '_blank',
+									value: '_blank'
+								}, {
+									label: '_parent',
+									value: '_parent'
+								}, {
+									label: '_top',
+									value: '_top'
+								}, ] }}
+							></SelectField>
+						</div>
+						<div className="u-margin-top">
+							<TextField
+								name="url"
+								label="Link Href"
+							></TextField>
+						</div>
+						<ModalFooter>
+							<Button type={ButtonTypes.DANGER} onClick={onRemoveLink} className="u-margin-right-sm">
+								Remove link
+							</Button>
+							<Button type={ButtonTypes.PRIMARY} onClick={linkModalFormMethods.handleSubmit(onSubmitLink)}>
+								{isLink ? "Update link" : "Create link"}
+							</Button>
+						</ModalFooter>
+					</form>
+				</FormProvider>
+			</Modal>
 		</div>
 	);
 }
