@@ -96,6 +96,7 @@ impl ContentComponent {
 		pagesize: i64,
 		include_hidden: bool,
 		include_internal: bool,
+		include_occurrences: bool,
 	) -> Result<(Vec<ContentComponent>, i64), AppError> {
 		let _site_query = {
 			let mut query = sites_content_components::table

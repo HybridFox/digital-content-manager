@@ -10,7 +10,7 @@ import {
 } from '@lexical/list';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $createHeadingNode, $createQuoteNode, $isHeadingNode, HeadingTagType } from '@lexical/rich-text';
-import { $getSelectionStyleValueForProperty, $isParentElementRTL, $patchStyleText, $setBlocksType } from '@lexical/selection';
+import { $getSelectionStyleValueForProperty, $isParentElementRTL, $setBlocksType } from '@lexical/selection';
 import { $isTableNode } from '@lexical/table';
 import { $findMatchingParent, $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
 import {
@@ -32,7 +32,7 @@ import { useCallback, useEffect, useState } from 'react';
 import cx from 'classnames/bind';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Button, ButtonTypes, HTMLButtonTypes, Modal, ModalFooter, Select } from '~components';
+import { Button, ButtonTypes, Modal, ModalFooter, Select } from '~components';
 
 import { getSelectedNode } from '../../utils/getSelectNode';
 import { sanitizeUrl } from '../../utils/url';

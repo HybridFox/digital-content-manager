@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 import { LinkAttributes, LinkNode, toggleLink } from '../helpers/link.helper';
 
-export const SET_LINK_COMMAND: LexicalCommand<{ url: string } & LinkAttributes | null> = createCommand('SET_LINK_COMMAND');
+export const SET_LINK_COMMAND: LexicalCommand<({ url: string } & LinkAttributes) | null> = createCommand('SET_LINK_COMMAND');
 
 export function CustomLinkPlugin(): null {
 	const [editor] = useLexicalComposerContext();
@@ -36,7 +36,10 @@ export function CustomLinkPlugin(): null {
 	return null;
 }
 
-export function $getAncestor<NodeType extends LexicalNode = LexicalNode>(node: LexicalNode, predicate: (ancestor: LexicalNode) => ancestor is NodeType) {
+export function $getAncestor<NodeType extends LexicalNode = LexicalNode>(
+	node: LexicalNode,
+	predicate: (ancestor: LexicalNode) => ancestor is NodeType
+) {
 	let parent = node;
 	while (parent !== null && parent.getParent() !== null && !predicate(parent)) {
 		parent = parent.getParentOrThrow();

@@ -13,10 +13,10 @@ export const CONTENT_COMPONENTS_LIST_COLUMNS = (t: TFunction, handleDelete: (ccI
 		id: 'name',
 		label: 'Name',
 	},
-	{
-		id: 'slug',
-		label: 'Slug',
-	},
+	// {
+	// 	id: 'slug',
+	// 	label: 'Slug',
+	// },
 	{
 		id: 'actions',
 		label: '',

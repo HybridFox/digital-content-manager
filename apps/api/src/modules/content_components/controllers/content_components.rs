@@ -31,6 +31,7 @@ pub struct FindAllQueryParams {
 	pagesize: Option<i64>,
 	include_internal: Option<bool>,
 	include_hidden: Option<bool>,
+	include_occurrences: Option<bool>,
 }
 
 #[utoipa::path(
@@ -99,6 +100,7 @@ pub async fn find_all(
 	let pagesize = query.pagesize.unwrap_or(20);
 	let include_internal = query.include_internal.unwrap_or(false);
 	let include_hidden = query.include_hidden.unwrap_or(false);
+	let include_occurrences = query.include_occurrences.unwrap_or(false);
 
 	let (content_components, total_elements) = ContentComponent::find(
 		conn,
@@ -107,6 +109,7 @@ pub async fn find_all(
 		pagesize,
 		include_hidden,
 		include_internal,
+		include_occurrences,
 	)?;
 
 	let res = response::ContentComponentsDTO::from((

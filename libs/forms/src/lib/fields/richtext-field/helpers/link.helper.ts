@@ -214,7 +214,7 @@ export class LinkNode extends ElementNode {
 		return true;
 	}
 
-	extractWithChild(child: LexicalNode, selection: BaseSelection, destination: 'clone' | 'html'): boolean {
+	extractWithChild(child: LexicalNode, selection: any, destination: 'clone' | 'html'): boolean {
 		if (!$isRangeSelection(selection)) {
 			return false;
 		}
@@ -298,7 +298,7 @@ export class AutoLinkNode extends LinkNode {
 		};
 	}
 
-	insertNewAfter(selection: RangeSelection, restoreSelection = true): null | ElementNode {
+	insertNewAfter(selection: RangeSelection, restoreSelection = true): any {
 		const element = this.getParentOrThrow().insertNewAfter(selection, restoreSelection);
 		if ($isElementNode(element)) {
 			const linkNode = $createAutoLinkNode(this.__url, {
