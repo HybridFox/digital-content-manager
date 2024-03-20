@@ -115,7 +115,6 @@ function BlockFormatDropDown({
 	};
 
 	const formatHeading = (headingSize: HeadingTagType) => {
-		console.log('fHeading')
 		if (blockType !== headingSize) {
 			editor.update(() => {
 				const selection = $getSelection();

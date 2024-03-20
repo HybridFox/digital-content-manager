@@ -19,7 +19,6 @@ export function CustomLinkPlugin(): null {
 			editor.registerCommand(
 				SET_LINK_COMMAND,
 				(payload) => {
-					console.log(payload);
 					if (payload === null) {
 						toggleLink(payload);
 						return true;
