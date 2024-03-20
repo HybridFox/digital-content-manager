@@ -98,7 +98,7 @@ impl ContentComponent {
 		include_internal: bool,
 		include_occurrences: bool,
 	) -> Result<(Vec<ContentComponent>, i64), AppError> {
-		let _site_query = {
+		let query = {
 			let mut query = sites_content_components::table
 				.filter(sites_content_components::site_id.eq(site_id))
 				.inner_join(
@@ -123,9 +123,14 @@ impl ContentComponent {
 			query
 		};
 
-		let query = {
-			let mut query = content_components::table
-				.filter(not(content_components::hidden.eq(true)))
+		let total_query = {
+			let mut query = sites_content_components::table
+				.filter(sites_content_components::site_id.eq(site_id))
+				.inner_join(
+					content_components::table.on(content_components::id
+						.eq(sites_content_components::content_component_id)
+						.or(content_components::internal.eq(true))),
+				)
 				.into_boxed();
 
 			if include_hidden == false {
@@ -136,10 +141,6 @@ impl ContentComponent {
 				query = query.filter(content_components::internal.eq(false))
 			};
 
-			if pagesize != -1 {
-				query = query.offset((page - 1) * pagesize).limit(pagesize);
-			};
-
 			query
 		};
 
@@ -147,10 +148,7 @@ impl ContentComponent {
 			.select(ContentComponent::as_select())
 			.load::<ContentComponent>(conn)?;
 		// TODO: take filtering in consideration
-		let total_elements = sites_content_components::table
-			.filter(sites_content_components::site_id.eq(site_id))
-			.count()
-			.get_result::<i64>(conn)?;
+		let total_elements = total_query.count().get_result::<i64>(conn)?;
 
 		Ok((content_components, total_elements))
 	}
