@@ -5,6 +5,7 @@ import { APP_SITE_ROOT_PATH } from "../core/routes.const"
 const ROOT_PATH = `${APP_SITE_ROOT_PATH}/content-types`;
 const DETAIL_PATH = `${ROOT_PATH}/:contentTypeId`;
 const FIELD_DETAIL_PATH = `${DETAIL_PATH}/fields/:fieldId`;
+const BLOCK_DETAIL_PATH = `${FIELD_DETAIL_PATH}/blocks/:blockId`;
 const COMPARTMENT_DETAIL_PATH = `${DETAIL_PATH}/compartments/:compartmentId`;
 
 export const CONTENT_TYPES_PATHS = {
@@ -18,7 +19,12 @@ export const CONTENT_TYPES_PATHS = {
 	FIELD_DETAIL_SETTINGS: `${FIELD_DETAIL_PATH}/settings`,
 	FIELD_DETAIL_CONFIGURATION: `${FIELD_DETAIL_PATH}/configuration`,
 	FIELD_DETAIL_VALIDATION: `${FIELD_DETAIL_PATH}/validation`,
+	FIELD_DETAIL_BLOCKS: `${FIELD_DETAIL_PATH}/blocks`,
 	FIELD_DETAIL_DEFAULT_VALUE: `${FIELD_DETAIL_PATH}/default-value`,
+	
+	BLOCK_DETAIL: `${BLOCK_DETAIL_PATH}`,
+	BLOCK_DETAIL_SETTINGS: `${BLOCK_DETAIL_PATH}/settings`,
+	BLOCK_DETAIL_CONFIGURATION: `${BLOCK_DETAIL_PATH}/configuration`,
 
 	COMPARTMENT_DETAIL: `${COMPARTMENT_DETAIL_PATH}`,
 }
@@ -68,7 +74,29 @@ export const CONTENT_TYPE_ROUTES: RouteObject[] = [
 					{
 						path: CONTENT_TYPES_PATHS.FIELD_DETAIL_CONFIGURATION,
 						lazy: async () => ({ Component: (await import('./pages/field-configuration/field-configuration.page')).FieldConfigurationPage }),
-					}
+					},
+					{
+						path: CONTENT_TYPES_PATHS.FIELD_DETAIL_BLOCKS,
+						lazy: async () => ({ Component: (await import('./pages/field-blocks/field-blocks.page')).FieldBlocksPage }),
+					},
+				]
+			},
+			{
+				path: CONTENT_TYPES_PATHS.BLOCK_DETAIL,
+				lazy: async () => ({ Component: (await import('./pages/block-detail/block-detail.page')).BlockDetailPage }),
+				children: [
+					{
+						path: '',
+						element: <Navigate replace to="settings" />,
+					},
+					{
+						path: CONTENT_TYPES_PATHS.BLOCK_DETAIL_SETTINGS,
+						lazy: async () => ({ Component: (await import('./pages/block-settings/block-settings.page')).BlockSettingsPage }),
+					},
+					{
+						path: CONTENT_TYPES_PATHS.BLOCK_DETAIL_CONFIGURATION,
+						lazy: async () => ({ Component: (await import('./pages/block-configuration/block-configuration.page')).BlockConfigurationPage }),
+					},
 				]
 			},
 			{

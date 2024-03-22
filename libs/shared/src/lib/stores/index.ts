@@ -19,4 +19,6 @@ export * from './iam-action';
 export * from './theme';
 export * from './content';
 export * from './compartment';
-export * from './status'
+export * from './status';
+export * from './root-content-type';
+export * from './field-block';

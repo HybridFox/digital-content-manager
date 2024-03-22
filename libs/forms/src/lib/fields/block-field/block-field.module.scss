@@ -1,0 +1,113 @@
+.o-block-field {
+	// border: 1px solid blue;
+	// padding: var(--spacer-xs);
+	// margin-bottom: var(--spacer);
+	// margin-top: calc(#{var(--spacer-sm)} * -1);
+	
+	// border-radius: var(--border-radius-sm);
+	
+	&__title {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	&__header {
+		padding: 0 0 var(--spacer-xs) 0;
+		margin: 0 0 var(--spacer) 0;
+		border-bottom: 1px solid var(--color-gray-lightest);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	&__content-components {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(150px, 1fr));
+		gap: var(--spacer);
+	}
+
+	&__cc {
+		border: 1px solid var(--color-gray-lightest);
+		text-align: left;
+		padding: var(--spacer);
+		border-radius: var(--border-radius-sm);
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		transition: all .2s ease;
+		cursor: pointer;
+
+		p {
+			margin: 0 0 var(--spacer-sm) 0;
+		}
+
+		&:hover {
+			border: 1px solid var(--color-primary);
+		}
+	}
+
+	&__field {
+		display: flex;
+		align-items: flex-start;
+		margin-bottom: var(--spacer);
+		width: 100%;
+
+		&__actions {
+			margin-right: var(--spacer-sm);
+		}
+
+		&__order {
+			display: flex;
+			flex-direction: column;
+			margin-bottom: var(--spacer-sm);
+
+			& :first-child {
+				border-bottom-left-radius: 0;
+				border-bottom-right-radius: 0;
+			}
+
+			& :last-child {
+				margin-top: -2px;
+				border-top-left-radius: 0;
+				border-top-right-radius: 0;
+			}
+		}
+
+		&__content {
+			flex: 1;
+		}
+	}
+	
+	&__add {
+		border: 2px dashed var(--color-gray-lightest);
+		display: flex;
+		width: 100%;
+		background-color: transparent;
+		font-weight: normal;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--border-radius-sm);
+		padding: var(--spacer-sm);
+		cursor: pointer;
+
+		p {
+			margin: 0 0 0 var(--spacer-xs);
+			font-size: 0.8rem;
+			color: var(--color-gray)
+		}
+
+		&:hover {
+			border: 2px solid var(--color-primary);
+			transition: all .2s ease;
+			background: transparent;
+		}
+
+		&:focus {
+			outline: none;
+			border: 2px solid var(--color-primary);
+			box-shadow: 0px 0px 0px var(--spacer-xxxs) var(--color-primary-light);
+		}
+	}
+}

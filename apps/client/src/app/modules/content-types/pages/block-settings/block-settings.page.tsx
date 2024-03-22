@@ -9,22 +9,24 @@ import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 import { editFieldSchema } from '../field-detail/field-detail.const';
 
 import { NumberField, TextField, TextareaField, ToggleField } from '~forms';
-import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentTypeFieldStore, useContentTypeStore, useHeaderStore } from '~shared';
+import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentTypeFieldStore, useContentTypeStore, useFieldBlockStore, useHeaderStore } from '~shared';
 
 interface IEditFieldForm {
 	name: string;
+	slug: string;
 	config: Record<string, unknown>;
 	min: number;
 	max: number;
 	multiLanguage: boolean;
 }
 
-export const FieldSettingsPage = () => {
-	const { siteId } = useParams();
+export const BlockSettingsPage = () => {
+	const { siteId, blockId } = useParams();
 	const [contentType] = useContentTypeStore((state) => [state.contentType]);
 	const [contentTypeField] = useContentTypeFieldStore((state) => [state.field]);
+	const [blockField] = useFieldBlockStore((state) => [state.field]);
 	const [setBreadcrumbs] = useHeaderStore((state) => [state.setBreadcrumbs]);
-	const [updateField, updateFieldLoading] = useContentTypeFieldStore((state) => [state.updateField, state.updateFieldLoading]);
+	const [updateField, updateFieldLoading] = useFieldBlockStore((state) => [state.updateField, state.updateFieldLoading]);
 
 	useEffect(() => {
 		setBreadcrumbs([
@@ -53,6 +55,14 @@ export const FieldSettingsPage = () => {
 				}),
 			},
 			{
+				label: 'Blocks',
+				to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_BLOCKS, {
+					contentTypeId: contentType?.id || '',
+					fieldId: contentTypeField?.id || '',
+					siteId,
+				}),
+			},
+			{
 				label: 'Settings',
 			},
 		]);
@@ -60,7 +70,7 @@ export const FieldSettingsPage = () => {
 
 	const formMethods = useForm<IEditFieldForm>({
 		resolver: yupResolver(editFieldSchema),
-		values: contentTypeField,
+		values: blockField,
 	});
 
 	const {
@@ -74,7 +84,7 @@ export const FieldSettingsPage = () => {
 			return;
 		}
 
-		updateField(siteId!, contentType.id, contentTypeField?.id, values).catch((error: IAPIError) => {
+		updateField(siteId!, contentType.id, contentTypeField?.id, blockId!, values).catch((error: IAPIError) => {
 			setError('root', {
 				message: error.code,
 			});
@@ -88,6 +98,9 @@ export const FieldSettingsPage = () => {
 					{errors?.root?.message}
 				</Alert>
 				<TextField name="name" label="Name" />
+				<div className="u-margin-top">
+					<TextField name="slug" label="Slug" />
+				</div>
 				<div className="u-margin-top">
 					<TextareaField name="description" label="Description"></TextareaField>
 				</div>

@@ -5,6 +5,7 @@ export interface IContentComponent {
 	id?: string;
 	name?: string;
 	slug?: string;
+	internal?: boolean;
 	componentName: FIELD_KEYS;
 	configurationFields: IField[];
 	fields: IField[];

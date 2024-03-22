@@ -62,6 +62,32 @@
 		}
 	}
 
+	&--danger {
+		background-color: var(--color-state-danger);
+		border: 2px solid var(--color-state-danger);
+		color: rgb(30, 30, 30);
+
+		&:hover {
+			color: var(--color-gray-darkest);
+			position: relative;
+			border: 2px solid var(--color-state-danger);
+			background-color: transparent;
+		}
+	}
+
+	&--success {
+		background-color: var(--color-state-success);
+		border: 2px solid var(--color-state-success);
+		color: rgb(30, 30, 30);
+
+		&:hover {
+			color: var(--color-gray-darkest);
+			position: relative;
+			border: 2px solid var(--color-state-success);
+			background-color: transparent;
+		}
+	}
+
 	&--secondary {
 		text-transform: none;
 		font-weight: 500;

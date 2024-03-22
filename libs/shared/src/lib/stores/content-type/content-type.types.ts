@@ -17,6 +17,8 @@ export enum FIELD_KEYS {
 	TOGGLE = 'TOGGLE',
 	CONTENT_REFERENCE = 'CONTENT_REFERENCE',
 	CONTENT_TYPES = 'CONTENT_TYPES',
+	CONTENT_COMPONENTS = 'CONTENT_COMPONENTS',
+	BLOCK = 'BLOCK',
 	DATETIME = 'DATETIME',
 }
 
@@ -30,6 +32,7 @@ export interface IContentType {
 	updatedAt: string;
 	fields: IField[];
 	compartments: ICompartment[];
+	contentOccurrences?: boolean;
 }
 
 export interface IField {
@@ -43,6 +46,7 @@ export interface IField {
 	compartmentId?: string;
 	sequenceNumber?: number;
 	config?: Record<string, any>;
+	blocks?: IField[];
 }
 
 export enum ContentTypeKinds {
@@ -73,6 +77,7 @@ export const CONTENT_TYPE_KINDS_OPTIONS: { value: string; label: string }[] = Ob
 export interface IFetchContentTypesParameters extends IPageParameters {
 	kind?: ContentTypeKinds
 	inludeOccurrences?: boolean;
+	siteId?: string;
 }
 
 export type IContentTypesResponse = IAPIHALResponse<'contentTypes', IContentType>

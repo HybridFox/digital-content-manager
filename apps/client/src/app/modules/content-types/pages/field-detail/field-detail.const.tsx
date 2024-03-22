@@ -5,10 +5,11 @@ import { IHeaderTab } from '~components';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 
-import { IContentType, IContentTypeField } from '~shared';
+import { FIELD_KEYS, IContentType, IContentTypeField } from '~shared';
 
 export const editFieldSchema = yup.object({
 	name: yup.string().required(),
+	slug: yup.string().required(),
 	min: yup.number().required(),
 	max: yup.number().required(),
 	multiLanguage: yup.boolean().required(),
@@ -28,14 +29,22 @@ export const FIELD_DETAIL_TABS = (
 		}),
 		label: 'Settings',
 	},
-	{
-		to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_CONFIGURATION, {
-			contentTypeId: contentType?.id || '',
-			fieldId: field?.id || '',
-			siteId,
-		}),
-		label: 'Configuration',
-	},
+	...(field?.contentComponent.componentName === FIELD_KEYS.BLOCK ? [
+		{
+			to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_BLOCKS, {
+				contentTypeId: contentType?.id || '',
+				fieldId: field?.id || '',
+				siteId,
+			}),
+			label: 'Blocks',
+		}] : [{
+			to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_CONFIGURATION, {
+				contentTypeId: contentType?.id || '',
+				fieldId: field?.id || '',
+				siteId,
+			}),
+			label: 'Configuration',
+		}]),
 	{
 		to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_VALIDATION, {
 			contentTypeId: contentType?.id || '',

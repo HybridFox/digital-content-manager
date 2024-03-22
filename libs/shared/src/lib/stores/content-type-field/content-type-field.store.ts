@@ -50,7 +50,7 @@ export const useContentTypeFieldStore = create<IContentTypeFieldStoreState>()(de
 		createFieldLoading: false,
 
 		updateField: async (siteId, contentTypeId, fieldId, field) => {
-			set(() => ({ createFieldLoading: true }));
+			set(() => ({ updateFieldLoading: true }));
 			const [result, error] = await wrapApi(kyInstance.put(`/admin-api/v1/sites/${siteId}/content-types/${contentTypeId}/fields/${fieldId}`, {
 				json: field,
 			}).json<IContentTypeField>());

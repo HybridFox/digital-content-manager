@@ -8,6 +8,7 @@ export enum ButtonTypes {
 	SECONDARY = 'secondary',
 	DEFAULT = 'default',
 	DANGER = 'danger',
+	SUCCESS = 'success',
 	TRANSPARENT = 'transparent',
 	OUTLINE = 'outline',
 }
