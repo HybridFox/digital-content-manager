@@ -58,7 +58,7 @@ export const ContentComponentsField: FC<IContentComponentsFieldProps> = ({ name,
 								type="checkbox"
 								id={option.id}
 								checked={(value || []).includes(option.id)}
-								onChange={(e) => handleChange(option.id)}
+								onChange={(e) => handleChange(option.id as any)}
 								className={cxBind('a-input__radio')}
 							/>
 							<label htmlFor={option.id}>{option.name}</label>

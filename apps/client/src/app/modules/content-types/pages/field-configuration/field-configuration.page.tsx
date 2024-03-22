@@ -12,6 +12,7 @@ import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, useContentTypeFieldStore, u
 
 interface IEditFieldForm {
 	name: string;
+	slug: string;
 	config: Record<string, unknown>;
 	min: number;
 	max: number;
