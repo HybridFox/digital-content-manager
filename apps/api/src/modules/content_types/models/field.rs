@@ -26,6 +26,7 @@ pub enum FieldTypeEnum {
 	ContentTypeField,
 	ContentCompentField,
 	ContentCompentConfigField,
+	BlockField,
 }
 
 impl ToSql<FieldTypes, Pg> for FieldTypeEnum {
@@ -36,6 +37,7 @@ impl ToSql<FieldTypes, Pg> for FieldTypeEnum {
 			FieldTypeEnum::ContentCompentConfigField => {
 				out.write_all(b"CONTENT-COMPONENT_CONFIG-FIELD")?
 			}
+			FieldTypeEnum::BlockField => out.write_all(b"BLOCK_FIELD")?,
 		}
 		Ok(IsNull::No)
 	}
@@ -47,6 +49,7 @@ impl FromSql<FieldTypes, Pg> for FieldTypeEnum {
 			b"CONTENT-TYPE_FIELD" => Ok(FieldTypeEnum::ContentTypeField),
 			b"CONTENT-COMPONENT_FIELD" => Ok(FieldTypeEnum::ContentCompentField),
 			b"CONTENT-COMPONENT_CONFIG-FIELD" => Ok(FieldTypeEnum::ContentCompentConfigField),
+			b"BLOCK_FIELD" => Ok(FieldTypeEnum::BlockField),
 			_ => Err("Unrecognized enum variant".into()),
 		}
 	}
@@ -57,6 +60,7 @@ impl FromSql<FieldTypes, Pg> for FieldTypeEnum {
 )]
 #[diesel(belongs_to(ContentComponent, foreign_key = content_component_id))]
 #[diesel(belongs_to(ContentType, foreign_key = parent_id))]
+#[diesel(belongs_to(FieldModel, foreign_key = parent_id))]
 #[diesel(table_name = fields)]
 #[diesel(primary_key(id))]
 pub struct FieldModel {
@@ -291,6 +295,7 @@ pub struct CreateField {
 #[serde(rename_all = "camelCase")]
 pub struct UpdateField {
 	pub name: Option<String>,
+	pub slug: Option<String>,
 	pub description: Option<String>,
 	pub min: Option<i32>,
 	pub max: Option<i32>,

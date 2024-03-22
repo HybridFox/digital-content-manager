@@ -2,7 +2,7 @@ use crate::modules::{
 	core::models::hal::{HALLinkList, HALPage},
 	resources::engines::lib::{ResourceItem, ResourceItemKind},
 };
-use chrono::NaiveDateTime;
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 use uuid::Uuid;
@@ -15,8 +15,8 @@ pub struct ResourceDTO {
 	pub kind: ResourceItemKind,
 	pub mime_type: Option<String>,
 	pub storage_repository_id: Uuid,
-	pub created_at: Option<NaiveDateTime>,
-	pub updated_at: Option<NaiveDateTime>,
+	pub created_at: Option<DateTime<Utc>>,
+	pub updated_at: Option<DateTime<Utc>>,
 }
 
 impl From<(ResourceItem, Uuid)> for ResourceDTO {

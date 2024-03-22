@@ -1,6 +1,6 @@
 use actix_multipart::form::tempfile::TempFile;
 
-use chrono::NaiveDateTime;
+use chrono::DateTime;
 use serde_json::Value;
 
 use std::{str::FromStr, time::UNIX_EPOCH};
@@ -70,14 +70,14 @@ impl StorageEngine for FtpStorageEngine {
 					} else {
 						ResourceItemKind::FILE
 					},
-					created_at: NaiveDateTime::from_timestamp_millis(
+					created_at: DateTime::from_timestamp_millis(
 						resource
 							.modified()
 							.duration_since(UNIX_EPOCH)?
 							.as_millis()
 							.try_into()?,
 					),
-					updated_at: NaiveDateTime::from_timestamp_millis(
+					updated_at: DateTime::from_timestamp_millis(
 						resource
 							.modified()
 							.duration_since(UNIX_EPOCH)?

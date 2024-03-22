@@ -361,7 +361,7 @@ impl User {
 
 impl User {
 	pub fn generate_token(&self) -> Result<String, AppError> {
-		let now = Utc::now().timestamp_nanos() / 1_000_000_000; // nanosecond -> second
+		let now = Utc::now().timestamp_millis() / 1_000; // milli -> second
 		let token = token::generate(self.id, now)?;
 		Ok(token)
 	}

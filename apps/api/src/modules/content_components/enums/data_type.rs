@@ -17,6 +17,7 @@ pub enum DataTypeEnum {
 	NUMBER,
 	BOOLEAN,
 	REFERENCE,
+	BLOCK,
 }
 
 impl ToSql<DataTypes, Pg> for DataTypeEnum {
@@ -28,6 +29,7 @@ impl ToSql<DataTypes, Pg> for DataTypeEnum {
 			DataTypeEnum::NUMBER => out.write_all(b"NUMBER")?,
 			DataTypeEnum::BOOLEAN => out.write_all(b"BOOLEAN")?,
 			DataTypeEnum::REFERENCE => out.write_all(b"REFERENCE")?,
+			DataTypeEnum::BLOCK => out.write_all(b"BLOCK")?,
 		}
 		Ok(IsNull::No)
 	}
@@ -42,6 +44,7 @@ impl FromSql<DataTypes, Pg> for DataTypeEnum {
 			b"NUMBER" => Ok(DataTypeEnum::NUMBER),
 			b"BOOLEAN" => Ok(DataTypeEnum::BOOLEAN),
 			b"REFERENCE" => Ok(DataTypeEnum::REFERENCE),
+			b"BLOCK" => Ok(DataTypeEnum::BLOCK),
 			_ => Err("Unrecognized enum variant".into()),
 		}
 	}

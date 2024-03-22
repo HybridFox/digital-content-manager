@@ -184,6 +184,7 @@ pub async fn update(
 			description: form.description.clone(),
 			min: form.min.clone(),
 			max: form.max.clone(),
+			slug: None,
 			hidden: form.hidden.clone(),
 			multi_language: form.multi_language.clone(),
 			sequence_number: form.sequence_number.clone(),

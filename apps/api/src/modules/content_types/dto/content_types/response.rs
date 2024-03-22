@@ -147,3 +147,18 @@ impl From<(Vec<(ContentType, i64)>, HALPage, Uuid)> for ContentTypesDTO {
 		}
 	}
 }
+
+impl From<(Vec<(ContentType, i64)>, HALPage)> for ContentTypesDTO {
+	fn from((content_types, page): (Vec<(ContentType, i64)>, HALPage)) -> Self {
+		Self {
+			_links: HALLinkList::from((format!("/api/v1/content-types"), &page)),
+			_embedded: ContentTypesEmbeddedDTO {
+				content_types: content_types
+					.into_iter()
+					.map(|content_type| ContentTypeWithOccurrencesDTO::from(content_type))
+					.collect(),
+			},
+			_page: page,
+		}
+	}
+}

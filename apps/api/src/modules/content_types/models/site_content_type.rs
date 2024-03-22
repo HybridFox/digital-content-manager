@@ -29,7 +29,7 @@ impl SiteContentType {
 		site_id: Uuid,
 		content_type_id: Uuid,
 	) -> Result<Vec<Self>, AppError> {
-		let permissions_iam_actions = diesel::insert_into(sites_content_types::table)
+		let site_content_type = diesel::insert_into(sites_content_types::table)
 			.values(CreateSiteContentType {
 				site_id,
 				content_type_id,
@@ -37,7 +37,23 @@ impl SiteContentType {
 			.returning(SiteContentType::as_returning())
 			.get_results(conn)?;
 
-		Ok(permissions_iam_actions)
+		Ok(site_content_type)
+	}
+
+	#[instrument(skip(conn))]
+	pub fn remove(
+		conn: &mut PgConnection,
+		site_id: Uuid,
+		content_type_id: Uuid,
+	) -> Result<(), AppError> {
+		let target = sites_content_types::table.filter(
+			sites_content_types::site_id
+				.eq(site_id)
+				.and(sites_content_types::content_type_id.eq(content_type_id)),
+		);
+		diesel::delete(target).execute(conn)?;
+
+		Ok(())
 	}
 }
 

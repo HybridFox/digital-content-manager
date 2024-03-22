@@ -18,6 +18,10 @@ pub mod sql_types {
 	pub struct FieldTypes;
 
 	#[derive(diesel::query_builder::QueryId, diesel::sql_types::SqlType)]
+	#[diesel(postgres_type(name = "module_types"))]
+	pub struct ModuleTypes;
+
+	#[derive(diesel::query_builder::QueryId, diesel::sql_types::SqlType)]
 	#[diesel(postgres_type(name = "workflow_state_technical_states"))]
 	pub struct WorkflowStateTechnicalStates;
 }
@@ -242,6 +246,20 @@ diesel::table! {
 }
 
 diesel::table! {
+	use diesel::sql_types::*;
+	use super::sql_types::ModuleTypes;
+
+	modules (id) {
+		id -> Uuid,
+		name -> Text,
+		#[sql_name = "type"]
+		type_ -> ModuleTypes,
+		active -> Bool,
+		site_id -> Uuid,
+	}
+}
+
+diesel::table! {
 	permissions (id) {
 		id -> Uuid,
 		iam_policy_id -> Uuid,
@@ -459,6 +477,7 @@ diesel::joinable!(content_revisions -> sites (site_id));
 diesel::joinable!(content_revisions -> users (user_id));
 diesel::joinable!(content_revisions -> workflow_states (workflow_state_id));
 diesel::joinable!(iam_policies -> sites (site_id));
+diesel::joinable!(modules -> sites (site_id));
 diesel::joinable!(permissions -> iam_policies (iam_policy_id));
 diesel::joinable!(permissions_iam_actions -> iam_actions (iam_action_key));
 diesel::joinable!(permissions_iam_actions -> permissions (permission_id));
@@ -502,6 +521,7 @@ diesel::allow_tables_to_appear_in_same_query!(
 	iam_conditions,
 	iam_policies,
 	languages,
+	modules,
 	permissions,
 	permissions_iam_actions,
 	permissions_iam_conditions,

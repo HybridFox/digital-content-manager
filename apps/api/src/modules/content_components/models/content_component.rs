@@ -6,10 +6,10 @@ use serde::{Serialize, Deserialize};
 use uuid::Uuid;
 use slug::slugify;
 use tracing::instrument;
-use diesel::dsl::*;
 
 use crate::errors::AppError;
 use crate::modules::content_components::enums::data_type::DataTypeEnum;
+use crate::modules::content_types::models::content_type::PopulatedBlockField;
 use crate::modules::content_types::models::field::{FieldModel, FieldTypeEnum};
 use crate::modules::content_types::models::field_config::{
 	FieldConfig, FieldConfigTypeEnum, FieldConfigContent,
@@ -30,6 +30,7 @@ pub struct PopulatedContentComponent {
 		FieldModel,
 		PopulatedContentComponent,
 		HashMap<String, FieldConfigContent>,
+		Vec<PopulatedBlockField>,
 	)>,
 }
 
@@ -106,6 +107,7 @@ impl ContentComponent {
 						.eq(sites_content_components::content_component_id)
 						.or(content_components::internal.eq(true))),
 				)
+				.distinct_on(content_components::id)
 				.into_boxed();
 
 			if include_hidden == false {
@@ -332,6 +334,7 @@ impl ContentComponent {
 							field,
 							populated_content_components.first().unwrap().clone(),
 							field_config,
+							vec![],
 						))
 					})
 					.collect::<Result<Vec<_>, AppError>>()?;

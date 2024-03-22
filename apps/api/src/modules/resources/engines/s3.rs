@@ -1,7 +1,7 @@
 use actix_multipart::form::tempfile::TempFile;
 use aws_credential_types::Credentials;
 use aws_sdk_s3::{Config, config::Region, Client};
-use chrono::NaiveDateTime;
+use chrono::DateTime;
 use serde_json::Value;
 
 use async_trait::async_trait;
@@ -143,10 +143,10 @@ impl StorageEngine for S3StorageEngine {
 				Ok(ResourceItem {
 					name: name.clone(),
 					kind: ResourceItemKind::FILE,
-					created_at: NaiveDateTime::from_timestamp_millis(
+					created_at: DateTime::from_timestamp_millis(
 						item.last_modified().unwrap().to_millis().unwrap(),
 					),
-					updated_at: NaiveDateTime::from_timestamp_millis(
+					updated_at: DateTime::from_timestamp_millis(
 						item.last_modified().unwrap().to_millis().unwrap(),
 					),
 					mime_type,

@@ -57,8 +57,13 @@ impl Modify for SecurityAddon {
 		super::modules::content_types::controllers::fields::find_all,
 		super::modules::content_types::controllers::fields::find_one,
 		super::modules::content_types::controllers::fields::update,
-		super::modules::content_types::controllers::fields::update,
 		super::modules::content_types::controllers::fields::remove,
+
+		super::modules::content_types::controllers::blocks::create,
+		super::modules::content_types::controllers::blocks::find_all,
+		super::modules::content_types::controllers::blocks::find_one,
+		super::modules::content_types::controllers::blocks::update,
+		super::modules::content_types::controllers::blocks::remove,
 
 		super::modules::content_types::controllers::compartments::create,
 		super::modules::content_types::controllers::compartments::find_all,

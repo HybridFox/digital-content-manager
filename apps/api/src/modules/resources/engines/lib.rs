@@ -3,7 +3,7 @@ use crate::{
 	modules::resources::models::storage_repository::StorageRepository,
 };
 use actix_multipart::form::tempfile::TempFile;
-use chrono::NaiveDateTime;
+use chrono::{DateTime, Utc};
 use diesel::PgConnection;
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
@@ -23,8 +23,8 @@ pub struct ResourceItem {
 	pub name: String,
 	pub kind: ResourceItemKind,
 	pub mime_type: Option<String>,
-	pub created_at: Option<NaiveDateTime>,
-	pub updated_at: Option<NaiveDateTime>,
+	pub created_at: Option<DateTime<Utc>>,
+	pub updated_at: Option<DateTime<Utc>>,
 }
 
 #[async_trait]

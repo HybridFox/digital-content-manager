@@ -26,10 +26,17 @@ use super::field::FieldModel;
 use super::field_config::{FieldConfig, FieldConfigContent};
 use super::site_content_type::SiteContentType;
 
+pub type PopulatedBlockField = (
+	FieldModel,                          // ...field
+	PopulatedContentComponent,           // contentComponent
+	HashMap<String, FieldConfigContent>, // config
+);
+
 pub type PopulatedContentTypeField = (
-	FieldModel,
-	PopulatedContentComponent,
-	HashMap<String, FieldConfigContent>,
+	FieldModel,                          // ...field
+	PopulatedContentComponent,           // contentComponent
+	HashMap<String, FieldConfigContent>, // config
+	Vec<PopulatedBlockField>,            // blocks (optional)
 );
 
 #[derive(
@@ -95,6 +102,28 @@ impl ContentType {
 		SiteContentType::create(conn, site_id, content_type.id)?;
 
 		Ok(content_type)
+	}
+
+	#[instrument(skip(conn))]
+	pub fn enable_site(
+		conn: &mut PgConnection,
+		content_type_id: Uuid,
+		site_id: Uuid,
+	) -> Result<(), AppError> {
+		SiteContentType::create(conn, site_id, content_type_id)?;
+
+		Ok(())
+	}
+
+	#[instrument(skip(conn))]
+	pub fn disable_site(
+		conn: &mut PgConnection,
+		content_type_id: Uuid,
+		site_id: Uuid,
+	) -> Result<(), AppError> {
+		SiteContentType::remove(conn, site_id, content_type_id)?;
+
+		Ok(())
 	}
 
 	#[instrument(skip(conn))]
@@ -164,6 +193,61 @@ impl ContentType {
 	}
 
 	#[instrument(skip(conn))]
+	pub fn find_root(
+		conn: &mut PgConnection,
+		page: i64,
+		pagesize: i64,
+		kind: Option<ContentTypeKindEnum>,
+		include_occurrences: Option<bool>,
+		site_id: Option<Uuid>,
+	) -> Result<(Vec<(Self, i64)>, i64), AppError> {
+		let query = {
+			let mut query = content_types::table.into_boxed();
+
+			if let Some(kind) = kind {
+				query = query.filter(content_types::kind.eq(kind));
+			}
+
+			if pagesize != -1 {
+				query = query.offset((page - 1) * pagesize).limit(pagesize);
+			};
+
+			query
+		};
+
+		let content_types = query
+			.select(ContentType::as_select())
+			.load::<ContentType>(conn)?;
+
+		let content_query = {
+			let mut query = Content::belonging_to(&content_types)
+				.distinct_on(content::translation_id)
+				.into_boxed();
+
+			if let Some(site_id) = site_id {
+				query = query.filter(content::site_id.eq(site_id));
+			}
+
+			query
+		};
+
+		let content = content_query
+			.select(Content::as_select())
+			.load::<Content>(conn)?;
+		let grouped_content = content.grouped_by(&content_types);
+
+		let content_types_with_occurences = content_types
+			.into_iter()
+			.zip(grouped_content)
+			.map(|(content_type, content_items)| (content_type, content_items.len() as i64))
+			.collect::<Vec<(ContentType, i64)>>();
+
+		let total_elements = content_types::table.count().get_result::<i64>(conn)?;
+
+		Ok((content_types_with_occurences, total_elements))
+	}
+
+	#[instrument(skip(conn))]
 	pub fn update(
 		conn: &mut PgConnection,
 		site_id: Uuid,
@@ -217,6 +301,54 @@ impl ContentType {
 				let populated_field_configs =
 					ContentComponent::populate_config(conn, field_configs)?;
 
+				let blocks = Self::find_blocks(conn, &vec![field.clone()])?;
+
+				let content_component = all_content_components
+					.iter()
+					.find(|cp| cp.id == field.content_component_id)
+					.map(|cp| cp.to_owned());
+
+				let populated_cc =
+					ContentComponent::populate_fields(conn, vec![content_component.unwrap()])?;
+
+				Ok((
+					field,
+					populated_cc.first().unwrap().clone(),
+					populated_field_configs,
+					blocks,
+				))
+			})
+			.collect::<Result<Vec<PopulatedContentTypeField>, AppError>>()?;
+
+		Ok(fields_with_config)
+	}
+
+	#[instrument(skip(conn))]
+	pub fn find_blocks(
+		conn: &mut PgConnection,
+		fields: &Vec<FieldModel>,
+	) -> Result<Vec<PopulatedBlockField>, AppError> {
+		let all_content_components = content_components::table
+			.select(ContentComponent::as_select())
+			.load::<ContentComponent>(conn)?;
+
+		let fields = FieldModel::belonging_to(fields)
+			.order(fields::sequence_number)
+			.select(FieldModel::as_select())
+			.load::<FieldModel>(conn)?;
+
+		let field_config = FieldConfig::belonging_to(&fields)
+			.select(FieldConfig::as_select())
+			.load::<FieldConfig>(conn)?;
+
+		let grouped_config: Vec<Vec<FieldConfig>> = field_config.grouped_by(&fields);
+		let fields_with_config = fields
+			.into_iter()
+			.zip(grouped_config)
+			.map(|(field, field_configs)| {
+				let populated_field_configs =
+					ContentComponent::populate_config(conn, field_configs)?;
+
 				let content_component = all_content_components
 					.iter()
 					.find(|cp| cp.id == field.content_component_id)
@@ -231,7 +363,7 @@ impl ContentType {
 					populated_field_configs,
 				))
 			})
-			.collect::<Result<Vec<PopulatedContentTypeField>, AppError>>()?;
+			.collect::<Result<Vec<PopulatedBlockField>, AppError>>()?;
 
 		Ok(fields_with_config)
 	}

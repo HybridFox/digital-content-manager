@@ -1,7 +1,9 @@
 use crate::modules::{
 	content_components::models::content_component::{ContentComponent, PopulatedContentComponent},
+	content_types::models::{
+		content_type::PopulatedBlockField, field::FieldModel, field_config::FieldConfigContent,
+	},
 	core::models::hal::{HALLinkList, HALPage},
-	content_types::models::{field::FieldModel, field_config::FieldConfigContent},
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
@@ -16,6 +18,7 @@ pub struct ContentComponentDTO {
 	pub id: Uuid,
 	pub name: String,
 	pub slug: String,
+	pub internal: bool,
 	pub description: Option<String>,
 	pub component_name: String,
 	pub created_at: NaiveDateTime,
@@ -28,6 +31,7 @@ impl From<ContentComponent> for ContentComponentDTO {
 			id: content_component.id,
 			name: content_component.name,
 			slug: content_component.slug,
+			internal: content_component.internal,
 			description: content_component.description,
 			component_name: content_component.component_name,
 			created_at: content_component.created_at,
@@ -116,6 +120,7 @@ pub struct FieldWithContentComponentDTO {
 	pub max: i32,
 	pub sequence_number: Option<i32>,
 	pub content_component: ContentComponentWithFieldsDTO,
+	pub blocks: Option<Vec<FieldWithContentComponentDTO>>,
 	pub config: HashMap<String, Value>,
 }
 
@@ -144,7 +149,65 @@ impl
 			sequence_number: field.sequence_number,
 			min: field.min,
 			max: field.max,
+			blocks: None,
 			content_component: ContentComponentWithFieldsDTO::from(content_component),
+			config: config
+				.into_iter()
+				.map(|(key, config_item)| {
+					match config_item {
+						FieldConfigContent::Text(text) => (key, Value::String(text)),
+						FieldConfigContent::Json(json) => (key, json),
+						FieldConfigContent::Fields(fields) => {
+							// TODO: clean this up somehow 🤮
+							let mapped_fields = fields
+								.into_iter()
+								.map(FieldDTO::from)
+								.collect::<Vec<FieldDTO>>();
+							let json = serde_json::to_string(&mapped_fields).unwrap();
+
+							(key, serde_json::from_str(&json).unwrap())
+						}
+					}
+				})
+				.collect::<HashMap<_, _>>(),
+		}
+	}
+}
+
+impl
+	From<(
+		FieldModel,
+		PopulatedContentComponent,
+		HashMap<String, FieldConfigContent>,
+		Vec<PopulatedBlockField>,
+	)> for FieldWithContentComponentDTO
+{
+	fn from(
+		(field, content_component, config, blocks): (
+			FieldModel,
+			PopulatedContentComponent,
+			HashMap<String, FieldConfigContent>,
+			Vec<PopulatedBlockField>,
+		),
+	) -> Self {
+		Self {
+			id: field.id,
+			name: field.name,
+			slug: field.slug,
+			description: field.description,
+			multi_language: field.multi_language,
+			hidden: field.hidden,
+			compartment_id: field.compartment_id,
+			sequence_number: field.sequence_number,
+			min: field.min,
+			max: field.max,
+			content_component: ContentComponentWithFieldsDTO::from(content_component),
+			blocks: Some(
+				blocks
+					.into_iter()
+					.map(FieldWithContentComponentDTO::from)
+					.collect(),
+			),
 			config: config
 				.into_iter()
 				.map(|(key, config_item)| {
@@ -176,6 +239,7 @@ pub struct ContentComponentWithFieldsDTO {
 	pub slug: String,
 	pub description: Option<String>,
 	pub component_name: String,
+	pub internal: bool,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 	pub configuration_fields: Vec<FieldWithContentComponentDTO>,
@@ -190,6 +254,7 @@ impl From<PopulatedContentComponent> for ContentComponentWithFieldsDTO {
 			slug: cc.content_component.slug,
 			description: cc.content_component.description,
 			component_name: cc.content_component.component_name,
+			internal: cc.content_component.internal,
 			created_at: cc.content_component.created_at,
 			updated_at: cc.content_component.updated_at,
 			configuration_fields: cc

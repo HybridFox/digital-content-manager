@@ -18,6 +18,11 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 					.service(modules::languages::controllers::languages::find_all)
 					.service(modules::languages::controllers::languages::find_one)
 				)
+				.service(web::scope("/content-types")
+					.service(modules::content_types::controllers::root_content_types::find_all)
+					.service(modules::content_types::controllers::root_content_types::enable)
+					.service(modules::content_types::controllers::root_content_types::disable)
+				)
 				.service(
 					web::scope("/auth")
 						.service(modules::auth::controllers::auth::me)
@@ -77,7 +82,15 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 										.service(modules::content_types::controllers::fields::find_all)
 										.service(modules::content_types::controllers::fields::find_one)
 										.service(modules::content_types::controllers::fields::update)
-										.service(modules::content_types::controllers::fields::remove),
+										.service(modules::content_types::controllers::fields::remove)
+										.service(
+											web::scope("/{field_id}/blocks")
+												.service(modules::content_types::controllers::blocks::create)
+												.service(modules::content_types::controllers::blocks::find_all)
+												.service(modules::content_types::controllers::blocks::find_one)
+												.service(modules::content_types::controllers::blocks::update)
+												.service(modules::content_types::controllers::blocks::remove)
+										)
 								)
 								.service(
 									web::scope("/{content_type_id}/compartments")

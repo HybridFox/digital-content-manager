@@ -112,6 +112,24 @@ fn parse_field(
 			let json = serde_json::to_string(&sub_fields).unwrap();
 			serde_json::from_str(&json).unwrap()
 		}
+		DataTypeEnum::BLOCK => {
+			// One block
+			let sub_fields = parse_object_fields(
+				content_id,
+				translation_id,
+				Some(field.id),
+				all_fields.clone(),
+				populate,
+			);
+
+			// TODO: clean this up somehow 🤮
+			let json = serde_json::to_string(&json!({
+			"block":  field.value.to_owned(),
+				"fields": &sub_fields
+			}))
+			.unwrap();
+			serde_json::from_str(&json).unwrap()
+		}
 	}
 }
 
