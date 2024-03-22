@@ -140,6 +140,10 @@ fn get_field_insert(
 
 			// then for each entry in the block section, we save a parent item with BLOCK type and let the recursive code handle the rest
 			let sub_values = values[field.slug.clone()].as_array();
+			if sub_values.is_none() {
+				return fields;
+			}
+
 			let mut sub_fields = sub_values
 				.unwrap()
 				.into_iter()
@@ -204,7 +208,9 @@ pub fn get_field_inserts(
 	let values_to_insert: Vec<CreateContentField> = fields
 		.into_iter()
 		.map(|(field, populated_cc, _field_config, blocks)| {
-			if field.min != 1 || field.max != 1 {
+			if (field.min != 1 || field.max != 1)
+				&& populated_cc.content_component.data_type != DataTypeEnum::BLOCK
+			{
 				// Multifield
 				let parent_field = CreateContentField {
 					id: Some(Uuid::new_v4()),
