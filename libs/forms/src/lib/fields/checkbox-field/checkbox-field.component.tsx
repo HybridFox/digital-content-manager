@@ -4,17 +4,18 @@ import cx from 'classnames/bind';
 import { Tooltip } from 'react-tooltip';
 
 import { IRenderControllerField } from '../fields.types';
+import { FieldLabel } from '../../field-label/field-label.component';
+import { FieldHint } from '../../field-hint/field-hint.component';
 
 import { ICheckboxFieldProps, ICheckboxOption } from './checkbox-field.types';
 import styles from './checkbox-field.module.scss';
 
 const cxBind = cx.bind(styles);
 
-export const CheckboxField: FC<ICheckboxFieldProps> = ({ name, label, placeholder, fieldConfiguration, fieldOptions }: ICheckboxFieldProps) => {
+export const CheckboxField: FC<ICheckboxFieldProps> = ({ name, label, placeholder, fieldConfiguration, viewMode, fieldOptions }: ICheckboxFieldProps) => {
 	const {
 		control
 	} = useFormContext();
-
 
 	const renderField = ({
 		field: { onChange, value },
@@ -36,11 +37,7 @@ export const CheckboxField: FC<ICheckboxFieldProps> = ({ name, label, placeholde
 					'a-input--has-error': !!error,
 				})}
 			>
-				{label && (
-					<label className={cxBind('a-input__label')}>
-						{label}
-					</label>
-				)}
+				<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
 				<div className={cxBind('a-input__field-wrapper')}>
 					{((fieldConfiguration?.options as ICheckboxOption[]) || []).map((option, i) => (
 						<div className={cxBind('a-input__field')} key={option.value}>
@@ -51,7 +48,10 @@ export const CheckboxField: FC<ICheckboxFieldProps> = ({ name, label, placeholde
 								onChange={(e) => handleChange(option.value)}
 								className={cxBind('a-input__radio')}
 							/>
-							<label htmlFor={option.value}>{option.label}</label>
+							<label htmlFor={option.value}>
+								{option.label}
+								<FieldHint hint={fieldConfiguration?.hint as string} />
+							</label>
 						</div>
 					))}
 					{error && (

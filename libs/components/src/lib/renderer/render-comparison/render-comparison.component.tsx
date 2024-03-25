@@ -6,19 +6,19 @@ import { Alert, Loading } from '~components';
 
 import { FIELD_COMPONENTS } from '../../../../../forms/src/lib/fields';
 import { RenderMultiple } from '../render-multiple';
-import { FIELD_VIEW_MODE } from '../../../../../forms/src/lib/fields/fields.types';
+import { FieldViewMode } from '../../../../../forms/src/lib/fields/fields.types';
 
 import styles from './render-comparison.module.scss';
 import { IRenderComparisonProps } from './render-comparison.types';
 
-import { FIELD_KEYS, IField } from '~shared';
+import { FieldKeys, IField } from '~shared';
 const cxBind = cx.bind(styles);
 
 export const RenderComparison: FC<IRenderComparisonProps> = ({
 	fields,
 	fieldPrefix = '',
 	siteId,
-	viewMode = FIELD_VIEW_MODE.EDIT,
+	viewMode = FieldViewMode.EDIT,
 }: IRenderComparisonProps) => {
 	const renderContentComponent = (field: IField) => {
 		const Component = FIELD_COMPONENTS[field.contentComponent.componentName];
@@ -35,7 +35,7 @@ export const RenderComparison: FC<IRenderComparisonProps> = ({
 
 		if (
 			(field.min === 1 && field.max === 1) ||
-			[FIELD_KEYS.MEDIA, FIELD_KEYS.CONTENT_REFERENCE, FIELD_KEYS.SELECT].includes(field.contentComponent.componentName)
+			[FieldKeys.MEDIA, FieldKeys.CONTENT_REFERENCE, FieldKeys.SELECT].includes(field.contentComponent.componentName)
 		) {
 			return (
 				<div className={cxBind('o-comparison__wrapper')}>

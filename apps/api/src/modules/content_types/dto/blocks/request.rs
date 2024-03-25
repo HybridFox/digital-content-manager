@@ -23,5 +23,6 @@ pub struct UpdateBlockFieldDTO {
 	pub hidden: Option<bool>,
 	pub multi_language: Option<bool>,
 	pub sequence_number: Option<i32>,
+	pub validation: Option<Value>,
 	pub config: HashMap<String, Value>,
 }

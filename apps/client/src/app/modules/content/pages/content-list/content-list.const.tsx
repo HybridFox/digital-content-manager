@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 import {Button, ButtonLink, ButtonSizes, IFiltersFilter, ITableColumn} from '~components';
 
-import {FIELD_KEYS, IContentType, ISite} from "~shared";
+import {FieldKeys, IContentType, ISite} from "~shared";
 
 
 export const addContentComponentSchema = yup.object({
@@ -16,7 +16,7 @@ export const CONTENT_LIST_FILTER = (t: TFunction, activeSite?: ISite, contentTyp
 	{
 		name: 'Name',
 		slug: 'name',
-		contentComponent: FIELD_KEYS.TEXT,
+		contentComponent: FieldKeys.TEXT,
 		config: {
 			wrapperClassName: 'u-col-4 u-margin-bottom-none'
 		}
@@ -24,7 +24,7 @@ export const CONTENT_LIST_FILTER = (t: TFunction, activeSite?: ISite, contentTyp
 	{
 		name: 'Language',
 		slug: 'language',
-		contentComponent: FIELD_KEYS.SELECT,
+		contentComponent: FieldKeys.SELECT,
 		config: {
 			options: (activeSite?.languages || []).map((lang) => ({ label: lang.name, value: lang.key })),
 			wrapperClassName: 'u-col-4 u-margin-bottom-none'
@@ -33,7 +33,7 @@ export const CONTENT_LIST_FILTER = (t: TFunction, activeSite?: ISite, contentTyp
 	{
 		name: 'Content Type',
 		slug: 'contentTypeId',
-		contentComponent: FIELD_KEYS.SELECT,
+		contentComponent: FieldKeys.SELECT,
 		config: {
 			options: (contentTypes || []).map((contentType) => ({ label: contentType.name, value: contentType.id })),
 			wrapperClassName: 'u-col-4 u-margin-bottom-none'

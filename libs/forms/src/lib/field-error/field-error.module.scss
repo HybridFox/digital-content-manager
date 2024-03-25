@@ -1,0 +1,16 @@
+.a-input {
+	&__error {
+		color: var(--color-gray-dark);
+		font-size: var(--font-size-small);
+		margin: 0;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		color: var(--color-state-danger);
+		background-color: var(--color-state-danger-light);
+		padding: 2px 4px;
+		margin: -2px -2px -2px var(--spacer-xs);
+		border-radius: 5px;
+		font-weight: normal;
+	}
+}

@@ -5,7 +5,7 @@ import { IHeaderTab } from '~components';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 
-import { FIELD_KEYS, IContentType, IContentTypeField } from '~shared';
+import { IContentType, IContentTypeField } from '~shared';
 
 export const editFieldSchema = yup.object({
 	name: yup.string().required(),

@@ -2,7 +2,7 @@ import { ControllerFieldState, ControllerRenderProps, FieldPath, FieldValues, Re
 
 import { IField } from "~shared";
 
-export enum FIELD_VIEW_MODE {
+export enum FieldViewMode {
 	EDIT = 'EDIT',
 	VIEW = 'VIEW',
 	DIFF = 'DIFF'
@@ -16,7 +16,7 @@ export interface IGenericFieldProps {
 	field?: Partial<IField>;
 	disabled?: boolean;
 	siteId?: string;
-	viewMode?: FIELD_VIEW_MODE;
+	viewMode?: FieldViewMode;
 }
 
 export interface IRenderControllerField {

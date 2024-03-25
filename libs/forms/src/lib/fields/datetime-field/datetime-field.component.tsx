@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 
 import {FieldLabel} from '../../field-label/field-label.component';
 import {FieldHint} from '../../field-hint/field-hint.component';
-import {FIELD_VIEW_MODE, IRenderControllerField} from '../fields.types';
+import {FieldViewMode, IRenderControllerField} from '../fields.types';
 import {FieldValue} from "../../field-value/field-value.component";
 import { FieldDiff } from '../../field-diff/field-diff.component';
 
@@ -23,7 +23,7 @@ export const DatetimeField: FC<IDatetimeFieldProps> = ({
 	fieldOptions,
 	fieldConfiguration,
 	disabled,
-	viewMode = FIELD_VIEW_MODE.EDIT
+	viewMode = FieldViewMode.EDIT
 }: IDatetimeFieldProps) => {
 	const { control } = useFormContext();
 
@@ -66,7 +66,7 @@ export const DatetimeField: FC<IDatetimeFieldProps> = ({
 		)
 	}
 
-	if (viewMode === FIELD_VIEW_MODE.VIEW) {
+	if (viewMode === FieldViewMode.VIEW) {
 		return (
 			<div className={cxBind('a-input')}>
 				<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
@@ -75,7 +75,7 @@ export const DatetimeField: FC<IDatetimeFieldProps> = ({
 		)
 	}
 
-	if (viewMode === FIELD_VIEW_MODE.DIFF) {
+	if (viewMode === FieldViewMode.DIFF) {
 		return (
 			<div className={cxBind('a-input')}>
 				<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />

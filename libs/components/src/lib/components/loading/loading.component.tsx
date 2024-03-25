@@ -14,7 +14,7 @@ export const Loading: FC<ILoadingProps> = ({
 	loading = true,
 }: ILoadingProps) => {
 	if (!loading) {
-		return children;
+		return children as any;
 	}
 
 	return (

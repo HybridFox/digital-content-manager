@@ -14,7 +14,7 @@ import { createPolicySchema } from './site-policy-detail.const';
 import { TextField } from '~forms';
 import {
 	IAPIError,
-	PERMISSION_EFFECT,
+	PermissionEffect,
 	useHeaderStore,
 	useIAMActionStore,
 	useSitePolicyStore,
@@ -23,7 +23,7 @@ import {
 interface UpdatePolicyForm {
 	name: string;
 	permissions: {
-		effect: PERMISSION_EFFECT,
+		effect: PermissionEffect,
 		resources: string[];
 		actions: string[];
 	}[]

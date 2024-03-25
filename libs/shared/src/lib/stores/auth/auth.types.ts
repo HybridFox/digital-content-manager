@@ -1,13 +1,13 @@
 import { ISite } from "../../types/site.types";
 import { IAuthenticationMethod } from "../authentication-method";
 
-export enum PERMISSION_EFFECT {
+export enum PermissionEffect {
 	GRANT = 'grant',
 	DENY = 'deny'
 }
 
 export interface IPermission {
-	effect: PERMISSION_EFFECT,
+	effect: PermissionEffect,
 	resources: string[];
 	actions: string[];
 }

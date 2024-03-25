@@ -1,12 +1,12 @@
-import { WORKFLOW_TECHNICAL_STATES } from "~shared";
+import { WorkflowTechnicalStates } from "~shared";
 
 export const WORKFLOW_STATE_TECHNICAL_STATE_OPTIONS = [
 	{
-		value: WORKFLOW_TECHNICAL_STATES.DRAFT,
+		value: WorkflowTechnicalStates.DRAFT,
 		label: 'DRAFT'
 	},
 	{
-		value: WORKFLOW_TECHNICAL_STATES.PUBLISHED,
+		value: WorkflowTechnicalStates.PUBLISHED,
 		label: 'PUBLISHED'
 	},
 ]

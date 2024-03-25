@@ -42,8 +42,7 @@ export const FIELD_DETAIL_TABS = (
 			fieldId: field?.id || '',
 			siteId,
 		}),
-		label: 'Validation',
-		disabled: true,
+		label: 'Validation'
 	},
 	{
 		to: generatePath(CONTENT_COMPONENT_PATHS.FIELD_DETAIL_DEFAULT_VALUE, {

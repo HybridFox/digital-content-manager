@@ -9,7 +9,8 @@ export interface IFieldBlock {
 	min: number;
 	max: number;
 	multiLanguage: boolean;
-	config: Record<string, string>
+	config: Record<string, string>;
+	validation: any;
 }
 
 export type IFieldBlocksResponse = IAPIHALResponse<'blocks', IFieldBlock>

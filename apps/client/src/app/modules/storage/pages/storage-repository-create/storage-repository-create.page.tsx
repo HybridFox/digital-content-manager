@@ -14,14 +14,14 @@ import { createStorageRepositorySchema } from './storage-repository-create.const
 import { SelectField, TextField } from '~forms';
 import {
 	IAPIError,
-	STORAGE_KINDS,
+	StorageKinds,
 	useHeaderStore,
 	useStorageRepositoryStore,
 } from '~shared';
 
 interface CreateStorageRepositoryForm {
 	name: string;
-	kind: STORAGE_KINDS;
+	kind: StorageKinds;
 	configuration: any;
 }
 

@@ -189,6 +189,7 @@ pub async fn update(
 			multi_language: form.multi_language.clone(),
 			sequence_number: form.sequence_number.clone(),
 			compartment_id: form.compartment_id.clone(),
+			validation: form.validation.clone(),
 		},
 	)?;
 

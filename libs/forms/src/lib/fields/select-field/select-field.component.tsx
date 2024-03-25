@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 import { Select } from '~components';
 
-import { FIELD_VIEW_MODE, IRenderControllerField } from '../fields.types';
+import { FieldViewMode, IRenderControllerField } from '../fields.types';
 import { FieldLabel } from '../../field-label/field-label.component';
 import { FieldValue } from '../../field-value/field-value.component';
 import { FieldDiff } from '../../field-diff/field-diff.component';
@@ -16,7 +16,7 @@ import styles from './select-field.module.scss';
 
 const cxBind = cx.bind(styles);
 
-export const SelectField: FC<ISelectFieldProps> = ({ name, label, viewMode = FIELD_VIEW_MODE.EDIT, fieldConfiguration, field, disabled }: ISelectFieldProps) => {
+export const SelectField: FC<ISelectFieldProps> = ({ name, label, viewMode = FieldViewMode.EDIT, fieldConfiguration, field, disabled }: ISelectFieldProps) => {
 	const { control } = useFormContext();
 
 	const getMappedValue = (value: string | string[]): ISelectOptions | ISelectOptions[] | undefined => {
@@ -87,9 +87,9 @@ export const SelectField: FC<ISelectFieldProps> = ({ name, label, viewMode = FIE
 
 	return (
 		<div className={cxBind('a-input__field-wrapper')}>
-			{viewMode === FIELD_VIEW_MODE.EDIT && <Controller control={control} name={name} render={renderField} />}
-			{viewMode === FIELD_VIEW_MODE.VIEW && renderValue()}
-			{viewMode === FIELD_VIEW_MODE.DIFF && renderDiff()}
+			{viewMode === FieldViewMode.EDIT && <Controller control={control} name={name} render={renderField} />}
+			{viewMode === FieldViewMode.VIEW && renderValue()}
+			{viewMode === FieldViewMode.DIFF && renderDiff()}
 		</div>
 	);
 };

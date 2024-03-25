@@ -15,14 +15,14 @@ import { createWorkflowStateSchema } from './workflow-state-create.const';
 import { SelectField, TextField, TextareaField } from '~forms';
 import {
 	IAPIError,
-	WORKFLOW_TECHNICAL_STATES,
+	WorkflowTechnicalStates,
 	useHeaderStore,
 } from '~shared';
 
 interface CreateWorkflowStateForm {
 	name: string;
 	description: undefined | string | null;
-	technicalState: WORKFLOW_TECHNICAL_STATES;
+	technicalState: WorkflowTechnicalStates;
 }
 
 export const WorkflowStateCreatePage = () => {

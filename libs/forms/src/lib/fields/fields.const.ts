@@ -1,9 +1,12 @@
 import { FC, lazy } from "react";
 
-import { FIELD_KEYS } from "~shared";
+import { FieldKeys } from "~shared";
 
 const TextField = lazy(async () => ({
 	default: (await import('./text-field')).TextField
+}));
+const NumberField = lazy(async () => ({
+	default: (await import('./number-field')).NumberField
 }));
 const TextareaField = lazy(async () => ({
 	default: (await import('./textarea-field')).TextareaField
@@ -39,22 +42,22 @@ const BlockField = lazy(async () => ({
 	default: (await import('./block-field')).BlockField
 }));
 
-export const FIELD_COMPONENTS: Record<FIELD_KEYS, FC<any>> = {
-	[FIELD_KEYS.FIELD_GROUP]: FieldGroupField,
-	[FIELD_KEYS.TEXT]: TextField,
-	[FIELD_KEYS.TEXTAREA]: TextareaField,
-	[FIELD_KEYS.NUMBER]: TextField,
-	[FIELD_KEYS.RICH_TEXT]: RichtextField,
-	[FIELD_KEYS.URL]: TextField,
-	[FIELD_KEYS.SELECT]: SelectField,
-	[FIELD_KEYS.RADIO]: TextField,
-	[FIELD_KEYS.CHECKBOX]: CheckboxField,
-	[FIELD_KEYS.MAP]: TextField,
-	[FIELD_KEYS.MEDIA]: AssetField,
-	[FIELD_KEYS.TOGGLE]: TextField,
-	[FIELD_KEYS.CONTENT_REFERENCE]: ContentReferenceField,
-	[FIELD_KEYS.CONTENT_TYPES]: ContentTypesField,
-	[FIELD_KEYS.DATETIME]: DatetimeField,
-	[FIELD_KEYS.CONTENT_COMPONENTS]: ContentComponentsField,
-	[FIELD_KEYS.BLOCK]: BlockField,
+export const FIELD_COMPONENTS: Record<FieldKeys, FC<any>> = {
+	[FieldKeys.FIELD_GROUP]: FieldGroupField,
+	[FieldKeys.TEXT]: TextField,
+	[FieldKeys.TEXTAREA]: TextareaField,
+	[FieldKeys.NUMBER]: NumberField,
+	[FieldKeys.RICH_TEXT]: RichtextField,
+	[FieldKeys.URL]: TextField,
+	[FieldKeys.SELECT]: SelectField,
+	[FieldKeys.RADIO]: TextField,
+	[FieldKeys.CHECKBOX]: CheckboxField,
+	[FieldKeys.MAP]: TextField,
+	[FieldKeys.MEDIA]: AssetField,
+	[FieldKeys.TOGGLE]: TextField,
+	[FieldKeys.CONTENT_REFERENCE]: ContentReferenceField,
+	[FieldKeys.CONTENT_TYPES]: ContentTypesField,
+	[FieldKeys.DATETIME]: DatetimeField,
+	[FieldKeys.CONTENT_COMPONENTS]: ContentComponentsField,
+	[FieldKeys.BLOCK]: BlockField,
 }

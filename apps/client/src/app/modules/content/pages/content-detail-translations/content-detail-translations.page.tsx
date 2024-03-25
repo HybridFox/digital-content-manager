@@ -56,7 +56,7 @@ export const ContentDetailTranslationsPage = () => {
 	}, [activeSite, content]);
 
 	if (!contentType) {
-		return;
+		return null;
 	}
 
 	return (

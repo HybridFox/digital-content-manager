@@ -23,6 +23,7 @@ pub struct UpdateFieldDTO {
 	pub hidden: Option<bool>,
 	pub multi_language: Option<bool>,
 	pub compartment_id: Option<Uuid>,
+	pub validation: Option<Value>,
 	pub sequence_number: Option<i32>,
 	pub config: HashMap<String, Value>,
 }

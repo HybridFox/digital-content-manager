@@ -2,16 +2,19 @@ import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
 import { Tooltip } from 'react-tooltip'
+import { path } from 'rambda';
 
 import { FieldLabel } from '../../field-label/field-label.component';
 import { FieldHint } from '../../field-hint/field-hint.component';
 import { FieldValue } from "../../field-value/field-value.component";
-import { FIELD_VIEW_MODE } from '../fields.types';
+import { FieldViewMode } from '../fields.types';
 import { FieldDiff } from '../../field-diff/field-diff.component';
 
 import { ITextFieldProps } from './text-field.types';
 import styles from './text-field.module.scss';
 import { TextFieldTypes } from './text-field.const';
+
+import { generateUuid } from '~shared';
 
 const cxBind = cx.bind(styles);
 
@@ -23,10 +26,10 @@ export const TextField: FC<ITextFieldProps> = ({
 	fieldOptions,
 	fieldConfiguration,
 	disabled,
-	viewMode = FIELD_VIEW_MODE.EDIT
+	viewMode = FieldViewMode.EDIT
 }: ITextFieldProps) => {
 	const { register, formState: { errors } } = useFormContext();
-	const error = errors?.[name];
+	const error = path([...name.split('.')])(errors);
 
 	const renderField = () => (
 		<div className={cxBind('a-input__field-wrapper')}>
@@ -40,17 +43,6 @@ export const TextField: FC<ITextFieldProps> = ({
 					...fieldOptions,
 				})}
 			/>
-			{error && (
-				<>
-					<Tooltip anchorSelect={`#${name}-err-tooltip`}>
-						{error.message?.toString()}
-					</Tooltip>
-					<div className={cxBind('a-input__error')} id={`${name}-err-tooltip`}>
-						<i className="las la-exclamation-triangle"></i>
-					</div>
-				</>
-				
-			)}
 		</div>
 	)
 
@@ -67,9 +59,9 @@ export const TextField: FC<ITextFieldProps> = ({
 			'a-input--has-error': !!error
 		})}>
 			<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
-			{viewMode === FIELD_VIEW_MODE.EDIT && renderField()}
-			{viewMode === FIELD_VIEW_MODE.VIEW && renderValue()}
-			{viewMode === FIELD_VIEW_MODE.DIFF && renderDiff()}
+			{viewMode === FieldViewMode.EDIT && renderField()}
+			{viewMode === FieldViewMode.VIEW && renderValue()}
+			{viewMode === FieldViewMode.DIFF && renderDiff()}
 			<FieldHint hint={fieldConfiguration?.hint as string} />
 		</div>
 	);

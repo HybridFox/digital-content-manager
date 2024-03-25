@@ -13,6 +13,7 @@ body, #root {
 .react-tooltip {
 	padding: var(--spacer-sm) !important;
 	border-radius: var(--border-radius-sm) !important;
+	z-index: 5000;
 }
 
 :root {

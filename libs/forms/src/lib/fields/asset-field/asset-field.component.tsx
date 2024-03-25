@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 
 import { FieldLabel } from '../../field-label/field-label.component';
 import { SelectAssetModal } from '../../modals';
-import { FIELD_VIEW_MODE } from '../fields.types';
+import { FieldViewMode } from '../fields.types';
 import { FieldValue } from '../../field-value/field-value.component';
 
 import { IAssetFieldProps } from './asset-field.types';
@@ -89,8 +89,8 @@ export const AssetField: FC<IAssetFieldProps> = ({ name, label, fieldConfigurati
 
 	return (
 		<div className={cxBind('a-input__field-wrapper')}>
-			{viewMode === FIELD_VIEW_MODE.EDIT && <Controller control={control} name={name} render={renderField} />}
-			{viewMode === FIELD_VIEW_MODE.VIEW && renderValue()}
+			{viewMode === FieldViewMode.EDIT && <Controller control={control} name={name} render={renderField} />}
+			{viewMode === FieldViewMode.VIEW && renderValue()}
 		</div>
 	);
 };

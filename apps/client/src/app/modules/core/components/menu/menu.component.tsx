@@ -7,7 +7,7 @@ import { DASHBOARD_PATHS } from '../../../dashboard';
 import { RESOURCE_PATHS } from '../../../resources';
 import { CONTENT_PATHS } from '../../../content/content.routes';
 import { CONTENT_TYPES_PATHS } from '../../../content-types';
-import { CONTENT_COMPONENT_PATHS } from '../../../content-components';
+import { CONTENT_COMPONENT_PATHS } from '../../../../../../../..';
 import { WORKFLOW_PATHS } from '../../../workflow';
 import { SITE_USER_PATHS } from '../../../site-users';
 import { SITE_ROLE_PATHS } from '../../../site-roles';

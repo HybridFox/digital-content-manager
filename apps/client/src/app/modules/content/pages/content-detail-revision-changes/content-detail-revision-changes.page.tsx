@@ -22,7 +22,7 @@ import {
 
 import { CONTENT_PATHS } from '../../content.routes';
 
-import { FIELD_VIEW_MODE, RadioField } from '~forms';
+import { FieldViewMode, RadioField } from '~forms';
 import {
 	CONTENT_TYPE_KINDS_TRANSLATIONS,
 	DATE_FORMAT,
@@ -32,7 +32,7 @@ import {
 	useContentTypeStore,
 	useHeaderStore,
 	useWorkflowStore,
-	WORKFLOW_TECHNICAL_STATES,
+	WorkflowTechnicalStates,
 } from '~shared';
 
 export const ContentDetailRevisionChangesPage = () => {
@@ -96,7 +96,7 @@ export const ContentDetailRevisionChangesPage = () => {
 
 	const statusOptions = useMemo(() => {
 		return (workflow?.transitions || [])
-			.filter((transition) => (contentItem?.published ? true : transition.toState.technicalState !== WORKFLOW_TECHNICAL_STATES.UNPUBLISHED))
+			.filter((transition) => (contentItem?.published ? true : transition.toState.technicalState !== WorkflowTechnicalStates.UNPUBLISHED))
 			.filter((transition) => transition.fromState.id === contentItem?.workflowStateId)
 			.sort((a, b) => (a.fromState.name < b.fromState.name ? -1 : 1))
 			.map((transition) => ({
@@ -131,7 +131,7 @@ export const ContentDetailRevisionChangesPage = () => {
 					</CardFooter>
 				</Card>
 				<FormProvider {...compareFormMethods}>
-					<RenderFields viewMode={FIELD_VIEW_MODE.DIFF} siteId={siteId!} fieldPrefix="0.fields." fields={contentType?.fields || []} />
+					<RenderFields viewMode={FieldViewMode.DIFF} siteId={siteId!} fieldPrefix="0.fields." fields={contentType?.fields || []} />
 				</FormProvider>
 			</Loading>
 			<Modal modalOpen={restoreModalVisible} title="Restore as..." onClose={() => setRestoreModalVisible(false)}>

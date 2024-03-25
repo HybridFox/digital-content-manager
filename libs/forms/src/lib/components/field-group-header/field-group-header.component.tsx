@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import cx from 'classnames/bind';
 
-
 import { Badge, BadgeSizes } from '~components';
 
-import { FIELD_VIEW_MODE } from '../../fields';
+import { FieldViewMode } from '../../fields';
+import { FieldError } from '../../field-error/field-error.component';
 
 import { IFieldGroupHeaderProps } from './field-group-header.types';
 import styles from './field-group-header.module.scss';
@@ -15,10 +15,11 @@ export const FieldGroupHeader: FC<IFieldGroupHeaderProps> = ({
 	label,
 	multiLanguage,
 	badge,
-	viewMode = FIELD_VIEW_MODE.EDIT,
+	viewMode = FieldViewMode.EDIT,
+	name,
 }: IFieldGroupHeaderProps) => {
 	const renderIcon = () => {
-		if (viewMode !== FIELD_VIEW_MODE.EDIT) {
+		if (viewMode !== FieldViewMode.EDIT) {
 			return;
 		}
 
@@ -35,7 +36,11 @@ export const FieldGroupHeader: FC<IFieldGroupHeaderProps> = ({
 
 	return (
 		<h6 className={cxBind('o-field-group-header')}>
-			<span className={cxBind('o-field-group-header__title')}>{badge && <Badge size={BadgeSizes.SMALL} className='u-margin-right-xs'>{badge}</Badge>}<span>{label}</span></span>
+			<span className={cxBind('o-field-group-header__title')}>
+				{badge && <Badge size={BadgeSizes.SMALL} className='u-margin-right-xs'>{badge}</Badge>}
+				<span>{label}</span>
+				{name && <FieldError name={name} />}
+			</span>
 			{renderIcon()}
 		</h6>
 	);

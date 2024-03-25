@@ -5,7 +5,7 @@ import { Tooltip } from 'react-tooltip';
 
 import { FieldLabel } from '../../field-label/field-label.component';
 import { FieldHint } from '../../field-hint/field-hint.component';
-import { FIELD_VIEW_MODE } from '../fields.types';
+import { FieldViewMode } from '../fields.types';
 import { FieldValue } from '../../field-value/field-value.component';
 import { FieldDiff } from '../../field-diff/field-diff.component';
 
@@ -14,7 +14,7 @@ import { IRadioFieldProps, IRadioOption } from './radio-field.types';
 
 const cxBind = cx.bind(styles);
 
-export const RadioField: FC<IRadioFieldProps> = ({ name, label, viewMode = FIELD_VIEW_MODE.EDIT, fieldConfiguration, fieldOptions }: IRadioFieldProps) => {
+export const RadioField: FC<IRadioFieldProps> = ({ name, label, viewMode = FieldViewMode.EDIT, fieldConfiguration, fieldOptions }: IRadioFieldProps) => {
 	const {
 		register,
 		formState: { errors },
@@ -63,9 +63,9 @@ export const RadioField: FC<IRadioFieldProps> = ({ name, label, viewMode = FIELD
 			})}
 		>
 			<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} viewMode={viewMode} name={name} />
-			{viewMode === FIELD_VIEW_MODE.EDIT && renderField()}
-			{viewMode === FIELD_VIEW_MODE.VIEW && renderValue()}
-			{viewMode === FIELD_VIEW_MODE.DIFF && renderDiff()}
+			{viewMode === FieldViewMode.EDIT && renderField()}
+			{viewMode === FieldViewMode.VIEW && renderValue()}
+			{viewMode === FieldViewMode.DIFF && renderDiff()}
 			<FieldHint hint={fieldConfiguration?.hint as string} />
 		</div>
 	);

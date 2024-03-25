@@ -27,8 +27,19 @@
 		position: relative;
 	}
 
-	&__field label {
-		color: var(--color-black);
+	&__field {
+		display: flex;
+		align-items: flex-start;
+
+		input {
+			margin-top: 2.5px;
+		}
+
+		label {
+			display: inline-block;
+			color: var(--color-black);
+			flex: 1;
+		}
 	}
 
 	&__field:not(:last-child) {

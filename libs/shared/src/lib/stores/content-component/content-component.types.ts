@@ -1,14 +1,15 @@
 import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types/paging.types";
-import { FIELD_KEYS, IField } from "../content-type";
+import { DataTypes, FieldKeys, IField } from "../content-type";
 
 export interface IContentComponent {
 	id?: string;
 	name?: string;
 	slug?: string;
 	internal?: boolean;
-	componentName: FIELD_KEYS;
+	componentName: FieldKeys;
 	configurationFields: IField[];
 	fields: IField[];
+	dataType?: DataTypes;
 	createdAt?: string;
 	updatedAt?: string;
 }
@@ -46,7 +47,7 @@ export interface IContentComponentStoreState {
 export interface IContentComponentCreateDTO {
 	name: string;
 	description?: string;
-	componentName: FIELD_KEYS;
+	componentName: FieldKeys;
 }
 
 export interface IContentComponentUpdateDTO {

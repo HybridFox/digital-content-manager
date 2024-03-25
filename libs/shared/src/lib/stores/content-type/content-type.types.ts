@@ -2,7 +2,7 @@ import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types/pa
 import { ICompartment } from "../compartment";
 import { IContentComponent } from "../content-component";
 
-export enum FIELD_KEYS {
+export enum FieldKeys {
 	FIELD_GROUP = 'FIELD_GROUP',
 	TEXT = 'TEXT',
 	NUMBER = 'NUMBER',
@@ -20,6 +20,16 @@ export enum FIELD_KEYS {
 	CONTENT_COMPONENTS = 'CONTENT_COMPONENTS',
 	BLOCK = 'BLOCK',
 	DATETIME = 'DATETIME',
+}
+
+export enum DataTypes {
+	TEXT = 'TEXT',
+	ARRAY = 'ARRAY',
+	OBJECT = 'OBJECT',
+	NUMBER = 'NUMBER',
+	BOOLEAN = 'BOOLEAN',
+	REFERENCE = 'REFERENCE',
+	BLOCK = 'BLOCK',
 }
 
 export interface IContentType {
@@ -47,6 +57,7 @@ export interface IField {
 	sequenceNumber?: number;
 	config?: Record<string, any>;
 	blocks?: IField[];
+	validation?: any;
 }
 
 export enum ContentTypeKinds {

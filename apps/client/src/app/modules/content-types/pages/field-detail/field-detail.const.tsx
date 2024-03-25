@@ -5,7 +5,7 @@ import { IHeaderTab } from '~components';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 
-import { FIELD_KEYS, IContentType, IContentTypeField } from '~shared';
+import { FieldKeys, IContentType, IContentTypeField } from '~shared';
 
 export const editFieldSchema = yup.object({
 	name: yup.string().required(),
@@ -29,7 +29,7 @@ export const FIELD_DETAIL_TABS = (
 		}),
 		label: 'Settings',
 	},
-	...(field?.contentComponent.componentName === FIELD_KEYS.BLOCK ? [
+	...(field?.contentComponent.componentName === FieldKeys.BLOCK ? [
 		{
 			to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_BLOCKS, {
 				contentTypeId: contentType?.id || '',
@@ -52,7 +52,6 @@ export const FIELD_DETAIL_TABS = (
 			siteId,
 		}),
 		label: 'Validation',
-		disabled: true,
 	},
 	{
 		to: generatePath(CONTENT_TYPES_PATHS.FIELD_DETAIL_DEFAULT_VALUE, {

@@ -1,6 +1,6 @@
 import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types";
 
-export enum AUTHENTICATION_METHOD_KINDS {
+export enum AuthenticationMethod {
 	LOCAL = 'LOCAL',
 	OAUTH2 = 'OAUTH2'
 }
@@ -8,7 +8,7 @@ export enum AUTHENTICATION_METHOD_KINDS {
 export interface IAuthenticationMethod {
 	id: string;
 	name: string;
-	kind: AUTHENTICATION_METHOD_KINDS;
+	kind: AuthenticationMethod;
 	configuration?: Record<string, string>;
 	weight: number;
 	active: boolean;

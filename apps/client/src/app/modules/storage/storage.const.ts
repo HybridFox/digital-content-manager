@@ -1,23 +1,23 @@
-import { FIELD_KEYS, IField, STORAGE_KINDS } from "~shared"
+import { FieldKeys, IField, StorageKinds } from "~shared"
 
 export const STORAGE_KIND_OPTIONS = [
 	{
 		label: 'Local Filesystem',
-		value: STORAGE_KINDS.LOCAL_FS
+		value: StorageKinds.LOCAL_FS
 	},
 	{
 		label: 'S3 Bucket',
-		value: STORAGE_KINDS.S3_BUCKET
+		value: StorageKinds.S3_BUCKET
 	},
 	{
 		label: 'FTP',
-		value: STORAGE_KINDS.FTP
+		value: StorageKinds.FTP
 	}
 ]
 
 
-export const STORAGE_KIND_FIELDS: Record<STORAGE_KINDS, IField[]> = {
-	[STORAGE_KINDS.LOCAL_FS]: [
+export const STORAGE_KIND_FIELDS: Record<StorageKinds, IField[]> = {
+	[StorageKinds.LOCAL_FS]: [
 		{
 			id: '5cf292a2-8a19-4bab-a637-dde0199c5d8b',
 			name: 'Base path',
@@ -28,7 +28,7 @@ export const STORAGE_KIND_FIELDS: Record<STORAGE_KINDS, IField[]> = {
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 				createdAt: 'string',
@@ -36,7 +36,7 @@ export const STORAGE_KIND_FIELDS: Record<STORAGE_KINDS, IField[]> = {
 			}
 		}
 	],
-	[STORAGE_KINDS.S3_BUCKET]: [
+	[StorageKinds.S3_BUCKET]: [
 		{
 			id: '5cf292a2-8a19-4bab-a637-dde0199c5d8b',
 			name: 'S3 Endpoint',
@@ -47,7 +47,7 @@ export const STORAGE_KIND_FIELDS: Record<STORAGE_KINDS, IField[]> = {
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 				createdAt: 'string',
@@ -64,7 +64,7 @@ export const STORAGE_KIND_FIELDS: Record<STORAGE_KINDS, IField[]> = {
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 				createdAt: 'string',
@@ -81,7 +81,7 @@ export const STORAGE_KIND_FIELDS: Record<STORAGE_KINDS, IField[]> = {
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 				createdAt: 'string',
@@ -98,7 +98,7 @@ export const STORAGE_KIND_FIELDS: Record<STORAGE_KINDS, IField[]> = {
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 				createdAt: 'string',
@@ -115,7 +115,7 @@ export const STORAGE_KIND_FIELDS: Record<STORAGE_KINDS, IField[]> = {
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 				createdAt: 'string',
@@ -123,7 +123,7 @@ export const STORAGE_KIND_FIELDS: Record<STORAGE_KINDS, IField[]> = {
 			}
 		}
 	],
-	[STORAGE_KINDS.FTP]: [
+	[StorageKinds.FTP]: [
 		{
 			id: '5cf292a2-8a19-4bab-a637-dde0199c5d8b',
 			name: 'FTP Server',
@@ -134,7 +134,7 @@ export const STORAGE_KIND_FIELDS: Record<STORAGE_KINDS, IField[]> = {
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 				createdAt: 'string',
@@ -151,7 +151,7 @@ export const STORAGE_KIND_FIELDS: Record<STORAGE_KINDS, IField[]> = {
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 				createdAt: 'string',
@@ -168,7 +168,7 @@ export const STORAGE_KIND_FIELDS: Record<STORAGE_KINDS, IField[]> = {
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 				createdAt: 'string',

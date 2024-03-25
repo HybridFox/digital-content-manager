@@ -8,7 +8,7 @@ import { AUTHENTICATION_METHOD_PATHS } from '../../authentication-methods.routes
 
 import { AUTHENTICATION_METHOD_DETAIL_TABS } from './authentication-method-detail.const';
 
-import { AUTHENTICATION_METHOD_KINDS, useAuthenticationMethodStore, useHeaderStore } from '~shared';
+import { AuthenticationMethod, useAuthenticationMethodStore, useHeaderStore } from '~shared';
 
 export const AuthenticationMethodDetailPage = () => {
 	const { t } = useTranslation();
@@ -38,7 +38,7 @@ export const AuthenticationMethodDetailPage = () => {
 			<Header
 				breadcrumbs={breadcrumbs}
 				title={<Trans t={t} i18nKey="AUTHENTICATION_METHODS.TITLES.EDIT" values={{ authenticationMethodName: authenticationMethod?.name || '...' }} />}
-				tabs={AUTHENTICATION_METHOD_DETAIL_TABS(t, authenticationMethodId!, authenticationMethod?.kind as AUTHENTICATION_METHOD_KINDS)}
+				tabs={AUTHENTICATION_METHOD_DETAIL_TABS(t, authenticationMethodId!, authenticationMethod?.kind as AuthenticationMethod)}
 			></Header>
 			<div className="u-margin-top">
 				<Loading loading={authenticationMethodLoading} text="Loading data...">

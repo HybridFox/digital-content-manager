@@ -1,0 +1,20 @@
+.o-validation {
+	border-radius: var(--border-radius-sm);
+	border: 1px solid var(--color-gray-lightest);
+	overflow-x: auto;
+	width: 100%;
+	background-color: var(--color-white);
+	
+	&__row {
+		background-color: var(--color-gray-accent);
+		border-top: 1px solid var(--color-gray-lightest);
+		padding: var(--spacer);
+		color: var(--color-black);
+	}
+	
+	&__config {
+		border-top: 1px solid var(--color-gray-lightest);
+		padding: var(--spacer);
+		color: var(--color-black);
+	}
+}

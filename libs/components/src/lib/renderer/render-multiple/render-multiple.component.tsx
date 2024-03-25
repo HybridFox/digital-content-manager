@@ -8,7 +8,7 @@ import { Button, ButtonSizes, ButtonTypes } from '~components';
 import { IRenderMultipleProps } from './render-multiple.types';
 import styles from './render-multiple.module.scss';
 
-import { FieldGroupHeader, FIELD_VIEW_MODE } from '~forms';
+import { FieldGroupHeader, FieldViewMode } from '~forms';
 const cxBind = cx.bind(styles);
 
 export const RenderMultiple: FC<IRenderMultipleProps> = ({ field, children, fieldPrefix = '', viewMode }: IRenderMultipleProps) => {
@@ -19,14 +19,14 @@ export const RenderMultiple: FC<IRenderMultipleProps> = ({ field, children, fiel
 
 	return (
 		<div className={cxBind('o-render-multiple')}>
-			<FieldGroupHeader viewMode={viewMode} label={field.name} multiLanguage={field?.multiLanguage} badge="Array" />
+			<FieldGroupHeader viewMode={viewMode} label={field.name} multiLanguage={field?.multiLanguage} badge="Array" name={`${fieldPrefix}${field.slug}`} />
 			<div className={cxBind('o-render-multiple__fields')}>
-				{viewMode === FIELD_VIEW_MODE.VIEW && fields.length === 0 && (
+				{viewMode === FieldViewMode.VIEW && fields.length === 0 && (
 					<span className="u-text--light u-text--small">{t('GENERAL.LABELS.NO_DATA')}</span>
 				)}
 				{fields.map((_, index) => (
 					<div className={cxBind('o-render-multiple__field')} key={index}>
-						{viewMode === FIELD_VIEW_MODE.EDIT && (
+						{viewMode === FieldViewMode.EDIT && (
 							<div className={cxBind('o-render-multiple__field__actions')}>
 								<div className={cxBind('o-render-multiple__field__order')}>
 									<Button
@@ -55,7 +55,7 @@ export const RenderMultiple: FC<IRenderMultipleProps> = ({ field, children, fiel
 					</div>
 				))}
 			</div>
-			{viewMode === FIELD_VIEW_MODE.EDIT && (
+			{viewMode === FieldViewMode.EDIT && (
 				<button type="button" className={cxBind('o-render-multiple__add')} onClick={() => append(null)}>
 					<i className="las la-plus"></i>
 					<p>

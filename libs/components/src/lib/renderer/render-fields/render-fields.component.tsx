@@ -2,18 +2,18 @@ import { FC, Suspense } from "react";
 import classNames from "classnames";
 import cx from "classnames/bind";
 
-import { Alert, Loading } from "~components";
-
 import { RenderMultiple } from "../render-multiple";
+import { Alert } from "../../components/alert";
+import { Loading } from "../../components/loading";
 
 import styles from './render-fields.module.scss';
 import { IRenderFieldsProps } from "./render-fields.types";
 
-import {FIELD_COMPONENTS, FIELD_VIEW_MODE} from "~forms";
-import { FIELD_KEYS, IField } from "~shared";
+import { FIELD_COMPONENTS, FieldViewMode } from "~forms";
+import { FieldKeys, IField } from "~shared";
 const cxBind = cx.bind(styles);
 
-export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix = '', siteId, viewMode = FIELD_VIEW_MODE.EDIT }: IRenderFieldsProps) => {
+export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix = '', siteId, viewMode = FieldViewMode.EDIT }: IRenderFieldsProps) => {
 	const renderContentComponent = (field: IField) => {
 		const Component = FIELD_COMPONENTS[field.contentComponent.componentName];
 
@@ -30,7 +30,7 @@ export const RenderFields: FC<IRenderFieldsProps> = ({ fields, fieldPrefix = '',
 			multiLanguage: field.multiLanguage,
 		};
  
-		if (field.min === 1 && field.max === 1 || [FIELD_KEYS.MEDIA, FIELD_KEYS.CONTENT_REFERENCE, FIELD_KEYS.SELECT, FIELD_KEYS.BLOCK].includes(field.contentComponent.componentName)) {
+		if ((field.min || 1)  <= 1 && (field.max || 1) <= 1 || [FieldKeys.MEDIA, FieldKeys.CONTENT_REFERENCE, FieldKeys.SELECT, FieldKeys.BLOCK].includes(field.contentComponent.componentName)) {
 			return <Component viewMode={viewMode} siteId={siteId} name={`${fieldPrefix}${field.slug}`} label={field.name} fieldConfiguration={fieldConfiguration} field={field} />
 		}
 

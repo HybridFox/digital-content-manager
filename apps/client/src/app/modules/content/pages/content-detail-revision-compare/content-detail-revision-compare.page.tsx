@@ -23,7 +23,7 @@ import { CONTENT_PATHS } from '../../content.routes';
 
 import styles from './content-detail-revision.compare.module.scss';
 
-import { FIELD_VIEW_MODE, RadioField } from '~forms';
+import { FieldViewMode, RadioField } from '~forms';
 import {
 	CONTENT_TYPE_KINDS_TRANSLATIONS,
 	DATE_FORMAT,
@@ -33,7 +33,7 @@ import {
 	useContentTypeStore,
 	useHeaderStore,
 	useWorkflowStore,
-	WORKFLOW_TECHNICAL_STATES,
+	WorkflowTechnicalStates,
 } from '~shared';
 
 const cxBind = cx.bind(styles);
@@ -99,7 +99,7 @@ export const ContentDetailRevisionComparePage = () => {
 
 	const statusOptions = useMemo(() => {
 		return (workflow?.transitions || [])
-			.filter((transition) => (contentItem?.published ? true : transition.toState.technicalState !== WORKFLOW_TECHNICAL_STATES.UNPUBLISHED))
+			.filter((transition) => (contentItem?.published ? true : transition.toState.technicalState !== WorkflowTechnicalStates.UNPUBLISHED))
 			.filter((transition) => transition.fromState.id === contentItem?.workflowStateId)
 			.sort((a, b) => (a.fromState.name < b.fromState.name ? -1 : 1))
 			.map((transition) => ({
@@ -161,7 +161,7 @@ export const ContentDetailRevisionComparePage = () => {
 					</div>
 				</div>
 				<FormProvider {...compareFormMethods}>
-					<RenderComparison viewMode={FIELD_VIEW_MODE.VIEW} siteId={siteId!} fieldPrefix="fields." fields={contentType?.fields || []} />
+					<RenderComparison viewMode={FieldViewMode.VIEW} siteId={siteId!} fieldPrefix="fields." fields={contentType?.fields || []} />
 				</FormProvider>
 			</Loading>
 			<Modal modalOpen={restoreModalVisible} title="Restore as..." onClose={() => setRestoreModalVisible(false)}>

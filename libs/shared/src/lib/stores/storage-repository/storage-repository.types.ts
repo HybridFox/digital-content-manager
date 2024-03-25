@@ -1,6 +1,6 @@
 import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types";
 
-export enum STORAGE_KINDS {
+export enum StorageKinds {
 	LOCAL_FS = 'LOCAL_FS',
 	S3_BUCKET = 'S3_BUCKET',
 	FTP = 'FTP'
@@ -9,7 +9,7 @@ export enum STORAGE_KINDS {
 export interface IStorageRepository {
 	id: string;
 	name: string;
-	kind: STORAGE_KINDS;
+	kind: StorageKinds;
 	configuration: Record<string, string>;
 	updatedAt: string;
 	createdAt: string;

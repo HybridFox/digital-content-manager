@@ -1,6 +1,6 @@
 import { IAPIHALResponse, IAPIPagination, IPageParameters } from "../../types/paging.types";
 
-export enum WORKFLOW_TECHNICAL_STATES {
+export enum WorkflowTechnicalStates {
 	DRAFT = 'DRAFT',
 	PUBLISHED = 'PUBLISHED',
 	UNPUBLISHED = 'UNPUBLISHED'
@@ -11,7 +11,7 @@ export interface IWorkflowState {
 	name: string;
 	slug: string;
 	description: string;
-	technicalState: WORKFLOW_TECHNICAL_STATES;
+	technicalState: WorkflowTechnicalStates;
 	internal: boolean;
 	removable: boolean;
 	deleted: boolean;

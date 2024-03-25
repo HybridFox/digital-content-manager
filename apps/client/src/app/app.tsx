@@ -11,7 +11,7 @@ import { AuthenticatedView } from './modules/core/views/authenticated/authentica
 import { DASHBOARD_ROUTES } from './modules/dashboard';
 import { CONTENT_TYPE_ROUTES } from './modules/content-types';
 import { CONTENT_ROUTES } from './modules/content';
-import { CONTENT_COMPONENT_ROUTES } from './modules/content-components';
+import { CONTENT_COMPONENT_ROUTES } from '../../../..';
 import { RESOURCE_ROUTES } from './modules/resources';
 import { STORAGE_ROUTES } from './modules/storage';
 import { WORKFLOW_ROUTES } from './modules/workflow';

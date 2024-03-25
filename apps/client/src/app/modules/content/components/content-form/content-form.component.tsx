@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
 import slugify from 'slugify';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Alert, AlertTypes, Button, ButtonTypes, Card, CardFooter, CardMeta, HTMLButtonTypes, RenderFields } from '~components';
 
@@ -10,14 +11,14 @@ import styles from './content-form.module.scss';
 import { ContentFormMode, IContentFormProps } from './content-form.types';
 
 import { RadioField, TextField } from '~forms';
-import { IContentItem, WORKFLOW_TECHNICAL_STATES } from '~shared';
+import { generateValidationSchema, IContentItem, WorkflowTechnicalStates } from '~shared';
 
 const cxBind = cx.bind(styles);
 
 export const ContentForm: FC<IContentFormProps> = ({ onSubmit, mode, contentItem, loading, workflow, workflowStates, fields }) => {
 	const { siteId } = useParams();
 	const formMethods = useForm<IContentItem>({
-		// resolver: yupResolver(editContentItemSchema),
+		// resolver: yupResolver(generateValidationSchema(fields)),
 		values: contentItem,
 	});
 
@@ -46,7 +47,7 @@ export const ContentForm: FC<IContentFormProps> = ({ onSubmit, mode, contentItem
 
 	const statusOptions = useMemo(() => {
 		return (workflow?.transitions || [])
-			.filter((transition) => (contentItem?.published ? true : transition.toState.technicalState !== WORKFLOW_TECHNICAL_STATES.UNPUBLISHED))
+			.filter((transition) => (contentItem?.published ? true : transition.toState.technicalState !== WorkflowTechnicalStates.UNPUBLISHED))
 			.filter((transition) => transition.fromState.id === contentItem?.workflowStateId)
 			.sort((a, b) => (a.fromState.name < b.fromState.name ? -1 : 1))
 			.map((transition) => ({
@@ -109,9 +110,9 @@ export const ContentForm: FC<IContentFormProps> = ({ onSubmit, mode, contentItem
 								<CardFooter>
 									<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT} block>
 										{loading && <i className="las la-redo-alt la-spin"></i>}{' '}
-										{technicalState === WORKFLOW_TECHNICAL_STATES.PUBLISHED && 'Publish'}
-										{technicalState === WORKFLOW_TECHNICAL_STATES.UNPUBLISHED && 'Unpublish'}
-										{technicalState === WORKFLOW_TECHNICAL_STATES.DRAFT && 'Save draft'}
+										{technicalState === WorkflowTechnicalStates.PUBLISHED && 'Publish'}
+										{technicalState === WorkflowTechnicalStates.UNPUBLISHED && 'Unpublish'}
+										{technicalState === WorkflowTechnicalStates.DRAFT && 'Save draft'}
 									</Button>
 								</CardFooter>
 							</Card>

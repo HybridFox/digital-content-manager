@@ -1,20 +1,20 @@
-import { AUTHENTICATION_METHOD_KINDS, FIELD_KEYS, IField } from "~shared"
+import { AuthenticationMethod, FieldKeys, IField } from "~shared"
 
 export const AUTHENTICATION_METHOD_OPTIONS = [
 	{
 		label: 'Local Auth',
-		value: AUTHENTICATION_METHOD_KINDS.LOCAL
+		value: AuthenticationMethod.LOCAL
 	},
 	{
 		label: 'OAuth2',
-		value: AUTHENTICATION_METHOD_KINDS.OAUTH2
+		value: AuthenticationMethod.OAUTH2
 	}
 ]
 
 
-export const AUTHENTICATION_METHOD_FIELDS: Record<AUTHENTICATION_METHOD_KINDS, IField[]> = {
-	[AUTHENTICATION_METHOD_KINDS.LOCAL]: [],
-	[AUTHENTICATION_METHOD_KINDS.OAUTH2]: [
+export const AUTHENTICATION_METHOD_FIELDS: Record<AuthenticationMethod, IField[]> = {
+	[AuthenticationMethod.LOCAL]: [],
+	[AuthenticationMethod.OAUTH2]: [
 		{
 			id: '5cf292a2-8a19-4bab-a637-dde0199c5d8b',
 			name: 'Client ID',
@@ -25,7 +25,7 @@ export const AUTHENTICATION_METHOD_FIELDS: Record<AUTHENTICATION_METHOD_KINDS, I
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 			}
@@ -43,7 +43,7 @@ export const AUTHENTICATION_METHOD_FIELDS: Record<AUTHENTICATION_METHOD_KINDS, I
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 			}
@@ -58,7 +58,7 @@ export const AUTHENTICATION_METHOD_FIELDS: Record<AUTHENTICATION_METHOD_KINDS, I
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 			}
@@ -73,7 +73,7 @@ export const AUTHENTICATION_METHOD_FIELDS: Record<AUTHENTICATION_METHOD_KINDS, I
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 			}
@@ -88,7 +88,7 @@ export const AUTHENTICATION_METHOD_FIELDS: Record<AUTHENTICATION_METHOD_KINDS, I
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 			}
@@ -103,7 +103,7 @@ export const AUTHENTICATION_METHOD_FIELDS: Record<AUTHENTICATION_METHOD_KINDS, I
 				id: 'f665034b-1dbc-4fda-ab62-da1ef6d4b054',
 				name: 'Text',
 				slug: 'text',
-				componentName: FIELD_KEYS.TEXT,
+				componentName: FieldKeys.TEXT,
 				configurationFields: [],
 				fields: [],
 			}

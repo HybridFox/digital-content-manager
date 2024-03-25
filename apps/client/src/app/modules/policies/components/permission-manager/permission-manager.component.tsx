@@ -1,14 +1,16 @@
 import { FC } from 'react';
 import { useFieldArray } from 'react-hook-form';
 import cx from 'classnames/bind';
-import { Button, ButtonSizes } from '~components';
 import { useTranslation } from 'react-i18next';
-import { SelectField, TextField } from '~forms';
 import classNames from 'classnames';
+
+import { Button, ButtonSizes } from '~components';
 
 import { IPermissionManagerProps } from './permission-manager.types';
 import styles from './permission-manager.module.scss';
-import { PERMISSION_EFFECT_OPTIONS } from './permission-manager.const';
+import { PermissionEffect_OPTIONS } from './permission-manager.const';
+
+import { SelectField, TextField } from '~forms';
 const cxBind = cx.bind(styles);
 
 export const PermissionManager: FC<IPermissionManagerProps> = ({ name, iamActions }: IPermissionManagerProps) => {
@@ -47,7 +49,7 @@ export const PermissionManager: FC<IPermissionManagerProps> = ({ name, iamAction
 						<div className={cxBind('o-permission-manager__permission__content')}>
 							<div className="u-row">
 								<div className="u-col-md-4">
-									<SelectField name={`permissions.${index}.effect`} fieldConfiguration={{ options: PERMISSION_EFFECT_OPTIONS }} label='Effect' />
+									<SelectField name={`permissions.${index}.effect`} fieldConfiguration={{ options: PermissionEffect_OPTIONS }} label='Effect' />
 								</div>
 								<div className="u-col-md-4">
 									<TextField name={`permissions.${index}.resources.0`} label='Resource' />

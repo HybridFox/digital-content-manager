@@ -1,12 +1,12 @@
-import { PERMISSION_EFFECT } from "~shared";
+import { PermissionEffect } from "~shared";
 
-export const PERMISSION_EFFECT_OPTIONS = [
+export const PermissionEffect_OPTIONS = [
 	{
 		label: 'Grant',
-		value: PERMISSION_EFFECT.GRANT,
+		value: PermissionEffect.GRANT,
 	},
 	{
 		label: 'Deny',
-		value: PERMISSION_EFFECT.DENY,
+		value: PermissionEffect.DENY,
 	},
 ]

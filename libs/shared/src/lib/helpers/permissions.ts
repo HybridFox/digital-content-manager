@@ -1,10 +1,10 @@
-import { IPermission, IRole, PERMISSION_EFFECT } from '../stores';
+import { IPermission, IRole, PermissionEffect } from '../stores';
 import { ISite } from '../types';
 
 const aggregatePermissions = (roles: IPermission[]): [IPermission[], IPermission[]] => {
 	const [denyList, grantList] = roles.reduce(
 		([accDenyList, accGrantList], permission) => {
-			if (permission.effect === PERMISSION_EFFECT.DENY) {
+			if (permission.effect === PermissionEffect.DENY) {
 				return [[...accDenyList, permission], [...accGrantList]];
 			}
 

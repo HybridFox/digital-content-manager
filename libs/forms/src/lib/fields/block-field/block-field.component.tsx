@@ -8,8 +8,8 @@ import { Badge, BadgeSizes, Button, ButtonSizes, ButtonTypes, Loading, Modal, Re
 import { IBlockFieldProps } from './block-field.types';
 import styles from './block-field.module.scss';
 
-import { FieldGroupHeader, FIELD_COMPONENTS, FIELD_VIEW_MODE } from '~forms';
-import { FIELD_KEYS, IContentComponent, IField, useContentComponentStore } from '~shared';
+import { FieldGroupHeader, FIELD_COMPONENTS, FieldViewMode } from '~forms';
+import { FieldKeys, IContentComponent, IField, useContentComponentStore } from '~shared';
 
 const cxBind = cx.bind(styles);
 
@@ -47,7 +47,7 @@ export const BlockField: FC<IBlockFieldProps> = ({ name, label, fieldConfigurati
 			<div className={cxBind('o-block-field')}>
 				<FieldGroupHeader viewMode={viewMode} label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} badge="Blocks" />
 				<div className={cxBind('o-block-field__fields')}>
-					{viewMode === FIELD_VIEW_MODE.VIEW && fields.length === 0 && (
+					{viewMode === FieldViewMode.VIEW && fields.length === 0 && (
 						<span className="u-text--light u-text--small">{t('GENERAL.LABELS.NO_DATA')}</span>
 					)}
 					{fields.map((contentBlock: any, index) => {
@@ -59,7 +59,7 @@ export const BlockField: FC<IBlockFieldProps> = ({ name, label, fieldConfigurati
 
 						return (
 							<div className={cxBind('o-block-field__field')} key={index}>
-								{viewMode === FIELD_VIEW_MODE.EDIT && (
+								{viewMode === FieldViewMode.EDIT && (
 									<div className={cxBind('o-block-field__field__actions')}>
 										<div className={cxBind('o-block-field__field__order')}>
 											<Button
@@ -93,7 +93,7 @@ export const BlockField: FC<IBlockFieldProps> = ({ name, label, fieldConfigurati
 						);
 					})}
 				</div>
-				{viewMode === FIELD_VIEW_MODE.EDIT && (
+				{viewMode === FieldViewMode.EDIT && (
 					<button type="button" className={cxBind('o-block-field__add')} onClick={() => setModalVisible(true)}>
 						<i className="las la-plus"></i>
 						<p>

@@ -5,7 +5,7 @@ import { Tooltip } from 'react-tooltip'
 
 import { FieldLabel } from '../../field-label/field-label.component';
 import { FieldHint } from '../../field-hint/field-hint.component';
-import { FIELD_VIEW_MODE } from '../fields.types';
+import { FieldViewMode } from '../fields.types';
 import { FieldValue } from '../../field-value/field-value.component';
 import { FieldDiff } from '../../field-diff/field-diff.component';
 
@@ -20,7 +20,7 @@ export const NumberField: FC<INumberFieldProps> = ({
 	placeholder,
 	fieldOptions,
 	fieldConfiguration,
-	viewMode = FIELD_VIEW_MODE.EDIT
+	viewMode = FieldViewMode.EDIT
 }: INumberFieldProps) => {
 	const { register, formState: { errors } } = useFormContext();
 	const error = errors?.[name];
@@ -63,9 +63,9 @@ export const NumberField: FC<INumberFieldProps> = ({
 			'a-input--has-error': !!error
 		})}>
 			<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} name={name} />
-			{viewMode === FIELD_VIEW_MODE.EDIT && renderField()}
-			{viewMode === FIELD_VIEW_MODE.VIEW && renderValue()}
-			{viewMode === FIELD_VIEW_MODE.DIFF && renderDiff()}
+			{viewMode === FieldViewMode.EDIT && renderField()}
+			{viewMode === FieldViewMode.VIEW && renderValue()}
+			{viewMode === FieldViewMode.DIFF && renderDiff()}
 			<FieldHint hint={fieldConfiguration?.hint as string} />
 		</div>
 	);

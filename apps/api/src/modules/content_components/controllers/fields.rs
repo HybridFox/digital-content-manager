@@ -193,6 +193,7 @@ pub async fn update(
 			hidden: form.hidden.clone(),
 			multi_language: form.multi_language.clone(),
 			sequence_number: form.sequence_number.clone(),
+			validation: form.validation.clone(),
 			compartment_id: None,
 		},
 	)?;

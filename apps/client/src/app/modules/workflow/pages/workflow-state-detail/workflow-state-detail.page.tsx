@@ -13,12 +13,12 @@ import { WORKFLOW_STATE_TECHNICAL_STATE_OPTIONS } from '../../workflow.const';
 import { editWorkflowStateSchema } from './workflow-state-detail.const';
 
 import { SelectField, TextField, TextareaField } from '~forms';
-import { IAPIError, WORKFLOW_TECHNICAL_STATES, useHeaderStore } from '~shared';
+import { IAPIError, WorkflowTechnicalStates, useHeaderStore } from '~shared';
 
 interface EditWorkflowStateForm {
 	name: string;
 	description: undefined | string | null;
-	technicalState: WORKFLOW_TECHNICAL_STATES;
+	technicalState: WorkflowTechnicalStates;
 }
 
 export const WorkflowStateDetailPage = () => {

@@ -65,6 +65,10 @@ export const CONTENT_COMPONENT_ROUTES: RouteObject[] = [
 					{
 						path: CONTENT_COMPONENT_PATHS.FIELD_DETAIL_CONFIGURATION,
 						lazy: async () => ({ Component: (await import('./pages/cc-field-configuration/cc-field-configuration.page')).CCFieldConfigurationPage }),
+					},
+					{
+						path: CONTENT_COMPONENT_PATHS.FIELD_DETAIL_VALIDATION,
+						lazy: async () => ({ Component: (await import('./pages/cc-field-validation/cc-field-validation.page')).CCFieldValidationPage }),
 					}
 				]
 			},

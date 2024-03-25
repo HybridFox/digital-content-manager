@@ -1,5 +1,8 @@
 use crate::modules::{
-	content_components::models::content_component::{ContentComponent, PopulatedContentComponent},
+	content_components::{
+		enums::data_type::DataTypeEnum,
+		models::content_component::{ContentComponent, PopulatedContentComponent},
+	},
 	content_types::models::{
 		content_type::PopulatedBlockField, field::FieldModel, field_config::FieldConfigContent,
 	},
@@ -21,6 +24,7 @@ pub struct ContentComponentDTO {
 	pub internal: bool,
 	pub description: Option<String>,
 	pub component_name: String,
+	pub data_type: DataTypeEnum,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
 }
@@ -34,6 +38,7 @@ impl From<ContentComponent> for ContentComponentDTO {
 			internal: content_component.internal,
 			description: content_component.description,
 			component_name: content_component.component_name,
+			data_type: content_component.data_type,
 			created_at: content_component.created_at,
 			updated_at: content_component.updated_at,
 		}
@@ -55,6 +60,7 @@ pub struct FieldDTO {
 	pub sequence_number: Option<i32>,
 	pub content_component: ContentComponentDTO,
 	pub config: HashMap<String, Value>,
+	pub validation: Option<Value>,
 }
 
 impl
@@ -82,6 +88,7 @@ impl
 			hidden: field.hidden,
 			min: field.min,
 			max: field.max,
+			validation: field.validation,
 			content_component: ContentComponentDTO::from(content_component.content_component),
 			config: config
 				.into_iter()
@@ -122,6 +129,7 @@ pub struct FieldWithContentComponentDTO {
 	pub content_component: ContentComponentWithFieldsDTO,
 	pub blocks: Option<Vec<FieldWithContentComponentDTO>>,
 	pub config: HashMap<String, Value>,
+	pub validation: Option<Value>,
 }
 
 impl
@@ -149,6 +157,7 @@ impl
 			sequence_number: field.sequence_number,
 			min: field.min,
 			max: field.max,
+			validation: field.validation,
 			blocks: None,
 			content_component: ContentComponentWithFieldsDTO::from(content_component),
 			config: config
@@ -201,6 +210,7 @@ impl
 			sequence_number: field.sequence_number,
 			min: field.min,
 			max: field.max,
+			validation: field.validation,
 			content_component: ContentComponentWithFieldsDTO::from(content_component),
 			blocks: Some(
 				blocks
@@ -242,6 +252,7 @@ pub struct ContentComponentWithFieldsDTO {
 	pub internal: bool,
 	pub created_at: NaiveDateTime,
 	pub updated_at: NaiveDateTime,
+	pub data_type: DataTypeEnum,
 	pub configuration_fields: Vec<FieldWithContentComponentDTO>,
 	pub fields: Vec<FieldWithContentComponentDTO>,
 }
@@ -255,6 +266,7 @@ impl From<PopulatedContentComponent> for ContentComponentWithFieldsDTO {
 			description: cc.content_component.description,
 			component_name: cc.content_component.component_name,
 			internal: cc.content_component.internal,
+			data_type: cc.content_component.data_type,
 			created_at: cc.content_component.created_at,
 			updated_at: cc.content_component.updated_at,
 			configuration_fields: cc

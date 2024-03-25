@@ -7,9 +7,9 @@ import { IHeaderTab } from '~components';
 import { AUTHENTICATION_METHOD_PATHS } from '../../authentication-methods.routes';
 import { AUTHENTICATION_METHOD_FIELDS } from '../../authentication-methods.const';
 
-import { AUTHENTICATION_METHOD_KINDS } from '~shared';
+import { AuthenticationMethod } from '~shared';
 
-export const AUTHENTICATION_METHOD_DETAIL_TABS = (t: TFunction, authenticationMethodId: string, authenticationMethodKind: AUTHENTICATION_METHOD_KINDS): IHeaderTab[] => [
+export const AUTHENTICATION_METHOD_DETAIL_TABS = (t: TFunction, authenticationMethodId: string, authenticationMethodKind: AuthenticationMethod): IHeaderTab[] => [
 	{
 		to: generatePath(AUTHENTICATION_METHOD_PATHS.DETAIL_INFO, {
 			authenticationMethodId,

@@ -21,7 +21,7 @@ export const Alert: FC<IAlertProps> = ({
 	}, [children])
 
 	if (!children || !visible) {
-		return;
+		return null;
 	}
 
 	return (

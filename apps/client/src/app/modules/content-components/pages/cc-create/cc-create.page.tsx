@@ -11,7 +11,7 @@ import { CONTENT_COMPONENT_PATHS } from '../../content-components.routes';
 import { createContentComponentForm } from './cc-create.const';
 
 import { TextField, TextareaField } from '~forms';
-import { FIELD_KEYS, IAPIError, useContentComponentStore, useHeaderStore, useWorkflowStore } from '~shared';
+import { FieldKeys, IAPIError, useContentComponentStore, useHeaderStore, useWorkflowStore } from '~shared';
 
 interface ICreateContentComponent {
 	name: string;
@@ -48,7 +48,7 @@ export const CCCreatePage = () => {
 	const onSubmit = (values: ICreateContentComponent) => {
 		createContentComponent(siteId!, {
 			...values,
-			componentName: FIELD_KEYS.FIELD_GROUP
+			componentName: FieldKeys.FIELD_GROUP
 		})
 			.then((contentComponent) => navigate(generatePath(CONTENT_COMPONENT_PATHS.DETAIL, { contentComponentId: contentComponent.id, siteId })))
 			.catch((error: IAPIError) => {

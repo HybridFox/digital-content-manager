@@ -1,8 +1,9 @@
-import { FIELD_VIEW_MODE } from "../../fields";
+import { FieldViewMode } from "../../fields";
 
 export interface IFieldGroupHeaderProps {
 	label?: string;
 	badge?: string;
 	multiLanguage?: boolean;
-	viewMode?: FIELD_VIEW_MODE
+	viewMode?: FieldViewMode;
+	name?: string;
 }

@@ -1,9 +1,9 @@
 import * as yup from 'yup';
 
-import { STORAGE_KINDS } from '~shared';
+import { StorageKinds } from '~shared';
 
 export const createStorageRepositorySchema = yup.object({
 	name: yup.string().required(),
-	kind: yup.string().required().oneOf([STORAGE_KINDS.LOCAL_FS, STORAGE_KINDS.S3_BUCKET, STORAGE_KINDS.FTP]),
+	kind: yup.string().required().oneOf([StorageKinds.LOCAL_FS, StorageKinds.S3_BUCKET, StorageKinds.FTP]),
 	configuration: yup.object().optional()
 });

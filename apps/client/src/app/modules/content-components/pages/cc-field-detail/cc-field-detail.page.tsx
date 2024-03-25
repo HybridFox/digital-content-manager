@@ -1,14 +1,7 @@
 import { useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
 import {
-	Alert,
-	AlertTypes,
-	Button,
-	ButtonTypes,
-	HTMLButtonTypes,
 	Header,
 	Loading,
 } from '~components';
@@ -16,19 +9,10 @@ import {
 import { FIELD_DETAIL_TABS, editFieldSchema } from './cc-field-detail.const';
 
 import {
-	IAPIError,
 	useContentComponentFieldStore,
 	useContentComponentStore,
 	useHeaderStore,
 } from '~shared';
-
-interface IEditFieldForm {
-	name: string;
-	config: Record<string, unknown>;
-	min: number;
-	max: number;
-	multiLanguage: boolean;
-}
 
 export const CCFieldDetailPage = () => {
 	const [contentComponent, contentComponentLoading, fetchContentComponent] =
@@ -43,22 +27,9 @@ export const CCFieldDetailPage = () => {
 			state.fieldLoading,
 			state.fetchField,
 		]);
-	const [updateField, updateFieldLoading] = useContentComponentFieldStore(
-		(state) => [state.updateField, state.updateFieldLoading]
-	);
 	const [breadcrumbs] = useHeaderStore((state) => [state.breadcrumbs]);
 	const { contentComponentId, siteId, fieldId } = useParams();
 	const navigate = useNavigate();
-	const formMethods = useForm<IEditFieldForm>({
-		resolver: yupResolver(editFieldSchema),
-		values: contentComponentField,
-	});
-
-	const {
-		handleSubmit,
-		setError,
-		formState: { errors }
-	} = formMethods;
 
 	useEffect(() => {
 		if (!contentComponentId || !fieldId) {
@@ -68,20 +39,6 @@ export const CCFieldDetailPage = () => {
 		fetchContentComponentField(siteId!, contentComponentId, fieldId);
 		fetchContentComponent(siteId!, contentComponentId);
 	}, []);
-
-	const onSubmit = (values: IEditFieldForm) => {
-		if (!contentComponent || !contentComponentField) {
-			return;
-		}
-
-		updateField(siteId!, contentComponent.id!, contentComponentField?.id, values).catch(
-			(error: IAPIError) => {
-				setError('root', {
-					message: error.code,
-				});
-			}
-		);
-	};
 
 	return (
 		<>
@@ -98,25 +55,7 @@ export const CCFieldDetailPage = () => {
 				text="Content type loading..."
 				loading={contentComponentLoading || contentComponentFieldLoading}
 			>
-				<FormProvider {...formMethods}>
-					<form onSubmit={handleSubmit(onSubmit)}>
-						<Alert
-							className="u-margin-bottom"
-							type={AlertTypes.DANGER}
-						>
-							{errors?.root?.message}
-						</Alert>
-						<Outlet />
-						<div className="u-margin-top">
-							<Button type={ButtonTypes.PRIMARY} htmlType={HTMLButtonTypes.SUBMIT}>
-								{updateFieldLoading && (
-									<i className="las la-redo-alt la-spin"></i>
-								)}{' '}
-								Save
-							</Button>
-						</div>
-					</form>
-				</FormProvider>
+				<Outlet />
 			</Loading>
 		</>
 	);

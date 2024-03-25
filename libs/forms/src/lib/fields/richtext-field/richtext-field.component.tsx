@@ -16,7 +16,7 @@ import { $generateNodesFromDOM } from '@lexical/html';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 
 import { FieldLabel } from '../../field-label/field-label.component';
-import { FIELD_VIEW_MODE } from '../fields.types';
+import { FieldViewMode } from '../fields.types';
 import { FieldValue } from '../../field-value/field-value.component';
 import { FieldDiff } from '../../field-diff/field-diff.component';
 
@@ -68,7 +68,7 @@ export const RichtextField: FC<IRichtextFieldProps> = ({
 	fieldOptions,
 	fieldConfiguration,
 	field,
-	viewMode = FIELD_VIEW_MODE.EDIT,
+	viewMode = FieldViewMode.EDIT,
 }: IRichtextFieldProps) => {
 	const { control } = useFormContext();
 
@@ -136,9 +136,9 @@ export const RichtextField: FC<IRichtextFieldProps> = ({
 
 	return (
 		<div className={cxBind('a-input__field-wrapper')}>
-			{viewMode === FIELD_VIEW_MODE.EDIT && <Controller control={control} name={name} render={renderField} />}
-			{viewMode === FIELD_VIEW_MODE.VIEW && renderValue()}
-			{viewMode === FIELD_VIEW_MODE.DIFF && renderDiff()}
+			{viewMode === FieldViewMode.EDIT && <Controller control={control} name={name} render={renderField} />}
+			{viewMode === FieldViewMode.VIEW && renderValue()}
+			{viewMode === FieldViewMode.DIFF && renderDiff()}
 		</div>
 	);
 };

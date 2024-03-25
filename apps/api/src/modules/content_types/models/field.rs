@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::io::Write;
 
+use serde_json::Value;
 use tracing::instrument;
 use diesel::{prelude::*, FromSqlRow, AsExpression};
 use slug::slugify;
@@ -77,6 +78,7 @@ pub struct FieldModel {
 	pub content_component_id: Uuid,
 	pub sequence_number: Option<i32>,
 	pub compartment_id: Option<Uuid>,
+	pub validation: Option<Value>,
 }
 
 impl FieldModel {
@@ -303,6 +305,7 @@ pub struct UpdateField {
 	pub multi_language: Option<bool>,
 	pub compartment_id: Option<Uuid>,
 	pub sequence_number: Option<i32>,
+	pub validation: Option<Value>,
 }
 
 #[derive(AsChangeset, Debug, Deserialize)]

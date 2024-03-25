@@ -1,4 +1,4 @@
-import {FIELD_KEYS} from "~shared";
+import {FieldKeys} from "~shared";
 
 export interface IFiltersProps {
 	className?: string;
@@ -11,6 +11,6 @@ export interface IFiltersProps {
 export interface IFiltersFilter {
 	name: string;
 	slug: string;
-	contentComponent: FIELD_KEYS;
+	contentComponent: FieldKeys;
 	config?: Record<string, unknown>;
 }

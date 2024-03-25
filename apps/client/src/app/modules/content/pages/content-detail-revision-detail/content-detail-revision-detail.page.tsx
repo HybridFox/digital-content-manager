@@ -18,12 +18,12 @@ import {
 
 import { CONTENT_PATHS } from '../../content.routes';
 
-import { FIELD_VIEW_MODE, RadioField } from '~forms';
+import { FieldViewMode, RadioField } from '~forms';
 import {
 	CONTENT_TYPE_KINDS_TRANSLATIONS,
 	DATE_FORMAT,
 	IContentItem,
-	WORKFLOW_TECHNICAL_STATES,
+	WorkflowTechnicalStates,
 	useContentRevisionStore,
 	useContentStore,
 	useContentTypeStore,
@@ -88,7 +88,7 @@ export const ContentDetailRevisionDetailPage = () => {
 
 	const statusOptions = useMemo(() => {
 		return (workflow?.transitions || [])
-			.filter((transition) => (contentItem?.published ? true : transition.toState.technicalState !== WORKFLOW_TECHNICAL_STATES.UNPUBLISHED))
+			.filter((transition) => (contentItem?.published ? true : transition.toState.technicalState !== WorkflowTechnicalStates.UNPUBLISHED))
 			.filter((transition) => transition.fromState.id === contentItem?.workflowStateId)
 			.sort((a, b) => (a.fromState.name < b.fromState.name ? -1 : 1))
 			.map((transition) => ({
@@ -120,7 +120,7 @@ export const ContentDetailRevisionDetailPage = () => {
 					</CardFooter>
 				</Card>
 				<form style={{ height: '100%' }}>
-					<RenderFields viewMode={FIELD_VIEW_MODE.VIEW} siteId={siteId!} fieldPrefix="fields." fields={contentType?.fields || []} />
+					<RenderFields viewMode={FieldViewMode.VIEW} siteId={siteId!} fieldPrefix="fields." fields={contentType?.fields || []} />
 				</form>
 			</FormProvider>
 			<Modal modalOpen={restoreModalVisible} title="Restore as..." onClose={() => setRestoreModalVisible(false)}>

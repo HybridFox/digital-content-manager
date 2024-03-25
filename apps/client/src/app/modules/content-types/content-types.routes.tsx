@@ -79,6 +79,10 @@ export const CONTENT_TYPE_ROUTES: RouteObject[] = [
 						path: CONTENT_TYPES_PATHS.FIELD_DETAIL_BLOCKS,
 						lazy: async () => ({ Component: (await import('./pages/field-blocks/field-blocks.page')).FieldBlocksPage }),
 					},
+					{
+						path: CONTENT_TYPES_PATHS.FIELD_DETAIL_VALIDATION,
+						lazy: async () => ({ Component: (await import('./pages/field-validation/field-validation.page')).FieldValidationPage }),
+					},
 				]
 			},
 			{
