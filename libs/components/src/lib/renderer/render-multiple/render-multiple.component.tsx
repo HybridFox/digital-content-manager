@@ -56,7 +56,7 @@ export const RenderMultiple: FC<IRenderMultipleProps> = ({ field, children, fiel
 				))}
 			</div>
 			{viewMode === FieldViewMode.EDIT && (
-				<button type="button" className={cxBind('o-render-multiple__add')} onClick={() => append(null)}>
+				<button type="button" className={cxBind('o-render-multiple__add')} onClick={() => append((field.contentComponent?.fields || []).reduce((acc, field) => ({ ...acc, [field.slug]: null }), {}))}>
 					<i className="las la-plus"></i>
 					<p>
 						Add <i>"{field.name}"</i> entry
