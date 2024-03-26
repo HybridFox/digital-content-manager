@@ -136,7 +136,7 @@ export const RichtextField: FC<IRichtextFieldProps> = ({
 
 	return (
 		<div className={cxBind('a-input__field-wrapper')}>
-			{viewMode === FieldViewMode.EDIT && <Controller control={control} name={name} render={renderField} shouldUnregister={true} />}
+			{viewMode === FieldViewMode.EDIT && <Controller control={control} name={name} render={renderField} />}
 			{viewMode === FieldViewMode.VIEW && renderValue()}
 			{viewMode === FieldViewMode.DIFF && renderDiff()}
 		</div>

@@ -68,6 +68,6 @@ export const CheckboxField: FC<ICheckboxFieldProps> = ({ name, label, placeholde
 	};
 
 	return (
-		<Controller control={control} name={name} render={renderField} shouldUnregister={true} />
+		<Controller control={control} name={name} render={renderField} />
 	);
 };

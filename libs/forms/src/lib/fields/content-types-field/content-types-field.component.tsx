@@ -78,6 +78,6 @@ export const ContentTypesField: FC<IContentTypesFieldProps> = ({ name, label, pl
 	};
 
 	return (
-		<Controller control={control} name={name} render={renderField} shouldUnregister={true} />
+		<Controller control={control} name={name} render={renderField} />
 	);
 };

@@ -18,16 +18,16 @@ const cxBind = cx.bind(styles);
 
 export const ContentForm: FC<IContentFormProps> = ({ onSubmit, mode, contentItem, loading, workflow, workflowStates, fields }) => {
 	const { siteId } = useParams();
+	console.log(contentItem?.fields)
 	const formMethods = useForm<IContentItem>({
 		// resolver: yupResolver(generateValidationSchema(fields)),
 		values: contentItem,
-		mode: 'onChange',
+		// mode: 'onChange',
 	});
 
 	const {
 		handleSubmit,
 		formState: { errors },
-		control,
 		watch,
 		setValue
 	} = formMethods;
@@ -64,7 +64,6 @@ export const ContentForm: FC<IContentFormProps> = ({ onSubmit, mode, contentItem
 				{errors?.root?.message}
 			</Alert>
 			<form onSubmit={handleSubmit(onSubmit)} style={{ height: '100%' }}>
-				<DevTool control={control} />
 				{mode === ContentFormMode.CREATE && (
 					<Card className='u-margin-bottom' title='Metadata'>
 						<div className="u-row">
