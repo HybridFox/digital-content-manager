@@ -14,6 +14,7 @@ export const ToggleField: FC<IToggleFieldProps> = ({ name, label, fieldOptions }
 	return (
 		<div className={cxBind('a-input__field-wrapper')}>
 			<Controller
+				shouldUnregister={true}
 				control={control}
 				name={name}
 				render={({ field: { onChange, value }, formState: { errors } }) => {

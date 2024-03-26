@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
 import slugify from 'slugify';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { DevTool } from "@hookform/devtools";
 
 import { Alert, AlertTypes, Button, ButtonTypes, Card, CardFooter, CardMeta, HTMLButtonTypes, RenderFields } from '~components';
 
@@ -20,12 +21,13 @@ export const ContentForm: FC<IContentFormProps> = ({ onSubmit, mode, contentItem
 	const formMethods = useForm<IContentItem>({
 		// resolver: yupResolver(generateValidationSchema(fields)),
 		values: contentItem,
+		mode: 'onChange',
 	});
 
 	const {
 		handleSubmit,
 		formState: { errors },
-		setError,
+		control,
 		watch,
 		setValue
 	} = formMethods;
@@ -62,6 +64,7 @@ export const ContentForm: FC<IContentFormProps> = ({ onSubmit, mode, contentItem
 				{errors?.root?.message}
 			</Alert>
 			<form onSubmit={handleSubmit(onSubmit)} style={{ height: '100%' }}>
+				<DevTool control={control} />
 				{mode === ContentFormMode.CREATE && (
 					<Card className='u-margin-bottom' title='Metadata'>
 						<div className="u-row">

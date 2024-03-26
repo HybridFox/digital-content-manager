@@ -87,7 +87,7 @@ export const SelectField: FC<ISelectFieldProps> = ({ name, label, viewMode = Fie
 
 	return (
 		<div className={cxBind('a-input__field-wrapper')}>
-			{viewMode === FieldViewMode.EDIT && <Controller control={control} name={name} render={renderField} />}
+			{viewMode === FieldViewMode.EDIT && <Controller control={control} name={name} render={renderField} shouldUnregister={true} />}
 			{viewMode === FieldViewMode.VIEW && renderValue()}
 			{viewMode === FieldViewMode.DIFF && renderDiff()}
 		</div>

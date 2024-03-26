@@ -41,6 +41,9 @@ const ContentComponentsField = lazy(async () => ({
 const BlockField = lazy(async () => ({
 	default: (await import('./block-field')).BlockField
 }));
+const ToggleField = lazy(async () => ({
+	default: (await import('./toggle-field')).ToggleField
+}));
 
 export const FIELD_COMPONENTS: Record<FieldKeys, FC<any>> = {
 	[FieldKeys.FIELD_GROUP]: FieldGroupField,
@@ -54,7 +57,7 @@ export const FIELD_COMPONENTS: Record<FieldKeys, FC<any>> = {
 	[FieldKeys.CHECKBOX]: CheckboxField,
 	[FieldKeys.MAP]: TextField,
 	[FieldKeys.MEDIA]: AssetField,
-	[FieldKeys.TOGGLE]: TextField,
+	[FieldKeys.TOGGLE]: ToggleField,
 	[FieldKeys.CONTENT_REFERENCE]: ContentReferenceField,
 	[FieldKeys.CONTENT_TYPES]: ContentTypesField,
 	[FieldKeys.DATETIME]: DatetimeField,

@@ -102,5 +102,5 @@ export const ContentReferenceField: FC<IContentReferenceFieldProps> = ({
 		);
 	};
 
-	return <Controller control={control} name={name} render={renderField} />;
+	return <Controller control={control} name={name} render={renderField} shouldUnregister={true} />;
 };

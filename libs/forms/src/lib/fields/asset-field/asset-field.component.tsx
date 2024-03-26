@@ -34,7 +34,7 @@ export const AssetField: FC<IAssetFieldProps> = ({ name, label, fieldConfigurati
 	);
 
 	const renderField = ({
-		field: { onChange, value },
+		field: { onChange, value, ref },
 		formState: { errors },
 	}: {
 		field: ControllerRenderProps<FieldValues, FieldPath<FieldValues>>;
@@ -44,6 +44,7 @@ export const AssetField: FC<IAssetFieldProps> = ({ name, label, fieldConfigurati
 		const error = errors?.[name];
 
 		const handleSubmit = (selection: string | string[]) => {
+			console.log('set change')
 			onChange(selection);
 			setModalOpen(false);
 		};
@@ -89,7 +90,7 @@ export const AssetField: FC<IAssetFieldProps> = ({ name, label, fieldConfigurati
 
 	return (
 		<div className={cxBind('a-input__field-wrapper')}>
-			{viewMode === FieldViewMode.EDIT && <Controller control={control} name={name} render={renderField} />}
+			{viewMode === FieldViewMode.EDIT && <Controller control={control} name={name} render={renderField} shouldUnregister={true} />}
 			{viewMode === FieldViewMode.VIEW && renderValue()}
 		</div>
 	);

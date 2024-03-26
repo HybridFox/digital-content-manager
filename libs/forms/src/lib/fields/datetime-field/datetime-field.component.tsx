@@ -32,6 +32,7 @@ export const DatetimeField: FC<IDatetimeFieldProps> = ({
 		formState: { errors },
 	}: IRenderControllerField) => {
 		const error = errors?.[name];
+		console.log(name, value);
 
 		return (
 			<div className={cxBind('a-input', {
@@ -85,6 +86,6 @@ export const DatetimeField: FC<IDatetimeFieldProps> = ({
 	}
 
 	return (
-		<Controller control={control} name={name} render={renderField} />
+		<Controller control={control} name={name} render={renderField} shouldUnregister={true} />
 	);
 };
