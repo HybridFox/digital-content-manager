@@ -61,6 +61,7 @@ fn get_field_insert(
 	existing_content_fields: &Vec<ContentField>,
 	skip_multi_language: bool,
 	blocks: Vec<PopulatedBlockField>,
+	sequence_number: Option<i32>,
 ) -> Vec<CreateContentField> {
 	let index_key = match &index {
 		FieldIndex::Block(number) => number.to_string(),
@@ -83,7 +84,7 @@ fn get_field_insert(
 			parent_id,
 			source_id: revision_id,
 			name: index_key.clone(),
-			sequence_number: None,
+			sequence_number,
 			content_component_id: Some(populated_cc.content_component.id),
 			data_type: populated_cc.content_component.data_type,
 			value: Some(value),
@@ -97,7 +98,7 @@ fn get_field_insert(
 				parent_id,
 				source_id: revision_id,
 				name: index_key.clone(),
-				sequence_number: None,
+				sequence_number,
 				content_component_id: None,
 				data_type: populated_cc.content_component.data_type,
 				value: None,
@@ -131,7 +132,7 @@ fn get_field_insert(
 				parent_id,
 				source_id: revision_id,
 				name: index_key.clone(),
-				sequence_number: None,
+				sequence_number,
 				content_component_id: None,
 				data_type: DataTypeEnum::ARRAY,
 				value: None,
@@ -182,6 +183,7 @@ fn get_field_insert(
 						existing_content_fields,
 						field.multi_language,
 						vec![],
+						None,
 					);
 
 					fields.append(&mut sub_fields);
@@ -246,6 +248,7 @@ pub fn get_field_inserts(
 							existing_content_fields,
 							field.multi_language,
 							vec![],
+							Some(i as i32),
 						)
 					})
 					.flatten()
@@ -266,6 +269,7 @@ pub fn get_field_inserts(
 				existing_content_fields,
 				field.multi_language,
 				blocks,
+				None,
 			)
 		})
 		.flatten()

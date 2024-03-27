@@ -34,6 +34,7 @@ export const ContentDetailPage = () => {
 		fetchContentItem(siteId!, contentId)
 			.then((contentItem) => fetchContentType(siteId!, contentItem.contentTypeId))
 			.then((contentType) => {
+				console.log('check compartments');
 				if (contentType.compartments.length) {
 					navigate(generatePath(CONTENT_PATHS.DETAIL_COMPARTMENT, {
 						contentId,

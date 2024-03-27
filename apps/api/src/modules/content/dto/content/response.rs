@@ -13,6 +13,7 @@ use crate::modules::{
 	},
 	languages::models::language::Language,
 };
+use itertools::Itertools;
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -140,16 +141,20 @@ fn parse_array_fields(
 	fields: Vec<ContentField>,
 	populate: bool,
 ) -> Vec<Option<Value>> {
-	let fields = fields
+	let filtered_fields = fields
 		.iter()
 		.filter(|field| {
 			field.parent_id == parent_id
 				&& vec![content_id, Some(translation_id)].contains(&Some(field.source_id))
 		})
-		.map(|field| parse_field(content_id, translation_id, field, fields.clone(), populate))
-		.collect();
+		.collect::<Vec<&ContentField>>();
+	dbg!(&filtered_fields);
 
-	fields
+	filtered_fields
+		.iter()
+		.sorted_by(|field_a, field_b| Ord::cmp(&field_a.sequence_number, &field_b.sequence_number))
+		.map(|field| parse_field(content_id, translation_id, field, fields.clone(), populate))
+		.collect()
 }
 
 pub fn parse_object_fields(

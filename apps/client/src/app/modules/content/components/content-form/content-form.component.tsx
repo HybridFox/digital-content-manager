@@ -18,7 +18,6 @@ const cxBind = cx.bind(styles);
 
 export const ContentForm: FC<IContentFormProps> = ({ onSubmit, mode, contentItem, loading, workflow, workflowStates, fields }) => {
 	const { siteId } = useParams();
-	console.log(contentItem?.fields)
 	const formMethods = useForm<IContentItem>({
 		// resolver: yupResolver(generateValidationSchema(fields)),
 		values: contentItem,
