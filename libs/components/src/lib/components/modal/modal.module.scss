@@ -7,9 +7,13 @@
 	min-width: 700px;
 	padding: var(--spacer);
 	border-radius: var(--border-radius-sm);
+	max-height: 90vh;
+	display: flex;
+	flex-direction: column;
 
 	&--lg {
-		min-width: 1200px;
+		max-width: 1200px;
+		width: 100%;
 	}
 
 	&__header {
@@ -19,6 +23,11 @@
 		justify-content: space-between;
 		padding-bottom: var(--spacer-sm);
 		margin-bottom: var(--spacer);
+	}
+
+	&__content {
+		overflow-y: auto;
+		height: 100%;
 	}
 		
 	&__title {

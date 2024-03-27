@@ -35,7 +35,7 @@ export const Modal: FC<IModalProps> = ({ title, children, modalOpen, onClose, si
 					<span className="las la-times"></span>
 				</Button>
 			</div>
-			{children}
+			<div className={cxBind('m-modal__content')}>{children}</div>
 		</ReactModal>
 	);
 };
