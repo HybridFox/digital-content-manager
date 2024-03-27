@@ -9,7 +9,7 @@ const cxBind = cx.bind(styles);
 
 export const FieldError: FC<IFieldErrorProps> = ({ name }: IFieldErrorProps) => {
 	const { register, formState: { errors } } = useFormContext();
-	const error = path([...name.split('.')])(errors) as any;
+	const error = path([...name?.split('.') || []])(errors) as any;
 
 	if (!error?.message) {
 		return null;

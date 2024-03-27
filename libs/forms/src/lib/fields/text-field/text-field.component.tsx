@@ -29,7 +29,7 @@ export const TextField: FC<ITextFieldProps> = ({
 	viewMode = FieldViewMode.EDIT
 }: ITextFieldProps) => {
 	const { register, formState: { errors } } = useFormContext();
-	const error = path([...name.split('.')])(errors);
+	const error = path([...name?.split('.') || []])(errors);
 
 	const renderField = () => (
 		<div className={cxBind('a-input__field-wrapper')}>
