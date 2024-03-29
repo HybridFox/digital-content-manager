@@ -3,8 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
 import slugify from 'slugify';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { DevTool } from "@hookform/devtools";
+import { clone } from 'rambda';
 
 import { Alert, AlertTypes, Button, ButtonTypes, Card, CardFooter, CardMeta, HTMLButtonTypes, RenderFields } from '~components';
 
@@ -12,7 +11,7 @@ import styles from './content-form.module.scss';
 import { ContentFormMode, IContentFormProps } from './content-form.types';
 
 import { RadioField, TextField } from '~forms';
-import { generateValidationSchema, IContentItem, WorkflowTechnicalStates } from '~shared';
+import { IContentItem, WorkflowTechnicalStates } from '~shared';
 
 const cxBind = cx.bind(styles);
 
@@ -20,7 +19,7 @@ export const ContentForm: FC<IContentFormProps> = ({ onSubmit, mode, contentItem
 	const { siteId } = useParams();
 	const formMethods = useForm<IContentItem>({
 		// resolver: yupResolver(generateValidationSchema(fields)),
-		values: contentItem,
+		values: clone(contentItem),
 		// mode: 'onChange',
 	});
 

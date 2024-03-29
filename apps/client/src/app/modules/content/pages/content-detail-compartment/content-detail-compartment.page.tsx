@@ -48,6 +48,7 @@ export const ContentDetailCompartmentPage = () => {
 		updateContentItem(siteId!, contentItem.id, values);
 	};
 
+	console.log('initialize form with', contentItem?.fields?.['stay-info-items'])
 	return (
 		<ContentForm
 			onSubmit={handleSubmit}
