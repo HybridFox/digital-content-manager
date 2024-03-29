@@ -22,7 +22,6 @@ use opentelemetry::{global, runtime::TokioCurrentThread, sdk::propagation::Trace
 use opentelemetry::sdk::{trace, Resource};
 use dotenv::dotenv;
 
-use crate::modules::core::actors::hook::HookActor;
 use crate::modules::iam_actions::models::iam_action::IAMAction;
 use crate::openapi::{ApiDoc};
 use serde_qs::actix::{QsQueryConfig};
@@ -94,7 +93,6 @@ async fn main() -> std::io::Result<()> {
 	println!("start server...");
 	let state: modules::core::middleware::state::AppState = {
 		let pool = utils::db::establish_connection();
-		let addr = SyncArbiter::start(2, || HookActor);
 
 		modules::core::middleware::state::AppState { pool }
 	};
