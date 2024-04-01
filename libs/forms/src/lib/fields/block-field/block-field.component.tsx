@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import cx from 'classnames/bind';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { Badge, BadgeSizes, Button, ButtonSizes, ButtonTypes, Loading, Modal, RenderFields } from '~components';
 
@@ -9,7 +9,7 @@ import { IBlockFieldProps } from './block-field.types';
 import styles from './block-field.module.scss';
 
 import { FieldGroupHeader, FIELD_COMPONENTS, FieldViewMode } from '~forms';
-import { FieldKeys, IContentComponent, IField, useContentComponentStore } from '~shared';
+import { arrayMove, FieldKeys, IContentComponent, IField, useContentComponentStore } from '~shared';
 
 const cxBind = cx.bind(styles);
 
@@ -21,9 +21,25 @@ export const BlockField: FC<IBlockFieldProps> = ({ name, label, fieldConfigurati
 		state.contentComponentsLoading,
 		state.fetchContentComponents,
 	]);
-	const { fields, append, remove, move } = useFieldArray({
+	const { control, getValues } = useFormContext();
+	const { fields, append, remove } = useFieldArray({
+		control,
 		name,
 	});
+
+	const handleSwap = (indexA: number, indexB: number): void => {
+		// collect all fields
+		const movingValues = getValues(name);
+
+		// Reset all fields
+		remove();
+
+		// Then insert all fields one per one
+		setTimeout(() => {
+			const movedValues = arrayMove(movingValues, indexA, indexB);
+			movedValues.forEach((value) => append(value, { shouldFocus: false }));
+		});
+	};
 
 	useEffect(() => {
 		if (!siteId) {
@@ -39,7 +55,7 @@ export const BlockField: FC<IBlockFieldProps> = ({ name, label, fieldConfigurati
 		append({
 			fields: {},
 			block: block.slug,
-		})
+		});
 	};
 
 	return (
@@ -66,7 +82,7 @@ export const BlockField: FC<IBlockFieldProps> = ({ name, label, fieldConfigurati
 												disabled={index === 0}
 												size={ButtonSizes.EXTRA_SMALL}
 												type={ButtonTypes.OUTLINE}
-												onClick={() => move(index, index - 1)}
+												onClick={() => handleSwap(index, index - 1)}
 											>
 												<i className="las la-angle-up"></i>
 											</Button>
@@ -74,7 +90,7 @@ export const BlockField: FC<IBlockFieldProps> = ({ name, label, fieldConfigurati
 												disabled={index === fields.length - 1}
 												size={ButtonSizes.EXTRA_SMALL}
 												type={ButtonTypes.OUTLINE}
-												onClick={() => move(index, index + 1)}
+												onClick={() => handleSwap(index, index + 1)}
 											>
 												<i className="las la-angle-down"></i>
 											</Button>
@@ -84,11 +100,7 @@ export const BlockField: FC<IBlockFieldProps> = ({ name, label, fieldConfigurati
 										</Button>
 									</div>
 								)}
-								<RenderFields
-									siteId={siteId!}
-									fieldPrefix={`${name}.${index}.fields.`}
-									fields={[block]}
-								/>
+								<RenderFields siteId={siteId!} fieldPrefix={`${name}.${index}.fields.`} fields={[block]} />
 							</div>
 						);
 					})}
@@ -113,7 +125,9 @@ export const BlockField: FC<IBlockFieldProps> = ({ name, label, fieldConfigurati
 										{block.contentComponent.name}
 									</Badge>
 									<Badge size={BadgeSizes.SMALL}>
-										{block.contentComponent.internal ? t(`CONTENT_COMPONENTS.KINDS.INTERNAL`) : t(`CONTENT_COMPONENTS.KINDS.CUSTOM`)}
+										{block.contentComponent.internal
+											? t(`CONTENT_COMPONENTS.KINDS.INTERNAL`)
+											: t(`CONTENT_COMPONENTS.KINDS.CUSTOM`)}
 									</Badge>
 								</div>
 							</div>
