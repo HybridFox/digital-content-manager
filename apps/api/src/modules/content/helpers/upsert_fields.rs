@@ -155,7 +155,7 @@ fn get_field_insert(
 						parent_id: parent_field.id,
 						source_id: revision_id,
 						name: i.clone().to_string(),
-						sequence_number: None,
+						sequence_number: Some(i as i32),
 						content_component_id: None,
 						data_type: DataTypeEnum::BLOCK,
 						value: Some(value["block"].clone()), // block name hero

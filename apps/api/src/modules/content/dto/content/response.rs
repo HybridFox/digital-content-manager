@@ -148,7 +148,6 @@ fn parse_array_fields(
 				&& vec![content_id, Some(translation_id)].contains(&Some(field.source_id))
 		})
 		.collect::<Vec<&ContentField>>();
-	dbg!(&filtered_fields);
 
 	filtered_fields
 		.iter()
