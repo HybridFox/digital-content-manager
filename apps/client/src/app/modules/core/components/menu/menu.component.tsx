@@ -13,6 +13,7 @@ import { SITE_USER_PATHS } from '../../../site-users';
 import { SITE_ROLE_PATHS } from '../../../site-roles';
 import { SITE_POLICY_PATHS } from '../../../site-policies';
 import { STORAGE_PATHS } from '../../../storage';
+import { WEBHOOKS_PATHS } from '../../../webbhooks';
 
 import styles from './menu.module.scss';
 
@@ -188,6 +189,14 @@ export const Menu = () => {
 								<NavLink {...navLinkBinding} to={generatePath(STORAGE_PATHS.ROOT, { siteId })}>
 									<i className="las la-server"></i>
 									<span>Storage Repositories</span>
+								</NavLink>
+							</HasPermission>
+						</li>
+						<li>
+							<HasPermission siteId={siteId} resource="*" action="sites::webhooks:read">
+								<NavLink {...navLinkBinding} to={generatePath(WEBHOOKS_PATHS.ROOT, { siteId })}>
+									<i className="las la-plug"></i>
+									<span>Webhooks</span>
 								</NavLink>
 							</HasPermission>
 						</li>

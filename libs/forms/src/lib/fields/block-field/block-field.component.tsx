@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import cx from 'classnames/bind';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
@@ -26,6 +26,7 @@ export const BlockField: FC<IBlockFieldProps> = ({ name, label, fieldConfigurati
 		control,
 		name,
 	});
+	const containerRef = useRef<HTMLDivElement | null>(null);
 
 	const handleSwap = (indexA: number, indexB: number): void => {
 		// collect all fields
@@ -35,9 +36,19 @@ export const BlockField: FC<IBlockFieldProps> = ({ name, label, fieldConfigurati
 		remove();
 
 		// Then insert all fields one per one
+		const containerHeight = containerRef?.current?.clientHeight;
+		
+		if (containerRef?.current) {
+			containerRef.current.style.height = `${containerHeight}px`;
+		}
+
 		setTimeout(() => {
 			const movedValues = arrayMove(movingValues, indexA, indexB);
 			movedValues.forEach((value) => append(value, { shouldFocus: false }));
+		
+			if (containerRef?.current) {
+				containerRef.current.style.height = `unset`;
+			}
 		});
 	};
 
@@ -60,7 +71,7 @@ export const BlockField: FC<IBlockFieldProps> = ({ name, label, fieldConfigurati
 
 	return (
 		<Loading loading={contentComponentsLoading}>
-			<div className={cxBind('o-block-field')}>
+			<div className={cxBind('o-block-field')} ref={containerRef}>
 				<FieldGroupHeader viewMode={viewMode} label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} badge="Blocks" />
 				<div className={cxBind('o-block-field__fields')}>
 					{viewMode === FieldViewMode.VIEW && fields.length === 0 && (

@@ -25,7 +25,7 @@ slug = { version = "0.1.4" }
 lazy_static = { version = "1.4.0" }
 diesel_migrations = { version = "2.1.0" }
 oauth2 = { version = "4.4.1" }
-reqwest = { version = "0.11.18" }
+reqwest = { version = "0.11.18", features = ["json"] }
 pluralizer = { version = "0.4.0" }
 rand = { version = "0.8.5" }
 opentelemetry = { version = "0.19.0", features = ["rt-tokio-current-thread", "metrics"] }

@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useRef } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +20,7 @@ export const RenderMultiple: FC<IRenderMultipleProps> = ({ field, children, fiel
 		name: `${fieldPrefix}${field.slug}`,
 		shouldUnregister: true,
 	});
+	const containerRef = useRef<HTMLDivElement | null>(null);
 
 	const defaultValues = useMemo(
 		() =>
@@ -37,14 +38,24 @@ export const RenderMultiple: FC<IRenderMultipleProps> = ({ field, children, fiel
 		remove();
 
 		// Then insert all fields one per one
+		const containerHeight = containerRef?.current?.clientHeight;
+		
+		if (containerRef?.current) {
+			containerRef.current.style.height = `${containerHeight}px`;
+		}
+
 		setTimeout(() => {
 			const movedValues = arrayMove(movingValues, indexA, indexB);
-			movedValues.forEach((value) => append(value, { shouldFocus: false }))
+			movedValues.forEach((value) => append(value, { shouldFocus: false }));
+		
+			if (containerRef?.current) {
+				containerRef.current.style.height = `unset`;
+			}
 		});
 	};
 
 	return (
-		<div className={cxBind('o-render-multiple')}>
+		<div className={cxBind('o-render-multiple')} ref={containerRef}>
 			<FieldGroupHeader
 				viewMode={viewMode}
 				label={field.name}

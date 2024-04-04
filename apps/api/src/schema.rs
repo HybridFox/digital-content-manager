@@ -413,6 +413,17 @@ diesel::table! {
 }
 
 diesel::table! {
+	webhooks (id) {
+		id -> Uuid,
+		event -> Text,
+		url -> Text,
+		active -> Bool,
+		site_id -> Uuid,
+		request_configuration -> Nullable<Jsonb>,
+	}
+}
+
+diesel::table! {
 	use diesel::sql_types::*;
 	use super::sql_types::WorkflowStateTechnicalStates;
 
@@ -502,6 +513,7 @@ diesel::joinable!(sites_users_roles -> sites (site_id));
 diesel::joinable!(sites_users_roles -> users (user_id));
 diesel::joinable!(users_roles -> roles (role_id));
 diesel::joinable!(users_roles -> users (user_id));
+diesel::joinable!(webhooks -> sites (site_id));
 diesel::joinable!(workflow_transition_requirements -> workflow_transitions (workflow_transition_id));
 diesel::joinable!(workflow_transitions -> workflows (workflow_id));
 
@@ -538,6 +550,7 @@ diesel::allow_tables_to_appear_in_same_query!(
 	storage_repositories,
 	users,
 	users_roles,
+	webhooks,
 	workflow_states,
 	workflow_transition_requirements,
 	workflow_transitions,

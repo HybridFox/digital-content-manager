@@ -105,6 +105,12 @@ impl Modify for SecurityAddon {
 		super::modules::workflows::controllers::workflow_states::update,
 		super::modules::workflows::controllers::workflow_states::remove,
 
+		super::modules::webhooks::controllers::webhooks::create,
+		super::modules::webhooks::controllers::webhooks::find_all,
+		super::modules::webhooks::controllers::webhooks::find_one,
+		super::modules::webhooks::controllers::webhooks::update,
+		super::modules::webhooks::controllers::webhooks::remove,
+
 		super::modules::iam_actions::controllers::iam_actions::find_all,
 		super::modules::iam_actions::controllers::iam_actions::find_one,
 

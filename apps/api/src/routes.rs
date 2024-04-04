@@ -146,6 +146,14 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 								.service(modules::workflows::controllers::workflows::remove)
 						)
 						.service(
+							web::scope("/{site_id}/webhooks")
+								.service(modules::webhooks::controllers::webhooks::create)
+								.service(modules::webhooks::controllers::webhooks::find_all)
+								.service(modules::webhooks::controllers::webhooks::find_one)
+								.service(modules::webhooks::controllers::webhooks::update)
+								.service(modules::webhooks::controllers::webhooks::remove)
+						)
+						.service(
 							web::scope("/{site_id}/workflow-states")
 								.service(modules::workflows::controllers::workflow_states::create)
 								.service(modules::workflows::controllers::workflow_states::find_all)

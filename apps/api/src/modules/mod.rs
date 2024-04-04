@@ -13,4 +13,5 @@ pub mod roles;
 pub mod setup;
 pub mod sites;
 pub mod users;
+pub mod webhooks;
 pub mod workflows;

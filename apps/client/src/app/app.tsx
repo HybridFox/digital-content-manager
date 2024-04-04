@@ -11,7 +11,6 @@ import { AuthenticatedView } from './modules/core/views/authenticated/authentica
 import { DASHBOARD_ROUTES } from './modules/dashboard';
 import { CONTENT_TYPE_ROUTES } from './modules/content-types';
 import { CONTENT_ROUTES } from './modules/content';
-import { CONTENT_COMPONENT_ROUTES } from '../../../..';
 import { RESOURCE_ROUTES } from './modules/resources';
 import { STORAGE_ROUTES } from './modules/storage';
 import { WORKFLOW_ROUTES } from './modules/workflow';
@@ -26,6 +25,8 @@ import { POLICY_ROUTES } from './modules/policies';
 import { SITE_ROLE_ROUTES } from './modules/site-roles';
 import { SiteView } from './modules/core/views/site/site.view';
 import { RootView } from './modules/core/views/root/root.view';
+import { WEBHOOKS_ROUTES } from './modules/webbhooks';
+import { CONTENT_COMPONENT_ROUTES } from './modules/content-components/content-components.routes';
 
 const router = createBrowserRouter([
 	{
@@ -60,6 +61,7 @@ const router = createBrowserRouter([
 							...SITE_USER_ROUTES,
 							...SITE_ROLE_ROUTES,
 							...SITE_POLICY_ROUTES,
+							...WEBHOOKS_ROUTES,
 						],
 					},
 					{

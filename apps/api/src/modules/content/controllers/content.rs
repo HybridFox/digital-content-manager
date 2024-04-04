@@ -4,6 +4,7 @@ use crate::errors::AppErrorValue;
 use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::content::models::content::{CreateContent, UpdateContent};
 use crate::modules::content_types::models::content_type::ContentTypeKindEnum;
+use crate::modules::core::actors::hook::HookMessage;
 use crate::modules::workflows::models::workflow_state::{WorkflowState, WorkflowTechnicalStateEnum};
 use crate::{errors::AppError, modules::content::models::content::Content};
 use crate::modules::core::middleware::state::AppState;
@@ -13,6 +14,7 @@ use actix_web::{get, post, web, HttpResponse, delete, put, HttpRequest};
 use chrono::Utc;
 use reqwest::StatusCode;
 use serde::Deserialize;
+use serde_json::Value;
 use serde_with::{StringWithSeparator, formats::CommaSeparator, serde_as};
 use serde_qs::actix::QsQuery;
 
@@ -241,10 +243,11 @@ pub async fn update(
 	)?;
 	let conn = &mut state.get_conn()?;
 
-	let workflow_state = WorkflowState::find_one(conn, params.site_id, form.workflow_state_id)?;
-	let published = if workflow_state.technical_state == WorkflowTechnicalStateEnum::PUBLISHED {
+	let i_workflow_state = WorkflowState::find_one(conn, params.site_id, form.workflow_state_id)?;
+
+	let published = if i_workflow_state.technical_state == WorkflowTechnicalStateEnum::PUBLISHED {
 		Some(true)
-	} else if workflow_state.technical_state == WorkflowTechnicalStateEnum::UNPUBLISHED {
+	} else if i_workflow_state.technical_state == WorkflowTechnicalStateEnum::UNPUBLISHED {
 		Some(false)
 	} else {
 		None
@@ -282,6 +285,7 @@ pub async fn update(
 		},
 		form.fields.clone(),
 	)?;
+
 	let res = response::ContentWithFieldsDTO::from((
 		content,
 		revision,
@@ -290,6 +294,16 @@ pub async fn update(
 		workflow_state,
 		false,
 	));
+
+	if i_workflow_state.technical_state == WorkflowTechnicalStateEnum::PUBLISHED {
+		let _ = state.hook_addr.do_send(HookMessage {
+			pool: state.pool.clone(),
+			site_id: params.site_id,
+			event: "CONTENT_PUBLISH".to_owned(),
+			event_data: serde_json::to_value(&res)?,
+		});
+	}
+
 	Ok(HttpResponse::Ok().json(res))
 }
 

@@ -22,3 +22,4 @@ export * from './compartment';
 export * from './status';
 export * from './root-content-type';
 export * from './field-block';
+export * from './webhook';
