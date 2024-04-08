@@ -1,4 +1,4 @@
-import { FC, useEffect, lazy } from 'react';
+import { FC, useEffect, lazy, useState } from 'react';
 import { Controller, ControllerFieldState, ControllerRenderProps, FieldPath, FieldValues, UseFormStateReturn, useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
 import { $generateHtmlFromNodes } from '@lexical/html';
@@ -9,6 +9,7 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
+import { TablePlugin } from '@lexical/react/LexicalTablePlugin';
 import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { $getRoot, $setSelection, EditorState, LexicalEditor } from 'lexical';
@@ -24,6 +25,9 @@ import styles from './richtext-field.module.scss';
 import { IRichtextFieldProps } from './richtext-field.types';
 import { RICHTEXT_NODES } from './nodes';
 import { CustomLinkPlugin } from './commands/link';
+import { TableContext } from './plugins/table/table.plugin';
+import { TableCellActionMenuPlugin } from './plugins/table/table-action-menu.plugin';
+import { TableCellResizerPlugin } from './plugins/table/table-cell-resizer.plugin';
 
 const ToolbarPlugin = lazy(async () => ({
 	default: (await import('./plugins/toolbar/toolbar.plugin')).ToolbarPlugin
@@ -71,6 +75,7 @@ export const RichtextField: FC<IRichtextFieldProps> = ({
 	viewMode = FieldViewMode.EDIT,
 }: IRichtextFieldProps) => {
 	const { control } = useFormContext();
+	const [floatingAnchorElem, setFloatingAnchorElem] = useState(null);
 
 	const renderField = ({
 		field: { onChange, value },
@@ -84,7 +89,23 @@ export const RichtextField: FC<IRichtextFieldProps> = ({
 		const initialConfig = {
 			namespace: 'editor',
 			onError: console.error,
-			nodes: [...RICHTEXT_NODES]
+			nodes: [...RICHTEXT_NODES],
+			theme: {
+				table: cxBind("a-input__field__table"),
+				tableAddColumns: cxBind("a-input__field__tableAddColumns"),
+				tableAddRows: cxBind("a-input__field__tableAddRows"),
+				tableCell: cxBind("a-input__field__tableCell"),
+				tableCellActionButton: cxBind("a-input__field__tableCellActionButton"),
+				tableCellActionButtonContainer: cxBind("a-input__field__tableCellActionButtonContainer"),
+				tableCellEditing: cxBind("a-input__field__tableCellEditing"),
+				tableCellHeader: cxBind("a-input__field__tableCellHeader"),
+				tableCellPrimarySelected: cxBind("a-input__field__tableCellPrimarySelected"),
+				tableCellResizer: cxBind("a-input__field__tableCellResizer"),
+				tableCellSelected: cxBind("a-input__field__tableCellSelected"),
+				tableCellSortedIndicator: cxBind("a-input__field__tableCellSortedIndicator"),
+				tableResizeRuler: cxBind("a-input__field__tableCellResizeRuler"),
+				tableSelected: cxBind("a-input__field__tableSelected"),
+			}
 		};
 
 		const handleChange = (editorState: EditorState, editor: LexicalEditor) => {
@@ -92,6 +113,12 @@ export const RichtextField: FC<IRichtextFieldProps> = ({
 				const raw = $generateHtmlFromNodes(editor, null);
 				onChange(raw);
 			});
+		};
+	  
+		const onRef = (_floatingAnchorElem: any) => {
+		  if (_floatingAnchorElem !== null) {
+			setFloatingAnchorElem(_floatingAnchorElem);
+		  }
 		};
 
 		return (
@@ -102,19 +129,33 @@ export const RichtextField: FC<IRichtextFieldProps> = ({
 			>
 				<FieldLabel label={label} multiLanguage={fieldConfiguration?.multiLanguage as boolean} name={name} />
 				<LexicalComposer initialConfig={initialConfig}>
-					<ToolbarPlugin />
-					<ListPlugin />
-					<CustomLinkPlugin />
-					<LinkPlugin validateUrl={validateUrl} />
-					<CheckListPlugin />
-					<OnChangePlugin onChange={handleChange} ignoreSelectionChange />
-					<RichTextPlugin
-						contentEditable={<ContentEditable className={cxBind('a-input__field')} />}
-						placeholder={null}
-						ErrorBoundary={LexicalErrorBoundary}
-					/>
-					<InitializeDataPlugin value={value} />
-					<HistoryPlugin />
+					<TableContext>
+						<>
+							<ToolbarPlugin />
+							<ListPlugin />
+							<CustomLinkPlugin />
+							<LinkPlugin validateUrl={validateUrl} />
+							<CheckListPlugin />
+							<TablePlugin />
+							<TableCellResizerPlugin />
+							<OnChangePlugin onChange={handleChange} ignoreSelectionChange />
+							<RichTextPlugin
+								contentEditable={
+									<div ref={onRef}>
+										<ContentEditable className={cxBind('a-input__field')} />
+									</div>
+								}
+								placeholder={null}
+								ErrorBoundary={LexicalErrorBoundary}
+							/>
+							<InitializeDataPlugin value={value} />
+							<HistoryPlugin />
+
+							{floatingAnchorElem && (
+								<TableCellActionMenuPlugin anchorElem={floatingAnchorElem} />
+							)}
+						</>
+					</TableContext>
 				</LexicalComposer>
 			</div>
 		);

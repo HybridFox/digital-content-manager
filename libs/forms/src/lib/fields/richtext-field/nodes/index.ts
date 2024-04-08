@@ -27,5 +27,5 @@ export const RICHTEXT_NODES: Array<Klass<LexicalNode>> = [
 	LinkNode,
 	OverflowNode,
 	HorizontalRuleNode,
-	MarkNode,
+	MarkNode
   ];

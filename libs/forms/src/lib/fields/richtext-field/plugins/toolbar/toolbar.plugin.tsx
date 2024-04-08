@@ -14,6 +14,11 @@ import { $getSelectionStyleValueForProperty, $isParentElementRTL, $setBlocksType
 import { $isTableNode } from '@lexical/table';
 import { $findMatchingParent, $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
 import {
+	$createTableNodeWithDimensions,
+	INSERT_TABLE_COMMAND,
+	TableNode,
+  } from '@lexical/table';
+import {
 	$createParagraphNode,
 	$getNodeByKey,
 	$getSelection,
@@ -37,27 +42,11 @@ import { Button, ButtonTypes, Modal, ModalFooter, Select } from '~components';
 import { getSelectedNode } from '../../utils/getSelectNode';
 import { sanitizeUrl } from '../../utils/url';
 import { IS_APPLE } from '../../utils/dom';
-
-// import useModal from '../../hooks/useModal';
-// import catTypingGif from '../../images/cat-typing.gif';
-// import { $createStickyNode } from '../../nodes/StickyNode';
-// import DropDown, { DropDownItem } from '../../ui/DropDown';
-// import DropdownColorPicker from '../../ui/DropdownColorPicker';
-// import { getSelectedNode } from '../../utils/getSelectedNode';
-// import { sanitizeUrl } from '../../utils/url';
-// import { EmbedConfigs } from '../AutoEmbedPlugin';
-// import { INSERT_COLLAPSIBLE_COMMAND } from '../CollapsiblePlugin';
-// import { InsertEquationDialog } from '../EquationsPlugin';
-// import { INSERT_EXCALIDRAW_COMMAND } from '../ExcalidrawPlugin';
-// import { INSERT_IMAGE_COMMAND, InsertImageDialog, InsertImagePayload } from '../ImagesPlugin';
-// import { InsertInlineImageDialog } from '../InlineImagePlugin';
-// import { INSERT_PAGE_BREAK } from '../PageBreakPlugin';
-// import { InsertPollDialog } from '../PollPlugin';
-// import { InsertNewTableDialog, InsertTableDialog } from '../TablePlugin';
 import { TextField } from '../../../text-field';
 import { SelectField } from '../../../select-field';
 import { $getAncestor, SET_LINK_COMMAND } from '../../commands/link';
 import { $isLinkNode } from '../../helpers/link.helper';
+import { NumberField } from '../../../number-field';
 
 import styles from './toolbar.module.scss';
 const cxBind = cx.bind(styles);
@@ -263,6 +252,7 @@ export const ToolbarPlugin = (): JSX.Element => {
 	const [bgColor, setBgColor] = useState<string>('#fff');
 	const [fontFamily, setFontFamily] = useState<string>('Arial');
 	const [isLink, setIsLink] = useState(false);
+	const [isTable, setIsTable] = useState(false);
 	const [isBold, setIsBold] = useState(false);
 	const [isItalic, setIsItalic] = useState(false);
 	const [isUnderline, setIsUnderline] = useState(false);
@@ -277,8 +267,10 @@ export const ToolbarPlugin = (): JSX.Element => {
 	const [codeLanguage, setCodeLanguage] = useState<string>('');
 	const [isEditable, setIsEditable] = useState(() => editor.isEditable());
 	const [linkModalVisible, setLinkModalVisible] = useState(false);
+	const [tableModalVisible, setTableModalVisible] = useState(false);
 
 	const linkModalFormMethods = useForm();
+	const tableModalFormMethods = useForm();
 
 	const $updateToolbar = useCallback(() => {
 		const selection = $getSelection();
@@ -430,11 +422,22 @@ export const ToolbarPlugin = (): JSX.Element => {
 		}
 	}, [editor, isLink]);
 
+	const insertTable = useCallback(() => {
+		setTableModalVisible(true)
+	}, []);
+
 	const onSubmitLink = useCallback((values: any) => {
 		setLinkModalVisible(false);
 		editor.dispatchCommand(SET_LINK_COMMAND, {
 			url: sanitizeUrl(values.url),
 			target: values.target
+		});
+	}, [isLink])
+
+	const onSubmitTable = useCallback((values: any) => {
+		setTableModalVisible(false);
+		editor.dispatchCommand(INSERT_TABLE_COMMAND, {
+			...values,
 		});
 	}, [isLink])
 
@@ -536,6 +539,17 @@ export const ToolbarPlugin = (): JSX.Element => {
 					>
 						<i className="las la-link" />
 					</Button>
+					<Button
+						disabled={!isEditable}
+						onClick={insertTable}
+						className={cxBind('a-toolbar__item')}
+						active={isTable}
+						aria-label="Insert link"
+						title="Insert link"
+						type={ButtonTypes.OUTLINE}
+					>
+						<i className="las la-table" />
+					</Button>
 				</>
 			)}
 			<Modal modalOpen={linkModalVisible} title={isLink ? "Update link" : "Create link"} onClose={() => setLinkModalVisible(false)}>
@@ -576,6 +590,30 @@ export const ToolbarPlugin = (): JSX.Element => {
 							</Button>
 							<Button type={ButtonTypes.PRIMARY} onClick={linkModalFormMethods.handleSubmit(onSubmitLink)}>
 								{isLink ? "Update link" : "Create link"}
+							</Button>
+						</ModalFooter>
+					</form>
+				</FormProvider>
+			</Modal>
+			<Modal modalOpen={tableModalVisible} title={"Create table"} onClose={() => setLinkModalVisible(false)}>
+				<FormProvider {...tableModalFormMethods}>
+					<form onSubmit={tableModalFormMethods.handleSubmit(onSubmitLink)}>
+						<NumberField
+							name="columns"
+							label="Columns"
+						></NumberField>
+						<div className="u-margin-top">
+							<NumberField
+								name="rows"
+								label="Rows"
+							></NumberField>
+						</div>
+						<ModalFooter>
+							{/* <Button type={ButtonTypes.DANGER} onClick={onRemoveLink} className="u-margin-right-sm">
+								Remove link
+							</Button> */}
+							<Button type={ButtonTypes.PRIMARY} onClick={tableModalFormMethods.handleSubmit(onSubmitTable)}>
+								Create table
 							</Button>
 						</ModalFooter>
 					</form>
