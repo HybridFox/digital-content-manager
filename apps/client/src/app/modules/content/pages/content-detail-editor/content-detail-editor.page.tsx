@@ -44,16 +44,16 @@ export const ContentDetailEditorPage = () => {
 	}, [contentItem?.translationId]);
 
 	const handleSubmit = useCallback(() => {
-			if (!contentItem) {
-				return;
-			}
-	
-			console.log(value, JSON.parse(value))
-			updateContentItem(siteId!, contentItem.id, {
-				...contentItem,
-				fields: JSON.parse(value),
-			});
-	}, [value])
+		if (!contentItem) {
+			return;
+		}
+
+		console.log(value, JSON.parse(value));
+		updateContentItem(siteId!, contentItem.id, {
+			...contentItem,
+			fields: JSON.parse(value),
+		});
+	}, [value]);
 
 	if (!contentType) {
 		return null;
