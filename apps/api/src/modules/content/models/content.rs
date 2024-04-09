@@ -179,17 +179,19 @@ impl Content {
 		),
 		AppError,
 	> {
-		let query = content::table
-			.filter(
-				content::published.eq(true).and(
-					content::slug
-						.eq(content_id.clone())
-						.or(content::id.eq(Uuid::parse_str(&content_id).unwrap_or(Uuid::new_v4()))),
-				),
-			)
-			.inner_join(languages::table.on(languages::id.eq(content::language_id)))
-			.filter(languages::key.eq(lang))
-			.into_boxed();
+		let query =
+			content::table
+				.filter(
+					content::published
+						.eq(true)
+						.and(content::slug.eq(content_id.clone()).or(
+							content::id.eq(Uuid::parse_str(&content_id).unwrap_or(Uuid::new_v4())),
+						))
+						.and(content::site_id.eq(site_id)),
+				)
+				.inner_join(languages::table.on(languages::id.eq(content::language_id)))
+				.filter(languages::key.eq(lang))
+				.into_boxed();
 
 		let (content_item, language) = query.get_result::<(Self, Language)>(conn)?;
 		let (revision, fields, translations) =
