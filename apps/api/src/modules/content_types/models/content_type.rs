@@ -174,6 +174,7 @@ impl ContentType {
 
 		let content = Content::belonging_to(&content_types)
 			.distinct_on(content::translation_id)
+			.filter(content::site_id.eq(site_id))
 			.select(Content::as_select())
 			.load::<Content>(conn)?;
 		let grouped_content = content.grouped_by(&content_types);
