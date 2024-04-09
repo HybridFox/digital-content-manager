@@ -13,6 +13,7 @@ export const CONTENT_PATHS = {
 	DETAIL_FIELDS: `${DETAIL_PATH}/fields`,
 	DETAIL_COMPARTMENT: `${DETAIL_PATH}/fields/:compartmentId`,
 	DETAIL_TRANSLATIONS: `${DETAIL_PATH}/translations`,
+	DETAIL_EDITOR: `${DETAIL_PATH}/editor`,
 	DETAIL_REVISIONS: `${DETAIL_PATH}/revisions`,
 	DETAIL_REVISION_PREVIEW: `${DETAIL_PATH}/revisions/:revisionId`,
 	DETAIL_REVISION_COMPARE: `${DETAIL_PATH}/revisions/:firstRevisionId/compare/:secondRevisionId`,

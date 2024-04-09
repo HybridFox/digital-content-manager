@@ -12,5 +12,6 @@ export * from './lib/components/tabs';
 export * from './lib/components/pagination';
 export * from './lib/components/select';
 export * from './lib/components/filters';
+export * from './lib/components/editor';
 
 export * from './lib/renderer';

@@ -44,6 +44,10 @@ export const CONTENT_ROUTES: RouteObject[] = [
 				lazy: async () => ({ Component: (await import('./pages/content-detail-compartment/content-detail-compartment.page')).ContentDetailCompartmentPage }),
 			},
 			{
+				path: CONTENT_PATHS.DETAIL_EDITOR,
+				lazy: async () => ({ Component: (await import('./pages/content-detail-editor/content-detail-editor.page')).ContentDetailEditorPage }),
+			},
+			{
 				path: CONTENT_PATHS.DETAIL_STATUS,
 				lazy: async () => ({ Component: (await import('./pages/content-detail-status/content-detail-status.page')).ContentDetailStatusPage }),
 			},

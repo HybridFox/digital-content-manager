@@ -1,8 +1,7 @@
 import * as yup from 'yup';
 import { generatePath } from 'react-router-dom';
 
-
-import { Badge, IHeaderTab } from '~components';
+import { IHeaderTab } from '~components';
 
 import { CONTENT_PATHS } from '../../content.routes';
 
@@ -66,5 +65,13 @@ export const CONTENT_DETAIL_META_TABS = (
 			siteId,
 		}),
 		label: <span className="las la-language"></span>,
+	},
+	{
+		to: generatePath(CONTENT_PATHS.DETAIL_EDITOR, {
+			contentId: contentItem?.id || '',
+			kind,
+			siteId,
+		}),
+		label: <span className="las la-bug"></span>,
 	},
 ];
