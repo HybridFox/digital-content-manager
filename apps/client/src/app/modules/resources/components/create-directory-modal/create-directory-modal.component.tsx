@@ -2,10 +2,10 @@ import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Button, ButtonTypes, HTMLButtonTypes, Modal, ModalFooter } from '~components';
+import { TextField } from '~components';
 
 import { ICreateDirectoryModalProps } from './create-directory-modal.types';
 
-import { TextField } from '~forms';
 
 export const CreateDirectoryModal: FC<ICreateDirectoryModalProps> = ({ onSubmit, modalOpen, onClose, loading }: ICreateDirectoryModalProps) => {
 	const formMethods = useForm();

@@ -4,10 +4,10 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { generatePath, useParams } from 'react-router-dom';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '~components';
+import { RadioField } from '~components';
 
 import { CONTENT_PATHS } from '../../content.routes';
 
-import { RadioField } from '~forms';
 import { CONTENT_TYPE_KINDS_TRANSLATIONS, IAPIError, IContentItem, useContentStore, useContentTypeStore, useHeaderStore, useWorkflowStore } from '~shared';
 
 export const ContentDetailStatusPage = () => {

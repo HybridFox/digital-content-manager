@@ -10,13 +10,13 @@ import {
 	ButtonTypes,
 	HTMLButtonTypes,
 } from '~components';
+import { TextField, TextareaField } from '~components';
 
 import { CONTENT_COMPONENT_PATHS } from '../../content-components.routes';
 
 import { editContentComponent } from './cc-settings.const';
 
 import { IAPIError, useContentComponentStore, useHeaderStore } from '~shared';
-import { TextField, TextareaField } from '~forms';
 
 interface IEditContentComponentForm {
 	name: string;

@@ -2,10 +2,10 @@ import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Button, ButtonTypes, HTMLButtonTypes, Modal, ModalFooter } from '~components';
+import { FileField } from '~components';
 
 import { IUploadFileModalProps } from './upload-file-modal.types';
 
-import { FileField } from '~forms';
 
 
 export const UploadFileModal: FC<IUploadFileModalProps> = ({

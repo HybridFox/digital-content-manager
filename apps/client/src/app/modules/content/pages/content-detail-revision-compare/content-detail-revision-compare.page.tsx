@@ -18,12 +18,12 @@ import {
 	ModalFooter,
 	RenderComparison,
 } from '~components';
+import { FieldViewMode, RadioField } from '~components';
 
 import { CONTENT_PATHS } from '../../content.routes';
 
 import styles from './content-detail-revision.compare.module.scss';
 
-import { FieldViewMode, RadioField } from '~forms';
 import {
 	CONTENT_TYPE_KINDS_TRANSLATIONS,
 	DATE_FORMAT,

@@ -5,12 +5,12 @@ import { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Alert, AlertTypes, Button, ButtonTypes, Card, HTMLButtonTypes, Header, Loading } from '~components';
+import { SelectField, TextField, TextareaField } from '~components';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 
 import { createContentTypeForm } from './ct-create.const';
 
-import { SelectField, TextField, TextareaField } from '~forms';
 import { CONTENT_TYPE_KINDS_OPTIONS, IAPIError, useContentTypeStore, useHeaderStore, useWorkflowStore } from '~shared';
 
 interface ICreateContentTypeForm {

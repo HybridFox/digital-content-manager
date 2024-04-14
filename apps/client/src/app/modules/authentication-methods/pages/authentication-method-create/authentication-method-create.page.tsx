@@ -5,14 +5,13 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header } from '~components';
-
+import { SelectField, TextField } from '~components';
 
 import { AUTHENTICATION_METHOD_OPTIONS } from '../../authentication-methods.const';
 import { AUTHENTICATION_METHOD_PATHS } from '../../authentication-methods.routes';
 
 import { editAuthenticationMethodSchema } from './authentication-method-create.const';
 
-import { SelectField, TextField } from '~forms';
 import { IAPIError, useAuthenticationMethodStore, useHeaderStore } from '~shared';
 
 interface CreateAuthenticationMethodForm {

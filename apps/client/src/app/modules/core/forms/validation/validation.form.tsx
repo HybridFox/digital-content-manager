@@ -3,13 +3,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 import cx from 'classnames/bind';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, RenderFields } from '~components';
-
+import { CheckboxField } from '~components';
 
 import { IEditValidationForm, IValidationFormProps } from './validation.types';
 import  styles from './validation.module.scss'
 import { fieldToValidationForm, validationFormToField } from './validation.helper';
 
-import { CheckboxField } from '~forms';
 import { IValidationConfig, ValidationConfiguration, ValidationTypes } from '~shared';
 const cxBind = cx.bind(styles);
 

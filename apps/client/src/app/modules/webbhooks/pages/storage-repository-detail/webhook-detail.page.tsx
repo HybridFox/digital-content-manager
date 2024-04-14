@@ -5,13 +5,13 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
+import { SelectField, TextField, ToggleField } from '~components';
 
 import { WEBHOOKS_PATHS } from '../../webhooks.routes';
 import { WEBHOOK_OPTIONS } from '../../webhooks.const';
 
 import { editWebhookSchema } from './webhook-detail.const';
 
-import { SelectField, TextField, ToggleField } from '~forms';
 import { IAPIError, useHeaderStore, useWebhookStore, WebhookEvents } from '~shared';
 
 interface EditWebhookForm {

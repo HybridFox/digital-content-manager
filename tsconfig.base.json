@@ -15,8 +15,8 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
+			"@digital-content-manager/core": ["libs/core/src/index.ts"],
 			"~components": ["libs/components/src/index.ts"],
-			"~forms": ["libs/forms/src/index.ts"],
 			"~shared": ["libs/shared/src/index.ts"]
 		}
 	},

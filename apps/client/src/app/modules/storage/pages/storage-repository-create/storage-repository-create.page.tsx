@@ -5,13 +5,13 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, RenderFields } from '~components';
+import { SelectField, TextField } from '~components';
 
 import { STORAGE_PATHS } from '../../storage.routes';
 import { STORAGE_KIND_FIELDS, STORAGE_KIND_OPTIONS } from '../../storage.const';
 
 import { createStorageRepositorySchema } from './storage-repository-create.const';
 
-import { SelectField, TextField } from '~forms';
 import {
 	IAPIError,
 	StorageKinds,

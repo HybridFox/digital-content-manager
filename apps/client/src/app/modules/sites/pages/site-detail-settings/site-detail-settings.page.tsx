@@ -5,13 +5,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useParams } from 'react-router-dom';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '~components';
+import { SelectField, TextField } from '~components';
 
 import { SITE_PATHS } from '../../sites.routes';
 import { useSiteStore } from '../../stores/site';
 
 import { updateSiteSchema } from './site-detail-settings.const';
 
-import { SelectField, TextField } from '~forms';
 import {
 	IAPIError,
 	useHeaderStore,

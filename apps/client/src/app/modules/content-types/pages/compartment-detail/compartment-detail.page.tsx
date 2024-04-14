@@ -13,6 +13,7 @@ import {
 	Header,
 	Loading,
 } from '~components';
+import { TextField } from '~components';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 
@@ -25,7 +26,6 @@ import {
 	useContentTypeStore,
 	useHeaderStore,
 } from '~shared';
-import { TextField } from '~forms';
 
 interface IEditCompartmentForm {
 	name: string;

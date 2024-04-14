@@ -1,0 +1,13 @@
+{
+	"name": "@digital-content-manager/core",
+	"version": "0.0.3",
+	"main": "./index.js",
+	"types": "./index.d.ts",
+	"exports": {
+		".": {
+			"import": "./index.mjs",
+			"require": "./index.js"
+		}
+	},
+	"private": false
+}

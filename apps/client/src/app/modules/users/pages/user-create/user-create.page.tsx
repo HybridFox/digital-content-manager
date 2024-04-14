@@ -5,14 +5,13 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
-
+import { CheckboxField, TextField, TextFieldTypes } from '~components';
 
 import { useUserStore } from '../../stores/user';
 import { USER_PATHS } from '../../users.routes';
 
 import { editUserSchema } from './user-create.const';
 
-import { CheckboxField, TextField, TextFieldTypes } from '~forms';
 import { IAPIError, useHeaderStore, useRoleStore } from '~shared';
 
 interface CreateUserForm {

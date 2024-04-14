@@ -85,12 +85,12 @@ export const RootMenu = () => {
 						<span>Administration</span>
 					</p>
 					<ul>
-							<li>
-								<NavLink {...navLinkBinding} to={generatePath(AUTHENTICATION_METHOD_PATHS.ROOT)}>
-									<i className="las la-server"></i>
-									<span>Authentication Methods</span>
-								</NavLink>
-							</li>
+						<li>
+							<NavLink {...navLinkBinding} to={generatePath(AUTHENTICATION_METHOD_PATHS.ROOT)}>
+								<i className="las la-server"></i>
+								<span>Authentication Methods</span>
+							</NavLink>
+						</li>
 					</ul>
 				</div>
 			</HasPermission>

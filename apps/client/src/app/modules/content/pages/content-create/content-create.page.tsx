@@ -5,13 +5,13 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Button, ButtonLink, ButtonTypes, HTMLButtonTypes, Header, Loading, Modal, ModalFooter, Table } from '~components';
+import { RadioField } from '~components';
 
 import { CONTENT_PATHS } from '../../content.routes';
 import { CONTENT_TYPES_PATHS } from '../../../content-types';
 
 import { CONTENT_CREATE_COLUMNS, selectLanguageSchema } from './content-create.const';
 
-import { RadioField } from '~forms';
 import { CONTENT_TYPE_KINDS_PARAMETER_MAP, useAuthStore, useContentTypeStore, useHeaderStore } from '~shared';
 
 interface ISelectLanguageForm {

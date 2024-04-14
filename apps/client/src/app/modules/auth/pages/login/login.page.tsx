@@ -6,11 +6,11 @@ import { useTranslation } from "react-i18next";
 import { FormEvent, useEffect } from "react";
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Loading } from "~components"
+import { TextField, TextFieldTypes } from "~components";
 
 import styles from './login.module.scss';
 import { loginSchema } from "./login.const";
 
-import { TextField, TextFieldTypes } from "~forms";
 import { IAPIError, IAuthenticationMethod, useAuthStore, useAuthenticationMethodStore, useThemeStore } from "~shared";
 const cxBind = cx.bind(styles);
 

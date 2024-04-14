@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import { FieldViewMode } from "../../../../../forms/src/lib/fields";
+import { FieldViewMode } from "../../fields";
 
 import { IField } from "~shared";
 
