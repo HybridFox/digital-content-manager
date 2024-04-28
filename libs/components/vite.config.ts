@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
 import * as path from 'path';
 
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
@@ -10,6 +11,7 @@ export default defineConfig({
 	cacheDir: '../../node_modules/.vite/core',
 
 	plugins: [
+		cssInjectedByJsPlugin(),
 		dts({
 			entryRoot: 'src',
 			tsConfigFilePath: path.join(__dirname, 'tsconfig.lib.json'),
@@ -44,7 +46,10 @@ export default defineConfig({
 		},
 		rollupOptions: {
 			// External packages that should not be bundled into your library.
-			external: ['react', 'react-dom', 'react/jsx-runtime'],
+			external: ['react', 'react-dom', 'react/jsx-runtime', 'react-router-dom', 'styled-components', 'react-hook-form'],
+			output: {
+				manualChunks: undefined,
+			}
 		},
 	},
 });

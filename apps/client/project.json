@@ -8,59 +8,65 @@
 			"command": "i18next-scanner --config apps/client/i18next-scanner.config.js"
 		},
 		"build": {
-			"executor": "@nx/vite:build",
+			"executor": "@nx/webpack:webpack",
 			"outputs": ["{options.outputPath}"],
 			"defaultConfiguration": "production",
 			"options": {
-				"outputPath": "dist/apps/client"
+				"compiler": "babel",
+				"outputPath": "dist/apps/client",
+				"index": "apps/client/index.html",
+				"baseHref": "/",
+				"main": "apps/client/src/main.tsx",
+				"tsConfig": "apps/client/tsconfig.app.json",
+				"assets": [{
+					"glob": "**/*",
+					"input": "apps/client/src/public",
+					"output": "/"
+				}],
+				"styles": ["apps/client/src/assets/scss/main.scss"],
+				"scripts": [],
+				"isolatedConfig": true,
+				"webpackConfig": "apps/client/webpack.config.js"
 			},
 			"configurations": {
 				"development": {
-					"mode": "development"
+					"extractLicenses": false,
+					"optimization": false,
+					"sourceMap": true,
+					"vendorChunk": true
 				},
 				"production": {
-					"mode": "production"
+					"fileReplacements": [
+						{
+							"replace": "apps/client/src/environments/environment.ts",
+							"with": "apps/client/src/environments/environment.prod.ts"
+						}
+					],
+					"optimization": true,
+					"outputHashing": "all",
+					"sourceMap": false,
+					"namedChunks": false,
+					"extractLicenses": true,
+					"vendorChunk": false
 				}
 			}
 		},
 		"serve": {
-			"executor": "@nx/vite:dev-server",
+			"executor": "@nx/webpack:dev-server",
 			"defaultConfiguration": "development",
 			"options": {
-				"buildTarget": "client:build"
-			},
-			"configurations": {
-				"development": {
-					"buildTarget": "client:build:development",
-					"hmr": true
-				},
-				"production": {
-					"buildTarget": "client:build:production",
-					"hmr": false
-				}
-			}
-		},
-		"preview": {
-			"executor": "@nx/vite:preview-server",
-			"defaultConfiguration": "development",
-			"options": {
-				"buildTarget": "client:build"
+				"buildTarget": "client:build",
+				"hmr": true,
+				"port": 3000
 			},
 			"configurations": {
 				"development": {
 					"buildTarget": "client:build:development"
 				},
 				"production": {
-					"buildTarget": "client:build:production"
+					"buildTarget": "client:build:production",
+					"hmr": false
 				}
-			}
-		},
-		"test": {
-			"executor": "@nx/vite:test",
-			"outputs": ["coverage/apps/client"],
-			"options": {
-				"passWithNoTests": true,
-				"reportsDirectory": "../../coverage/apps/client"
 			}
 		},
 		"lint": {
@@ -74,6 +80,20 @@
 			"executor": "@nx/web:file-server",
 			"options": {
 				"buildTarget": "client:build"
+			}
+		},
+		"test": {
+			"executor": "@nx/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+			"options": {
+				"jestConfig": "apps/client/jest.config.ts",
+				"passWithNoTests": true
+			},
+			"configurations": {
+				"ci": {
+					"ci": true,
+					"codeCoverage": true
+				}
 			}
 		}
 	},

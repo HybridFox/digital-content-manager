@@ -33,7 +33,7 @@ pub async fn me(
 ) -> ApiResponse {
 	let conn = &mut state.get_conn()?;
 	let user = auth::get_current_user(&req)?;
-	let token = user.generate_token()?;
+	let token = user.generate_token(None)?;
 	let permissions = get_user_permissions(conn, user.id, query.site_id)?;
 	let res = response::MeDTO::from((user, token, permissions));
 	Ok(HttpResponse::Ok().json(res))
@@ -69,7 +69,7 @@ pub async fn update(
 			bio: form.bio.clone(),
 		},
 	)?;
-	let token = user.generate_token()?;
+	let token = user.generate_token(None)?;
 	let sites = user.get_sites(conn)?;
 	let roles = user.get_roles(conn)?;
 	let res = response::AuthDTO::from((user, sites, roles, token));
