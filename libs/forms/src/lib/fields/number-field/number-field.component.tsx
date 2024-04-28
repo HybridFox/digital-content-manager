@@ -32,6 +32,7 @@ export const NumberField: FC<INumberFieldProps> = ({
 				className={cxBind('a-input__field')}
 				id={name}
 				placeholder={placeholder}
+				step="any"
 				{...register(name, {
 					...fieldOptions,
 				})}
