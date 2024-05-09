@@ -6,6 +6,7 @@ import { Menu } from "../../components/menu/menu.component";
 import { RootMenu } from "../../components/menu/root-menu.component";
 import { TopBar } from "../../components/top-bar/top-bar.component";
 
+
 import styles from './authenticated.module.scss';
 
 import { useThemeStore } from "~shared";
@@ -13,7 +14,7 @@ const cxBind = cx.bind(styles);
 
 export const AuthenticatedView = () => {
 	const { siteId } = useParams();
-	const [theme] = useThemeStore((state) => [state.theme])
+	const [theme] = useThemeStore((state) => [state.theme]);
 
 	return <div className={classNames(cxBind('o-authenticated-view'), `u-theme u-theme--${theme}`)}>
 		<div className={cxBind('o-authenticated-view__menu')}>

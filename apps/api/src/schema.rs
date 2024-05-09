@@ -18,10 +18,6 @@ pub mod sql_types {
 	pub struct FieldTypes;
 
 	#[derive(diesel::query_builder::QueryId, diesel::sql_types::SqlType)]
-	#[diesel(postgres_type(name = "module_types"))]
-	pub struct ModuleTypes;
-
-	#[derive(diesel::query_builder::QueryId, diesel::sql_types::SqlType)]
 	#[diesel(postgres_type(name = "workflow_state_technical_states"))]
 	pub struct WorkflowStateTechnicalStates;
 }
@@ -247,14 +243,10 @@ diesel::table! {
 }
 
 diesel::table! {
-	use diesel::sql_types::*;
-	use super::sql_types::ModuleTypes;
-
 	modules (id) {
 		id -> Uuid,
 		name -> Text,
-		#[sql_name = "type"]
-		type_ -> ModuleTypes,
+		entry_url -> Text,
 		active -> Bool,
 		site_id -> Uuid,
 	}

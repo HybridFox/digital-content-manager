@@ -23,5 +23,11 @@ export const SITE_DETAIL_TABS = (t: TFunction, rootSiteId: string): IHeaderTab[]
 			rootSiteId,
 		}),
 		label: t('SITES.TABS.CONTENT_TYPES')
+	},
+	{
+		to: generatePath(SITE_PATHS.DETAIL_MODULES, {
+			rootSiteId,
+		}),
+		label: t('SITES.TABS.MODULES')
 	}
 ];

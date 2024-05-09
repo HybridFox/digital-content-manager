@@ -1,12 +1,49 @@
 import { Outlet, useNavigate, useParams } from "react-router-dom"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { IAPIError, useAuthStore } from "~shared";
+import { Loading } from "~components";
+
+import { MfeUtil } from "../../helpers/federation";
+
+import { IAPIError, useAuthStore, useModuleStore } from "~shared";
+
+const mfeUtil = new MfeUtil();
 
 export const SiteView = () => {
 	const [fetchUser, fetchSite] = useAuthStore((state) => [state.fetchUser, state.fetchSite]);
 	const { siteId } = useParams();
 	const navigate = useNavigate();
+	const [moduleLoadingStarted, setModuleLoadingStarted] = useState(false);
+	const [routerReady, setRouterReady] = useState(false);
+	const [modules, modulesLoading, fetchModules] = useModuleStore((state) => ([state.modules, state.modulesLoading, state.fetchModules]));
+	const [externalModulesLoading, setExternalModulesLoading] = useState(false);
+
+	useEffect(() => {
+		if (!siteId || moduleLoadingStarted) {
+			return;
+		}
+
+		setModuleLoadingStarted(true);
+		fetchModules(siteId);
+	}, [siteId]);
+
+	useEffect(() => {
+		if (!modules.length) {
+			return;
+		}
+		
+		setExternalModulesLoading(true);
+		(async () => {
+			await Promise.all(modules.map(() => mfeUtil.loadRemoteFile({
+				remoteEntry: '/modules/dcm_reffurence-admin_module/dist/remoteEntry.js',
+				remoteName: 'dcm_reffurence_admin_module',
+				exposedFile: 'entry'
+			})));
+			console.log('done loading')
+			setExternalModulesLoading(false);
+			setRouterReady(true);
+		})()
+	}, [modules])
 
 	useEffect(() => {
 		fetchSite(siteId!);
@@ -22,5 +59,7 @@ export const SiteView = () => {
 			});
 	}, [siteId]);
 
-	return <Outlet />
+	return <Loading loading={externalModulesLoading || !routerReady} text="Loading external modules...">
+		<Outlet />
+	</Loading>
 }

@@ -70,6 +70,14 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 								.service(modules::iam_policies::controllers::site_iam_policies::remove),
 						)
 						.service(
+							web::scope("/{site_id}/modules")
+								.service(modules::modules::controllers::modules::create)
+								.service(modules::modules::controllers::modules::find_all)
+								.service(modules::modules::controllers::modules::find_one)
+								.service(modules::modules::controllers::modules::update)
+								.service(modules::modules::controllers::modules::remove),
+						)
+						.service(
 							web::scope("/{site_id}/content-types")
 								.service(modules::content_types::controllers::content_types::create)
 								.service(modules::content_types::controllers::content_types::find_all)
