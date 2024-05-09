@@ -29,6 +29,8 @@ export const SiteView = () => {
 
 	useEffect(() => {
 		if (!modules.length) {
+			setExternalModulesLoading(false);
+			setRouterReady(true);
 			return;
 		}
 		
