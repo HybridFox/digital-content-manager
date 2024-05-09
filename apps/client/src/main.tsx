@@ -14,7 +14,7 @@ import App from './app/app';
 import './assets/scss/main.scss';
 import 'react-tooltip/dist/react-tooltip.css';
 import "react-datepicker/dist/react-datepicker.css";
-import { MfeUtil } from './federation';
+// import { MfeUtil } from './federation';
 
 const LazyApp = lazy(() => import('./app/app'))
 
@@ -28,7 +28,7 @@ declare global {
     interface Window { __dcmCore__: typeof dcmCore; }
 }
 
-const mfeUtil = new MfeUtil();
+// const mfeUtil = new MfeUtil();
 
 // ISO 639-1 + '_' + ISO 3166-1
 // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
@@ -45,11 +45,11 @@ i18n.use(initReactI18next)
 
 (async () => {
 	window.__dcmCore__ = dcmCore;
-	mfeUtil.loadRemoteFile({
-		remoteEntry: '/modules/dcm_reffurence-admin_module/dist/remoteEntry.js',
-		remoteName: 'dcm_reffurence_admin_module',
-		exposedFile: 'entry'
-	});
+	// mfeUtil.loadRemoteFile({
+	// 	remoteEntry: '/modules/dcm_reffurence-admin_module/dist/remoteEntry.js',
+	// 	remoteName: 'dcm_reffurence_admin_module',
+	// 	exposedFile: 'entry'
+	// });
 })();
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
