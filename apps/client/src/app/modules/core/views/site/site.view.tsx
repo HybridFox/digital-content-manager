@@ -36,9 +36,9 @@ export const SiteView = () => {
 		
 		setExternalModulesLoading(true);
 		(async () => {
-			await Promise.all(modules.map(() => mfeUtil.loadRemoteFile({
-				remoteEntry: '/modules/dcm_reffurence-admin_module/dist/remoteEntry.js',
-				remoteName: 'dcm_reffurence_admin_module',
+			await Promise.all(modules.map((mfeModule) => mfeUtil.loadRemoteFile({
+				remoteEntry: mfeModule.entryUrl,
+				remoteName: mfeModule.name,
 				exposedFile: 'entry'
 			})));
 			console.log('done loading')
