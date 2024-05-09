@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate, RouteObject, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, Outlet, RouteObject, RouterProvider, useParams } from 'react-router-dom';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useModuleHookStore } from '@digital-content-manager/core';
 
@@ -27,6 +27,7 @@ import { SiteView } from './modules/core/views/site/site.view';
 import { RootView } from './modules/core/views/root/root.view';
 import { WEBHOOKS_ROUTES } from './modules/webbhooks';
 import { CONTENT_COMPONENT_ROUTES } from './modules/content-components/content-components.routes';
+import { APP_SITE_ROOT_PATH } from './modules/core/routes.const';
 
 const createRouter = (moduleRoutes: RouteObject[]) => createBrowserRouter([
 	{
@@ -62,7 +63,17 @@ const createRouter = (moduleRoutes: RouteObject[]) => createBrowserRouter([
 							...SITE_ROLE_ROUTES,
 							...SITE_POLICY_ROUTES,
 							...WEBHOOKS_ROUTES,
-							...moduleRoutes,
+							{
+								path: `${APP_SITE_ROOT_PATH}`,
+								element: <Outlet />,
+								children: [
+									...moduleRoutes,
+									{
+										path: `modules/*`,
+										element: <Loading loading={true} />,
+									}
+								]
+							}
 						],
 					},
 					{
@@ -85,16 +96,13 @@ const createRouter = (moduleRoutes: RouteObject[]) => createBrowserRouter([
 export const App = () => {
 	const [moduleRoutes] = useModuleHookStore((state) => [state.routes]);
 
-	const [routerReady, setRouterReady] = useState(false);
-
 	const router = useMemo(() => {
-		setRouterReady(!!moduleRoutes.length)
 		return createRouter(moduleRoutes || []);
 	}, [moduleRoutes])
 
 	return (
 		<Suspense fallback={<Loading loading={true} />}>
-			{routerReady && <RouterProvider router={router} />}
+			<RouterProvider router={router} />
 		</Suspense>
 	);
 }

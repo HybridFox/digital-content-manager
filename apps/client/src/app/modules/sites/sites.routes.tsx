@@ -11,6 +11,7 @@ export const SITE_PATHS = {
 	DETAIL: `${DETAIL_PATH}`,
 	DETAIL_SETTINGS: `${DETAIL_PATH}/settings/info`,
 	DETAIL_CT: `${DETAIL_PATH}/settings/content-types`,
+	DETAIL_MODULES: `${DETAIL_PATH}/settings/modules`,
 }
 
 export const SITE_ROUTES: RouteObject[] = [
@@ -37,6 +38,10 @@ export const SITE_ROUTES: RouteObject[] = [
 			{
 				path: SITE_PATHS.DETAIL_CT,
 				lazy: async () => ({ Component: (await import('./pages/site-detail-ct/site-detail-ct.page')).SiteDetailCTPage }),
+			},
+			{
+				path: SITE_PATHS.DETAIL_MODULES,
+				lazy: async () => ({ Component: (await import('./pages/site-detail-modules/site-detail-modules.page')).SiteDetailModulesPage }),
 			},
 		]
 	},
