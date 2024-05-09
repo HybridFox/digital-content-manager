@@ -6,26 +6,28 @@ const deps = require('../../package.json').dependencies;
 
 // Nx plugins for webpack.
 module.exports = composePlugins(withNx(), withReact(), (config) => {
-	config.devServer.proxy = [
-		{
-			context: ['/api'],
-			target: 'http://localhost:8000',
-			secure: false,
-			changeOrigin: true,
-		},
-		{
-			context: ['/admin-api'],
-			target: 'http://localhost:8000',
-			secure: false,
-			changeOrigin: true,
-		},
-		{
-			context: ['/modules'],
-			target: 'http://127.0.0.1:8080',
-			secure: false,
-			pathRewrite: { '^/modules': '' },
-		},
-	];
+	if (config.devServer) {
+		config.devServer.proxy = [
+			{
+				context: ['/api'],
+				target: 'http://localhost:8000',
+				secure: false,
+				changeOrigin: true,
+			},
+			{
+				context: ['/admin-api'],
+				target: 'http://localhost:8000',
+				secure: false,
+				changeOrigin: true,
+			},
+			{
+				context: ['/modules'],
+				target: 'http://127.0.0.1:8080',
+				secure: false,
+				pathRewrite: { '^/modules': '' },
+			},
+		];
+	}
 
 	config.plugins.push(
 		new ModuleFederationPlugin({
