@@ -20,10 +20,10 @@ pub fn decode(token: &str) -> jsonwebtoken::errors::Result<TokenData<Claims>> {
 	)
 }
 
-pub fn generate(user_id: Uuid, now: i64) -> Result<String, Error> {
+pub fn generate(user_id: Uuid, external_token: Option<String>, now: i64) -> Result<String, Error> {
 	let secret = env::var(constants::env_key::JWT_SECRET).expect("JWT Secret should be defined");
 	let jwt_secret: &[u8] = secret.as_bytes();
-	let claims = Claims::new(user_id, now);
+	let claims = Claims::new(user_id, external_token, now);
 	jsonwebtoken::encode(
 		&Header::default(),
 		&claims,
@@ -39,10 +39,11 @@ pub struct Claims {
 	iss: String, // Optional. Issuer
 	nbf: i64, // Optional. Not Before (as UTC timestamp)
 	pub sub: Uuid, // Optional. Subject (whom token refers to)
+	pub external_token: Option<String>,
 }
 
 impl Claims {
-	pub fn new(user_id: Uuid, now: i64) -> Self {
+	pub fn new(user_id: Uuid, external_token: Option<String>, now: i64) -> Self {
 		Claims {
 			iat: now,
 			exp: now + SEVEN_DAYS,
@@ -50,6 +51,7 @@ impl Claims {
 			iss: ISSUER.to_owned(),
 			aud: AUDIENCE.to_owned(),
 			nbf: now,
+			external_token,
 		}
 	}
 }

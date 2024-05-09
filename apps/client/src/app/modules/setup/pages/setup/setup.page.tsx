@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from "~components"
+import { TextField, TextFieldTypes } from "~components";
 
 import styles from './setup.module.scss';
 import { setupSchema } from "./setup.const";
 
-import { TextField, TextFieldTypes } from "~forms";
 import { IAPIError, useAuthStore } from "~shared";
 const cxBind = cx.bind(styles);
 

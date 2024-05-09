@@ -3,13 +3,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '~components';
-
+import { TextField, TextFieldTypes } from '~components';
 
 import { useUserStore } from '../../stores/user';
 
 import { editUserSchema } from './user-detail-info.const';
 
-import { TextField, TextFieldTypes } from '~forms';
 import { IAPIError } from '~shared';
 
 interface EditUserForm {

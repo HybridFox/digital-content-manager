@@ -4,13 +4,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Loading } from '~components';
-
+import { CheckboxField } from '~components';
 
 import { useUserStore } from '../../stores/user';
 
 import { editUserSchema } from './user-detail-roles.const';
 
-import { CheckboxField } from '~forms';
 import { IAPIError, useRoleStore } from '~shared';
 
 interface EditUserForm {

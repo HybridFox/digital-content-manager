@@ -4,13 +4,13 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { generatePath, useParams } from 'react-router-dom';
 
 import { Button, ButtonTypes, Card, HTMLButtonTypes, Loading, Table } from '~components';
+import { SelectField } from '~components';
 
 import { WORKFLOW_PATHS } from '../../workflow.routes';
 import { useWorkflowStateStore } from '../../stores/workflow-state';
 
 import { WORKFLOW_TRANSITIONS_COLUMNS } from './workflow-detail-transitions.const';
 
-import { SelectField } from '~forms';
 import { IWorkflowTransition, generateUuid, useHeaderStore, useWorkflowStore } from '~shared';
 
 interface AddWorkflowTransitionForm {

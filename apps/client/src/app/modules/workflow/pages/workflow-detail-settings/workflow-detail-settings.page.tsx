@@ -5,13 +5,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '~components';
-
+import { TextField } from '~components';
 
 import { WORKFLOW_PATHS } from '../../workflow.routes';
 
 import { editWorkflowSchema } from './workflow-detail-settings.const';
 
-import { TextField } from '~forms';
 import { IAPIError, useHeaderStore, useWorkflowStore } from '~shared';
 
 interface EditWorkflowForm {

@@ -6,11 +6,11 @@ import slugify from 'slugify';
 import { clone } from 'rambda';
 
 import { Alert, AlertTypes, Button, ButtonTypes, Card, CardFooter, CardMeta, HTMLButtonTypes, RenderFields } from '~components';
+import { RadioField, TextField } from '~components';
 
 import styles from './content-form.module.scss';
 import { ContentFormMode, IContentFormProps } from './content-form.types';
 
-import { RadioField, TextField } from '~forms';
 import { IContentItem, WorkflowTechnicalStates } from '~shared';
 
 const cxBind = cx.bind(styles);

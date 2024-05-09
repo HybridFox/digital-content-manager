@@ -2,7 +2,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
-import { visualizer } from "rollup-plugin-visualizer";
 import federation from "@originjs/vite-plugin-federation";
 
 export default defineConfig({
@@ -14,6 +13,15 @@ export default defineConfig({
 		proxy: {
 			'/api': 'https://dcm.reffurence.com',
 			'/admin-api': 'https://dcm.reffurence.com',
+			'/modules': {
+				target: 'http://127.0.0.1:8080',
+				rewrite: (path) => path.replace(/^\/modules/, ''),
+			},
+			'^/node_modules': {
+				target: 'http://localhost:3000',
+				changeOrigin: true,
+				rewrite: path => [process.cwd(), path].join(''),
+			}
 		},
 	},
 
@@ -23,20 +31,25 @@ export default defineConfig({
 	},
 
 	plugins: [
-		federation({
-			name: 'dcm',
-			remotes: {},
-			shared: ['react']
-		}),
 		react(),
 		viteTsConfigPaths({
 			root: '../../',
 		}),
-		visualizer({
-			gzipSize: true,
-			brotliSize: true,
-		}),
+		federation({
+			name: 'dynamic-remote',
+			remotes: {
+				dummyApp: 'dummy.js',
+			},
+			shared: ["react", "react-dom", "react-router-dom"],
+		})
 	],
+
+	build: {
+		modulePreload: false,
+		target: "esnext",
+		minify: false,
+		cssCodeSplit: false,
+	},
 
 	// Uncomment this if you are using workers.
 	// worker: {

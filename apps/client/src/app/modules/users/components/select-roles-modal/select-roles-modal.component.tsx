@@ -2,10 +2,10 @@ import { FC, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Button, ButtonTypes, HTMLButtonTypes, Loading, Modal, ModalFooter } from '~components';
+import { CheckboxField } from '~components';
 
 import { ISelectRolesModalProps } from './select-roles-modal.types';
 
-import { CheckboxField } from '~forms';
 import { useSiteRoleStore } from '~shared';
 
 

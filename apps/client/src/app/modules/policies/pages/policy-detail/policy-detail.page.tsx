@@ -5,13 +5,13 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
+import { TextField } from '~components';
 
 import { POLICY_PATHS } from '../../policies.routes';
 import { PermissionManager } from '../../components/permission-manager';
 
 import { createPolicySchema } from './policy-detail.const';
 
-import { TextField } from '~forms';
 import {
 	IAPIError,
 	PermissionEffect,

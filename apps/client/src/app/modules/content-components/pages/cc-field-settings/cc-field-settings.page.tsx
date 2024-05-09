@@ -4,11 +4,11 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes } from '~components';
+import { NumberField, TextField, TextareaField, ToggleField } from '~components';
 
 import { CONTENT_COMPONENT_PATHS } from '../../content-components.routes';
 import { editFieldSchema } from '../cc-field-detail/cc-field-detail.const';
 
-import { NumberField, TextField, TextareaField, ToggleField } from '~forms';
 import { useContentComponentFieldStore, useContentComponentStore, useHeaderStore } from '~shared';
 
 interface IEditFieldForm {

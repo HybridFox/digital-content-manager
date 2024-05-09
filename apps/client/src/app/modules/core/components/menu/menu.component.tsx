@@ -1,19 +1,19 @@
 import { NavLink, generatePath, useParams } from 'react-router-dom';
 import cx from 'classnames/bind';
+import { useModuleHookStore } from '@digital-content-manager/core';
 
 import { HasPermission } from '~components';
 
-import { DASHBOARD_PATHS } from '../../../dashboard';
 import { RESOURCE_PATHS } from '../../../resources';
 import { CONTENT_PATHS } from '../../../content/content.routes';
 import { CONTENT_TYPES_PATHS } from '../../../content-types';
-import { CONTENT_COMPONENT_PATHS } from '../../../../../../../..';
 import { WORKFLOW_PATHS } from '../../../workflow';
 import { SITE_USER_PATHS } from '../../../site-users';
 import { SITE_ROLE_PATHS } from '../../../site-roles';
 import { SITE_POLICY_PATHS } from '../../../site-policies';
 import { STORAGE_PATHS } from '../../../storage';
 import { WEBHOOKS_PATHS } from '../../../webbhooks';
+import { CONTENT_COMPONENT_PATHS } from '../../../content-components/content-components.routes';
 
 import styles from './menu.module.scss';
 
@@ -33,6 +33,7 @@ export const Menu = () => {
 	const { siteId } = useParams();
 	const [theme] = useThemeStore((state) => [state.theme]);
 	const [status] = useStatusStore((state) => [state.status]);
+	const [menuGroups] = useModuleHookStore((state) => [state.menuGroups]);
 
 	return (
 		<div className={cxBind('o-menu')}>
@@ -209,9 +210,26 @@ export const Menu = () => {
 					</ul>
 				</div>
 			</HasPermission>
+			{menuGroups.map((menuGroup, i) => (
+				<div className={cxBind('o-menu__links')} key={i}>
+					<p className={cxBind('o-menu__links__name')}>
+						<span>{menuGroup.name}</span>
+					</p>
+					<ul>
+						{menuGroup.items?.map((menuRoute) => (
+							<li key={menuRoute.to}>
+								<NavLink {...navLinkBinding} to={generatePath(menuRoute.to, { siteId })}>
+									<i className={`las la-${menuRoute.icon}`}></i>
+									<span>{menuRoute.name}</span>
+								</NavLink>
+							</li>
+						))}
+					</ul>
+				</div>
+			))}
 			<div className={cxBind('o-menu__version')}>
 				<span className='las la-cookie'></span>{' '}
-				<span className={cxBind('o-menu__version-number')}>{(import.meta.env.VITE_APP_VERSION || 'unknown')?.replace('v', '')} / {(status?.version || 'unknown')?.replace('v', '')}</span>
+				<span className={cxBind('o-menu__version-number')}>{('' || 'unknown')?.replace('v', '')} / {(status?.version || 'unknown')?.replace('v', '')}</span>
 			</div>
 		</div>
 	);

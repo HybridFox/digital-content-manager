@@ -5,13 +5,13 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header } from '~components';
+import { SelectField, TextField, ToggleField } from '~components';
 
 import { WEBHOOKS_PATHS } from '../../webhooks.routes';
 import { WEBHOOK_OPTIONS } from '../../webhooks.const';
 
 import { createWebhookSchema } from './webhook-create.const';
 
-import { SelectField, TextField, ToggleField } from '~forms';
 import {
 	IAPIError,
 	useHeaderStore,

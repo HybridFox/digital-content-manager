@@ -108,7 +108,7 @@ impl User {
 			.returning(User::as_returning())
 			.get_result::<User>(conn)?;
 
-		let token = user.generate_token()?;
+		let token = user.generate_token(None)?;
 		Ok((user, token))
 	}
 
@@ -140,7 +140,7 @@ impl User {
 					}));
 				}
 
-				let token = user.generate_token()?;
+				let token = user.generate_token(None)?;
 				Ok((user, token))
 			}
 		}
@@ -151,6 +151,7 @@ impl User {
 		conn: &mut PgConnection,
 		email: &str,
 		authentication_method_id: Uuid,
+		external_token: Option<String>,
 	) -> Result<(User, Token), AppError> {
 		let user = Self::find_by_email_and_source(conn, email, authentication_method_id)?;
 
@@ -162,7 +163,7 @@ impl User {
 				..Default::default()
 			})),
 			Some(user) => {
-				let token = user.generate_token()?;
+				let token = user.generate_token(external_token)?;
 				Ok((user, token))
 			}
 		}
@@ -360,9 +361,9 @@ impl User {
 }
 
 impl User {
-	pub fn generate_token(&self) -> Result<String, AppError> {
+	pub fn generate_token(&self, external_token: Option<String>) -> Result<String, AppError> {
 		let now = Utc::now().timestamp_millis() / 1_000; // milli -> second
-		let token = token::generate(self.id, now)?;
+		let token = token::generate(self.id, external_token, now)?;
 		Ok(token)
 	}
 }

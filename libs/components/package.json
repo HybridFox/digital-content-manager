@@ -1,0 +1,12 @@
+{
+	"name": "@digital-content-manager/components",
+	"version": "0.0.4",
+	"main": "./index.js",
+	"types": "./index.d.ts",
+	"exports": {
+		".": {
+			"import": "./index.mjs",
+			"require": "./index.js"
+		}
+	}
+}

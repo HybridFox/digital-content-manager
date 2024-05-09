@@ -131,8 +131,12 @@ impl AuthProvider for OAuth2AuthProvider {
 		let userinfo: UserInfoResponse = serde_json::from_str(userinfo_result.borrow())?;
 
 		// Try to find existing user
-		let existing_user =
-			User::signin_social(conn, &userinfo.email, self.authentication_method.id);
+		let existing_user = User::signin_social(
+			conn,
+			&userinfo.email,
+			self.authentication_method.id,
+			Some(token_result.access_token().secret().to_owned()),
+		);
 
 		match existing_user {
 			Ok((user, token)) => {

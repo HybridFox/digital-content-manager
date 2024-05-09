@@ -4,13 +4,12 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
-
+import { TextField, TextareaField } from '~components';
 
 import { CONTENT_COMPONENT_PATHS } from '../../content-components.routes';
 
 import { createContentComponentForm } from './cc-create.const';
 
-import { TextField, TextareaField } from '~forms';
 import { FieldKeys, IAPIError, useContentComponentStore, useHeaderStore, useWorkflowStore } from '~shared';
 
 interface ICreateContentComponent {

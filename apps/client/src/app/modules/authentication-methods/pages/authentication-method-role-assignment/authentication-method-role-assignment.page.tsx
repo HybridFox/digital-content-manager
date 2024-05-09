@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 
 import { Alert, AlertTypes, Button, ButtonTypes, Card, HTMLButtonTypes, Loading, Pagination, Table, Tabs } from '~components';
+import { SelectField } from '~components';
 
 import { useSiteStore } from '../../../sites/stores/site';
 
 import { AUTHENTICATION_METHOD_ROLE_ASSIGNMENTS_COLUMNS, addRoleAssignmentSchema } from './authentication-method-role-assignment.const';
 
-import { SelectField } from '~forms';
 import { IAPIError, getPageParams, getPaginationProps, useAuthenticationMethodRoleAssignmentStore, useAuthenticationMethodStore, useRoleStore, useSiteRoleStore } from '~shared';
 
 interface AddAssignmentForm {

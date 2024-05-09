@@ -5,12 +5,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
+import { CheckboxField, TextField } from '~components';
 
 import { SITE_ROLE_PATHS } from '../../site-roles.routes';
 
 import { createRoleSchema } from './site-role-create.const';
 
-import { CheckboxField, TextField } from '~forms';
 import {
 	IAPIError,
 	useHeaderStore,

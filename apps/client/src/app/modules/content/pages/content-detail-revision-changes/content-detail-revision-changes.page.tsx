@@ -19,10 +19,10 @@ import {
 	RenderComparison,
 	RenderFields,
 } from '~components';
+import { FieldViewMode, RadioField } from '~components';
 
 import { CONTENT_PATHS } from '../../content.routes';
 
-import { FieldViewMode, RadioField } from '~forms';
 import {
 	CONTENT_TYPE_KINDS_TRANSLATIONS,
 	DATE_FORMAT,

@@ -5,11 +5,11 @@ import cx from "classnames/bind";
 import { RenderMultiple } from "../render-multiple";
 import { Alert } from "../../components/alert";
 import { Loading } from "../../components/loading";
+import { FieldViewMode, FIELD_COMPONENTS } from "../../fields";
 
 import styles from './render-fields.module.scss';
 import { IRenderFieldsProps } from "./render-fields.types";
 
-import { FIELD_COMPONENTS, FieldViewMode } from "~forms";
 import { FieldKeys, IField } from "~shared";
 const cxBind = cx.bind(styles);
 

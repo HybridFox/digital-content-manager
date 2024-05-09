@@ -85,18 +85,18 @@ export const RootMenu = () => {
 						<span>Administration</span>
 					</p>
 					<ul>
-							<li>
-								<NavLink {...navLinkBinding} to={generatePath(AUTHENTICATION_METHOD_PATHS.ROOT)}>
-									<i className="las la-server"></i>
-									<span>Authentication Methods</span>
-								</NavLink>
-							</li>
+						<li>
+							<NavLink {...navLinkBinding} to={generatePath(AUTHENTICATION_METHOD_PATHS.ROOT)}>
+								<i className="las la-server"></i>
+								<span>Authentication Methods</span>
+							</NavLink>
+						</li>
 					</ul>
 				</div>
 			</HasPermission>
 			<div className={cxBind('o-menu__version')}>
 				<span className='las la-cookie'></span>{' '}
-				<span className={cxBind('o-menu__version-number')}>{(import.meta.env.VITE_APP_VERSION || 'unknown')?.replace('v', '')} / {(status?.version || 'unknown')?.replace('v', '')}</span>
+				<span className={cxBind('o-menu__version-number')}>{('' || 'unknown')?.replace('v', '')} / {(status?.version || 'unknown')?.replace('v', '')}</span>
 			</div>
 		</div>
 	);

@@ -12,7 +12,7 @@ import {
 	HTMLButtonTypes,
 	Table,
 } from '~components';
-
+import { SelectField, TextField } from '~components';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 
@@ -22,7 +22,6 @@ import {
 	addCompartmentSchema,
 } from './ct-content-components.const';
 
-import { SelectField, TextField } from '~forms';
 import {
 	CONTENT_TYPE_KINDS_TRANSLATIONS,
 	IAPIError,

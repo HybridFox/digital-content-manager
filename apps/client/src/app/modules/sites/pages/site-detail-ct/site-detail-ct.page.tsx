@@ -1,24 +1,19 @@
 import { useEffect } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 
-import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading, Table, Pagination } from '~components';
+import { Loading, Table, Pagination } from '~components';
 
 import { SITE_PATHS } from '../../sites.routes';
 import { useSiteStore } from '../../stores/site';
 
 import { CONTENT_TYPE_LIST_COLUMNS } from './site-detail-ct.const';
 
-import { SelectField, TextField } from '~forms';
 import {
 	getPageParams,
 	getPaginationProps,
-	IAPIError,
 	useContentTypeStore,
 	useHeaderStore,
-	useLanguageStore,
 	useRootContentTypeStore,
 } from '~shared';
 

@@ -1,4 +1,4 @@
-import { FieldViewMode } from "../../../../../forms/src/lib/fields/fields.types";
+import { FieldViewMode } from "../../fields";
 
 import { IField } from "~shared";
 

@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
 import { Button, ButtonSizes } from '~components';
+import { SelectField, TextField } from '~components';
 
 import { IPermissionManagerProps } from './permission-manager.types';
 import styles from './permission-manager.module.scss';
 import { PermissionEffect_OPTIONS } from './permission-manager.const';
 
-import { SelectField, TextField } from '~forms';
 const cxBind = cx.bind(styles);
 
 export const PermissionManager: FC<IPermissionManagerProps> = ({ name, iamActions }: IPermissionManagerProps) => {

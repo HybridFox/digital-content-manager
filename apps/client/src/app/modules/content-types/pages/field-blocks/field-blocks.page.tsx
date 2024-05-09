@@ -4,12 +4,12 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Alert, AlertTypes, Button, ButtonTypes, Card, HTMLButtonTypes, Loading, Table } from '~components';
+import { NumberField, TextField, TextareaField, ToggleField, SelectField } from '~components';
 
 import { CONTENT_TYPES_PATHS } from '../../content-types.routes';
 
 import { addContentComponentSchema, FIELD_BLOCKS_COLUMNS } from './field-blocks.const';
 
-import { NumberField, TextField, TextareaField, ToggleField, SelectField } from '~forms';
 import { CONTENT_TYPE_KINDS_TRANSLATIONS, useContentComponentStore, useContentTypeFieldStore, useContentTypeStore, useFieldBlockStore, useHeaderStore } from '~shared';
 
 interface IAddContentComponentForm {

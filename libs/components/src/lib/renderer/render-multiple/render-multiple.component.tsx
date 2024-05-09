@@ -3,12 +3,12 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import cx from 'classnames/bind';
 import { useTranslation } from 'react-i18next';
 
-import { Button, ButtonSizes, ButtonTypes } from '~components';
+import { Button, ButtonSizes, ButtonTypes, FieldGroupHeader } from '../../components';
+import { FieldViewMode } from '../../fields';
 
 import { IRenderMultipleProps } from './render-multiple.types';
 import styles from './render-multiple.module.scss';
 
-import { FieldGroupHeader, FieldViewMode } from '~forms';
 import { arrayMove } from '~shared';
 const cxBind = cx.bind(styles);
 
