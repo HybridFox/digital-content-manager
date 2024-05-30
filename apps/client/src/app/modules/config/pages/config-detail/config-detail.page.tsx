@@ -1,15 +1,12 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Alert, AlertTypes, Button, ButtonTypes, HTMLButtonTypes, Header, Loading } from '~components';
-import { CheckboxField, TextField } from '~components';
+import { TextField } from '~components';
 
 import { CONFIG_PATHS } from '../../config.routes';
 
-import { configSchema } from './config-detail.const';
 
 import {
 	IAPIError,
@@ -33,8 +30,7 @@ export const ConfigDetailPage = () => {
 	const { t } = useTranslation();
 	const [breadcrumbs, setBreadcrumbs] = useHeaderStore((state) => [state.breadcrumbs, state.setBreadcrumbs]);
 	const formMethods = useForm<UpdateConfigForm>({
-		resolver: yupResolver(configSchema) as any,
-		values: config,
+		values: config
 	});
 
 	const {
@@ -51,6 +47,7 @@ export const ConfigDetailPage = () => {
 	}, []);
 
 	const onSubmit = (values: UpdateConfigForm) => {
+		console.log(values)
 		updateConfig(values)
 			.catch((error: IAPIError) => {
 				setError('root', {
