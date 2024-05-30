@@ -1,3 +1,4 @@
+import ky from 'ky';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
 
@@ -10,7 +11,7 @@ export const useConfigStore = create<IConfigStoreState>()(devtools(
 	(set) => ({
 		fetchConfig: async () => {
 			set(() => ({ configLoading: true }));
-			const [result, error] = await wrapApi(kyInstance.get(`/admin-api/v1/config`).json<IConfig>());
+			const [result, error] = await wrapApi(ky.get(`/admin-api/v1/config`).json<IConfig>());
 
 			if (error) {
 				set(() => ({ config: undefined, configLoading: false }));

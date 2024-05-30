@@ -11,7 +11,7 @@ import { TextField, TextFieldTypes } from "~components";
 import styles from './login.module.scss';
 import { loginSchema } from "./login.const";
 
-import { IAPIError, IAuthenticationMethod, useAuthStore, useAuthenticationMethodStore, useThemeStore } from "~shared";
+import { IAPIError, IAuthenticationMethod, useAuthStore, useAuthenticationMethodStore, useThemeStore, useConfigStore } from "~shared";
 const cxBind = cx.bind(styles);
 
 interface ILoginForm {
@@ -25,6 +25,7 @@ export const LoginPage = () => {
 	const formMethods = useForm<ILoginForm>({ resolver: yupResolver(loginSchema) });
 	const { handleSubmit, setError, formState: { errors } } = formMethods;
 	const [theme] = useThemeStore((state) => [state.theme]);
+	const [config] = useConfigStore((state) => [state.config]);
 	const { t } = useTranslation();
 	const [authenticationMethods, authenticationMethodsLoading, fetchAuthenticationMethods] = useAuthenticationMethodStore((state) => [
 		state.authenticationMethods,
@@ -93,7 +94,7 @@ export const LoginPage = () => {
 		<div className={cxBind('p-login')}>
 			<div className={cxBind('p-login__content')}>
 				<div className={cxBind('p-login__logo')}>
-					<img src={`/assets/img/logo-alternative-${theme}.svg`} alt="Logo" />
+					<img src={config?.rootLogoUrl as string || `/assets/img/logo-alternative-${theme}.svg`} alt="Logo" />
 				</div>
 				<Loading loading={authenticationMethodsLoading}>
 					{(authenticationMethods || []).sort((a, b) => b.weight - a.weight).map((method) => {

@@ -168,13 +168,17 @@ impl SkipAuthRoute {
 }
 
 lazy_static! {
-	static ref SKIP_AUTH_ROUTES: [SkipAuthRoute; 8] = [
+	static ref SKIP_AUTH_ROUTES: [SkipAuthRoute; 9] = [
 		SkipAuthRoute {
 			path: Regex::new(r"/admin-api/v1/auth/(.*)/login").unwrap(),
 			method: Method::POST,
 		},
 		SkipAuthRoute {
 			path: Regex::new(r"/admin-api/v1/status").unwrap(),
+			method: Method::GET,
+		},
+		SkipAuthRoute {
+			path: Regex::new(r"/admin-api/v1/config").unwrap(),
 			method: Method::GET,
 		},
 		SkipAuthRoute {

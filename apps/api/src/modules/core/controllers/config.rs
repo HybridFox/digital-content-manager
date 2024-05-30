@@ -63,8 +63,6 @@ pub async fn find_all(
 	req: HttpRequest,
 	state: web::Data<AppState>,
 ) -> Result<HttpResponse, AppError> {
-	ensure_permission(&req, None, format!("urn:dcm:config:*"), "root::config:read")?;
-
 	let conn = &mut state.get_conn()?;
 	let config_items = ConfigItem::find(conn, None, None)?;
 
