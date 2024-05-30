@@ -1,4 +1,4 @@
-FROM rust:1.70.0 as builder
+FROM rust:1.76.0 as builder
 
 # create a new empty shell project
 # RUN USER=root cargo new --bin app
