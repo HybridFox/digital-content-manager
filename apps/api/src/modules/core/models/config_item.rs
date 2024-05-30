@@ -1,4 +1,5 @@
 use diesel::prelude::*;
+use diesel::query_builder::AsQuery;
 use serde::Deserialize;
 use serde_json::Value;
 use uuid::Uuid;
@@ -26,8 +27,21 @@ impl ConfigItem {
 		module_name: Option<String>,
 		values: Vec<CreateConfigItem>,
 	) -> Result<Vec<Self>, AppError> {
-		let existing_config_items = config_items::table.filter(config_items::site_id.eq(site_id));
-		diesel::delete(existing_config_items).execute(conn)?;
+		let mut query = diesel::delete(config_items::table).into_boxed();
+
+		if site_id.is_none() {
+			query = query.filter(config_items::site_id.is_null())
+		} else {
+			query = query.filter(config_items::site_id.eq(site_id))
+		};
+
+		if module_name.is_none() {
+			query = query.filter(config_items::module_name.is_null())
+		} else {
+			query = query.filter(config_items::module_name.eq(module_name))
+		};
+
+		query.execute(conn)?;
 
 		let created_items = diesel::insert_into(config_items::table)
 			.values(values)
