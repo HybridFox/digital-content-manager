@@ -14,7 +14,7 @@ RUN cargo build --bins --release
 RUN ldd /app/target/release/dcm-api
 
 # our final base
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 ARG APP_VERSION
 ENV VERSION=$APP_VERSION
 
