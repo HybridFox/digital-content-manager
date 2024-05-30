@@ -19,6 +19,13 @@ export const Root = () => {
 		fetchStatus();
 		fetchConfig();
 	}, []);
+
+	useEffect(() => {
+		const root = document.querySelector('.u-theme') as HTMLElement;
+		console.log(config, root)
+		config?.rootPrimaryColour && root?.style?.setProperty('--color-primary', config.rootPrimaryColour as string, 'important');
+		config?.rootSecondaryColour && root?.style?.setProperty('--color-secondary', config.rootSecondaryColour as string, 'important');
+	}, [config])
 	
 	return <div className={cxBind('u-root')}>
 		<Loading loading={configLoading}>
