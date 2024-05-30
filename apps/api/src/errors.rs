@@ -1,5 +1,4 @@
 use actix_web::{http::StatusCode, HttpResponse};
-use aws_sdk_s3::error::SdkError;
 use bcrypt::BcryptError;
 use diesel::r2d2::{Error as R2D2Error, PoolError};
 use diesel::result::{DatabaseErrorKind, Error as DieselError};
@@ -248,17 +247,17 @@ impl From<&str> for AppError {
 	}
 }
 
-impl<T> From<SdkError<T>> for AppError {
-	fn from(err: SdkError<T>) -> Self {
-		println!("{}", &err);
-		AppError::InternalServerError(AppErrorValue {
-			message: err.to_string(),
-			status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
-			code: "S3_ERROR".to_owned(),
-			..Default::default()
-		})
-	}
-}
+// impl<T> From<SdkError<T>> for AppError {
+// 	fn from(err: SdkError<T>) -> Self {
+// 		println!("{}", &err);
+// 		AppError::InternalServerError(AppErrorValue {
+// 			message: err.to_string(),
+// 			status: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+// 			code: "S3_ERROR".to_owned(),
+// 			..Default::default()
+// 		})
+// 	}
+// }
 
 impl From<TryFromIntError> for AppError {
 	fn from(_err: TryFromIntError) -> Self {

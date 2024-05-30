@@ -35,10 +35,7 @@ tracing-subscriber = { version = "0.3.17", features = ["registry", "env-filter"]
 tracing-actix-web = { version = "0.7.5", features = ["opentelemetry_0_19"]}
 tracing-bunyan-formatter = "0.3.7"
 opentelemetry-otlp = { version = "0.12.0" }
-aws-sdk-s3 = { version = "0.28.0" }
 actix-multipart = { version = "0.6.0" }
-aws-config = { version = "0.55.3" }
-aws-credential-types = { version = "0.55.3", features = ["hardcoded-credentials"] }
 tokio = { version = "1.29.1", features = ["io-util", "fs"] }
 mime_guess = { version = "2.0.4" }
 async-trait = { version = "0.1.73" }
