@@ -32,7 +32,6 @@ export const DatetimeField: FC<IDatetimeFieldProps> = ({
 		formState: { errors },
 	}: IRenderControllerField) => {
 		const error = errors?.[name];
-		console.log(value)
 
 		return (
 			<div className={cxBind('a-input', {
@@ -42,10 +41,16 @@ export const DatetimeField: FC<IDatetimeFieldProps> = ({
 				<div className={cxBind('a-input__field-wrapper')}>
 					<ReactDatePicker
 						selected={dayjs(value).isValid() && !!value ? dayjs(value).toDate() : undefined}
-						onChange={(d) => onChange(d)}
+						onChange={(d) => {
+							if (fieldConfiguration?.transformDate && typeof fieldConfiguration?.transformDate === 'function') {
+								return onChange(fieldConfiguration?.transformDate(d));
+							}
+							
+							onChange(d)
+						}}
 						timeInputLabel="Time:"
-						dateFormat="dd/MM/yyyy HH:mm"
-						showTimeInput
+						dateFormat={fieldConfiguration?.dateFormat as string || "dd/MM/yyyy HH:mm"}
+						showTimeInput={fieldConfiguration?.showTimeInput as boolean ?? true}
 						className={cxBind('a-input__field')}
 						wrapperClassName={cxBind('a-input__datepicker__wrapper')}
 						showPopperArrow={false}

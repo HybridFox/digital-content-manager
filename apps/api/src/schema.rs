@@ -81,6 +81,16 @@ diesel::table! {
 }
 
 diesel::table! {
+	config_items (id) {
+		id -> Uuid,
+		key -> Text,
+		module_name -> Nullable<Text>,
+		site_id -> Nullable<Uuid>,
+		value -> Nullable<Jsonb>,
+	}
+}
+
+diesel::table! {
 	content (id) {
 		id -> Uuid,
 		name -> Text,
@@ -473,6 +483,7 @@ diesel::joinable!(authentication_method_roles -> authentication_methods (authent
 diesel::joinable!(authentication_method_roles -> roles (role_id));
 diesel::joinable!(authentication_method_roles -> sites (site_id));
 diesel::joinable!(compartments -> content_types (content_type_id));
+diesel::joinable!(config_items -> sites (site_id));
 diesel::joinable!(content -> content_types (content_type_id));
 diesel::joinable!(content -> sites (site_id));
 diesel::joinable!(content -> workflow_states (workflow_state_id));
@@ -515,6 +526,7 @@ diesel::allow_tables_to_appear_in_same_query!(
 	authentication_method_roles,
 	authentication_methods,
 	compartments,
+	config_items,
 	content,
 	content_components,
 	content_fields,

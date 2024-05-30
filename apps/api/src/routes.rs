@@ -247,6 +247,11 @@ pub fn api(cfg: &mut web::ServiceConfig) {
 						.service(modules::iam_policies::controllers::iam_policies::update)
 						.service(modules::iam_policies::controllers::iam_policies::remove),
 				)
+				.service(
+					web::scope("/config")
+						.service(modules::core::controllers::config::find_all)
+						.service(modules::core::controllers::config::update)
+				)
 			)
 	);
 }

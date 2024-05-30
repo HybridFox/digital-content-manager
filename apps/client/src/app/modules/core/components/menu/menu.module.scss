@@ -31,6 +31,10 @@
 		padding: var(--spacer-xxxs) 0 var(--spacer-lg) 0;
 		border-bottom: 2px solid var(--color-secondary);
 
+		img {
+			height: 22.5px;
+		}
+
 		a {
 			text-decoration: none;
 		}
@@ -135,9 +139,15 @@
 		align-items: center;
 	}
 
-	&__version-number {
+	&__credits {
+		display: flex;
+		flex-direction: column;
 		margin-left: var(--spacer-sm);
 		font-size: 0.7rem;
 		font-family: 'IBM Plex Mono', monospace;
+
+		a {
+			color: var(--color-gray-lighter);
+		}
 	}
 }

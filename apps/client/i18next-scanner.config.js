@@ -24,7 +24,7 @@ function flush(done) {
 			const resPath = parser.formatResourceSavePath(lng, ns);
 			let resContent;
 			try {
-				resContent = JSON.parse(fs.readFileSync(fs.realpathSync(path.join(__dirname, 'public/assets', resPath))).toString('utf-8'));
+				resContent = JSON.parse(fs.readFileSync(fs.realpathSync(path.join(__dirname, 'src/public/assets', resPath))).toString('utf-8'));
 			} catch (e) {
 				resContent = {};
 			}
@@ -75,7 +75,7 @@ module.exports = {
 		'!apps/**/i18n/**',
 		'!**/node_modules/**',
 	],
-	output: './apps/client/public/assets',
+	output: './apps/client/src/public/assets',
 	options: {
 		debug: false,
 		removeUnusedKeys: true,

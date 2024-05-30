@@ -17,7 +17,7 @@ import { CONTENT_COMPONENT_PATHS } from '../../../content-components/content-com
 
 import styles from './menu.module.scss';
 
-import { useStatusStore, useThemeStore } from '~shared';
+import { useConfigStore, useStatusStore, useThemeStore } from '~shared';
 const cxBind = cx.bind(styles);
 
 const navLinkBinding = {
@@ -34,13 +34,14 @@ export const Menu = () => {
 	const [theme] = useThemeStore((state) => [state.theme]);
 	const [status] = useStatusStore((state) => [state.status]);
 	const [menuGroups] = useModuleHookStore((state) => [state.menuGroups]);
+	const [config] = useConfigStore((state) => [state.config]);
 
 	return (
 		<div className={cxBind('o-menu')}>
 			<div className={cxBind('o-menu__logo')}>
 				<NavLink to="/">
-					<img src={`/assets/img/logo-${theme}.svg`} alt="Logo" className={cxBind('o-menu__logo__image--big')} />
-					<img src="/assets/img/logo-icon.svg" alt="Logo" className={cxBind('o-menu__logo__image--small')} />
+					<img src={config?.rootLogoUrl as string || `/assets/img/logo-${theme}.svg`} alt="Logo" className={cxBind('o-menu__logo__image--big')} />
+					<img src={config?.rootLogoMobileUrl as string || "/assets/img/logo-icon.svg"} alt="Logo" className={cxBind('o-menu__logo__image--small')} />
 				</NavLink>
 			</div>
 			<div className={cxBind('o-menu__links')}>

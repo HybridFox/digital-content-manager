@@ -24,3 +24,4 @@ export * from './root-content-type';
 export * from './field-block';
 export * from './webhook';
 export * from './module';
+export * from './config';

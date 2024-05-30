@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate, Outlet, RouteObject, RouterProvider, useParams } from 'react-router-dom';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useModuleHookStore } from '@digital-content-manager/core';
+import { HelmetProvider } from 'react-helmet-async';
 
 import { Loading } from '~components';
 
@@ -8,7 +9,6 @@ import { Root } from './modules/core/components/root/root.component';
 import { AUTH_ROUTES } from './modules/auth';
 import { AnonymousView } from './modules/core/views/anonymous/anonymous.view';
 import { AuthenticatedView } from './modules/core/views/authenticated/authenticated.view';
-import { DASHBOARD_ROUTES } from './modules/dashboard';
 import { CONTENT_TYPE_ROUTES } from './modules/content-types';
 import { CONTENT_ROUTES } from './modules/content';
 import { RESOURCE_ROUTES } from './modules/resources';
@@ -28,6 +28,7 @@ import { RootView } from './modules/core/views/root/root.view';
 import { WEBHOOKS_ROUTES } from './modules/webbhooks';
 import { CONTENT_COMPONENT_ROUTES } from './modules/content-components/content-components.routes';
 import { APP_SITE_ROOT_PATH } from './modules/core/routes.const';
+import { CONFIG_ROUTES } from './modules/config';
 
 const createRouter = (moduleRoutes: RouteObject[]) => createBrowserRouter([
 	{
@@ -85,6 +86,7 @@ const createRouter = (moduleRoutes: RouteObject[]) => createBrowserRouter([
 							...ROLE_ROUTES,
 							...POLICY_ROUTES,
 							...AUTHENTICATION_METHOD_ROUTES,
+							...CONFIG_ROUTES,
 						],
 					},
 				]
@@ -102,7 +104,9 @@ export const App = () => {
 
 	return (
 		<Suspense fallback={<Loading loading={true} />}>
-			<RouterProvider router={router} />
+			<HelmetProvider>
+				<RouterProvider router={router} />
+			</HelmetProvider>
 		</Suspense>
 	);
 }
