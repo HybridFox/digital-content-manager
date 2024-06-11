@@ -26,6 +26,7 @@ export const SelectField: FC<ISelectFieldProps> = ({ name, label, viewMode = Fie
 
 			return [...acc, option];
 		}, [] as ISelectOptions[]);
+		
 		if (Array.isArray(value)) {
 			return flattenedFields.filter(({ value: optionValue }) => value.includes(optionValue));
 		}

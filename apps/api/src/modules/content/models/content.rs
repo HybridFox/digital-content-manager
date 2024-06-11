@@ -1,17 +1,17 @@
-use std::collections::HashMap;
 use chrono::NaiveDateTime;
 use diesel::dsl::*;
 use diesel::prelude::*;
 use serde::Deserialize;
-use uuid::Uuid;
+use std::collections::HashMap;
 use tracing::instrument;
+use uuid::Uuid;
 
 use crate::errors::AppError;
 use crate::modules::content_types::models::content_type::{ContentType, ContentTypeKindEnum};
 use crate::modules::languages::models::language::Language;
 use crate::modules::workflows::models::workflow_state::WorkflowState;
 use crate::schema::content_revisions;
-use crate::schema::{content, content_fields, languages, content_types, workflow_states};
+use crate::schema::{content, content_fields, content_types, languages, workflow_states};
 
 use super::content_field::ContentField;
 use super::content_revision::ContentRevision;

@@ -2,27 +2,27 @@ use std::borrow::Borrow;
 use std::env;
 
 use crate::constants;
-use crate::modules::auth::dto::request::LoginUserDTO;
-use crate::modules::auth::helpers::permissions::get_user_permissions;
-use async_trait::async_trait;
-use diesel::PgConnection;
-use reqwest::header::AUTHORIZATION;
 use crate::errors::AppError;
+use crate::modules::auth::dto::request::LoginUserDTO;
 use crate::modules::auth::dto::response;
+use crate::modules::auth::helpers::permissions::get_user_permissions;
 use crate::modules::auth::services::dynamic_login::AuthProvider;
+use crate::modules::auth::services::register::{persist_role_assignments, register_user};
 use crate::modules::authentication_methods::models::authentication_method::AuthenticationMethod;
 use crate::modules::users::models::user::User;
-use crate::modules::auth::services::register::{register_user, persist_role_assignments};
 use crate::utils::string::generate_random_string;
 use actix_web::HttpResponse;
+use async_trait::async_trait;
+use diesel::PgConnection;
 use oauth2::basic::BasicClient;
-use oauth2::{
-	CsrfToken, Scope, AuthorizationCode, ClientId, ClientSecret, AuthUrl, TokenUrl, RedirectUrl,
-	TokenResponse,
-};
 use oauth2::reqwest::async_http_client;
-use serde::{Serialize, Deserialize};
-use serde_json::{Value, json};
+use oauth2::{
+	AuthUrl, AuthorizationCode, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope,
+	TokenResponse, TokenUrl,
+};
+use reqwest::header::AUTHORIZATION;
+use serde::{Deserialize, Serialize};
+use serde_json::{json, Value};
 use utoipa::IntoParams;
 
 #[derive(Deserialize, IntoParams, Debug)]

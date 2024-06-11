@@ -1,11 +1,11 @@
-use super::super::models::role::{UpdateRole, Role};
 use super::super::dto::{request, response};
+use super::super::models::role::{Role, UpdateRole};
 use crate::errors::AppError;
 use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, HttpResponse, put, delete, HttpRequest};
+use actix_web::{delete, get, post, put, web, HttpRequest, HttpResponse};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;

@@ -1,13 +1,13 @@
 use crate::modules::{
-	core::models::hal::{HALLinkList, HALPage},
 	authentication_methods::models::authentication_method_role::AuthenticationMethodRole,
-	roles::{models::role::Role, dto::response::RoleDTO},
+	core::models::hal::{HALLinkList, HALPage},
+	roles::{dto::response::RoleDTO, models::role::Role},
 	sites::{dto::response::SiteDTO, models::site::Site},
 };
 use serde::{Deserialize, Serialize};
+use std::convert::From;
 use utoipa::ToSchema;
 use uuid::Uuid;
-use std::convert::From;
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]

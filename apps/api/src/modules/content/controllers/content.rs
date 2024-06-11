@@ -1,21 +1,23 @@
-use std::collections::HashMap;
 use super::super::dto::content::{request, response};
 use crate::errors::AppErrorValue;
 use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::content::models::content::{CreateContent, UpdateContent};
 use crate::modules::content_types::models::content_type::ContentTypeKindEnum;
 use crate::modules::core::actors::hook::HookMessage;
-use crate::modules::workflows::models::workflow_state::{WorkflowState, WorkflowTechnicalStateEnum};
-use crate::{errors::AppError, modules::content::models::content::Content};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
+use crate::modules::workflows::models::workflow_state::{
+	WorkflowState, WorkflowTechnicalStateEnum,
+};
 use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, HttpResponse, delete, put, HttpRequest};
+use crate::{errors::AppError, modules::content::models::content::Content};
+use actix_web::{delete, get, post, put, web, HttpRequest, HttpResponse};
 use chrono::Utc;
 use reqwest::StatusCode;
 use serde::Deserialize;
-use serde_with::{StringWithSeparator, formats::CommaSeparator, serde_as};
 use serde_qs::actix::QsQuery;
+use serde_with::{formats::CommaSeparator, serde_as, StringWithSeparator};
+use std::collections::HashMap;
 
 use utoipa::IntoParams;
 use uuid::Uuid;

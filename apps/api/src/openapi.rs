@@ -1,6 +1,6 @@
 use utoipa::{
-	openapi::security::{SecurityScheme, HttpBuilder, HttpAuthScheme},
-	OpenApi, Modify,
+	openapi::security::{HttpAuthScheme, HttpBuilder, SecurityScheme},
+	Modify, OpenApi,
 };
 
 pub struct SecurityAddon;

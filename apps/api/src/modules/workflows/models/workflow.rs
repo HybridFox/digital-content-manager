@@ -1,15 +1,15 @@
 use chrono::NaiveDateTime;
 use diesel::prelude::*;
 use serde::Deserialize;
-use uuid::Uuid;
 use tracing::instrument;
+use uuid::Uuid;
 
 use crate::errors::AppError;
 use crate::modules::workflows::dto::workflows::request::UpsertWorkflowTransitionDTO;
 use crate::schema::workflows;
 
 use super::workflow_state::WorkflowState;
-use super::workflow_transition::{WorkflowTransition, CreateWorkflowTransition};
+use super::workflow_transition::{CreateWorkflowTransition, WorkflowTransition};
 
 #[derive(Identifiable, Selectable, Queryable, Debug, Clone)]
 #[diesel(table_name = workflows)]

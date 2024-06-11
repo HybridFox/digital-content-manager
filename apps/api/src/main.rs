@@ -6,26 +6,28 @@ use std::error::Error;
 
 use actix::prelude::*;
 use actix_web::http::StatusCode;
-use actix_web::{web, App, HttpServer, HttpResponse};
-use errors::{AppErrorValue, AppError};
+use actix_web::{web, App, HttpResponse, HttpServer};
+use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
+use dotenv::dotenv;
+use errors::{AppError, AppErrorValue};
 use modules::core::middleware::state::AppConn;
+use opentelemetry::sdk::{trace, Resource};
 use opentelemetry::KeyValue;
+use opentelemetry::{
+	global, runtime::TokioCurrentThread, sdk::propagation::TraceContextPropagator,
+};
 use opentelemetry_otlp::WithExportConfig;
 use tracing_actix_web::TracingLogger;
-use utoipa::OpenApi;
-use utoipa_swagger_ui::SwaggerUi;
-use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use tracing_bunyan_formatter::BunyanFormattingLayer;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::{EnvFilter, Registry};
-use opentelemetry::{global, runtime::TokioCurrentThread, sdk::propagation::TraceContextPropagator};
-use opentelemetry::sdk::{trace, Resource};
-use dotenv::dotenv;
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
 
 use crate::modules::core::actors::hook::HookActor;
 use crate::modules::iam_actions::models::iam_action::IAMAction;
-use crate::openapi::{ApiDoc};
-use serde_qs::actix::{QsQueryConfig};
+use crate::openapi::ApiDoc;
+use serde_qs::actix::QsQueryConfig;
 use serde_qs::Config as QsConfig;
 
 pub mod constants;

@@ -1,10 +1,10 @@
 use super::super::dto::revisions::response;
+use crate::errors::AppError;
 use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::content::models::content_revision::ContentRevision;
-use crate::errors::AppError;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
-use actix_web::{get, web, HttpResponse, HttpRequest, post};
+use actix_web::{get, post, web, HttpRequest, HttpResponse};
 use serde::Deserialize;
 
 use utoipa::IntoParams;

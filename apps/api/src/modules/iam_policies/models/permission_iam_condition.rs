@@ -1,9 +1,9 @@
 use chrono::NaiveDateTime;
 use diesel::deserialize::FromSql;
 use diesel::pg::{Pg, PgValue};
-use diesel::serialize::{ToSql, Output};
-use diesel::{prelude::*, FromSqlRow, AsExpression};
+use diesel::serialize::{Output, ToSql};
 use diesel::sql_types::Jsonb;
+use diesel::{prelude::*, AsExpression, FromSqlRow};
 use serde::Deserialize;
 use uuid::Uuid;
 

@@ -1,18 +1,18 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 use uuid::Uuid;
 
 use crate::modules::{
-	users::models::user::User,
-	core::models::hal::{HALLinkList, HALPage},
-	roles::{models::role::Role, dto::response::RoleDTO},
-	sites::{dto::response::SiteWithRolesDTO, models::site::Site},
-	iam_policies::models::{permission::Permission, iam_policy::IAMPolicy},
-	languages::models::language::Language,
 	authentication_methods::{
 		dto::authentication_methods::response::AuthenticationMethodDTO,
 		models::authentication_method::AuthenticationMethod,
 	},
+	core::models::hal::{HALLinkList, HALPage},
+	iam_policies::models::{iam_policy::IAMPolicy, permission::Permission},
+	languages::models::language::Language,
+	roles::{dto::response::RoleDTO, models::role::Role},
+	sites::{dto::response::SiteWithRolesDTO, models::site::Site},
+	users::models::user::User,
 };
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]

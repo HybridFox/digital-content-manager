@@ -2,14 +2,14 @@ use std::collections::HashMap;
 use std::io::Write;
 
 use chrono::NaiveDateTime;
-use diesel::pg::{PgValue, Pg};
 use diesel::deserialize::{self, FromSql};
+use diesel::pg::{Pg, PgValue};
 use diesel::serialize::{self, IsNull, Output, ToSql};
-use diesel::{prelude::*, FromSqlRow, AsExpression};
-use serde_json::Value;
-use uuid::Uuid;
+use diesel::{prelude::*, AsExpression, FromSqlRow};
 use serde::{Deserialize, Serialize};
-use tracing::{instrument};
+use serde_json::Value;
+use tracing::instrument;
+use uuid::Uuid;
 
 use crate::errors::AppError;
 use crate::modules::content_components::models::content_component::PopulatedContentComponent;

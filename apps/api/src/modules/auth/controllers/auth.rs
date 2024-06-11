@@ -1,10 +1,10 @@
 use crate::modules::auth::dto::request;
 use crate::modules::auth::helpers::permissions::get_user_permissions;
-use crate::modules::users::models::user::{User, UpdateUser};
-use crate::modules::{core::middleware::auth, auth::dto::response};
 use crate::modules::core::middleware::state::AppState;
+use crate::modules::users::models::user::{UpdateUser, User};
+use crate::modules::{auth::dto::response, core::middleware::auth};
 use crate::utils::api::ApiResponse;
-use actix_web::{get, web, HttpRequest, HttpResponse, put};
+use actix_web::{get, put, web, HttpRequest, HttpResponse};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;

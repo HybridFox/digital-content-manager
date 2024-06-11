@@ -1,6 +1,6 @@
 {
 	"name": "@digital-content-manager/components",
-	"version": "0.0.7",
+	"version": "0.0.10",
 	"main": "./index.js",
 	"types": "./index.d.ts",
 	"exports": {

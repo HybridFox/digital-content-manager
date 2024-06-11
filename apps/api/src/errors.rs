@@ -1,17 +1,17 @@
 use actix_web::{http::StatusCode, HttpResponse};
 use bcrypt::BcryptError;
+use core::fmt;
 use diesel::r2d2::{Error as R2D2Error, PoolError};
 use diesel::result::{DatabaseErrorKind, Error as DieselError};
 use jsonwebtoken::errors::{Error as JwtError, ErrorKind as JwtErrorKind};
 use oauth2::RequestTokenError;
 use serde::Serialize;
-use utoipa::ToSchema;
-use core::fmt;
 use std::convert::From;
 use std::env::VarError;
 use std::num::TryFromIntError;
 use suppaftp::FtpError;
 use thiserror::Error;
+use utoipa::ToSchema;
 use uuid::{Error as UuidError, Uuid};
 
 #[derive(Debug, Serialize, ToSchema)]

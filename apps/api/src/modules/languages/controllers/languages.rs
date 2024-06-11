@@ -1,10 +1,10 @@
 use super::super::models::language::Language;
 use crate::modules::auth::helpers::permissions::ensure_permission;
-use crate::modules::sites::dto::languages::response::LanguagesDTO;
-use crate::{errors::AppError, modules::sites::dto::languages::response::LanguageDTO};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
-use actix_web::{get, web, HttpResponse, HttpRequest};
+use crate::modules::sites::dto::languages::response::LanguagesDTO;
+use crate::{errors::AppError, modules::sites::dto::languages::response::LanguageDTO};
+use actix_web::{get, web, HttpRequest, HttpResponse};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;

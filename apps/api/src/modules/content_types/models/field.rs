@@ -1,23 +1,23 @@
 use std::collections::HashMap;
 use std::io::Write;
 
-use serde_json::Value;
-use tracing::instrument;
-use diesel::{prelude::*, FromSqlRow, AsExpression};
-use slug::slugify;
-use diesel::deserialize::{self, FromSql};
-use diesel::pg::{Pg, PgValue};
-use serde::{Deserialize, Serialize};
 use crate::modules::content_components::models::content_component::{
 	ContentComponent, PopulatedContentComponent,
 };
 use crate::modules::content_types::models::content_type::ContentType;
 use crate::schema::field_config;
-use uuid::Uuid;
+use diesel::deserialize::{self, FromSql};
+use diesel::pg::{Pg, PgValue};
 use diesel::serialize::{self, IsNull, Output, ToSql};
+use diesel::{prelude::*, AsExpression, FromSqlRow};
+use serde::{Deserialize, Serialize};
+use serde_json::Value;
+use slug::slugify;
+use tracing::instrument;
+use uuid::Uuid;
 
 use crate::errors::AppError;
-use crate::schema::{fields, content_components, sql_types::FieldTypes};
+use crate::schema::{content_components, fields, sql_types::FieldTypes};
 
 use super::field_config::{FieldConfig, FieldConfigContent};
 

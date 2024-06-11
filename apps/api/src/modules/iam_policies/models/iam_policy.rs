@@ -1,6 +1,6 @@
 use crate::errors::AppError;
 use crate::modules::iam_policies::models::permission_iam_action::PermissionIAMAction;
-use crate::schema::{iam_policies, permissions_iam_actions, iam_actions};
+use crate::schema::{iam_actions, iam_policies, permissions_iam_actions};
 use chrono::NaiveDateTime;
 use diesel::pg::PgConnection;
 use diesel::prelude::*;

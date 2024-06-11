@@ -1,8 +1,8 @@
 use chrono::NaiveDateTime;
 use diesel::prelude::*;
 use serde::Deserialize;
-use uuid::Uuid;
 use tracing::instrument;
+use uuid::Uuid;
 
 use crate::modules::content_components::models::content_component::ContentComponent;
 use crate::modules::sites::models::site::Site;

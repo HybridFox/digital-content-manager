@@ -1,14 +1,14 @@
 use crate::modules::{
+	core::models::hal::{HALLinkList, HALPage},
 	workflows::models::{
 		workflow_state::WorkflowState, workflow_state::WorkflowTechnicalStateEnum,
 	},
-	core::models::hal::{HALLinkList, HALPage},
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
+use std::convert::From;
 use utoipa::ToSchema;
 use uuid::Uuid;
-use std::convert::From;
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]

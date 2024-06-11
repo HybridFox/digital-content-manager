@@ -1,6 +1,6 @@
 use std::env;
 
-use actix_web::{HttpResponse, get};
+use actix_web::{get, HttpResponse};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 

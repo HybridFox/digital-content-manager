@@ -2,14 +2,14 @@ use std::collections::HashMap;
 use std::io::Write;
 
 use chrono::NaiveDateTime;
-use diesel::{prelude::*, FromSqlRow, AsExpression};
+use diesel::deserialize::{self, FromSql};
+use diesel::pg::{Pg, PgValue};
+use diesel::serialize::{self, IsNull, Output, ToSql};
+use diesel::{prelude::*, AsExpression, FromSqlRow};
 use serde::{Deserialize, Serialize};
+use tracing::instrument;
 use utoipa::ToSchema;
 use uuid::Uuid;
-use tracing::instrument;
-use diesel::pg::{Pg, PgValue};
-use diesel::deserialize::{self, FromSql};
-use diesel::serialize::{self, IsNull, Output, ToSql};
 
 use crate::errors::AppError;
 use crate::modules::content::models::content::Content;
@@ -18,7 +18,7 @@ use crate::modules::content_components::models::content_component::{
 };
 use crate::schema::{content, fields};
 use crate::schema::{
-	content_types, sites_content_types, content_components, sql_types::ContentTypeKinds,
+	content_components, content_types, sites_content_types, sql_types::ContentTypeKinds,
 };
 
 use super::compartment::CompartmentModel;

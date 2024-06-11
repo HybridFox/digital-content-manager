@@ -229,8 +229,11 @@ export const Menu = () => {
 				</div>
 			))}
 			<div className={cxBind('o-menu__version')}>
-				<span className='las la-cookie'></span>{' '}
-				<span className={cxBind('o-menu__version-number')}>{('' || 'unknown')?.replace('v', '')} / {(status?.version || 'unknown')?.replace('v', '')}</span>
+				<span className='las la-cookie'></span>
+				<div className={cxBind('o-menu__credits')}>
+					<span>by <a href="https://felikx.be" target="_blank" rel="noreferrer">Felikx</a></span>
+					<span className={cxBind('o-menu__version-number')}>{('' || 'unknown')?.replace('v', '')} / {(status?.version || 'unknown')?.replace('v', '')}</span>
+				</div>
 			</div>
 		</div>
 	);

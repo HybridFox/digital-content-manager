@@ -1,16 +1,16 @@
 use crate::modules::{
-	roles::models::role::Role,
 	core::models::hal::{HALLinkList, HALPage},
 	iam_policies::{
-		models::{iam_policy::IAMPolicy, permission::Permission},
 		dto::response::{IAMPolicyDTO, IAMPolicyWithPermissionsDTO},
+		models::{iam_policy::IAMPolicy, permission::Permission},
 	},
+	roles::models::role::Role,
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
+use std::convert::From;
 use utoipa::ToSchema;
 use uuid::Uuid;
-use std::convert::From;
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]

@@ -1,9 +1,9 @@
 use crate::modules::core::models::config_item::ConfigItem;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use utoipa::ToSchema;
-use std::convert::From;
 use std::collections::HashMap;
+use std::convert::From;
+use utoipa::ToSchema;
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]

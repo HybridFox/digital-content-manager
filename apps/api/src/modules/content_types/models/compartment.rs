@@ -1,7 +1,7 @@
-use tracing::instrument;
+use crate::modules::content_types::models::content_type::ContentType;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
-use crate::modules::content_types::models::content_type::ContentType;
+use tracing::instrument;
 use uuid::Uuid;
 
 use crate::errors::AppError;

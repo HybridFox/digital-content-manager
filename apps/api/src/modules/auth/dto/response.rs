@@ -1,16 +1,16 @@
 use crate::modules::{
-	users::models::user::User,
-	sites::{dto::response::SiteWithRolesDTO, models::site::Site},
-	roles::{models::role::Role, dto::response::RoleWithPoliciesWithPermissionsDTO},
 	iam_policies::{
-		models::{iam_policy::IAMPolicy, permission::Permission},
 		dto::response::PermissionDTO,
+		models::{iam_policy::IAMPolicy, permission::Permission},
 	},
 	languages::models::language::Language,
+	roles::{dto::response::RoleWithPoliciesWithPermissionsDTO, models::role::Role},
+	sites::{dto::response::SiteWithRolesDTO, models::site::Site},
+	users::models::user::User,
 };
 use serde::{Deserialize, Serialize};
-use utoipa::ToSchema;
 use std::convert::From;
+use utoipa::ToSchema;
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 pub struct UserDTO {

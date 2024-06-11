@@ -2,17 +2,17 @@ use std::collections::HashMap;
 
 use chrono::NaiveDateTime;
 use diesel::prelude::*;
-use serde::{Serialize, Deserialize};
-use uuid::Uuid;
+use serde::{Deserialize, Serialize};
 use slug::slugify;
 use tracing::instrument;
+use uuid::Uuid;
 
 use crate::errors::AppError;
 use crate::modules::content_components::enums::data_type::DataTypeEnum;
 use crate::modules::content_types::models::content_type::PopulatedBlockField;
 use crate::modules::content_types::models::field::{FieldModel, FieldTypeEnum};
 use crate::modules::content_types::models::field_config::{
-	FieldConfig, FieldConfigTypeEnum, FieldConfigContent,
+	FieldConfig, FieldConfigContent, FieldConfigTypeEnum,
 };
 use crate::schema::{content_components, fields, sites_content_components};
 

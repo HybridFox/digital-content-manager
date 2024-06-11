@@ -2,18 +2,18 @@ use std::io::Write;
 
 use chrono::NaiveDateTime;
 use diesel::prelude::*;
+use tracing::instrument;
 use utoipa::ToSchema;
 use uuid::Uuid;
-use tracing::instrument;
 
-use diesel::{FromSqlRow, AsExpression};
 use diesel::deserialize::{self, FromSql};
 use diesel::pg::{Pg, PgValue};
-use serde::{Deserialize, Serialize};
 use diesel::serialize::{self, IsNull, Output, ToSql};
+use diesel::{AsExpression, FromSqlRow};
+use serde::{Deserialize, Serialize};
 
 use crate::errors::AppError;
-use crate::schema::{workflow_states, sql_types::WorkflowStateTechnicalStates};
+use crate::schema::{sql_types::WorkflowStateTechnicalStates, workflow_states};
 
 #[derive(
 	Debug, PartialEq, FromSqlRow, AsExpression, Eq, Clone, Deserialize, Serialize, ToSchema,

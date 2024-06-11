@@ -1,19 +1,19 @@
 use crate::modules::{
+	content_components::dto::content_components::response::FieldWithContentComponentDTO,
 	content_types::{
-		models::{
-			content_type::{ContentType, ContentTypeKindEnum, PopulatedContentTypeField},
-			compartment::CompartmentModel,
-		},
 		dto::compartments::response::CompartmentDTO,
+		models::{
+			compartment::CompartmentModel,
+			content_type::{ContentType, ContentTypeKindEnum, PopulatedContentTypeField},
+		},
 	},
 	core::models::hal::{HALLinkList, HALPage},
-	content_components::dto::content_components::response::FieldWithContentComponentDTO,
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
+use std::convert::From;
 use utoipa::ToSchema;
 use uuid::Uuid;
-use std::convert::From;
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]

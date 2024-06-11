@@ -1,7 +1,7 @@
 use crate::errors::AppError;
 use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
 use crate::modules::iam_policies::models::roles_iam_policies::RoleIAMPolicy;
-use crate::schema::{roles, iam_policies, roles_iam_policies};
+use crate::schema::{iam_policies, roles, roles_iam_policies};
 use chrono::NaiveDateTime;
 use diesel::pg::PgConnection;
 use diesel::prelude::*;

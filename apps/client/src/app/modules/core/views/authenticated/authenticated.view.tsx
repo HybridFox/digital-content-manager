@@ -9,14 +9,18 @@ import { TopBar } from "../../components/top-bar/top-bar.component";
 
 import styles from './authenticated.module.scss';
 
-import { useThemeStore } from "~shared";
+import { useConfigStore, useThemeStore } from "~shared";
 const cxBind = cx.bind(styles);
 
 export const AuthenticatedView = () => {
 	const { siteId } = useParams();
 	const [theme] = useThemeStore((state) => [state.theme]);
+	const [config] = useConfigStore((state) => ([state.config]));
 
-	return <div className={classNames(cxBind('o-authenticated-view'), `u-theme u-theme--${theme}`)}>
+	return <div className={classNames(cxBind('o-authenticated-view'), `u-theme u-theme--${theme}`)} style={{
+		...(config?.rootPrimaryColour && { '--color-primary': config.rootPrimaryColour }),
+		...(config?.rootSecondaryColour && { '--color-secondary': config.rootSecondaryColour })
+	} as React.CSSProperties}>
 		<div className={cxBind('o-authenticated-view__menu')}>
 			{siteId && <Menu />}
 			{!siteId && <RootMenu />}

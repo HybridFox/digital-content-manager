@@ -1,6 +1,6 @@
 use crate::modules::iam_actions::seeds::site_actions::SITE_IAM_ACTION_SEEDS;
-use crate::{errors::AppError, modules::iam_actions::seeds::root_actions::ROOT_IAM_ACTION_SEEDS};
 use crate::schema::iam_actions;
+use crate::{errors::AppError, modules::iam_actions::seeds::root_actions::ROOT_IAM_ACTION_SEEDS};
 use chrono::NaiveDateTime;
 use diesel::pg::PgConnection;
 use diesel::prelude::*;

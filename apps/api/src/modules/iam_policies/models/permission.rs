@@ -1,17 +1,17 @@
 use chrono::NaiveDateTime;
 use diesel::{
-	prelude::*,
-	FromSqlRow, AsExpression,
 	deserialize::FromSql,
-	sql_types::Jsonb,
 	pg::{Pg, PgValue},
+	prelude::*,
 	serialize::{Output, ToSql},
+	sql_types::Jsonb,
+	AsExpression, FromSqlRow,
 };
 use serde::Deserialize;
 use uuid::Uuid;
 
 use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
-use crate::{schema::permissions, errors::AppError};
+use crate::{errors::AppError, schema::permissions};
 
 #[derive(FromSqlRow, AsExpression, serde::Serialize, serde::Deserialize, Debug, Default, Clone)]
 #[diesel(sql_type = Jsonb)]

@@ -1,11 +1,11 @@
 use super::super::dto::workflow_states::{request, response};
 use crate::modules::auth::helpers::permissions::ensure_permission;
-use crate::modules::workflows::models::workflow_state::{CreateWorkflowState, UpdateWorkflowState};
-use crate::{errors::AppError, modules::workflows::models::workflow_state::WorkflowState};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
+use crate::modules::workflows::models::workflow_state::{CreateWorkflowState, UpdateWorkflowState};
 use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, HttpResponse, delete, put, HttpRequest};
+use crate::{errors::AppError, modules::workflows::models::workflow_state::WorkflowState};
+use actix_web::{delete, get, post, put, web, HttpRequest, HttpResponse};
 use serde::Deserialize;
 use slug::slugify;
 use utoipa::IntoParams;

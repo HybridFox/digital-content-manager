@@ -1,10 +1,10 @@
 use super::super::dto::content::response;
+use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::{errors::AppError, modules::content::models::content::Content};
-use crate::modules::core::middleware::state::AppState;
-use serde_with::{StringWithSeparator, formats::CommaSeparator, serde_as};
 use actix_web::{get, web, HttpResponse};
 use serde::Deserialize;
+use serde_with::{formats::CommaSeparator, serde_as, StringWithSeparator};
 use utoipa::IntoParams;
 use uuid::Uuid;
 

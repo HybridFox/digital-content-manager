@@ -4,8 +4,8 @@ use crate::modules::users::models::user::User;
 use crate::errors::{AppError, AppErrorValue};
 use crate::modules::core::middleware::state::AppState;
 
-use actix_web::HttpMessage;
 use actix_web::http::StatusCode;
+use actix_web::HttpMessage;
 use actix_web::{
 	body::EitherBody,
 	dev::{Service, ServiceRequest, ServiceResponse, Transform},

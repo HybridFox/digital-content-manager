@@ -1,15 +1,15 @@
-use crate::{
-	errors::AppError,
-	modules::{
-		core::middleware::state::AppConn, users::models::user_role::UserRole,
-		authentication_methods::models::authentication_method::AuthenticationMethod,
-	},
-};
 use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
 use crate::modules::iam_policies::models::permission::Permission;
 use crate::modules::iam_policies::models::permission_iam_action::PermissionIAMAction;
 use crate::modules::roles::models::role::Role;
 use crate::modules::users::models::user::User;
+use crate::{
+	errors::AppError,
+	modules::{
+		authentication_methods::models::authentication_method::AuthenticationMethod,
+		core::middleware::state::AppConn, users::models::user_role::UserRole,
+	},
+};
 use tracing::instrument;
 
 #[instrument(skip(conn, password))]

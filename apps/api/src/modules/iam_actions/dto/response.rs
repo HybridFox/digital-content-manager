@@ -1,11 +1,11 @@
 use crate::modules::{
-	iam_actions::models::iam_action::IAMAction,
 	core::models::hal::{HALLinkList, HALPage},
+	iam_actions::models::iam_action::IAMAction,
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
-use utoipa::ToSchema;
 use std::convert::From;
+use utoipa::ToSchema;
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]

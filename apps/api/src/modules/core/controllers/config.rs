@@ -1,9 +1,9 @@
 use super::super::dto::config::{request, response};
-use crate::modules::auth::helpers::permissions::ensure_permission;
-use crate::modules::core::models::config_item::{ConfigItem, CreateConfigItem};
 use crate::errors::AppError;
+use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::core::middleware::state::AppState;
-use actix_web::{get, web, HttpResponse, put, HttpRequest};
+use crate::modules::core::models::config_item::{ConfigItem, CreateConfigItem};
+use actix_web::{get, put, web, HttpRequest, HttpResponse};
 
 #[utoipa::path(
 	context_path = "/api/v1/config",

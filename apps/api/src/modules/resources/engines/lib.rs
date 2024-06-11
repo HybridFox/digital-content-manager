@@ -3,11 +3,11 @@ use crate::{
 	modules::resources::models::storage_repository::StorageRepository,
 };
 use actix_multipart::form::tempfile::TempFile;
+use async_trait::async_trait;
 use chrono::{DateTime, Utc};
 use diesel::PgConnection;
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
-use async_trait::async_trait;
 use uuid::Uuid;
 
 use super::{fs::FsStorageEngine, ftp::FtpStorageEngine};

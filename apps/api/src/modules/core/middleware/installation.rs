@@ -1,11 +1,11 @@
-use crate::modules::users::models::user::User;
 use crate::modules::core::middleware::state::AppState;
+use crate::modules::users::models::user::User;
 use actix_web::{
 	body::EitherBody,
 	dev::{Service, ServiceRequest, ServiceResponse, Transform},
+	http::Method,
 	web::Data,
 	Error, HttpResponse,
-	http::Method,
 };
 use futures::future::{ok, Ready};
 use futures::Future;

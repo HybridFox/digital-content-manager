@@ -1,7 +1,7 @@
 use diesel::prelude::*;
 use serde::Deserialize;
-use uuid::Uuid;
 use tracing::instrument;
+use uuid::Uuid;
 
 use crate::errors::AppError;
 use crate::modules::roles::models::role::Role;

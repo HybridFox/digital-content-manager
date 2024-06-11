@@ -4,16 +4,16 @@ use crate::modules::iam_policies::models::iam_policy::IAMPolicy;
 use crate::modules::iam_policies::models::permission::Permission;
 use crate::modules::iam_policies::models::permission_iam_action::PermissionIAMAction;
 use crate::modules::iam_policies::models::roles_iam_policies::RoleIAMPolicy;
-use crate::modules::roles::models::role::Role;
 use crate::modules::languages::models::language::Language;
+use crate::modules::roles::models::role::Role;
 use crate::modules::sites::models::site::Site;
 use crate::modules::sites::models::site_language::SiteLanguage;
 use crate::modules::sites::models::site_user::SiteUser;
 use crate::modules::sites::models::site_user_role::SiteUserRole;
 use crate::modules::users::models::user_role::UserRole;
 use crate::schema::{
-	users, sites, sites_users, roles, sites_users_roles, roles_iam_policies, iam_policies,
-	sites_languages, languages, users_roles, authentication_methods,
+	authentication_methods, iam_policies, languages, roles, roles_iam_policies, sites,
+	sites_languages, sites_users, sites_users_roles, users, users_roles,
 };
 use crate::utils::{hasher, token};
 use actix_web::http::StatusCode;

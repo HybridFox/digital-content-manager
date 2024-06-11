@@ -6,10 +6,10 @@ use crate::modules::sites::models::site_user_role::SiteUserRole;
 use crate::modules::users::models::user::User;
 use crate::modules::users::models::user_role::UserRole;
 use crate::schema::authentication_method_roles;
+use diesel::prelude::*;
 use diesel::PgConnection;
 use tracing::instrument;
 use uuid::Uuid;
-use diesel::prelude::*;
 
 #[instrument(skip(conn, password))]
 pub async fn register_user(

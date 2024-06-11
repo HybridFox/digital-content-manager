@@ -1,11 +1,11 @@
 use super::super::dto::directories::{request, response};
-use crate::modules::{
-	resources::engines::lib::get_storage_engine, auth::helpers::permissions::ensure_permission,
-};
 use crate::errors::AppError;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
-use actix_web::{get, post, web, delete, HttpResponse, HttpRequest};
+use crate::modules::{
+	auth::helpers::permissions::ensure_permission, resources::engines::lib::get_storage_engine,
+};
+use actix_web::{delete, get, post, web, HttpRequest, HttpResponse};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;

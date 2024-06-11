@@ -1,17 +1,17 @@
 use crate::{
 	errors::{AppError, AppErrorValue},
 	modules::{
-		authentication_methods::models::authentication_method::AuthenticationMethod,
 		auth::{
-			providers::{oauth2::OAuth2AuthProvider, local::LocalAuthProvider},
 			dto::request::LoginUserDTO,
+			providers::{local::LocalAuthProvider, oauth2::OAuth2AuthProvider},
 		},
+		authentication_methods::models::authentication_method::AuthenticationMethod,
 	},
 };
 use actix_web::HttpResponse;
+use async_trait::async_trait;
 use diesel::PgConnection;
 use reqwest::StatusCode;
-use async_trait::async_trait;
 use uuid::Uuid;
 
 #[async_trait]

@@ -1,12 +1,12 @@
+use crate::errors::AppError;
 use crate::modules::auth::helpers::permissions::ensure_permission;
-use crate::modules::resources::dto::storage_repositories::{response, request};
+use crate::modules::core::middleware::state::AppState;
+use crate::modules::core::models::hal::HALPage;
+use crate::modules::resources::dto::storage_repositories::{request, response};
 use crate::modules::resources::models::storage_repository::{
 	CreateStorageRepository, StorageRepository, UpdateStorageRepository,
 };
-use crate::errors::AppError;
-use crate::modules::core::middleware::state::AppState;
-use crate::modules::core::models::hal::HALPage;
-use actix_web::{get, post, web, put, delete, HttpResponse, HttpRequest};
+use actix_web::{delete, get, post, put, web, HttpRequest, HttpResponse};
 use chrono::Utc;
 use serde::Deserialize;
 use utoipa::IntoParams;

@@ -1,11 +1,11 @@
 use super::super::dto::modules::{request, response};
 use crate::modules::auth::helpers::permissions::ensure_permission;
-use crate::modules::modules::models::module::{CreateModule, UpdateModule};
-use crate::{errors::AppError, modules::modules::models::module::Module};
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
+use crate::modules::modules::models::module::{CreateModule, UpdateModule};
 use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, HttpResponse, delete, put, HttpRequest};
+use crate::{errors::AppError, modules::modules::models::module::Module};
+use actix_web::{delete, get, post, put, web, HttpRequest, HttpResponse};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;

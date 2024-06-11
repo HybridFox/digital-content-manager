@@ -1,21 +1,21 @@
 use crate::modules::{
+	auth::dto::response::UserDTO,
 	content::{
-		models::{content_revision::ContentRevision, content_field::ContentField},
 		dto::content::response::parse_object_fields,
+		models::{content_field::ContentField, content_revision::ContentRevision},
 	},
 	core::models::hal::{HALLinkList, HALPage},
+	users::models::user::User,
 	workflows::{
 		dto::workflow_states::response::WorkflowStateDTO, models::workflow_state::WorkflowState,
 	},
-	users::models::user::User,
-	auth::dto::response::UserDTO,
 };
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::{collections::HashMap, convert::From};
 use utoipa::ToSchema;
 use uuid::Uuid;
-use std::{convert::From, collections::HashMap};
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]

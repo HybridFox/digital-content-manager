@@ -1,11 +1,11 @@
 use super::super::dto::request;
-use crate::modules::auth::services::dynamic_login::get_auth_provider;
 use crate::errors::AppError;
+use crate::modules::auth::services::dynamic_login::get_auth_provider;
 use crate::modules::core::middleware::state::AppState;
 use crate::utils::api::ApiResponse;
 use actix_web::{post, web, HttpResponse};
-use utoipa::IntoParams;
 use serde::Deserialize;
+use utoipa::IntoParams;
 use uuid::Uuid;
 
 #[derive(Deserialize, IntoParams, Debug)]

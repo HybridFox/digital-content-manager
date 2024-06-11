@@ -3,8 +3,8 @@ use diesel::prelude::*;
 use serde::Deserialize;
 use uuid::Uuid;
 
-use crate::modules::iam_policies::models::permission::Permission;
 use crate::modules::iam_actions::models::iam_action::IAMAction;
+use crate::modules::iam_policies::models::permission::Permission;
 
 use crate::errors::AppError;
 use crate::schema::permissions_iam_actions;

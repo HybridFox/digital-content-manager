@@ -1,7 +1,7 @@
 use diesel::prelude::*;
 use serde_json::Value;
-use uuid::Uuid;
 use tracing::instrument;
+use uuid::Uuid;
 
 use crate::errors::AppError;
 use crate::modules::content::helpers::upsert_fields::upsert_fields;

@@ -3,7 +3,9 @@ use crate::errors::{AppError, AppErrorValue};
 use crate::modules::auth::dto::response::MeDTO;
 use crate::modules::auth::helpers::permissions::get_user_permissions;
 use crate::modules::users::models::user::User;
-use crate::modules::{core::middleware::state::AppState, setup::services::setup::setup_initial_user};
+use crate::modules::{
+	core::middleware::state::AppState, setup::services::setup::setup_initial_user,
+};
 use crate::utils::api::ApiResponse;
 use actix_web::{post, web, HttpResponse};
 use reqwest::StatusCode;

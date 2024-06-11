@@ -1,10 +1,10 @@
+use diesel::prelude::*;
 use diesel::PgConnection;
 use serde_json::Value;
-use diesel::prelude::*;
 use uuid::Uuid;
 
 use crate::errors::AppError;
-use crate::modules::content::models::content_field::{CreateContentField, ContentField};
+use crate::modules::content::models::content_field::{ContentField, CreateContentField};
 use crate::modules::content_components::enums::data_type::DataTypeEnum;
 use crate::modules::content_components::models::content_component::PopulatedContentComponent;
 use crate::modules::content_types::models::content_type::{

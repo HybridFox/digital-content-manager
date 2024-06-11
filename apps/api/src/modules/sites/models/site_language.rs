@@ -5,7 +5,7 @@ use serde::Deserialize;
 use uuid::Uuid;
 
 use crate::errors::AppError;
-use crate::schema::{sites_languages, languages};
+use crate::schema::{languages, sites_languages};
 
 #[derive(Identifiable, Selectable, Queryable, Associations, Debug)]
 #[diesel(belongs_to(Language))]

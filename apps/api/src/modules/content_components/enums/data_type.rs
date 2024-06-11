@@ -1,10 +1,10 @@
 use std::io::Write;
 
-use diesel::{FromSqlRow, AsExpression};
 use diesel::deserialize::{self, FromSql};
 use diesel::pg::{Pg, PgValue};
-use serde::{Deserialize, Serialize};
 use diesel::serialize::{self, IsNull, Output, ToSql};
+use diesel::{AsExpression, FromSqlRow};
+use serde::{Deserialize, Serialize};
 
 use crate::schema::sql_types::DataTypes;
 

@@ -1,14 +1,14 @@
-use crate::modules::auth::dto::request::LoginUserDTO;
-use async_trait::async_trait;
-use diesel::PgConnection;
-use reqwest::StatusCode;
 use crate::errors::{AppError, AppErrorValue};
+use crate::modules::auth::dto::request::LoginUserDTO;
 use crate::modules::auth::dto::response;
 use crate::modules::auth::services::dynamic_login::AuthProvider;
 use crate::modules::authentication_methods::models::authentication_method::AuthenticationMethod;
 use crate::modules::users::models::user::User;
 use actix_web::HttpResponse;
-use serde::{Serialize, Deserialize};
+use async_trait::async_trait;
+use diesel::PgConnection;
+use reqwest::StatusCode;
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 struct LocalConfig {

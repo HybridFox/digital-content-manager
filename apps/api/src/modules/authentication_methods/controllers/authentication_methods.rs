@@ -3,14 +3,14 @@ use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::authentication_methods::models::authentication_method::{
 	CreateAuthenticationMethod, UpdateAuthenticationMethod,
 };
+use crate::modules::core::middleware::state::AppState;
+use crate::modules::core::models::hal::HALPage;
+use crate::utils::api::ApiResponse;
 use crate::{
 	errors::AppError,
 	modules::authentication_methods::models::authentication_method::AuthenticationMethod,
 };
-use crate::modules::core::middleware::state::AppState;
-use crate::modules::core::models::hal::HALPage;
-use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, HttpResponse, delete, put, HttpRequest};
+use actix_web::{delete, get, post, put, web, HttpRequest, HttpResponse};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;

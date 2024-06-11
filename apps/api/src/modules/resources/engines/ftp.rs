@@ -3,16 +3,16 @@ use actix_multipart::form::tempfile::TempFile;
 use chrono::DateTime;
 use serde_json::Value;
 
-use std::{str::FromStr, time::UNIX_EPOCH};
-use async_trait::async_trait;
 use crate::errors::AppError;
-use std::path::Path;
+use async_trait::async_trait;
 use std::fs;
+use std::path::Path;
+use std::{str::FromStr, time::UNIX_EPOCH};
 use suppaftp::{list::File, NativeTlsFtpStream};
 
 use path_slash::PathExt as _;
 
-use super::lib::{StorageEngine, ResourceItem, ResourceItemKind};
+use super::lib::{ResourceItem, ResourceItemKind, StorageEngine};
 
 fn clean_path(path: &str) -> &str {
 	path.trim_start_matches('/')

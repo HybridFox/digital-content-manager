@@ -1,14 +1,14 @@
 use super::super::dto::content_components::{request, response};
 use crate::modules::auth::helpers::permissions::ensure_permission;
-use crate::{
-	errors::AppError,
-	modules::content_components::models::content_component::UpdateContentComponent,
-};
 use crate::modules::content_components::models::content_component::ContentComponent;
 use crate::modules::core::middleware::state::AppState;
 use crate::modules::core::models::hal::HALPage;
 use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, put, HttpResponse, delete, HttpRequest};
+use crate::{
+	errors::AppError,
+	modules::content_components::models::content_component::UpdateContentComponent,
+};
+use actix_web::{delete, get, post, put, web, HttpRequest, HttpResponse};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;

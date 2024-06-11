@@ -1,18 +1,18 @@
-use actix_web::{HttpRequest, web::Data};
-use diesel::{PgConnection, prelude::*, QueryDsl, SelectableHelper, sql_types::Array};
+use actix_web::HttpMessage;
+use actix_web::{web::Data, HttpRequest};
+use diesel::{prelude::*, sql_types::Array, PgConnection, QueryDsl, SelectableHelper};
 use regex::Regex;
 use reqwest::StatusCode;
 use uuid::Uuid;
-use actix_web::HttpMessage;
 
 use crate::{
+	errors::{AppError, AppErrorValue},
 	modules::{
-		iam_policies::models::permission::Permission, core::middleware::state::AppState,
+		core::middleware::state::AppState, iam_policies::models::permission::Permission,
 		users::models::user::User,
 	},
-	errors::{AppError, AppErrorValue},
 	schema::{
-		users_roles, roles_iam_policies, permissions, permissions_iam_actions, sites_users_roles,
+		permissions, permissions_iam_actions, roles_iam_policies, sites_users_roles, users_roles,
 	},
 };
 

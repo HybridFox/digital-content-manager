@@ -1,9 +1,9 @@
-use serde_json::Value;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use uuid::Uuid;
 
-use crate::{schema::content_fields, modules::content_components::enums::data_type::DataTypeEnum};
+use crate::{modules::content_components::enums::data_type::DataTypeEnum, schema::content_fields};
 
 #[derive(
 	Selectable, Queryable, Debug, Identifiable, Clone, Deserialize, Serialize, QueryableByName,

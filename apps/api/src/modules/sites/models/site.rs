@@ -1,6 +1,6 @@
 use crate::modules::languages::models::language::Language;
+use crate::schema::{languages, sites, sites_users};
 use crate::{errors::AppError, schema::sites_languages};
-use crate::schema::{sites, languages, sites_users};
 use chrono::NaiveDateTime;
 use diesel::pg::PgConnection;
 use diesel::prelude::*;

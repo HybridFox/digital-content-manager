@@ -2,8 +2,8 @@ use chrono::NaiveDateTime;
 use diesel::prelude::*;
 use serde::Deserialize;
 use serde_json::Value;
-use uuid::Uuid;
 use tracing::instrument;
+use uuid::Uuid;
 
 use crate::errors::AppError;
 use crate::schema::authentication_methods;

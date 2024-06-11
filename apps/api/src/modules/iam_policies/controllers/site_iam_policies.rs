@@ -1,5 +1,5 @@
-use super::super::models::iam_policy::{UpdateIAMPolicy, IAMPolicy};
 use super::super::dto::{request, response};
+use super::super::models::iam_policy::{IAMPolicy, UpdateIAMPolicy};
 use crate::errors::AppError;
 use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::core::middleware::state::AppState;
@@ -7,7 +7,7 @@ use crate::modules::core::models::hal::HALPage;
 use crate::modules::iam_policies::models::permission::Permission;
 use crate::modules::iam_policies::models::permission_iam_action::PermissionIAMAction;
 use crate::utils::api::ApiResponse;
-use actix_web::{get, post, web, HttpResponse, put, delete, HttpRequest};
+use actix_web::{delete, get, post, put, web, HttpRequest, HttpResponse};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;

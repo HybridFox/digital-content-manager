@@ -1,7 +1,7 @@
 use diesel::prelude::*;
 use serde_json::Value;
-use uuid::Uuid;
 use tracing::instrument;
+use uuid::Uuid;
 
 use crate::errors::AppError;
 use crate::modules::content::helpers::upsert_fields::upsert_fields;
@@ -13,8 +13,8 @@ use crate::modules::languages::models::language::Language;
 use crate::modules::workflows::models::workflow_state::WorkflowState;
 use crate::schema::content;
 
-use super::super::content_field::ContentField;
 use super::super::content::Content;
+use super::super::content_field::ContentField;
 
 impl Content {
 	#[instrument(skip(conn))]

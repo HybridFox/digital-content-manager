@@ -11,9 +11,9 @@ use crate::modules::{
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::{collections::HashMap, convert::From};
 use utoipa::ToSchema;
 use uuid::Uuid;
-use std::{convert::From, collections::HashMap};
 
 #[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]

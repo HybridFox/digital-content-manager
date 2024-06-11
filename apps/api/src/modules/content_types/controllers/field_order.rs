@@ -1,9 +1,9 @@
 use super::super::dto::field_order::request;
 use crate::modules::auth::helpers::permissions::ensure_permission;
 use crate::modules::content_types::models::field::UpdateFieldOrder;
-use crate::{errors::AppError, modules::content_types::models::field::FieldModel};
 use crate::modules::core::middleware::state::AppState;
-use actix_web::{patch, web, HttpResponse, HttpRequest};
+use crate::{errors::AppError, modules::content_types::models::field::FieldModel};
+use actix_web::{patch, web, HttpRequest, HttpResponse};
 use serde::Deserialize;
 use utoipa::IntoParams;
 use uuid::Uuid;

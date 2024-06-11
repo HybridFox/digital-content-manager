@@ -1,17 +1,17 @@
 use chrono::NaiveDateTime;
 use diesel::prelude::*;
 use serde::Deserialize;
-use uuid::Uuid;
 use tracing::instrument;
+use uuid::Uuid;
 
 use crate::errors::AppError;
 use crate::modules::users::models::user::User;
 use crate::modules::workflows::models::workflow_state::WorkflowState;
 use crate::schema::users;
-use crate::schema::{content_revisions, content_fields, workflow_states};
+use crate::schema::{content_fields, content_revisions, workflow_states};
 
-use super::content_field::ContentField;
 use super::content::Content;
+use super::content_field::ContentField;
 
 #[derive(Identifiable, Selectable, Queryable, Debug, Associations, Clone)]
 #[diesel(table_name = content_revisions)]

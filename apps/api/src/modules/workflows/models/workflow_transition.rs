@@ -1,11 +1,11 @@
 use diesel::prelude::*;
-use uuid::Uuid;
 use tracing::instrument;
+use uuid::Uuid;
 
 use serde::Deserialize;
 
 use crate::errors::AppError;
-use crate::schema::{workflow_transitions, workflow_states};
+use crate::schema::{workflow_states, workflow_transitions};
 
 use super::workflow::Workflow;
 use super::workflow_state::WorkflowState;
